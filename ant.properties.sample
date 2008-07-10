@@ -1,0 +1,52 @@
+# EchoPoint Build properties file.
+
+#
+# If you set dir.appserver.deploy # then the test war file will be deployed
+# to it.  Use to automatically deploy to Tomcat/JBoss etc.
+#
+dir.appserver                     /usr/local/apache-tomcat-6.0.14
+
+version                           3.0.0a1
+debug                             true
+
+dir.src                           src
+dir.src.client                    ${dir.src}/client
+dir.src.client.app                ${dir.src.client}/js
+dir.src.client.test               ${dir.src.client}/test
+dir.src.server                    ${dir.src}/server-java
+dir.src.server.app                ${dir.src}/server-java/app
+dir.src.server.webcontainer       ${dir.src}/server-java/webcontainer
+dir.src.server.test               ${dir.src}/server-java/test
+
+dir.lib                           lib
+dir.dist                          dist
+dir.build                         build
+dir.build.api                     ${dir.build}/api
+dir.build.resource                ${dir.build.api}/resource/js
+dir.build.test                    ${dir.build}/test
+dir.docs                          docs
+dir.docs.api                      ${dir.docs}/api
+dir.docs.api.app                  ${dir.docs.api}/app
+dir.docs.api.webcontainer         ${dir.docs.api}/webcontainer
+
+echo.app.lib.jar                  ${dir.lib}/Echo3_App.jar
+echo.webcontainer.lib.jar         ${dir.lib}/Echo3_WebContainer.jar
+junit.lib.jar                     ${dir.lib}/junit-4.4.jar
+servlet.lib.jar                   ${dir.appserver}/lib/servlet-api.jar
+
+jarfile                           echopoint.jar
+testwarfile                       echopointtest.war
+dir.appserver.deploy              ${dir.appserver}/webapps
+
+# Javadoc configuration
+javadoc.header                    <b>EchoPoint API - ${version}</b><br/><a href='${echopoint.app.doc.link}' target='_top'>App<a/> <a href='${echopoint.webcontainer.doc.link}' target='_top'>Webcontainer</a>
+javadoc.doctitle.app              EchoPoint App<br/> API Specificiation
+javadoc.doctitle.webcontainer     EchoPoint Webcontainer<br/> API Specificiation
+javadoc.windowtitle               EchoPoint API Specification
+jse.doc.link                      http://java.sun.com/j2se/1.5.0/docs/api/
+jee.doc.link                      http://java.sun.com/j2ee/1.4/docs/api/
+echo.app.doc.link                 http://echo.nextapp.com/content/echo3/doc/3.0/api/public/
+echo.webcontainer.doc.link        http://echo.nextapp.com/content/echo3/doc/3.0/api/public/webcontainer/
+extras.app.doc.link               http://docs.rakeshv.org/java/echo/extras/app/
+echopoint.app.doc.link            http://sptci.com/projects/echopoint/api/app/
+echopoint.webcontainer.doc.link   http://sptci.com/projects/echopoint/api/webcontainer/
