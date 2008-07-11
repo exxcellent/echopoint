@@ -1,7 +1,7 @@
 # EchoPoint Build properties file.
 
 #
-# If you set dir.appserver.deploy # then the test war file will be deployed
+# If you set dir.appserver.deploy then the test war files will be deployed
 # to it.  Use to automatically deploy to Tomcat/JBoss etc.
 #
 dir.appserver                     /usr/local/apache-tomcat-6.0.14
@@ -38,6 +38,13 @@ jarfile                           echopoint.jar
 testwarfile                       echopointtest.war
 dir.appserver.deploy              ${dir.appserver}/webapps
 
+# Settings for the deployable client-test application
+dir.echo                          ../../NextApp_Echo/v3/echo3
+dir.echo.extras                   ../../NextApp_Echo/v3/extras
+dir.src.client.test.tempdir       /tmp/out
+clienttestwarfile                 echopointclienttest.war
+yuicompressor.lib.jar             ${dir.lib}/yuicompressor-2.3.5.jar
+
 # Javadoc configuration
 javadoc.header                    <b>EchoPoint API - ${version}</b><br/><a href='${echopoint.app.doc.link}' target='_top'>App<a/> <a href='${echopoint.webcontainer.doc.link}' target='_top'>Webcontainer</a>
 javadoc.doctitle.app              EchoPoint App<br/> API Specificiation
@@ -48,5 +55,6 @@ jee.doc.link                      http://java.sun.com/j2ee/1.4/docs/api/
 echo.app.doc.link                 http://echo.nextapp.com/content/echo3/doc/3.0/api/public/
 echo.webcontainer.doc.link        http://echo.nextapp.com/content/echo3/doc/3.0/api/public/webcontainer/
 extras.app.doc.link               http://docs.rakeshv.org/java/echo/extras/app/
+junit.doc.link                    http://junit.sourceforge.net/javadoc/
 echopoint.app.doc.link            http://sptci.com/projects/echopoint/api/app/
 echopoint.webcontainer.doc.link   http://sptci.com/projects/echopoint/api/webcontainer/

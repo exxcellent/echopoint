@@ -320,6 +320,62 @@
   </target>
 
 <!-- ************************************************************************************************** -->
+  <target name='update'
+    description='Updates client application JS library from Echo3'
+    if='dir.echo'>
+    <copy todir='${dir.src.client.test}/lib/corejs'
+      overwrite='true' preservelastmodified='true'>
+      <filelist dir='${dir.echo}/src/client/corejs/'>
+        <file name='Core.js'/>
+        <file name='Core.Web.js'/>
+      </filelist>
+    </copy>
+
+    <copy todir='${dir.src.client.test}/lib/echo'
+      overwrite='true' preservelastmodified='true'>
+      <filelist dir='${dir.echo}/src/client/echo/'>
+        <file name='Application.js'/>
+        <file name='Render.js'/>
+        <file name='Sync.js'/>
+        <file name='Serial.js'/>
+        <file name='Client.js'/>
+        <file name='FreeClient.js'/>
+        <file name='Arc.js'/>
+        <file name='Sync.ArrayContainer.js'/>
+        <file name='Sync.Button.js'/>
+        <file name='Sync.ContentPane.js'/>
+        <file name='Sync.Grid.js'/>
+        <file name='Sync.Label.js'/>
+        <file name='Sync.List.js'/>
+        <file name='Sync.SplitPane.js'/>
+        <file name='Sync.TextComponent.js'/>
+        <file name='Sync.WindowPane.js'/>
+      </filelist>
+    </copy>
+
+    <copy todir='${dir.src.client.test}/lib/extras'
+      overwrite='true' preservelastmodified='true'>
+      <filelist dir='${dir.echo.extras}/src/client/extras/'>
+        <file name='Extras.js'/>
+        <file name='Application.AccordionPane.js'/>
+        <file name='Sync.AccordionPane.js'/>
+        <file name='Application.Menu.js'/>
+        <file name='Sync.Menu.js'/>
+        <file name='Application.TransitionPane.js'/>
+        <file name='Sync.TransitionPane.js'/>
+        <file name='Application.TabPane.js'/>
+        <file name='Sync.TabPane.js'/>
+        <file name='Application.ColorSelect.js'/>
+        <file name='Sync.ColorSelect.js'/>
+        <file name='Application.RichTextArea.js'/>
+        <file name='Sync.RichTextArea.js'/>
+        <file name='Application.ToolTipContainer.js'/>
+        <file name='Sync.ToolTipContainer.js'/>
+      </filelist>
+    </copy>
+  </target>
+
+<!-- ************************************************************************************************** -->
   <target name='default'
     depends='start,clean,compile,jar,release' description='Default build'>
 
