@@ -16,6 +16,7 @@ echopoint.test.Button = Core.extend( Echo.Button,
 
     Echo.Button.call( this,
     {
+      renderId: "echopointUnitTestButton" + component,
       styleName: "Default",
       text: component,
       events:

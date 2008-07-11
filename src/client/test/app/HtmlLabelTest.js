@@ -20,6 +20,9 @@ echopoint.test.HtmlLabelTest = Core.extend(
   _createComponent: function()
   {
     return new echopoint.HtmlLabel(
-      { text: echopoint.test.HtmlLabelTest.CONTENT } );
+      {
+        renderId: "echopointUnitTestHtmlLabel",
+        text: echopoint.test.HtmlLabelTest.CONTENT
+      } );
   }
 });

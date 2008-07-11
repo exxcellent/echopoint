@@ -41,6 +41,7 @@ public class Button extends nextapp.echo.app.Button
   public Button( final String componentName )
   {
     super( componentName );
+    setRenderId( "echopointUnitTestButton" + componentName );
   }
 
   /**

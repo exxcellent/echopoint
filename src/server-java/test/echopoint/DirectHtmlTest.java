@@ -27,7 +27,6 @@ import nextapp.echo.app.Border;
 import nextapp.echo.app.Button;
 import nextapp.echo.app.Color;
 import nextapp.echo.app.Component;
-import nextapp.echo.app.Row;
 import nextapp.echo.app.Label;
 import nextapp.echo.app.event.ActionEvent;
 import nextapp.echo.app.event.ActionListener;
@@ -73,6 +72,7 @@ public class DirectHtmlTest
   {
     final Component content = Application.getContent().getTestArea();
     component = new DirectHtml();
+    component.setRenderId( "echopointUnitTestDirectHtml" );
     content.removeAll();
     content.add( component );
 
@@ -144,6 +144,7 @@ public class DirectHtmlTest
 
     /*
     final RichTextArea rta = new RichTextArea();
+    rta.setRenderId( "echopointUnitTestDirectHtmlRTA" );
     rta.setText( COMPLEX_TEXT );
     content.add( rta );
 
@@ -152,9 +153,13 @@ public class DirectHtmlTest
     content.add( row );
     */
 
-    content.add( new DirectHtml( COMPLEX_TEXT ) );
+    final DirectHtml complex = new DirectHtml( COMPLEX_TEXT );
+    complex.setRenderId( "echopointUnitTestDirectHtmlNoTarget" );
+    content.add( complex );
 
-    content.add( new DirectHtml( LINK_TEXT, "_new" ) );
+    final DirectHtml simple = new DirectHtml( LINK_TEXT, "_new" );
+    simple.setRenderId( "echopointUnitTestDirectHtmlTarget" );
+    content.add( simple );
   }
 
   /**
@@ -167,6 +172,7 @@ public class DirectHtmlTest
   private static Button createButton( final RichTextArea rta )
   {
     final Button button = new Button( "Display" );
+    button.setRenderId( "echopointUnitTestDirectHtmlDisplay" );
 
     final Color color = Color.BLACK;
     final Border border = new Border( 1, color, Border.STYLE_OUTSET );

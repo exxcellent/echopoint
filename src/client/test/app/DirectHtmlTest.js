@@ -45,6 +45,7 @@ echopoint.test.DirectHtmlTest = Core.extend(
   {
     return new Extras.RichTextArea(
     {
+      renderId: "echopointUnitTestDirectHtmlRTA",
       styleName: "Default",
       text: echopoint.test.DirectHtmlTest.CONTENT
     });
@@ -62,6 +63,7 @@ echopoint.test.DirectHtmlTest = Core.extend(
     var row = new Echo.Row( { style: "Default" } );
     var button = new Echo.Button(
     {
+      renderId: "echopointUnitTestDirectHtmlDisplay",
       style: "Default",
       text: "Save",
       events:
@@ -80,6 +82,12 @@ echopoint.test.DirectHtmlTest = Core.extend(
   /** Create the component being tested. */
   _createComponent: function( content, target )
   {
-    return new echopoint.DirectHtml( { text: content, target: target } );
+    var rid = "echopointUnitTestDirectHtml" +
+                   ( target == null ) ? "NoTarget" : "Target";
+    return new echopoint.DirectHtml(
+    {
+      renderId: rid,
+      text: content, target: target
+    } );
   }
 });

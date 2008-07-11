@@ -44,6 +44,7 @@ public class HtmlLabelTest
   {
     final MainContent content = Application.getContent();
     component = new HtmlLabel();
+    component.setRenderId( "echoPointUnitTestHtmlLabel" );
     content.getTestArea().removeAll();
     content.getTestArea().add( component );
 

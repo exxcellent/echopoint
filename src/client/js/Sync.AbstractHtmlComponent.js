@@ -22,6 +22,7 @@ echopoint.internal.AbstractHtmlComponentSync = Core.extend( Echo.Render.Componen
   renderAdd: function( update, parentElement )
   {
     this._container = document.createElement( this._containerType );
+    this._container.id = this.component.renderId;
 
     Echo.Sync.Font.render( this.component.render( "font" ), this._container );
     Echo.Sync.Color.renderFB( this.component, this._container );
