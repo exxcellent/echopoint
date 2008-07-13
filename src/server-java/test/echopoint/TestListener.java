@@ -23,7 +23,6 @@ import nextapp.echo.app.event.ActionListener;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.Label;
 import org.junit.runner.JUnitCore;
-import org.junit.runner.Result;
 import org.junit.runner.Description;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
@@ -55,7 +54,7 @@ class TestListener implements ActionListener
    */
   public void actionPerformed( final ActionEvent event )
   {
-    final Button button = (Button) event.getSource();
+    final MenuButton button = (MenuButton) event.getSource();
     try
     {
       test( button );
@@ -73,7 +72,7 @@ class TestListener implements ActionListener
    * @throws Exception If errors are encountered while initialising the
    *   test case.
    */
-  protected void test( final Button button ) throws Exception
+  protected void test( final MenuButton button ) throws Exception
   {
     final String testCaseName =
         getClass().getPackage().getName() + "." + button.getText() + "Test";

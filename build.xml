@@ -204,6 +204,8 @@
         <file name='Sync.AbstractHtmlComponent.js'/>
         <file name='Sync.DirectHtml.js'/>
         <file name='Sync.HtmlLabel.js'/>
+        <file name='Application.HttpPane.js'/>
+        <file name='Sync.HttpPane.js'/>
       </filelist>
       <filelist dir='${dir.src.client.test}/app'>
         <file name='TestApp.js'/>
@@ -213,6 +215,7 @@
         <file name='Button.js'/>
         <file name='DirectHtmlTest.js'/>
         <file name='HtmlLabelTest.js'/>
+        <file name='HttpPaneTest.js'/>
       </filelist>
     </concat>
 

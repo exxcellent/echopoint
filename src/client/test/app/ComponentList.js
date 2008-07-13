@@ -13,7 +13,8 @@ echopoint.test.ComponentList = Core.extend( Echo.Column,
   {
     COMPONENTS: new Array(
         "DirectHtml",
-        "HtmlLabel"
+        "HtmlLabel",
+        "HttpPane"
       )
   },
 

@@ -12,5 +12,5 @@ echopoint.DirectHtmlSync = Core.extend( echopoint.internal.AbstractHtmlComponent
   },
 
   /** The container element for this component */
-  _containerType: "div"
+  containerType: "div"
 });

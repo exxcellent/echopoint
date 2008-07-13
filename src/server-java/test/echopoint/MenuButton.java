@@ -18,57 +18,47 @@
 
 package echopoint;
 
-import nextapp.echo.app.Column;
-import nextapp.echo.app.Component;
+import nextapp.echo.app.Border;
+import nextapp.echo.app.Color;
 
 /**
- * A component used to list the various echopoint components that are to be
- * tested.
+ * A custom styled button used to display the controls for testing the
+ * various echopoint components.
  *
  * @author Rakesh 2008-06-24
  * @version $Id$
  */
-public class ComponentList extends Column
+public class MenuButton extends nextapp.echo.app.Button
 {
   private static final long serialVersionUID = 1l;
 
   /**
-   * The array of names of components that are to be tested.
+   * Create a new instance of the button with the specified title.  Note
+   * that the title should match the name of that class to be tested.
+   *
+   * @param componentName The name of the component to test.
    */
-  protected static final String[] COMPONENTS =
-      {
-        "DirectHtml",
-        "HtmlLabel",
-        "HttpPane"
-      };
+  public MenuButton( final String componentName )
+  {
+    super( componentName );
+    setRenderId( "echopointUnitTestButton" + componentName );
+  }
 
   /**
    * Life-cycle method invoked when the component is added to the hierarchy.
-   * Layouts out the components that are to be tested.
-   *
-   * @see #COMPONENTS
-   * @see #createButton
+   * Sets the stylistic features for the button.
    */
   @Override
   public void init()
   {
-    removeAll();
     super.init();
 
-    for ( String component : COMPONENTS )
-    {
-      add( createButton( component ) );
-    }
-  }
+    final Color color = Color.BLACK;
+    final Border border = new Border( 1, color, Border.STYLE_OUTSET );
+    setBorder( border );
 
-  /**
-   * Create the control used to display the {@link DirectHtml} component.
-   *
-   * @param component The name of the component to test.
-   * @return The component that triggers a test.
-   */
-  protected Component createButton( final String component )
-  {
-    return new MenuButton( component );
+    final Border pressed = new Border( 1, color, Border.STYLE_INSET );
+    setPressedBorder( pressed );
+    addActionListener( new TestListener() );
   }
 }

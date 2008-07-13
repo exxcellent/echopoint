@@ -15,36 +15,32 @@
  * for the specific language governing rights and limitations under the
  * License.
  */
+package echopoint;
 
-package echopoint.internal;
-
-import echopoint.CommonResources;
-import echopoint.CommonService;
-import nextapp.echo.app.Component;
-import nextapp.echo.app.util.Context;
-import nextapp.echo.webcontainer.AbstractComponentSynchronizePeer;
-import nextapp.echo.webcontainer.ServerMessage;
 import nextapp.echo.webcontainer.Service;
 import nextapp.echo.webcontainer.WebContainerServlet;
+import nextapp.echo.webcontainer.ServerMessage;
+import nextapp.echo.webcontainer.AbstractComponentSynchronizePeer;
 import nextapp.echo.webcontainer.service.JavaScriptService;
+import nextapp.echo.app.util.Context;
+import nextapp.echo.app.Component;
 
 /**
- * Rendering peer for the {@link echopoint.internal.AbstractHtmlComponent} class.
+ * Rendering peer for the {@link echopoint.HttpPane} class.
  *
- * @author Rakesh 2008-03-22
+ * @author Rakesh 2008-07-13
  * @version $Id$
  */
-public class AbstractHtmlComponentPeer
-  extends AbstractComponentSynchronizePeer
+public class HttpPanePeer extends AbstractComponentSynchronizePeer
 {
-  /** The name of the component for which this class is a peer. */
-  private static final String COMPONENT_NAME = AbstractHtmlComponent.class.getName();
+  /** The component name for which this class is a peer. */
+  private static final String COMPONENT_NAME = HttpPane.class.getName();
 
   /** The JS service files to load. */
   private static final String[] SERVICE_FILES =
   {
-    "resource/js/Application.HtmlComponent.js",
-    "resource/js/Sync.AbstractHtmlComponent.js"
+    "resource/js/Application.HttpPane.js",
+    "resource/js/Sync.HttpPane.js"
   };
 
   /** The service for the client side peer for this component. */
@@ -79,7 +75,7 @@ public class AbstractHtmlComponentPeer
   @Override
   public Class getComponentClass()
   {
-    return AbstractHtmlComponent.class;
+    return HttpPane.class;
   }
 
   /**
@@ -91,3 +87,4 @@ public class AbstractHtmlComponentPeer
     return COMPONENT_NAME;
   }
 }
+

@@ -71,6 +71,9 @@ echopoint.constants =
   DIRECT_HTML: "echopoint.DirectHtml",
 
   /** The name of the HtmlLabel component. */
-  HTML_LABEL: "echopoint.HtmlLabel"
+  HTML_LABEL: "echopoint.HtmlLabel",
+
+  /** The name of the HttpPane component. */
+  HTTP_PANE: "echopoint.HttpPane"
 };
 

@@ -82,12 +82,13 @@ echopoint.test.DirectHtmlTest = Core.extend(
   /** Create the component being tested. */
   _createComponent: function( content, target )
   {
-    var rid = "echopointUnitTestDirectHtml" +
-                   ( target == null ) ? "NoTarget" : "Target";
+    var rid = "echopointUnitTestDirectHtml";
+    rid += ( target == null ) ? "NoTarget" : "Target";
     return new echopoint.DirectHtml(
     {
       renderId: rid,
-      text: content, target: target
+      text: content,
+      target: target
     } );
   }
 });

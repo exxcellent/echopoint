@@ -34,6 +34,7 @@ import nextapp.echo.webcontainer.service.JavaScriptService;
  */
 public class DirectHtmlPeer extends AbstractHtmlComponentPeer
 {
+  /** The component name for which this class is a peer. */
   private static final String COMPONENT_NAME = DirectHtml.class.getName();
 
   /** The service for the client side peer for this component. */

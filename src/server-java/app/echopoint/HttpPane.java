@@ -1,0 +1,86 @@
+/*
+ * This file is part of the Echo Point Project.  This project is a
+ * collection of Components that have extended the Echo Web Application
+ * Framework Version 3.
+ *
+ * Version: MPL 1.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ */
+package echopoint;
+
+import nextapp.echo.app.Component;
+
+/**
+ * A component that uses a <code>iframe</code> to dislay the contents of a
+ * user specified URI.
+ *
+ * @author Brad Baker
+ * <p>Modified by Rakesh 2008-07-13</p>
+ * @version $Id$
+ */
+public class HttpPane extends Component
+{
+  private static final long serialVersionUID = 1l;
+
+  /** The URI to display in this component. */
+  public static final String PROPERTY_URI = "uri";
+
+  /** Constructs a new instance that loads a blank page. */
+  public HttpPane()
+  {
+    this( "javascript:void" );
+  }
+
+  /**
+   * Constructs a new instance that loads the contents of the specified URI.
+   * Note that the URI needs to specify the protocal (eg. http, https, etc.)
+   * for the iframe to load the contents properly.
+   *
+   * @param uri The URI to load in this component.
+   */
+  public HttpPane( String uri )
+  {
+    setURI( uri );
+  }
+
+  /**
+   * Return the URI that is currently loaded in this component.
+   *
+   * @return The URI being displayed
+   */
+  public String getURI()
+  {
+    return (String) getProperty( PROPERTY_URI );
+  }
+
+  /**
+   * Sets the URI to display in this component.
+   *
+   * @param uri The URI to load in this component.
+   */
+  public void setURI( String uri )
+  {
+    setProperty( PROPERTY_URI, uri );
+  }
+
+  /**
+   * Over-ridden to unconditionally return <code>false</code> as no children
+   * are allowed.
+   *
+   * @inheritDoc
+   */
+  @Override
+  public boolean isValidChild( final Component child )
+  {
+    return false;
+  }
+}

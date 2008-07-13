@@ -12,5 +12,5 @@ echopoint.HtmlLabelSync = Core.extend( echopoint.internal.AbstractHtmlComponentS
   },
 
   /** The container element for this component */
-  _containerType: "span"
+  containerType: "span"
 });

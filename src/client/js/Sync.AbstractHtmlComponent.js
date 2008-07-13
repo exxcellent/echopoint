@@ -13,15 +13,18 @@ echopoint.internal.AbstractHtmlComponentSync = Core.extend( Echo.Render.Componen
     Echo.Render.registerPeer( echopoint.constants.ABSTRACT_HTML_COMPONENT, this );
   },
 
-  /** The type of container to use.  Sub-classes must set this. */
-  _containerType: null,
+  $virtual:
+  {
+    /** The type of container to use.  Sub-classes must set this. */
+    containerType: null
+  },
 
   /** The container element for this component */
   _container: null,
 
   renderAdd: function( update, parentElement )
   {
-    this._container = document.createElement( this._containerType );
+    this._container = document.createElement( this.containerType );
     this._container.id = this.component.renderId;
 
     Echo.Sync.Font.render( this.component.render( "font" ), this._container );
@@ -35,7 +38,7 @@ echopoint.internal.AbstractHtmlComponentSync = Core.extend( Echo.Render.Componen
   renderDispose: function( update )
   {
     this._container = null;
-    this._containerType = null;
+    this.containerType = null;
   },
 
   renderUpdate: function( update )
