@@ -23,6 +23,18 @@ import nextapp.echo.app.Component;
  * A component that uses a <code>iframe</code> to dislay the contents of a
  * user specified URI.
  *
+ * <p>The following code sample shows usage of this component:</p>
+ * <pre>
+ *   import echopoint.HttpPane;
+ *   import nextapp.echo.app.Column;
+ *
+ *     ...
+ *     final Column column = new Column();
+ *     final String uri = "https://echopoint.dev.java.net/";
+ *     final HttpPane pane = new HttpPane( uri );
+ *     column.add( pane );
+ * </pre>
+ *
  * @author Brad Baker
  * <p>Modified by Rakesh 2008-07-13</p>
  * @version $Id$
