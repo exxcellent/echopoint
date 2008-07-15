@@ -10,7 +10,7 @@ echopoint.test.HttpPaneTest = Core.extend(
 {
   $static:
   {
-    DEFAULT_URI: "http://wiki.nextapp.com/echowiki/EchoPoint"
+    DEFAULT_URI: "https://echopoint.dev.java.net/"
   },
 
   $construct: function( testArea )

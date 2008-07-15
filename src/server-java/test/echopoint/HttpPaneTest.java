@@ -40,7 +40,7 @@ public class HttpPaneTest
 {
   /** The default URI to load in the test component. */
   private static final String DEFAULT_URI =
-      "http://wiki.nextapp.com/echowiki/EchoPoint";
+      "https://echopoint.dev.java.net/";
 
   /** The component that will be tested. */
   private static HttpPane component;
