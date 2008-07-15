@@ -17,11 +17,16 @@
  */
 package echopoint;
 
+import echopoint.internal.AbstractContainer;
 import nextapp.echo.app.Component;
 
 /**
  * A component that uses a <code>iframe</code> to dislay the contents of a
- * user specified URI.
+ * user specified URI.  Note that unlike the EPNG
+ * <a href='http://docs.rakeshv.org/java/echopointng/echopointng/HttpPaneEx.html'>HttpPaneEx</a>
+ * component, this component is not a subclass of {@link
+ * nextapp.echo.app.ContentPane} and hence may be embedded anywhere within
+ * your application component hierarchy.
  *
  * <p>The following code sample shows usage of this component:</p>
  * <pre>
@@ -35,11 +40,10 @@ import nextapp.echo.app.Component;
  *     column.add( pane );
  * </pre>
  *
- * @author Brad Baker
- * <p>Modified by Rakesh 2008-07-13</p>
+ * @author Brad Baker.  Modified by Rakesh 2008-07-13
  * @version $Id$
  */
-public class HttpPane extends Component
+public class HttpPane extends AbstractContainer
 {
   private static final long serialVersionUID = 1l;
 

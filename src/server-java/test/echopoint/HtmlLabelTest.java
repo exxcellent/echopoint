@@ -22,6 +22,9 @@ import static org.junit.Assert.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import nextapp.echo.app.Label;
+import nextapp.echo.app.Color;
+import nextapp.echo.app.Border;
+import nextapp.echo.app.Extent;
 
 /**
  * Test case for the {@link HtmlLabel} component.  Exercises getting and
@@ -42,9 +45,13 @@ public class HtmlLabelTest
   @BeforeClass
   public static void init()
   {
+    final Border border = new Border( new Extent( 2 ),
+        new Color( 0xcfdfff ), Border.STYLE_GROOVE );
+
     final MainContent content = Application.getContent();
     component = new HtmlLabel();
     component.setRenderId( "echoPointUnitTestHtmlLabel" );
+    component.setBorder( border );
     content.getTestArea().removeAll();
     content.getTestArea().add( component );
 

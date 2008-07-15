@@ -28,6 +28,8 @@ import nextapp.echo.app.Button;
 import nextapp.echo.app.Color;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.Label;
+import nextapp.echo.app.Extent;
+import nextapp.echo.app.Row;
 import nextapp.echo.app.event.ActionEvent;
 import nextapp.echo.app.event.ActionListener;
 import nextapp.echo.extras.app.RichTextArea;
@@ -153,12 +155,22 @@ public class DirectHtmlTest
     content.add( row );
     */
 
+    final Border border = new Border( new Extent( 2 ),
+        new Color( 0xcfdfff ), Border.STYLE_GROOVE );
+    final Extent height = new Extent( 100 );
+    final Extent width = new Extent( 500 );
     final DirectHtml complex = new DirectHtml( COMPLEX_TEXT );
     complex.setRenderId( "echopointUnitTestDirectHtmlNoTarget" );
+    complex.setBorder( border );
+    complex.setHeight( height );
+    complex.setWidth( width );
     content.add( complex );
 
     final DirectHtml simple = new DirectHtml( LINK_TEXT, "_new" );
     simple.setRenderId( "echopointUnitTestDirectHtmlTarget" );
+    simple.setBorder( border );
+    simple.setHeight( height );
+    simple.setWidth( width );
     content.add( simple );
   }
 

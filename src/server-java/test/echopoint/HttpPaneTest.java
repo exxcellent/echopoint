@@ -26,6 +26,9 @@ import static org.junit.Assert.assertNotNull;
 import nextapp.echo.app.Button;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.TextField;
+import nextapp.echo.app.Border;
+import nextapp.echo.app.Extent;
+import nextapp.echo.app.Color;
 import nextapp.echo.app.event.ActionListener;
 import nextapp.echo.app.event.ActionEvent;
 
@@ -45,9 +48,18 @@ public class HttpPaneTest
   @BeforeClass
   public static void init()
   {
+    final Border border = new Border( new Extent( 2 ),
+        new Color( 0xcfdfff ), Border.STYLE_GROOVE );
+    final Extent height = new Extent( 500 );
+    final Extent width = new Extent( 600 );
+
     final Component content = Application.getContent().getTestArea();
     component = new HttpPane();
     component.setRenderId( "echopointUnitTestHttpPane" );
+    component.setBorder( border );
+    component.setHeight( height );
+    component.setWidth( width );
+
     content.removeAll();
     content.add( component );
 

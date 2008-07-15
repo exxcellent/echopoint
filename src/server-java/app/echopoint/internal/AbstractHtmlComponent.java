@@ -26,7 +26,7 @@ import nextapp.echo.app.Component;
  * @author Rakesh 2008-03-22
  * @version $Id$
  */
-public abstract class AbstractHtmlComponent extends Component
+public abstract class AbstractHtmlComponent extends AbstractContainer
 {
   private static final long serialVersionUID = 1l;
 

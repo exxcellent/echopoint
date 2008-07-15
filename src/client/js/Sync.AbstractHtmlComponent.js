@@ -26,9 +26,8 @@ echopoint.internal.AbstractHtmlComponentSync = Core.extend( Echo.Render.Componen
   {
     this._container = document.createElement( this.containerType );
     this._container.id = this.component.renderId;
+    this._renderStyle();
 
-    Echo.Sync.Font.render( this.component.render( "font" ), this._container );
-    Echo.Sync.Color.renderFB( this.component, this._container );
     this._container.innerHTML = this.component.render( "text", "" );
     this._processLinks();
 
@@ -45,6 +44,34 @@ echopoint.internal.AbstractHtmlComponentSync = Core.extend( Echo.Render.Componen
   {
     this._container.innerHTML = this.component.render( "text", "" );
     this._processLinks();
+  },
+
+  /** Set the styles for the component. */
+  _renderStyle: function()
+  {
+    this._container.style.overflow = "auto";
+    
+    Echo.Sync.Alignment.render( this.component.render( "alignment" ),
+        this._container, false, null );
+    Echo.Sync.Border.render( this.component.render( "border" ), this._container );
+    Echo.Sync.Color.renderFB( this.component, this._container );
+    Echo.Sync.Font.render( this.component.render( "font" ), this._container );
+    Echo.Sync.FillImage.render(
+        this.component.render( "backgroundImage" ), this._container );
+    Echo.Sync.Insets.render(
+        this.component.render( "insets" ), this._container, "padding" );
+
+    var width = this.component.render( "width" );
+    if ( width && !Echo.Sync.Extent.isPercent( width ) )
+    {
+      this._container.style.width = Echo.Sync.Extent.toCssValue( width, true );
+    }
+
+    var height = this.component.render( "height" );
+    if ( height )
+    {
+      this._container.style.height = Echo.Sync.Extent.toCssValue( height, false );
+    }
   },
 
   /**

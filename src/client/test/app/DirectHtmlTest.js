@@ -64,7 +64,7 @@ echopoint.test.DirectHtmlTest = Core.extend(
     var button = new Echo.Button(
     {
       renderId: "echopointUnitTestDirectHtmlDisplay",
-      style: "Default",
+      styleName: "Default",
       text: "Save",
       events:
       {
@@ -87,6 +87,7 @@ echopoint.test.DirectHtmlTest = Core.extend(
     return new echopoint.DirectHtml(
     {
       renderId: rid,
+      styleName: "Default",
       text: content,
       target: target
     } );
