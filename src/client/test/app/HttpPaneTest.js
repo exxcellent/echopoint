@@ -47,7 +47,7 @@ echopoint.test.HttpPaneTest = Core.extend(
     var button = new Echo.Button(
     {
       renderId: "echopointUnitTestHttpPaneDisplay",
-      style: "Default",
+      styleName: "Default",
       text: "Load",
       events:
       {
@@ -68,6 +68,7 @@ echopoint.test.HttpPaneTest = Core.extend(
     return new echopoint.HttpPane(
     {
       renderId: "echopointUnitTestHttpPane",
+      styleName: "Default",
       uri: testUri
     } );
   }

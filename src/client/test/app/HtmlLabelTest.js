@@ -22,6 +22,7 @@ echopoint.test.HtmlLabelTest = Core.extend(
     return new echopoint.HtmlLabel(
       {
         renderId: "echopointUnitTestHtmlLabel",
+        styleName: "Default",
         text: echopoint.test.HtmlLabelTest.CONTENT
       } );
   }
