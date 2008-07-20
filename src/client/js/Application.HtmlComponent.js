@@ -10,7 +10,7 @@
  * Abstract super-class component of components that render raw HTML
  * content.
  */
-echopoint.internal.AbstractHtmlComponent = Core.extend( Echo.Component,
+echopoint.internal.AbstractHtmlComponent = Core.extend( echopoint.internal.AbstractContainer,
 {
   $abstract: true,
 

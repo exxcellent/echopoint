@@ -4,11 +4,17 @@
  * @author Rakesh 2008-07-13
  * @version: $Id$
  */
-echopoint.HttpPaneSync = Core.extend( Echo.Render.ComponentSync,
+echopoint.HttpPaneSync = Core.extend( echopoint.internal.AbstractContainerSync,
 {
   $load: function()
   {
     Echo.Render.registerPeer( echopoint.constants.HTTP_PANE, this );
+  },
+
+  $static:
+  {
+    DEFAULT_HEIGHT: "100%",
+    DEFAULT_WIDTH: "100%"
   },
 
   /**
@@ -25,6 +31,8 @@ echopoint.HttpPaneSync = Core.extend( Echo.Render.ComponentSync,
   {
     this._container = document.createElement( "div" );
     this._container.id = this.component.renderId;
+    this.renderStyle( this._container );
+    this._renderContainerStyle();
     this._container.appendChild( this._createIframe() );
 
     parentElement.appendChild( this._container );
@@ -46,54 +54,26 @@ echopoint.HttpPaneSync = Core.extend( Echo.Render.ComponentSync,
   {
     this._iframe = document.createElement( "iframe" );
     this._iframe.allowtransparency = "true";
-    this._renderStyle();
     this._iframe.src = this.component.get( "uri" );
+    this._renderIframeStyle();
 
     return this._iframe;
   },
 
-  /** Set the styles for the iframe element. */
-  _renderStyle: function()
-  {
-    this._renderContainerStyle();
-    this._renderIframeStyle();
-  },
+  /** Over-ridden to return the value to use. */
+  getDefaultHeight: function() { return echopoint.HttpPaneSync.DEFAULT_HEIGHT; },
 
+  /** Over-ridden to return the value to use. */
+  getDefaultWidth: function() { return echopoint.HttpPaneSync.DEFAULT_WIDTH; },
+
+  /** Additional style configuration for the container element. */
   _renderContainerStyle: function()
   {
     this._container.style.position = "absolute";
     this._container.style.overflow = "auto";
-
-    Echo.Sync.Alignment.render( this.component.render( "alignment" ),
-        this._container, false, null );
-    Echo.Sync.Border.render( this.component.render( "border" ), this._container );
-    Echo.Sync.Color.renderFB( this.component, this._container );
-    Echo.Sync.FillImage.render(
-        this.component.render( "backgroundImage" ), this._container );
-    Echo.Sync.Insets.render(
-        this.component.render( "insets" ), this._container, "padding" );
-
-    var width = this.component.render( "width" );
-    if ( width && !Echo.Sync.Extent.isPercent( width ) )
-    {
-      this._container.style.width = Echo.Sync.Extent.toCssValue( width, true );
-    }
-    else
-    {
-      this._container.style.width = "100%";
-    }
-
-    var height = this.component.render( "height" );
-    if ( height )
-    {
-      this._container.style.height = Echo.Sync.Extent.toCssValue( height, false );
-    }
-    else
-    {
-      this._container.style.height = "100%";
-    }
   },
 
+  /** The styles to apply to the iframe element. */
   _renderIframeStyle: function()
   {
     this._iframe.style.position = "relative";

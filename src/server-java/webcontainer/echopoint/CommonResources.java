@@ -31,7 +31,7 @@ public class CommonResources
   /** Register the <code>Echopoint</code> package. */
   static
   {
-    WebContainerServlet.getResourceRegistry().addPackage( "echopoint", "js");
+    WebContainerServlet.getResourceRegistry().addPackage( "echopoint", "resource/");
   }
 
   /** Dummy method that must be invoked by all component peers. */

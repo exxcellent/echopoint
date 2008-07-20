@@ -39,7 +39,8 @@ public class ComponentList extends Column
       {
         "DirectHtml",
         "HtmlLabel",
-        "HttpPane"
+        "HttpPane",
+        "Strut",
       };
 
   /**

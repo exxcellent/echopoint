@@ -16,41 +16,45 @@
  * License.
  */
 
-package echopoint;
+package echopoint.internal;
 
-import echopoint.internal.AbstractContainerPeer;
-import nextapp.echo.app.Component;
-import nextapp.echo.app.util.Context;
+import nextapp.echo.webcontainer.AbstractComponentSynchronizePeer;
 import nextapp.echo.webcontainer.ServerMessage;
-import nextapp.echo.webcontainer.Service;
 import nextapp.echo.webcontainer.WebContainerServlet;
+import nextapp.echo.webcontainer.Service;
 import nextapp.echo.webcontainer.service.JavaScriptService;
+import nextapp.echo.app.util.Context;
+import nextapp.echo.app.Component;
+import echopoint.CommonService;
+import echopoint.CommonResources;
 
 /**
- * Rendering peer for the {@link echopoint.HttpPane} class.
+ * Rendering peer for the {@link echopoint.internal.AbstractContainer} root
+ * component from which most components are derived.
  *
- * @author Rakesh 2008-07-13
+ * @author Rakesh 2008-07-20
  * @version $Id$
  */
-public class HttpPanePeer extends AbstractContainerPeer
+public class AbstractContainerPeer extends AbstractComponentSynchronizePeer
 {
-  /** The component name for which this class is a peer. */
-  private static final String COMPONENT_NAME = HttpPane.class.getName();
+  /** The name of the component for which this class is a peer. */
+  private static final String COMPONENT_NAME = AbstractContainer.class.getName();
 
   /** The JS service files to load. */
   private static final String[] SERVICE_FILES =
   {
-    "resource/js/Application.HttpPane.js",
-    "resource/js/Sync.HttpPane.js"
+      "resource/js/Application.AbstractContainer.js",
+      "resource/js/Sync.AbstractContainer.js"
   };
 
   /** The service for the client side peer for this component. */
   private static final Service COMPONENT_SERVICE =
-    JavaScriptService.forResources( COMPONENT_NAME, SERVICE_FILES );
+      JavaScriptService.forResources( COMPONENT_NAME, SERVICE_FILES );
 
   /** Register the services */
   static
   {
+    CommonResources.install();
     WebContainerServlet.getServiceRegistry().add( COMPONENT_SERVICE );
   }
 
@@ -59,11 +63,12 @@ public class HttpPanePeer extends AbstractContainerPeer
    * @see nextapp.echo.webcontainer.AbstractComponentSynchronizePeer#init
    */
   @Override
-  public void init( final Context context, final  Component component )
+  public void init( final Context context, final Component component )
   {
     super.init( context, component );
     ServerMessage serverMessage =
-      (ServerMessage) context.get( ServerMessage.class );
+        (ServerMessage) context.get( ServerMessage.class );
+    serverMessage.addLibrary( CommonService.ECHOPOINT_SERVICE.getId() );
     serverMessage.addLibrary( COMPONENT_NAME );
   }
 
@@ -74,17 +79,15 @@ public class HttpPanePeer extends AbstractContainerPeer
   @Override
   public Class getComponentClass()
   {
-    return HttpPane.class;
+    return AbstractContainer.class;
   }
 
   /**
    * @inheritDoc
    * @see nextapp.echo.webcontainer.AbstractComponentSynchronizePeer#getClientComponentType
    */
-  @Override
   public String getClientComponentType( final boolean shortType )
   {
     return COMPONENT_NAME;
   }
 }
-

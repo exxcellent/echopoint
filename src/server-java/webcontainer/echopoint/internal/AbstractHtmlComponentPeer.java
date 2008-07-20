@@ -18,11 +18,8 @@
 
 package echopoint.internal;
 
-import echopoint.CommonResources;
-import echopoint.CommonService;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.util.Context;
-import nextapp.echo.webcontainer.AbstractComponentSynchronizePeer;
 import nextapp.echo.webcontainer.ServerMessage;
 import nextapp.echo.webcontainer.Service;
 import nextapp.echo.webcontainer.WebContainerServlet;
@@ -34,8 +31,7 @@ import nextapp.echo.webcontainer.service.JavaScriptService;
  * @author Rakesh 2008-03-22
  * @version $Id$
  */
-public class AbstractHtmlComponentPeer
-  extends AbstractComponentSynchronizePeer
+public class AbstractHtmlComponentPeer extends AbstractContainerPeer
 {
   /** The name of the component for which this class is a peer. */
   private static final String COMPONENT_NAME = AbstractHtmlComponent.class.getName();
@@ -54,7 +50,6 @@ public class AbstractHtmlComponentPeer
   /** Register the services */
   static
   {
-    CommonResources.install();
     WebContainerServlet.getServiceRegistry().add( COMPONENT_SERVICE );
   }
 
@@ -68,8 +63,7 @@ public class AbstractHtmlComponentPeer
     super.init( context, component );
     ServerMessage serverMessage =
       (ServerMessage) context.get( ServerMessage.class );
-    serverMessage.addLibrary( CommonService.ECHOPOINT_SERVICE.getId() );
-    serverMessage.addLibrary(  COMPONENT_NAME );
+    serverMessage.addLibrary( COMPONENT_NAME );
   }
 
   /**

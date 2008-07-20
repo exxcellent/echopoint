@@ -1,4 +1,23 @@
-echopoint.test.TestApp.StyleSheet = new Echo.StyleSheet({
+echopoint.test.TestApp.StyleSheet = new Echo.StyleSheet(
+{
+  "RowStrut":
+  {
+    "echopoint.Strut":
+    {
+      border: "1px outset #709bcd",
+      width: "50px",
+      height: "100%"
+    }
+  },
+  "ColumnStrut":
+  {
+    "echopoint.Strut":
+    {
+      border: "1px outset #709bcd",
+      height: "100px",
+      width: "100%"
+    }
+  },
   "ControlPane": {
     "Row": {
       layoutData: {

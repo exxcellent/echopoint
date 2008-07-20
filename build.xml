@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 
-<!-- -
+<!--
  * This file is part of the Echo Point Project.  This project is a
  * collection of Components that have extended the Echo Web Application
  * Framework.
@@ -107,6 +107,12 @@
       </fileset>
     </copy>
 
+    <copy todir='${dir.build.images}'>
+      <fileset dir='${dir.src.client.images}'>
+        <patternset refid='fileset.resources' />
+      </fileset>
+    </copy>
+
     <delete file='${dir.dist}/echopoint.jar' />
     <jar jarfile='${dir.dist}/${jarfile}' basedir='${dir.build.api}'>
       <metainf dir='${dir.src.server.webcontainer}/META-INF'>
@@ -200,15 +206,19 @@
       </filelist>
       <filelist dir='${dir.src.client.app}'>
         <file name='Echopoint.js'/>
+        <file name='Application.AbstractContainer.js'/>
+        <file name='Sync.AbstractContainer.js'/>
         <file name='Application.HtmlComponent.js'/>
         <file name='Sync.AbstractHtmlComponent.js'/>
         <file name='Sync.DirectHtml.js'/>
         <file name='Sync.HtmlLabel.js'/>
         <file name='Application.HttpPane.js'/>
         <file name='Sync.HttpPane.js'/>
+        <file name='Application.Strut.js'/>
+        <file name='Sync.Strut.js'/>
       </filelist>
       <filelist dir='${dir.src.client.test}/app'>
-        <file name='TestApp.js'/>
+        <file name='TestAppDeploy.js'/>
         <file name='Default.StyleSheet.js'/>
         <file name='MainContent.js'/>
         <file name='ComponentList.js'/>
@@ -216,6 +226,7 @@
         <file name='DirectHtmlTest.js'/>
         <file name='HtmlLabelTest.js'/>
         <file name='HttpPaneTest.js'/>
+        <file name='StrutTest.js'/>
       </filelist>
     </concat>
 
@@ -231,6 +242,9 @@
         <exclude name='index*.html' />
         <exclude name='web.xml' />
       </fileset>
+    </copy>
+    <copy todir='${dir.src.client.test.tempdir}/resource/images'>
+      <fileset dir='${dir.src.client.images}' />
     </copy>
     <copy file='${dir.src.client.test}/index-out.html'
       tofile='${dir.src.client.test.tempdir}/index.html'

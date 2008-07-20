@@ -64,6 +64,9 @@ echopoint.constants =
    */
   uniqueId: 20080624,
 
+  /** The name of the AbstractContainer. */
+  ABSTRACT_CONTAINER: "echopoint.internal.AbstractContainer",
+
   /** The name of the AbstractHtmlComponent. */
   ABSTRACT_HTML_COMPONENT: "echopoint.internal.AbstractHtmlComponent",
 
@@ -74,6 +77,9 @@ echopoint.constants =
   HTML_LABEL: "echopoint.HtmlLabel",
 
   /** The name of the HttpPane component. */
-  HTTP_PANE: "echopoint.HttpPane"
+  HTTP_PANE: "echopoint.HttpPane",
+
+  /** The name of the Strut component. */
+  STRUT: "echopoint.Strut"
 };
 

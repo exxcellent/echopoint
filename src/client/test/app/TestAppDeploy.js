@@ -1,7 +1,9 @@
 /**
- * Root namespace for the Echopoint client-side test application.
+ * Root namespace for the Echopoint client-side test application.  This file
+ * is used for the echopointclienttest.war file since the image paths are
+ * different for the deployable client application.
  *
- * @author Rakesh 2008-06-26
+ * @author Rakesh 2008-07-20
  * @version $Id$
  */
 echopoint.test = {};
@@ -35,7 +37,7 @@ function init()
   var client = new Echo.FreeClient( testApp, document.getElementById( "rootArea" ) );
   client.addResourcePath( "Echo", "lib/echo/" );
   client.addResourcePath( "Extras", "lib/extras/" );
-  client.addResourcePath( "echopoint", "../" );
+  client.addResourcePath( "echopoint", "resource/" );
   testApp.setStyleSheet( echopoint.test.TestApp.StyleSheet );
   client.init();
 };

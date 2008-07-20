@@ -16,13 +16,13 @@ echopoint.test.DirectHtmlTest = Core.extend(
              "<ol><li><b>First</b> line.</li>" +
              "<li><b>Second</b> line.</li>" +
              "<li><b>Third</b> line.</li></ol>" +
-             "<p>Clicking <a href='http://wiki.nextapp.com/echowiki/EchoPoint'>link</a>" +
+             "<p>Clicking <a href='https://echopoint.dev.java.net/'>link</a>" +
              " should open in the same browser window/tab.</p>",
 
     LINK_CONTENT:  "<h2>DirectHtml With Target Set</h2>" +
-                   "<p>Clicking <a href='http://wiki.nextapp.com/echowiki/EchoPoint'>link</a>" +
+                   "<p>Clicking <a href='https://echopoint.dev.java.net/'>link</a>" +
                    " should open in a new browser window/tab.</p>" +
-                   "<p>Clicking <a href='http://wiki.nextapp.com/echowiki/EchoPoint' target=''>link</a>" +
+                   "<p>Clicking <a href='https://echopoint.dev.java.net/' target=''>link</a>" +
                    " should open in the same browser window/tab.</p>"
   },
 

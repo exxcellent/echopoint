@@ -12,6 +12,7 @@ debug                             true
 dir.src                           src
 dir.src.client                    ${dir.src}/client
 dir.src.client.app                ${dir.src.client}/js
+dir.src.client.images             ${dir.src.client}/images
 dir.src.client.test               ${dir.src.client}/test
 dir.src.server                    ${dir.src}/server-java
 dir.src.server.app                ${dir.src}/server-java/app
@@ -23,6 +24,7 @@ dir.dist                          dist
 dir.build                         build
 dir.build.api                     ${dir.build}/api
 dir.build.resource                ${dir.build.api}/resource/js
+dir.build.images                ${dir.build.api}/resource/images
 dir.build.test                    ${dir.build}/test
 dir.docs                          docs
 dir.docs.api                      ${dir.docs}/api
