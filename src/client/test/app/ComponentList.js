@@ -15,7 +15,8 @@ echopoint.test.ComponentList = Core.extend( Echo.Column,
         "DirectHtml",
         "HtmlLabel",
         "HttpPane",
-        "Strut"
+        "Strut",
+        "TagCloud"
       )
   },
 

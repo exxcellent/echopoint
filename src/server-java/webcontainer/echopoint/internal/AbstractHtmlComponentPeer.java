@@ -61,7 +61,7 @@ public class AbstractHtmlComponentPeer extends AbstractContainerPeer
   public void init( final Context context, final  Component component )
   {
     super.init( context, component );
-    ServerMessage serverMessage =
+    final ServerMessage serverMessage =
       (ServerMessage) context.get( ServerMessage.class );
     serverMessage.addLibrary( COMPONENT_NAME );
   }

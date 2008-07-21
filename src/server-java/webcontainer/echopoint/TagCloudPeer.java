@@ -18,32 +18,30 @@
 
 package echopoint;
 
-import echopoint.internal.AbstractContainerPeer;
-import nextapp.echo.webcontainer.WebContainerServlet;
-import nextapp.echo.webcontainer.ServerMessage;
-import nextapp.echo.webcontainer.Service;
-import nextapp.echo.webcontainer.ContentType;
-import nextapp.echo.webcontainer.ResourceRegistry;
+import echopoint.internal.AbstractPeer;
 import nextapp.echo.webcontainer.service.JavaScriptService;
-import nextapp.echo.app.util.Context;
+import nextapp.echo.webcontainer.WebContainerServlet;
+import nextapp.echo.webcontainer.Service;
+import nextapp.echo.webcontainer.ServerMessage;
 import nextapp.echo.app.Component;
+import nextapp.echo.app.util.Context;
 
 /**
- * Rendering peer for the {@link echopoint.Strut} component.
+ * Component rendering peer for {@link echopoint.TagCloud}.
  *
  * @author Rakesh 2008-07-20
  * @version $Id$
  */
-public class StrutPeer extends AbstractContainerPeer
+public class TagCloudPeer extends AbstractPeer
 {
   /** The component name for which this class is a peer. */
-  private static final String COMPONENT_NAME = Strut.class.getName();
+  private static final String COMPONENT_NAME = TagCloud.class.getName();
 
   /** The JS service files to load. */
   private static final String[] SERVICE_FILES =
       {
-          "resource/js/Application.Strut.js",
-          "resource/js/Sync.Strut.js"
+          "resource/js/Application.TagCloud.js",
+          "resource/js/Sync.TagCloud.js"
       };
 
   /** The service for the client side peer for this component. */
@@ -54,8 +52,6 @@ public class StrutPeer extends AbstractContainerPeer
   static
   {
     WebContainerServlet.getServiceRegistry().add( COMPONENT_SERVICE );
-    final ResourceRegistry resources = WebContainerServlet.getResourceRegistry();
-    resources.add( "echopoint", "images/transparent1x1.gif", ContentType.IMAGE_GIF );
   }
 
   /**
@@ -75,17 +71,15 @@ public class StrutPeer extends AbstractContainerPeer
    * @inheritDoc
    * @see nextapp.echo.webcontainer.AbstractComponentSynchronizePeer#getComponentClass
    */
-  @Override
   public Class getComponentClass()
   {
-    return Strut.class;
+    return TagCloud.class;
   }
 
   /**
    * @inheritDoc
    * @see nextapp.echo.webcontainer.AbstractComponentSynchronizePeer#getClientComponentType
    */
-  @Override
   public String getClientComponentType( final boolean shortType )
   {
     return COMPONENT_NAME;

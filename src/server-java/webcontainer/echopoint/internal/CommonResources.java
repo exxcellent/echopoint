@@ -16,27 +16,24 @@
  * License.
  */
 
-package echopoint;
+package echopoint.internal;
 
-import nextapp.echo.webcontainer.service.JavaScriptService;
-import nextapp.echo.webcontainer.Service;
 import nextapp.echo.webcontainer.WebContainerServlet;
 
 /**
- * Register the Echopoint core library.
+ * Boot-strap code for loading common resources.
  *
  * @author Rakesh 2008-06-23
  * @version $Id$
  */
-public class CommonService
+public class CommonResources
 {
-  /** The service for the core echopoint namespace and components. */
-  public static final Service ECHOPOINT_SERVICE =
-      JavaScriptService.forResource( "echopoint.Boot", "resource/js/Echopoint.js" );
-
-  /** Add the {@link #ECHOPOINT_SERVICE} to the service registry. */
+  /** Register the <code>Echopoint</code> package. */
   static
   {
-    WebContainerServlet.getServiceRegistry().add( ECHOPOINT_SERVICE );
+    WebContainerServlet.getResourceRegistry().addPackage( "echopoint", "resource/");
   }
+
+  /** Dummy method that must be invoked by all component peers. */
+  public static void install() {}
 }

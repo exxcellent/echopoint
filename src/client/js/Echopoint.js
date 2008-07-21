@@ -80,6 +80,19 @@ echopoint.constants =
   HTTP_PANE: "echopoint.HttpPane",
 
   /** The name of the Strut component. */
-  STRUT: "echopoint.Strut"
+  STRUT: "echopoint.Strut",
+
+  /** The name of the TagCloud component. */
+  TAG_CLOUD: "echopoint.TagCloud"
 };
 
+/** The namespace for client-side model objects. */
+echopoint.model =
+{
+   /**
+   * Maintains a unique id for the echopoint.constants namespace.
+   *
+   * @type Number
+   */
+  uniqueId: 20080720
+}

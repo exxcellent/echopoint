@@ -27,6 +27,20 @@ import nextapp.echo.app.Component;
  * is most commonly used to create precise spaces between components laid out
  * in a container component such as {@link nextapp.echo.app.Column}.
  *
+ * <p>The following shows how to add a 50 px space between two labels in
+ * a {@link nextapp.echo.app.Row} container.</p>
+ * <pre>
+ *   import echopoint.Strut;
+ *   import nextapp.echo.app.Label;
+ *   import nextapp.echo.app.Row;
+ *
+ *     ...
+ *     final Row row = new Row();
+ *     row.add( new Label( "Label 1" ) );
+ *     row.add( new Strut( 50, 10 ) );
+ *     row.add( new Label( "Label 2" ) );
+ * </pre>
+ *
  * @author Brad Baker <p>Modified by Rakesh 2008-07-20</p>
  * @version $Id$
  */
@@ -70,7 +84,7 @@ public class Strut extends AbstractContainer
    * @see nextapp.echo.app.Component#isValidChild(nextapp.echo.app.Component)
    */
   @Override
-  public boolean isValidChild( Component child )
+  public boolean isValidChild( final Component child )
   {
     return false;
   }

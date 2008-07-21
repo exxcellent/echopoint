@@ -216,6 +216,8 @@
         <file name='Sync.HttpPane.js'/>
         <file name='Application.Strut.js'/>
         <file name='Sync.Strut.js'/>
+        <file name='Application.TagCloud.js'/>
+        <file name='Sync.TagCloud.js'/>
       </filelist>
       <filelist dir='${dir.src.client.test}/app'>
         <file name='TestAppDeploy.js'/>
@@ -227,6 +229,7 @@
         <file name='HtmlLabelTest.js'/>
         <file name='HttpPaneTest.js'/>
         <file name='StrutTest.js'/>
+        <file name='TagCloudTest.js'/>
       </filelist>
     </concat>
 
@@ -325,15 +328,26 @@
 
 <!-- ************************************************************************************************** -->
   <target name='release' depends='compile'
-    description='Prepares the versioned EchoPoint jar file'>
+    description='Prepares the versioned EchoPoint jar and zip files'>
 
     <delete file='${dir.dist}/echopoint-${version}.jar' />
+    <delete file='${dir.dist}/echopoint-${version}.zip' />
     <jar jarfile='${dir.dist}/echopoint-${version}.jar'
       basedir='${dir.build.api}'>
       <metainf dir='${dir.src.server.webcontainer}/META-INF'>
         <patternset refid='fileset.resources' />
       </metainf>
     </jar>
+
+    <zip destfile='${dir.dist}/echopoint-${version}.zip'>
+      <fileset dir='${dir.dist}'>
+        <include name='echopoint-${version}.jar' />
+      </fileset>
+      <fileset dir='${dir.lib}'>
+        <include name='Echo3*.jar' />
+        <include  name='xstream*.jar' />
+      </fileset>
+    </zip>
   </target>
 
 <!-- ************************************************************************************************** -->

@@ -18,15 +18,12 @@
 
 package echopoint.internal;
 
-import nextapp.echo.webcontainer.AbstractComponentSynchronizePeer;
-import nextapp.echo.webcontainer.ServerMessage;
-import nextapp.echo.webcontainer.WebContainerServlet;
-import nextapp.echo.webcontainer.Service;
-import nextapp.echo.webcontainer.service.JavaScriptService;
-import nextapp.echo.app.util.Context;
 import nextapp.echo.app.Component;
-import echopoint.CommonService;
-import echopoint.CommonResources;
+import nextapp.echo.app.util.Context;
+import nextapp.echo.webcontainer.ServerMessage;
+import nextapp.echo.webcontainer.Service;
+import nextapp.echo.webcontainer.WebContainerServlet;
+import nextapp.echo.webcontainer.service.JavaScriptService;
 
 /**
  * Rendering peer for the {@link echopoint.internal.AbstractContainer} root
@@ -35,7 +32,7 @@ import echopoint.CommonResources;
  * @author Rakesh 2008-07-20
  * @version $Id$
  */
-public class AbstractContainerPeer extends AbstractComponentSynchronizePeer
+public class AbstractContainerPeer extends AbstractPeer
 {
   /** The name of the component for which this class is a peer. */
   private static final String COMPONENT_NAME = AbstractContainer.class.getName();
@@ -54,7 +51,6 @@ public class AbstractContainerPeer extends AbstractComponentSynchronizePeer
   /** Register the services */
   static
   {
-    CommonResources.install();
     WebContainerServlet.getServiceRegistry().add( COMPONENT_SERVICE );
   }
 
@@ -66,9 +62,8 @@ public class AbstractContainerPeer extends AbstractComponentSynchronizePeer
   public void init( final Context context, final Component component )
   {
     super.init( context, component );
-    ServerMessage serverMessage =
+    final ServerMessage serverMessage =
         (ServerMessage) context.get( ServerMessage.class );
-    serverMessage.addLibrary( CommonService.ECHOPOINT_SERVICE.getId() );
     serverMessage.addLibrary( COMPONENT_NAME );
   }
 

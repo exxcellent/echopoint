@@ -37,10 +37,11 @@ public class ComponentList extends Column
    */
   protected static final String[] COMPONENTS =
       {
-        "DirectHtml",
-        "HtmlLabel",
-        "HttpPane",
-        "Strut",
+          "DirectHtml",
+          "HtmlLabel",
+          "HttpPane",
+          "Strut",
+          "TagCloud",
       };
 
   /**
