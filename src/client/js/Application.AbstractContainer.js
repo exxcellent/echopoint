@@ -13,8 +13,11 @@ echopoint.internal.AbstractContainer = Core.extend( Echo.Component,
   $static:
   {
     ALIGNMENT: "alignment",
-    BORDER: "border",
     BACKGROUND_IMAGE: "backgroundImage",
+    BACKGROUND: "background",
+    BORDER: "border",
+    FONT: "font",
+    FOREGROUND: "foreground",
     INSETS: "insets",
     HEIGHT: "height",
     WIDTH: "width"

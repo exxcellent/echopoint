@@ -46,10 +46,12 @@ echopoint.HttpPaneSync = Core.extend( echopoint.internal.AbstractContainerSync,
 
   renderUpdate: function( update )
   {
+    this.renderStyle( this._container, update );
+
     var property = update.getUpdatedProperty( echopoint.HttpPane.URI );
     if ( property )
     {
-      this._iframe.src = this.component.get( echopoint.HttpPane.URI );
+      this._iframe.src = property.newValue;
     }
   },
 

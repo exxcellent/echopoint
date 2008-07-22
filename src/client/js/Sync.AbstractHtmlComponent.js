@@ -44,9 +44,16 @@ echopoint.internal.AbstractHtmlComponentSync = Core.extend( echopoint.internal.A
 
   renderUpdate: function( update )
   {
-    this._container.innerHTML = this.component.render(
-        echopoint.internal.AbstractHtmlComponent.TEXT, "" );
-    this._processLinks();
+    this.renderStyle( this._container, update );
+
+    var property = update.getUpdatedProperty(
+        echopoint.internal.AbstractHtmlComponent.TEXT );
+    if ( property )
+    {
+      this._container.innerHTML =
+        this.component.render( property.newValue, "" );
+      this._processLinks();
+    }
   },
 
   /** Set additional styles for the component. */

@@ -6,7 +6,7 @@ echopoint.test.TestApp.StyleSheet = new Echo.StyleSheet(
     {
       border: "1px outset #709bcd",
       width: "50px",
-      height: "100%"
+      height: "20px"
     }
   },
   "ColumnStrut":
@@ -15,7 +15,7 @@ echopoint.test.TestApp.StyleSheet = new Echo.StyleSheet(
     {
       border: "1px outset #709bcd",
       height: "100px",
-      width: "100%"
+      width: "100px"
     }
   },
   "ControlPane": {

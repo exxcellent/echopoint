@@ -51,9 +51,9 @@ echopoint.test.HttpPaneTest = Core.extend(
       text: "Load",
       events:
       {
-        action: function( event )
+        action: function()
         {
-          component.set( "uri", textField.get( "text" ) );
+          component.set( echopoint.HttpPane.URI, textField.get( "text" ) );
         }
       }
     } );
