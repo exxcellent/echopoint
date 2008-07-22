@@ -22,6 +22,10 @@ import echopoint.model.Tag;
 import nextapp.echo.app.Color;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.Row;
+import nextapp.echo.app.Column;
+import nextapp.echo.app.Button;
+import nextapp.echo.app.event.ActionEvent;
+import nextapp.echo.app.event.ActionListener;
 import org.junit.AfterClass;
 import static org.junit.Assert.*;
 import org.junit.BeforeClass;
@@ -108,7 +112,11 @@ public class TagCloudTest
     //System.out.println( tagCloud.getTagsJson() );
 
     row.add( tagCloud );
-    content.add( row );
+
+    final Column column = new Column();
+    column.add( row );
+    column.add( createUpdate() );
+    content.add( column );
   }
 
   private static Collection<Tag> createTags()
@@ -122,5 +130,26 @@ public class TagCloudTest
     }
 
     return tags;
+  }
+
+  private static Row createUpdate()
+  {
+    final Row row = new Row();
+
+    final Button button = new Button( "Update" );
+    button.setRenderId( "echopointUnitTestTagCloudUpdate" );
+    button.addActionListener(
+    new ActionListener()
+    {
+      private static final long serialVersionUID = 1l;
+
+      public void actionPerformed( final ActionEvent event )
+      {
+        tagCloud.setTags( createTags() );
+      }
+    });
+
+    row.add( button );
+    return row;
   }
 }

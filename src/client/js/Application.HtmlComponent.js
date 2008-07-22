@@ -14,6 +14,12 @@ echopoint.internal.AbstractHtmlComponent = Core.extend( echopoint.internal.Abstr
 {
   $abstract: true,
 
+  /** The properties supported by this component. */
+  $static:
+  {
+    TEXT: "text"
+  },
+
   $load: function()
   {
     Echo.ComponentFactory.registerType(

@@ -15,6 +15,16 @@ echopoint.TagCloud = Core.extend( Echo.Component,
     Echo.ComponentFactory.registerType( echopoint.constants.TAG_CLOUD, this );
   },
 
+  /** Properties defined for this component. */
+  $static:
+  {
+    ROLLOVER_ENABLED: "rolloverEnabled",
+    ROLLOVER_BACKGROUND: "rolloverBackground",
+    ROLLOVER_FOREGROUND: "rolloverForeground",
+    TAGS: "tags",
+    TAGS_JSON: "tagsJson"
+  },
+
   componentType: echopoint.constants.TAG_CLOUD,
 
   doAction: function( tag )
@@ -26,12 +36,6 @@ echopoint.TagCloud = Core.extend( Echo.Component,
 /** The data object for the TagCloud component. */
 echopoint.model.Tag = Core.extend(
 {
-  $construct: function( title, occurances )
-  {
-    this.name = title;
-    this.count = occurances;
-  },
-
   /** The name (title) for the tag. */
   name: null,
 
@@ -39,5 +43,11 @@ echopoint.model.Tag = Core.extend(
    * The count for this tag. This is usually the number of occurances of
    * the name represented in this tag.
    */
-  count: 0
+  count: 0,
+
+  $construct: function( title, occurances )
+  {
+    this.name = title;
+    this.count = occurances;
+  }
 } );

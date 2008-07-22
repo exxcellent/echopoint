@@ -46,7 +46,11 @@ echopoint.HttpPaneSync = Core.extend( echopoint.internal.AbstractContainerSync,
 
   renderUpdate: function( update )
   {
-    this._iframe.src = this.component.get( "uri" );
+    var property = update.getUpdatedProperty( echopoint.HttpPane.URI );
+    if ( property )
+    {
+      this._iframe.src = this.component.get( echopoint.HttpPane.URI );
+    }
   },
 
   /** Create the iframe in which the URI contents are displayed. */
@@ -54,7 +58,7 @@ echopoint.HttpPaneSync = Core.extend( echopoint.internal.AbstractContainerSync,
   {
     this._iframe = document.createElement( "iframe" );
     this._iframe.allowtransparency = "true";
-    this._iframe.src = this.component.get( "uri" );
+    this._iframe.src = this.component.get( echopoint.HttpPane.URI );
     this._renderIframeStyle();
 
     return this._iframe;

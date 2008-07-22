@@ -42,20 +42,22 @@ echopoint.internal.AbstractContainerSync = Core.extend( Echo.Render.ComponentSyn
     /** The method used to render the style properties for the container. */
     renderStyle: function( container )
     {
-      Echo.Sync.Alignment.render( this.component.render( "alignment" ),
+      Echo.Sync.Alignment.render( this.component.render(
+          echopoint.internal.AbstractContainer.ALIGNMENT ),
           container, false, null );
-      Echo.Sync.Border.render( this.component.render( "border" ), container );
+      Echo.Sync.Border.render( this.component.render(
+          echopoint.internal.AbstractContainer.BORDER ), container );
       Echo.Sync.Color.renderFB( this.component, container );
-      Echo.Sync.FillImage.render(
-          this.component.render( "backgroundImage" ), container );
-      Echo.Sync.Insets.render(
-          this.component.render( "insets" ), container, "padding" );
+      Echo.Sync.FillImage.render( this.component.render(
+              echopoint.internal.AbstractContainer.BACKGROUND_IMAGE ), container );
+      Echo.Sync.Insets.render( this.component.render(
+          echopoint.internal.AbstractContainer.INSETS ), container, "padding" );
 
-      var width = this.component.render( "width" );
+      var width = this.component.render( echopoint.internal.AbstractContainer.WIDTH );
       container.style.width = Echo.Sync.Extent.toCssValue(
           ( ( width ) ? width : this.getDefaultWidth() ), true, true );
 
-      var height = this.component.render( "height" );
+      var height = this.component.render( echopoint.internal.AbstractContainer.HEIGHT );
       container.style.height = Echo.Sync.Extent.toCssValue(
           ( ( height ) ? height : this.getDefaultHeight() ), false, true );
     }

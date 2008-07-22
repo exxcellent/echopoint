@@ -29,7 +29,8 @@ echopoint.internal.AbstractHtmlComponentSync = Core.extend( echopoint.internal.A
     this.renderStyle( this._container );
     this._renderStyle();
 
-    this._container.innerHTML = this.component.render( "text", "" );
+    this._container.innerHTML = this.component.render(
+        echopoint.internal.AbstractHtmlComponent.TEXT, "" );
     this._processLinks();
 
     parentElement.appendChild( this._container );
@@ -43,7 +44,8 @@ echopoint.internal.AbstractHtmlComponentSync = Core.extend( echopoint.internal.A
 
   renderUpdate: function( update )
   {
-    this._container.innerHTML = this.component.render( "text", "" );
+    this._container.innerHTML = this.component.render(
+        echopoint.internal.AbstractHtmlComponent.TEXT, "" );
     this._processLinks();
   },
 
@@ -78,9 +80,10 @@ echopoint.internal.AbstractHtmlComponentSync = Core.extend( echopoint.internal.A
       }
       catch ( exception )
       {
-        this._container.innerHTML = this.component.render( "text", "" );
+        this._container.innerHTML = this.component.render( echopoint.internal.AbstractHtmlComponent.TEXT, "" );
         var message = "XML parsing error for html content: " +
-            this.component.get( "text" ) + Core.Debug.toString( exception );
+            this.component.get( echopoint.internal.AbstractHtmlComponent.TEXT ) +
+                      Core.Debug.toString( exception );
         Core.Debug.consoleWrite( message );
       }
     }

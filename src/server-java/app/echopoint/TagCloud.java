@@ -29,7 +29,19 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
 
 /**
- * A tag cloud component based on client-side code contribued by Tod.
+ * A <a href='http://en.wikipedia.org/wiki/Tag_cloud'>tag cloud</a> component
+ * based on client-side code contribued by Tod.  This component supports the
+ * following style properties in addition to those defined in {@link
+ * nextapp.echo.app.Component}:
+ *
+ * <ul>
+ *   <li><code>rolloverEnabled</code> - A flag used to indicate that the tag
+ *     components should support change of style on mouse rollover.</li>
+ *   <li><code>rolloverBackground</code> - The colour to use as the background
+ *     of the tag element over which the mouse hovers.</li>
+ *   <li><code>rolloverForeground</code> - The colour to use for the title
+ *     of the tag element over which the mouse hovers.</li>
+ * </ul>
  *
  * <p>The following shows sample usage of this component:</p>
  * <pre>
@@ -38,7 +50,7 @@ import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
  *   import nextapp.echo.app.Row;
  *
  *     ...
- *     final Collection<Tag> tags = new ArrayList<Tag>();
+ *     final Collection&lt;Tag&gt; tags = new ArrayList&lt;Tag&gt;();
  *     tags.add( new Tag( "Java", 50 ) );
  *     tags.add( new Tag( "Objective-C", 25 ) );
  *     tags.add( new Tag( "Groovy", 10 ) );
@@ -53,7 +65,7 @@ import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
  *     row.add( tc );
  * </pre>
  *
- * @author Rakesh Vidyadharan 2008-07-20
+ * @author Rakesh 2008-07-20
  * @version $Id$
  */
 public class TagCloud extends Component
@@ -71,7 +83,8 @@ public class TagCloud extends Component
 
   /**
    * The JSON representation of {@link echopoint.model.Tag} instances to be
-   * represented in the component.
+   * represented in the component.  Note that this property should be
+   * treated as internal use only.
    */
   public static final String PROPERTY_TAGS_JSON = "tagsJson";
 
@@ -150,26 +163,6 @@ public class TagCloud extends Component
   }
 
   /**
-   * Return the value of the {@link #PROPERTY_TAGS_JSON} propoerty.
-   *
-   * @return The JSON data structure that represents {@link #tags}.
-   */
-  public String getTagsJson()
-  {
-    return (String) getProperty( PROPERTY_TAGS_JSON );
-  }
-
-  /**
-   * Set the value of the {@link #PROPERTY_TAGS_JSON} propoerty.
-   *
-   * @param tagsJson The JSON data structure that represents {@link #tags}.
-   */
-  protected void setTagsJson( final String tagsJson )
-  {
-    setProperty( PROPERTY_TAGS_JSON, tagsJson );
-  }
-
-  /**
    * Return the value of the {@link #tags} propoerty.
    *
    * @return The array of tags represented in this component.
@@ -182,6 +175,7 @@ public class TagCloud extends Component
   /**
    * Set the value of the {@link #tags} propoerty.
    *
+   * @see #toJson
    * @param tags The collection of tag instances to be represented in this component.
    */
   public void setTags( final Collection<Tag> tags )
@@ -196,8 +190,35 @@ public class TagCloud extends Component
   }
 
   /**
+   * Return the value of the {@link #PROPERTY_TAGS_JSON} propoerty.  Note
+   * that this method should be treated as for internal use only.
+   *
+   * @see #getTags
+   * @return The JSON data structure that represents {@link #tags}.
+   */
+  public String getTagsJson()
+  {
+    return (String) getProperty( PROPERTY_TAGS_JSON );
+  }
+
+  /**
+   * Set the value of the {@link #PROPERTY_TAGS_JSON} propoerty.  Note that
+   * this method should be treated as for internal use only.
+   *
+   * @see #setTags
+   * @param tagsJson The JSON data structure that represents {@link #tags}.
+   */
+  public void setTagsJson( final String tagsJson )
+  {
+    setProperty( PROPERTY_TAGS_JSON, tagsJson );
+  }
+
+  /**
    * Convert the {@link #tags} collection to JSON and set the {@link
    * #PROPERTY_TAGS_JSON} property.
+   *
+   * @see #createSerialiser
+   * @see #setTagsJson
    */
   protected void toJson()
   {

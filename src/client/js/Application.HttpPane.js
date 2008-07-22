@@ -14,5 +14,11 @@ echopoint.HttpPane = Core.extend( Echo.Component,
     Echo.ComponentFactory.registerType( echopoint.constants.HTTP_PANE, this );
   },
 
+  /** The properties supported by this component. */
+  $static:
+  {
+    URI: "uri"
+  },
+
   componentType: echopoint.constants.HTTP_PANE
 });

@@ -12,10 +12,12 @@ echopoint.test.TagCloudTest = Core.extend(
     testArea.add( this._createRow() );
   },
 
+  tagcloud: null,
+
   _createRow: function()
   {
     var row = new Echo.Row( { style: "Default" } );
-    var tagcloud = new echopoint.TagCloud(
+    this.tagcloud = new echopoint.TagCloud(
     {
       renderId: "echopointUnitTestTagCloud",
       tags: this._createTags(),
@@ -23,9 +25,12 @@ echopoint.test.TagCloudTest = Core.extend(
       rolloverForeground: "#c1c1c1",
       rolloverEnabled: true
     } );
-    row.add( tagcloud );
+    row.add( this.tagcloud );
 
-    return row;
+    var column = new Echo.Column( { style: "Default" } );
+    column.add( row );
+    column.add( this._createUpdate() );
+    return column;
   },
 
   _createTags: function()
@@ -39,5 +44,29 @@ echopoint.test.TagCloudTest = Core.extend(
     }
 
     return tags;
+  },
+
+  _createUpdate: function()
+  {
+    var row = new Echo.Row( { style: "Default" } );
+
+    var button = new Echo.Button(
+    {
+      renderId: "echopointUnitTestTagCloudUpdate",
+      styleName: "Default",
+      text: "Update",
+      events:
+      {
+        action: Core.method( this, this._actionPerformed )
+      }
+    } );
+
+    row.add( button );
+    return row;
+  },
+
+  _actionPerformed: function( event )
+  {
+    this.tagcloud.set( echopoint.TagCloud.TAGS, this._createTags() );
   }
 } );
