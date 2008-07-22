@@ -38,9 +38,9 @@ echopoint.TagCloudSync = Core.extend(Echo.Render.ComponentSync,
     }
 
     Echo.Sync.Color.renderClear(
-        this.component.render("rolloverForeground"), e.target, "color");
+        this.component.render(echopoint.TagCloud.ROLLOVER_FOREGROUND), e.target, "color");
     Echo.Sync.Color.renderClear(
-        this.component.render("rolloverBackground"), e.target, "backgroundColor");
+        this.component.render(echopoint.TagCloud.ROLLOVER_BACKGROUND), e.target, "backgroundColor");
   },
 
   _processRolloverExit: function( e )
@@ -65,38 +65,52 @@ echopoint.TagCloudSync = Core.extend(Echo.Render.ComponentSync,
 
   _getTags: function()
   {
-    var tags = this.component.get( "tags" );
-    if ( ! tags )
+    var json = this.component.get( echopoint.TagCloud.TAGS_JSON );
+
+    if ( json )
     {
-      var json = this.component.get( "tagsJson" );
-
-      if ( json )
-      {
-        tags = new Array();
-        var data = eval( "(" + json + ")" );
-
-        for ( var i = 0; i < data.list.length; ++i )
-        {
-          tags[i] = new echopoint.model.Tag(
-              data.list[i].name, data.list[i].count );
-        }
-
-        data = null;
-        this.component.set( "tags", tags );
-        this.component.set( "tagsJson", null );
-      }
-
-      json = null;
+      this._parseJson( json );
     }
 
-    return tags;
+    return this.component.get( echopoint.TagCloud.TAGS );
   },
 
-  renderAdd: function( update, parentElement )
+  _parseJson: function( json )
   {
-    this._element = document.createElement("div");
+    var tags = new Array();
+    var data = eval( "(" + json + ")" );
+
+    // This should work but does not seem to
+    //this.component.set( echopoint.TagCloud.TAGS, data.list );
+    // End
+
+    for ( var i = 0; i < data.list.length; ++i )
+    {
+      tags[i] = new echopoint.model.Tag(
+          data.list[i].name, data.list[i].count );
+    }
+
+    this.component.set( echopoint.TagCloud.TAGS, tags );
+    this.component.set( echopoint.TagCloud.TAGS_JSON, null );
+    data = null;
+  },
+
+  _renderStyle: function()
+  {
     Echo.Sync.Font.render(this.component.render("font"), this._element);
     Echo.Sync.Color.renderFB(this.component, this._element);
+
+    if ( this.component.render(echopoint.TagCloud.ROLLOVER_ENABLED) )
+    {
+      Core.Web.Event.add(this._element, "mouseover",
+          Core.method(this, this._processRolloverEnter), false);
+      Core.Web.Event.add(this._element, "mouseout",
+          Core.method(this, this._processRolloverExit), false);
+    }
+  },
+
+  _renderTags: function()
+  {
     var tags = this._getTags();
 
     if ( tags )
@@ -126,16 +140,17 @@ echopoint.TagCloudSync = Core.extend(Echo.Render.ComponentSync,
         this._element.appendChild(span);
       }
     }
+  },
 
+  renderAdd: function( update, parentElement )
+  {
+    this._element = document.createElement("div");
+    this._element.id = this.component.renderId;
     Core.Web.Event.add(this._element, "click",
         Core.method(this, this._processClick), false);
-    if ( this.component.render("rolloverEnabled") )
-    {
-      Core.Web.Event.add(this._element, "mouseover",
-          Core.method(this, this._processRolloverEnter), false);
-      Core.Web.Event.add(this._element, "mouseout",
-          Core.method(this, this._processRolloverExit), false);
-    }
+
+    this._renderTags();
+    this._renderStyle();
     parentElement.appendChild(this._element);
   },
 
@@ -147,11 +162,25 @@ echopoint.TagCloudSync = Core.extend(Echo.Render.ComponentSync,
 
   renderUpdate: function( update )
   {
-    var element = this._element;
-    var containerElement = element.parentNode;
-    this.renderDispose(update);
-    containerElement.removeChild(element);
-    this.renderAdd(update, containerElement);
-    return false; // Child elements not supported: safe to return false.
+    var property = update.getUpdatedProperty( echopoint.TagCloud.TAGS );
+    if ( ! property )
+    {
+      property = update.getUpdatedProperty( echopoint.TagCloud.TAGS_JSON );
+    }
+
+    if ( property )
+    {
+      if ( this._element.hasChildNodes() )
+      {
+        while( this._element.childNodes.length >= 1 )
+        {
+          this._element.removeChild( this._element.firstChild );
+        }
+      }
+
+      this._renderTags();
+    }
+
+    this._renderStyle();
   }
 });

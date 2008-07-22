@@ -25,6 +25,10 @@ import nextapp.echo.app.Row;
 import nextapp.echo.app.Column;
 import nextapp.echo.app.Border;
 import nextapp.echo.app.Color;
+import nextapp.echo.app.Button;
+import nextapp.echo.app.TextField;
+import nextapp.echo.app.event.ActionListener;
+import nextapp.echo.app.event.ActionEvent;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import org.junit.BeforeClass;
@@ -80,26 +84,76 @@ public class StrutTest
     final Component content = Application.getContent().getTestArea();
     content.removeAll();
 
+    content.add( createRow() );
+    content.add( createColumn() );
+  }
+
+  private static Row createRow()
+  {
     final Row row = new Row();
     row.add( new Label( "Label 1" ) );
-    Strut strut = new Strut( new Extent( 200, Extent.PX ),
-        new Extent( 100, Extent.PERCENT ) );
+
+    final Strut strut = new Strut( new Extent( 200, Extent.PX ),
+        new Extent( 20, Extent.PX ) );
     strut.setBorder( new Border( 1, Color.BLACK, Border.STYLE_SOLID ) );
     strut.setRenderId( "echopointUnitTestStrutRow" );
     row.add( strut );
+
     row.add( new Label( "Label 2" ) );
+    row.add( new Strut() );
 
-    content.add( row );
+    final TextField textField = new TextField();
+    row.add( textField );
 
+    row.add( new Strut() );
+    row.add( createButton( "Change Width",
+        Strut.PROPERTY_WIDTH, strut, textField ) );
+
+    return row;
+  }
+
+  private static Column createColumn()
+  {
     final Column column = new Column();
     column.add( new Label( "Label 3" ) );
-    strut = new Strut( new Extent( 200, Extent.PX ),
-        new Extent( 100, Extent.PERCENT ) );
+    final Strut strut = new Strut( new Extent( 200, Extent.PX ),
+        new Extent( 100, Extent.PX ) );
     strut.setBorder( new Border( 1, Color.BLACK, Border.STYLE_SOLID ) );
     strut.setRenderId( "echopointUnitTestStrutColumn" );
     column.add( strut );
     column.add( new Label( "Label 4" ) );
 
-    content.add( column );
+    column.add( new Strut() );
+
+    final TextField textField = new TextField();
+    column.add( textField );
+
+    column.add( new Strut() );
+
+    final Row row = new Row();
+    row.add( createButton( "Change Height",
+        Strut.PROPERTY_HEIGHT, strut, textField ) );
+    column.add( row );
+
+    return column;
+  }
+
+  private static Button createButton( final String title,
+      final String property, final Strut strut, final TextField textField )
+  {
+    final Button button = new Button( title );
+    button.addActionListener( new ActionListener()
+    {
+      private static final long serialVersionUID = 1l;
+
+      public void actionPerformed( final ActionEvent event )
+      {
+        final int value = Integer.parseInt( textField.getText() );
+        final Extent extent = new Extent( value, Extent.PX );
+        strut.setProperty( property, extent );
+      }
+    });
+
+    return button;
   }
 }

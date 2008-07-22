@@ -39,25 +39,256 @@ echopoint.internal.AbstractContainerSync = Core.extend( Echo.Render.ComponentSyn
       return echopoint.internal.AbstractContainerSync.DEFAULT_HEIGHT;
     },
 
-    /** The method used to render the style properties for the container. */
-    renderStyle: function( container )
+    /**
+     * The method used to render the full style properties for the container.
+     * This may also be invoked from {@link #renderUpdate} to selectively
+     * re-apply the styles that have changed.
+     *
+     * @see #renderAlignment
+     * @see #renderBorder
+     * @see #renderFB
+     * @see #renderBackgroundImage
+     * @see #renderInsets
+     * @see #renderHeight
+     * @see #renderWidth
+     * @param container The element to which the styles are to be applied.
+     * @param update The update object that will be queried for style updates.
+     *   If this is not specified or is <code>null</code>, then the styles
+     *   will be applied unconditionally.  This helps to use this optional
+     *   parameter to drive use from {@link #renderAdd} or {@link #renderUpaate}.
+     */
+    renderStyle: function( container, update )
     {
-      Echo.Sync.Alignment.render( this.component.render( "alignment" ),
-          container, false, null );
-      Echo.Sync.Border.render( this.component.render( "border" ), container );
-      Echo.Sync.Color.renderFB( this.component, container );
-      Echo.Sync.FillImage.render(
-          this.component.render( "backgroundImage" ), container );
-      Echo.Sync.Insets.render(
-          this.component.render( "insets" ), container, "padding" );
+      this.renderAlignment( container, update );
+      this.renderBorder( container, update );
+      this.renderFB( container, update );
+      this.renderFont( container, update );
+      this.renderBackgroundImage( container, update );
+      this.renderInsets( container, update );
+      this.renderWidth( container, update );
+      this.renderHeight( container, update );
+    },
 
-      var width = this.component.render( "width" );
-      container.style.width = Echo.Sync.Extent.toCssValue(
-          ( ( width ) ? width : this.getDefaultWidth() ), true, true );
+    /**
+     * Render the <code>alignment</code> style property for the component.
+     * This may be used to render update of the alignment property alone from
+     * {@link #renderUpdate}.
+     *
+     * @param container The element to which the style will be applied.
+     * @param update The update object that will be queried for style change.
+     */
+    renderAlignment: function( container, update )
+    {
+      if ( update )
+      {
+        var property = update.getUpdatedProperty(
+            echopoint.internal.AbstractContainer.ALIGNMENT );
+        if ( property )
+        {
+          Echo.Sync.Alignment.render(
+              this.component.render( property.newValue ),
+              container, false, null );
+        }
+      }
+      else
+      {
+        Echo.Sync.Alignment.render( this.component.render(
+            echopoint.internal.AbstractContainer.ALIGNMENT ),
+            container, false, null );
+      }
+    },
 
-      var height = this.component.render( "height" );
-      container.style.height = Echo.Sync.Extent.toCssValue(
-          ( ( height ) ? height : this.getDefaultHeight() ), false, true );
+    /**
+     * Render the <code>backgroundImage</code> style property for the component.
+     * This may be used to render update of the alignment property alone from
+     * {@link #renderUpdate}.
+     *
+     * @param container The element to which the style will be applied.
+     * @param update The update object that will be queried for style change.
+     */
+    renderBackgroundImage: function( container, update )
+    {
+      if ( update )
+      {
+        var property = update.getUpdatedProperty(
+            echopoint.internal.AbstractContainer.BACKGROUND_IMAGE );
+        if ( property )
+        {
+          Echo.Sync.FillImage.render( this.component.render(
+              property.newValue ), container );
+        }
+      }
+      else
+      {
+        Echo.Sync.FillImage.render( this.component.render(
+            echopoint.internal.AbstractContainer.BACKGROUND_IMAGE ), container );
+      }
+    },
+
+    /**
+     * Render the <code>border</code> style property for the component.
+     * This may be used to render update of the alignment property alone from
+     * {@link #renderUpdate}.
+     *
+     * @param container The element to which the style will be applied.
+     * @param update The update object that will be queried for style change.
+     */
+    renderBorder: function( container, update )
+    {
+      if ( update )
+      {
+        var property = update.getUpdatedProperty(
+            echopoint.internal.AbstractContainer.BORDER );
+        if ( property )
+        {
+          Echo.Sync.Border.render( this.component.render(
+              property.newValue ), container );
+        }
+      }
+      else
+      {
+        Echo.Sync.Border.render( this.component.render(
+            echopoint.internal.AbstractContainer.BORDER ), container );
+      }
+    },
+
+    /**
+     * Render the <code>foreground</code> and <code>background</code> style
+     * properties the component.
+     * This may be used to render update of the alignment property alone from
+     * {@link #renderUpdate}.
+     *
+     * @param container The element to which the style will be applied.
+     * @param update The update object that will be queried for style change.
+     */
+    renderFB: function( container, update )
+    {
+      if ( update )
+      {
+        var foreground = update.getUpdatedProperty(
+            echopoint.internal.AbstractContainer.FOREGROUND );
+        var background = update.getUpdatedProperty(
+            echopoint.internal.AbstractContainer.BACKGROUND );
+        if ( foreground || background )
+        {
+          Echo.Sync.Color.renderFB( this.component, container );
+        }
+      }
+      else
+      {
+        Echo.Sync.Color.renderFB( this.component, container );
+      }
+    },
+
+    /**
+     * Render the <code>font</code> style property for the component.
+     * This may be used to render update of the alignment property alone from
+     * {@link #renderUpdate}.
+     *
+     * @param container The element to which the style will be applied.
+     * @param update The update object that will be queried for style change.
+     */
+    renderFont: function( container, update )
+    {
+      if ( update )
+      {
+        var property = update.getUpdatedProperty(
+            echopoint.internal.AbstractContainer.FONT );
+        if ( property )
+        {
+          Echo.Sync.Font.render( this.component.render(
+              property.newValue ), container );
+        }
+      }
+      else
+      {
+        Echo.Sync.Font.render( this.component.render(
+            echopoint.internal.AbstractContainer.FONT ), container );
+      }
+    },
+
+    /**
+     * Render the <code>insets</code> style property for the component.
+     * This may be used to render update of the alignment property alone from
+     * {@link #renderUpdate}.
+     *
+     * @param container The element to which the style will be applied.
+     * @param update The update object that will be queried for style change.
+     */
+    renderInsets: function( container, update )
+    {
+      if ( update )
+      {
+        var property = update.getUpdatedProperty(
+            echopoint.internal.AbstractContainer.INSETS );
+        if ( property )
+        {
+          Echo.Sync.Insets.render( this.component.render(
+              property.newValue ), container, "padding" );
+        }
+      }
+      else
+      {
+        Echo.Sync.Insets.render( this.component.render(
+            echopoint.internal.AbstractContainer.INSETS ), container, "padding" );
+      }
+    },
+
+    /**
+     * Render the <code>width</code> style property for the component.
+     * This may be used to render update of the alignment property alone from
+     * {@link #renderUpdate}.
+     *
+     * @param container The element to which the style will be applied.
+     * @param update The update object that will be queried for style change.
+     */
+    renderWidth: function( container, update )
+    {
+      if ( update )
+      {
+        var property = update.getUpdatedProperty(
+            echopoint.internal.AbstractContainer.WIDTH );
+        if ( property )
+        {
+          container.style.width = Echo.Sync.Extent.toCssValue(
+              property.newValue, true, true );
+        }
+      }
+      else
+      {
+        var width = this.component.render( echopoint.internal.AbstractContainer.WIDTH );
+        container.style.width = Echo.Sync.Extent.toCssValue(
+            ( ( width ) ? width : this.getDefaultWidth() ), true, true );
+      }
+    },
+
+    /**
+     * Render the <code>height</code> style property for the component.
+     * This may be used to render update of the alignment property alone from
+     * {@link #renderUpdate}.
+     *
+     * @param container The element to which the style will be applied.
+     * @param update The update object that will be queried for style change.
+     */
+    renderHeight: function( container, update )
+    {
+      if ( update )
+      {
+        var property = update.getUpdatedProperty(
+            echopoint.internal.AbstractContainer.HEIGHT );
+        if ( property )
+        {
+          container.style.height = Echo.Sync.Extent.toCssValue(
+              property.newValue, false, true );
+        }
+      }
+      else
+      {
+        var height =
+            this.component.render( echopoint.internal.AbstractContainer.HEIGHT );
+        container.style.height = Echo.Sync.Extent.toCssValue(
+            ( ( height ) ? height : this.getDefaultHeight() ), false, true );
+      }
     }
   }
 } );

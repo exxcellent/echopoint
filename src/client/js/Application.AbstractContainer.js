@@ -9,6 +9,20 @@ echopoint.internal.AbstractContainer = Core.extend( Echo.Component,
 {
   $abstract: true,
 
+  /** Properties defined for this component. */
+  $static:
+  {
+    ALIGNMENT: "alignment",
+    BACKGROUND_IMAGE: "backgroundImage",
+    BACKGROUND: "background",
+    BORDER: "border",
+    FONT: "font",
+    FOREGROUND: "foreground",
+    INSETS: "insets",
+    HEIGHT: "height",
+    WIDTH: "width"
+  },
+
   $load: function()
   {
     Echo.ComponentFactory.registerType(

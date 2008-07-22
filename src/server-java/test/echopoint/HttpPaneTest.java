@@ -70,15 +70,15 @@ public class HttpPaneTest
   @Test
   public void get()
   {
-    assertNotNull( "Ensuring that uri is not null", component.getURI() );
+    assertNotNull( "Ensuring that uri is not null", component.getUri() );
   }
 
   @Test
   public void set()
   {
-    component.setURI( DEFAULT_URI );
+    component.setUri( DEFAULT_URI );
     assertEquals( "Ensuring setting URI succeeded",
-        component.getURI(), DEFAULT_URI );
+        component.getUri(), DEFAULT_URI );
   }
 
   @AfterClass
@@ -112,12 +112,7 @@ public class HttpPaneTest
 
       public void actionPerformed( final ActionEvent event )
       {
-        component.setURI( field.getText() );
-
-        // Echo update manager does not seem to catch change of property
-        final Component content = Application.getContent().getTestArea();
-        content.remove( component );
-        content.add( component );
+        component.setUri( field.getText() );
       }
     });
 

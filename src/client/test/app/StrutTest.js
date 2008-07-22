@@ -25,11 +25,12 @@ echopoint.test.StrutTest = Core.extend(
       text: "Label 1"
     } ) );
 
-    row.add( new echopoint.Strut(
+    var strut = new echopoint.Strut(
     {
       renderId: "echopointUnitTestStrutRow",
       styleName: "RowStrut"
-    } ) );
+    } );
+    row.add( strut );
 
     row.add( new Echo.Label(
     {
@@ -37,6 +38,20 @@ echopoint.test.StrutTest = Core.extend(
       styleName: "Default",
       text: "Label 2"
     } ) );
+
+    row.add( new echopoint.Strut() );
+
+    var textField = new Echo.TextField(
+    {
+      renderId: "echopointUnitTestStrutRowTextField",
+      styleName: "Default"
+    } );
+    row.add( textField );
+
+    row.add( new echopoint.Strut() );
+
+    row.add( this._createButton( "Change Width",
+        echopoint.internal.AbstractContainer.WIDTH,  strut, textField ) );
 
     return row;
   },
@@ -52,11 +67,12 @@ echopoint.test.StrutTest = Core.extend(
       text: "Label 3"
     } ) );
 
-    column.add( new echopoint.Strut(
+    var strut = new echopoint.Strut(
     {
       renderId: "echopointUnitTestStrutColumn",
       styleName: "ColumnStrut"
-    } ) );
+    } );
+    column.add( strut );
 
     column.add( new Echo.Label(
     {
@@ -65,6 +81,41 @@ echopoint.test.StrutTest = Core.extend(
       text: "Label 4"
     } ) );
 
+    column.add( new echopoint.Strut() );
+
+    var textField = new Echo.TextField(
+    {
+      renderId: "echopointUnitTestStrutColumnTextField",
+      styleName: "Default"
+    } );
+    column.add( textField );
+
+    column.add( new echopoint.Strut() );
+
+    var row = new Echo.Row( { style: "Default" } );
+    row.add( this._createButton( "Change Height",
+        echopoint.internal.AbstractContainer.HEIGHT, strut, textField ) );
+    column.add( row );
+
     return column;
+  },
+
+  _createButton: function( title, property, strut, textField )
+  {
+    var button = new Echo.Button(
+    {
+      renderId: "echopointUnitTestStrutButton" + property,
+      styleName: "Default",
+      text: title,
+      events:
+      {
+        action: function()
+        {
+          strut.set( property,  textField.get( "text" ) );
+        }
+      }
+    } );
+
+    return button;
   }
 });

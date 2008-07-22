@@ -63,9 +63,9 @@ public class HttpPane extends AbstractContainer
    *
    * @param uri The URI to load in this component.
    */
-  public HttpPane( String uri )
+  public HttpPane( final String uri )
   {
-    setURI( uri );
+    setUri( uri );
   }
 
   /**
@@ -73,7 +73,7 @@ public class HttpPane extends AbstractContainer
    *
    * @return The URI being displayed
    */
-  public String getURI()
+  public String getUri()
   {
     return (String) getProperty( PROPERTY_URI );
   }
@@ -83,7 +83,7 @@ public class HttpPane extends AbstractContainer
    *
    * @param uri The URI to load in this component.
    */
-  public void setURI( String uri )
+  public void setUri( final String uri )
   {
     setProperty( PROPERTY_URI, uri );
   }

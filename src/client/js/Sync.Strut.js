@@ -33,7 +33,7 @@ echopoint.StrutSync = Core.extend( echopoint.internal.AbstractContainerSync,
 
   renderUpdate: function( update )
   {
-    this.renderStyle();
+    this.renderStyle( this._image, update );
   },
 
   /** The default width to use for the image element. */
