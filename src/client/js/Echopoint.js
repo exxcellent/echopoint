@@ -62,28 +62,7 @@ echopoint.constants =
    *
    * @type Number
    */
-  uniqueId: 20080624,
-
-  /** The name of the AbstractContainer. */
-  ABSTRACT_CONTAINER: "echopoint.internal.AbstractContainer",
-
-  /** The name of the AbstractHtmlComponent. */
-  ABSTRACT_HTML_COMPONENT: "echopoint.internal.AbstractHtmlComponent",
-
-  /** The name of the DirectHtml component. */
-  DIRECT_HTML: "echopoint.DirectHtml",
-
-  /** The name of the HtmlLabel component. */
-  HTML_LABEL: "echopoint.HtmlLabel",
-
-  /** The name of the HttpPane component. */
-  HTTP_PANE: "echopoint.HttpPane",
-
-  /** The name of the Strut component. */
-  STRUT: "echopoint.Strut",
-
-  /** The name of the TagCloud component. */
-  TAG_CLOUD: "echopoint.TagCloud"
+  uniqueId: 20080624
 };
 
 /** The namespace for client-side model objects. */
@@ -95,4 +74,15 @@ echopoint.model =
    * @type Number
    */
   uniqueId: 20080720
+}
+
+/** The namespace for Google API related components. */
+echopoint.google =
+{
+  /**
+   * Maintains a unique id for the echopoint.constants namespace.
+   *
+   * @type Number
+   */
+  uniqueId: 20080808
 }

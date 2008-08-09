@@ -6,6 +6,15 @@
  * @version $Id$
  */
 
+/** The name of the AbstractHtmlComponent. */
+echopoint.constants.ABSTRACT_HTML_COMPONENT = "echopoint.internal.AbstractHtmlComponent";
+
+/** The name of the DirectHtml component. */
+echopoint.constants.DIRECT_HTML = "echopoint.DirectHtml";
+
+/** The name of the HtmlLabel component. */
+echopoint.constants.HTML_LABEL = "echopoint.HtmlLabel";
+
 /**
  * Abstract super-class component of components that render raw HTML
  * content.
@@ -54,3 +63,4 @@ echopoint.HtmlLabel = Core.extend( echopoint.internal.AbstractHtmlComponent,
 
   componentType: echopoint.constants.HTML_LABEL
 });
+

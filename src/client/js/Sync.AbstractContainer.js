@@ -31,12 +31,32 @@ echopoint.internal.AbstractContainerSync = Core.extend( Echo.Render.ComponentSyn
     },
 
     /**
+     * Return the width to use for the component.  If no width property has
+     * been specified, returns {@link #getDefaultWidth}.
+     */
+    getWidth: function()
+    {
+      var width = this.component.render( echopoint.internal.AbstractContainer.WIDTH );
+      return  ( ( width ) ? width : this.getDefaultWidth() );
+    },
+
+    /**
      * The default height property to use.  Sub-classes should over-ride as
      * necessary.
      */
     getDefaultHeight: function()
     {
       return echopoint.internal.AbstractContainerSync.DEFAULT_HEIGHT;
+    },
+
+    /**
+     * Return the height to use for the component.  If no height property
+     * has been specified, returns {@link #getDefaultHeight}.
+     */
+    getHeight: function()
+    {
+      var height = this.component.render( echopoint.internal.AbstractContainer.HEIGHT );
+      return  ( ( height ) ? height : this.getDefaultHeight() );
     },
 
     /**
@@ -256,9 +276,8 @@ echopoint.internal.AbstractContainerSync = Core.extend( Echo.Render.ComponentSyn
       }
       else
       {
-        var width = this.component.render( echopoint.internal.AbstractContainer.WIDTH );
         container.style.width = Echo.Sync.Extent.toCssValue(
-            ( ( width ) ? width : this.getDefaultWidth() ), true, true );
+            this.getWidth(), true, true );
       }
     },
 
@@ -284,10 +303,8 @@ echopoint.internal.AbstractContainerSync = Core.extend( Echo.Render.ComponentSyn
       }
       else
       {
-        var height =
-            this.component.render( echopoint.internal.AbstractContainer.HEIGHT );
         container.style.height = Echo.Sync.Extent.toCssValue(
-            ( ( height ) ? height : this.getDefaultHeight() ), false, true );
+            this.getHeight(), false, true );
       }
     }
   }

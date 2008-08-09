@@ -18,6 +18,30 @@ echopoint.test.TestApp.StyleSheet = new Echo.StyleSheet(
       width: "100px"
     }
   },
+  "SimpleChart":
+  {
+    "echopoint.google.LineChart":
+    {
+      backgroundFill: "efefef",
+      border: "2px groove #cfdfff",
+      chartFill: "00000080",
+      width: "600",
+      height: "400",
+      insets: 10
+    }
+  },
+  "ComplexChart":
+  {
+    "echopoint.google.LineChart":
+    {
+      border: "2px groove #cfdfff",
+      width: "600",
+      height: "400",
+      insets: 10,
+      //transparency: "efefeff0"
+      linearGradient: "45,ffffff,0,76A4FB,0.75"
+    }
+  },
   "ControlPane": {
     "Row": {
       layoutData: {

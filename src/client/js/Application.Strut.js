@@ -1,3 +1,6 @@
+/** The name of the Strut component. */
+echopoint.constants.STRUT = "echopoint.Strut";
+
 /**
  * A simple component used to add space between other components.  Renders
  * an empty image of the specified size.
@@ -14,3 +17,4 @@ echopoint.Strut = Core.extend( Echo.Component,
 
   componentType: echopoint.constants.STRUT
 });
+

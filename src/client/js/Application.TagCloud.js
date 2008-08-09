@@ -1,3 +1,6 @@
+/** The name of the TagCloud component. */
+echopoint.constants.TAG_CLOUD = "echopoint.TagCloud";
+
 /**
  * TagCloud component.
  *
@@ -51,3 +54,4 @@ echopoint.model.Tag = Core.extend(
     this.count = occurances;
   }
 } );
+

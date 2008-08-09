@@ -1,3 +1,6 @@
+/** The name of the AbstractContainer. */
+echopoint.constants.ABSTRACT_CONTAINER = "echopoint.internal.AbstractContainer";
+
 /**
  * The class definition for the abstract container component that is the root
  * for most components.
@@ -29,3 +32,4 @@ echopoint.internal.AbstractContainer = Core.extend( Echo.Component,
         echopoint.constants.ABSTRACT_CONTAINER, this );
   }
 });
+

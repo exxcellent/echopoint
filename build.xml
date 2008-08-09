@@ -218,6 +218,9 @@
         <file name='Sync.Strut.js'/>
         <file name='Application.TagCloud.js'/>
         <file name='Sync.TagCloud.js'/>
+        <file name='Application.Chart.js'/>
+        <file name='Sync.AbstractChart.js'/>
+        <file name='Sync.LineChart.js'/>
       </filelist>
       <filelist dir='${dir.src.client.test}/app'>
         <file name='TestAppDeploy.js'/>
@@ -230,6 +233,7 @@
         <file name='HttpPaneTest.js'/>
         <file name='StrutTest.js'/>
         <file name='TagCloudTest.js'/>
+        <file name='LineChartTest.js'/>
       </filelist>
     </concat>
 

@@ -16,7 +16,8 @@ echopoint.test.ComponentList = Core.extend( Echo.Column,
         "HtmlLabel",
         "HttpPane",
         "Strut",
-        "TagCloud"
+        "TagCloud",
+        "LineChart"
       )
   },
 

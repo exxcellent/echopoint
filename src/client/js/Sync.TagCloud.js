@@ -97,15 +97,15 @@ echopoint.TagCloudSync = Core.extend(Echo.Render.ComponentSync,
 
   _renderStyle: function()
   {
-    Echo.Sync.Font.render(this.component.render("font"), this._element);
-    Echo.Sync.Color.renderFB(this.component, this._element);
+    Echo.Sync.Font.render( this.component.render("font"), this._element );
+    Echo.Sync.Color.renderFB( this.component, this._element );
 
-    if ( this.component.render(echopoint.TagCloud.ROLLOVER_ENABLED) )
+    if ( this.component.render( echopoint.TagCloud.ROLLOVER_ENABLED ) )
     {
       Core.Web.Event.add(this._element, "mouseover",
-          Core.method(this, this._processRolloverEnter), false);
-      Core.Web.Event.add(this._element, "mouseout",
-          Core.method(this, this._processRolloverExit), false);
+          Core.method( this, this._processRolloverEnter ), false);
+      Core.Web.Event.add( this._element, "mouseout",
+          Core.method( this, this._processRolloverExit ), false);
     }
   },
 
@@ -132,10 +132,10 @@ echopoint.TagCloudSync = Core.extend(Echo.Render.ComponentSync,
       for ( var i = 0; i < tags.length; ++i )
       {
         var countValue = Math.floor(
-            (tags[i].count - minCount) / (maxCount - minCount) * 100) + 100;
+            ( tags[i].count - minCount) / (maxCount - minCount) * 100 ) + 100;
         var span = document.createElement("span");
         span.style.cssText = "cursor:pointer;font-size: " + countValue + "%";
-        span.appendChild(document.createTextNode(tags[i].name));
+        span.appendChild( document.createTextNode( tags[i].name ) );
         span.appendChild(document.createTextNode(" "));
         this._element.appendChild(span);
       }

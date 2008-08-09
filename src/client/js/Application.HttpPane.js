@@ -1,4 +1,7 @@
-/*
+/** The name of the HttpPane component. */
+echopoint.constants.HTTP_PANE = "echopoint.HttpPane";
+
+/**
  * A container for displaying the contents of a user specified URI.  The
  * contents are displayed in an <code>iframe</code> component that is not
  * available in XHTML-Strict.  If Echo changes to strict DTD, then the
@@ -22,3 +25,4 @@ echopoint.HttpPane = Core.extend( Echo.Component,
 
   componentType: echopoint.constants.HTTP_PANE
 });
+
