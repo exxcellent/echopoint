@@ -18,10 +18,14 @@ echopoint.test.LineChartTest = Core.extend(
     var xdata = [ 30,60,70,90,95,110 ];
     var xmax = 120;
 
-    var data = new echopoint.google.ChartData( xdata, xmax );
-    data.color = "00ff00";
+    var markers = new Array();
+    markers[0] = new echopoint.google.model.ShapeMarker( "o", "ff3333", 5 );
 
-    var title = new echopoint.google.Title();
+    var data = new echopoint.google.model.ChartData( xdata, xmax );
+    data.color = "00ff00";
+    data.markers = markers;
+
+    var title = new echopoint.google.model.Title();
     title.add( "Simple Chart" );
 
     var labels = new Array();
@@ -29,8 +33,12 @@ echopoint.test.LineChartTest = Core.extend(
     labels[1] = [ 0, 25, 50, 75, 100 ];
 
     var ranges = new Array();
-    ranges[0] = new echopoint.google.Range( 20, 125 );
-    ranges[1] = new echopoint.google.Range( 25, 150 );
+    ranges[0] = new echopoint.google.model.Range( 20, 125 );
+    ranges[1] = new echopoint.google.model.Range( 25, 150 );
+
+    var rangeMarkers = new Array();
+    rangeMarkers[0] = new echopoint.google.model.RangerMarker( "r", "ff0000", 0.1, 0.11 );
+    rangeMarkers[1] = new echopoint.google.model.RangerMarker( "R", "0000ff", 0.1, 0.11 );
 
     return new echopoint.google.LineChart(
     {
@@ -39,31 +47,59 @@ echopoint.test.LineChartTest = Core.extend(
       data: [ data ],
       title: title,
       axisLabels: labels,
-      axisRanges: ranges
+      axisRanges: ranges,
+      rangeMarkers: rangeMarkers
     });
   },
 
   _createComplex: function()
   {
+    var markers1 = new Array();
+    markers1[0] = new echopoint.google.model.ShapeMarker( "a", "00ff33", 7 );
+    markers1[1] = new echopoint.google.model.ShapeMarker( "c", "00ff33", 7 );
+    markers1[2] = new echopoint.google.model.ShapeMarker( "d", "00ff33", 7 );
+    markers1[3] = new echopoint.google.model.ShapeMarker( "o", "00ff33", 7 );
+    markers1[4] = new echopoint.google.model.ShapeMarker( "s", "00ff33", 7 );
+    markers1[5] = new echopoint.google.model.ShapeMarker( "tValue+7", "00ff33", 7 );
+    markers1[6] = new echopoint.google.model.ShapeMarker( "x", "00ff33", 7 );
+
     var data = new Array();
-    data[0] = new echopoint.google.ChartData(
+    data[0] = new echopoint.google.model.ChartData(
         [ 0, 30, 60, 70, 90, 95, 100 ], 110 );
     data[0].ydata = [ 20,30,40,50,60,70,80 ];
     data[0].ymax = 100;
     data[0].legend = "First";
+    data[0].markers = markers1;
 
-    data[1] = new echopoint.google.ChartData(
+    var markers2 = new Array();
+    markers2[0] = new echopoint.google.model.ShapeMarker( "x", "ff00ff", 7 );
+    markers2[1] = new echopoint.google.model.ShapeMarker( "s", "ff00ff", 7 );
+    markers2[2] = new echopoint.google.model.ShapeMarker( "o", "ff00ff", 7 );
+    markers2[3] = new echopoint.google.model.ShapeMarker( "d", "ff00ff", 7 );
+    markers2[4] = new echopoint.google.model.ShapeMarker( "c", "ff00ff", 7 );
+    markers2[5] = new echopoint.google.model.ShapeMarker( "a", "ff00ff", 7 );
+
+    data[1] = new echopoint.google.model.ChartData(
         [ 10,30,40,45,52 ], 60 );
     data[1].ydata = [ 100,90,40,20,10 ]
     data[1].ymax = 110;
     data[1].legend = "Second";
+    data[1].markers = markers2;
 
-    data[2] = new echopoint.google.ChartData( [ -1 ], 0 );
+    var markers3 = new Array();
+    markers3[0] = new echopoint.google.model.ShapeMarker( "x", "ff3300", 7 );
+    markers3[1] = new echopoint.google.model.ShapeMarker( "a", "ff3300", 7 );
+    markers3[2] = new echopoint.google.model.ShapeMarker( "o", "ff3300", 7 );
+    markers3[3] = new echopoint.google.model.ShapeMarker( "c", "ff3300", 7 );
+    markers3[4] = new echopoint.google.model.ShapeMarker( "t", "ff3300", 7 );
+
+    data[2] = new echopoint.google.model.ChartData( [ -1 ], 0 );
     data[2].ydata = [ 5,33,50,55,7 ];
     data[2].ymax = 60;
     data[2].legend = "Third";
+    data[2].markers = markers3;
 
-    var title = new echopoint.google.Title( "Complex Chart" );
+    var title = new echopoint.google.model.Title( "Complex Chart" );
     title.add( "Multiple Line Title" );
 
     var labels = new Array();
@@ -79,9 +115,18 @@ echopoint.test.LineChartTest = Core.extend(
     positions[3] = [];
 
     var lineStyles = new Array();
-    lineStyles[0] = new echopoint.google.LineStyle( 3, 6, 3 );
-    lineStyles[1] = new echopoint.google.LineStyle( 2, 4, 2 );
-    lineStyles[2] = new echopoint.google.LineStyle( 4 );
+    lineStyles[0] = new echopoint.google.model.LineStyle( 3, 6, 3 );
+    lineStyles[1] = new echopoint.google.model.LineStyle( 2, 4, 2 );
+    lineStyles[2] = new echopoint.google.model.LineStyle( 4 );
+
+    var ranges = new Array();
+    ranges[0] = new echopoint.google.model.RangerMarker( "r", "e5ecf9", 0.35, 0.25 );
+    ranges[1] = new echopoint.google.model.RangerMarker( "R", "a0bae9", 0.35, 0.25 );
+
+
+    var fillArea = new Array();
+    fillArea[0] = new echopoint.google.model.FillArea( "b", "224499", 0, 1 );
+    fillArea[1] = new echopoint.google.model.FillArea( "b", "76a4fb", 1, 2 );
 
     return new echopoint.google.LineChart(
     {
@@ -91,7 +136,9 @@ echopoint.test.LineChartTest = Core.extend(
       title: title,
       axisLabels: labels,
       labelPositions: positions,
-      lineStyles: lineStyles
+      lineStyles: lineStyles,
+      rangeMarkers: ranges,
+      fillArea: fillArea
     });
   }
 });

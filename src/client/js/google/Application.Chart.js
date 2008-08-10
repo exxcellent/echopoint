@@ -1,6 +1,6 @@
 /**
  * Component definitions for the Google Chart API chart components.  All
- * charts are derived from the {@link echopoint.internal.AbstractChart}
+ * charts are derived from the {@link echopoint.google.internal.AbstractChart}
  * super class.
  *
  * @author Rakesh 2008-08-08
@@ -8,7 +8,7 @@
  */
 
 /** The name of the AbstractChart component. */
-echopoint.constants.ABSTRACT_CHART = "echopoint.internal.AbstractChart";
+echopoint.constants.ABSTRACT_CHART = "echopoint.google.internal.AbstractChart";
 
 /** The name of the LineChart component. */
 echopoint.constants.LINE_CHART = "echopoint.google.LineChart";
@@ -18,7 +18,8 @@ echopoint.constants.LINE_CHART = "echopoint.google.LineChart";
  * component from which <a href='http://code.google.com/apis/chart/'>Google
  * Chart API</a> components are derived.
  */
-echopoint.internal.AbstractChart = Core.extend( echopoint.internal.AbstractContainer,
+echopoint.google.internal.AbstractChart = Core.extend(
+    echopoint.internal.AbstractContainer,
 {
   $abstract: true,
 
@@ -70,7 +71,7 @@ echopoint.internal.AbstractChart = Core.extend( echopoint.internal.AbstractConta
 
     /**
      * The title to display for chart.  Must be of type {@link
-     * echopoint.google.Title}.
+     * echopoint.google.model.Title}.
      */
     TITLE: "title"
   },
@@ -86,7 +87,7 @@ echopoint.internal.AbstractChart = Core.extend( echopoint.internal.AbstractConta
  * The class definition for line chart type supported by
  * <a href='http://code.google.com/apis/chart/'>Google Chart API</a>.
  */
-echopoint.google.LineChart = Core.extend( echopoint.internal.AbstractChart,
+echopoint.google.LineChart = Core.extend( echopoint.google.internal.AbstractChart,
 {
   /** Constants to control the chart type as defined by google. */
   $static:
@@ -140,7 +141,7 @@ echopoint.google.LineChart = Core.extend( echopoint.internal.AbstractChart,
 
     /**
      * The line styles for the data sets plotted.  Value is expressed as an
-     * array of {@link echopoint.google.LineStyle} objects.  This property
+     * array of {@link echopoint.google.model.LineStyle} objects.  This property
      * is not styleable.
      */
     LINE_STYLES: "lineStyles",
@@ -151,7 +152,19 @@ echopoint.google.LineChart = Core.extend( echopoint.internal.AbstractChart,
      * documentation for specification.  Express the values without the
      * <code>&amp;chls=</code> prefix in the style sheet.
      */
-    GRID_LINES: "gridLines"
+    GRID_LINES: "gridLines",
+
+    /**
+     * Range markers to display on the graph.  Value is specified as an array
+     * of {@link echopoint.google.model.RangeMarker} objects.
+     */
+    RANGE_MARKERS: "rangeMarkers",
+
+    /**
+     * An array of {@link echopoint.google.model.FillArea} instances that
+     * represent the areas between lines that are to be filled.
+     */
+    FILL_AREA: "fillArea"
   },
 
   $load: function()
@@ -160,159 +173,4 @@ echopoint.google.LineChart = Core.extend( echopoint.internal.AbstractChart,
   },
 
   componentType: echopoint.constants.LINE_CHART
-});
-
-/**
- * The model object that is used to represent the data to be plotted.
- * Each object contains a mandatory <code>xdata</code> array that contains
- * the array of numbers to be plotted along the x-axis.  An optional
- * <code>ydata</code> array may be specified that contains the corresponding
- * y-axis values.  The <code>xmax</code> is mandatory is used to ensure a
- * gap between the chart boundary and maximum chart data value.  The
- * <code>ymax</code> is optional and should be specified if <code>ydata</code>
- * is specified.  Each chart object takes an array of these model objects
- * allowing plotting multiple data data sequences in the same chart.
- */
-echopoint.google.ChartData = Core.extend(
-{
-  /** The mandatory array of numbers to be displayed along the x-axis. */
-  xdata: null,
-
-  /** The mandatory maximum value to use for numbers plotted along x-axis. */
-  xmax: null,
-
-  /** The optional array of numbers to be displayed along the y-axis. */
-  ydata: null,
-
-  /** The maximum value to use for the numbers plotted long y-axie. */
-  ymax: null,
-
-  /**
-   * The colour to apply to the data set.  Default values will be assigned
-   * sequentially from the colour set defined in {@link
-   * echopoint.internal.AbstractChartSync#COLORS}.
-   */
-  color: null,
-
-  /**
-   * The legend text to apply to the data set.  If legend is specified, it
-   * must be specified for all instances in the data array.
-   */
-  legend: null,
-
-  $construct: function( xvalues, xmaximum )
-  {
-    this.xdata = xvalues;
-    this.xmax = xmaximum;
-  },
-
-  /**
-   * Return the {@link #xmax} value.  If {@link xmax} is not defined, return
-   * the maximum value from {@link #xdata}.
-   */
-  getXMax: function()
-  {
-    if ( this.xmax ) return this.xmax;
-
-    var maxValue = -1;
-    for ( var i = 0; i < this.xdata.length; ++i )
-    {
-      var currentValue = this.xdata[i];
-      if ( currentValue > maxValue ) maxValue = currentValue;
-    }
-
-    return maxValue;
-  },
-
-  /**
-   * Return the {@link #ymax} value.  If {@link ymax} is not defined, return
-   * the maximum value from {@link #ydata}.
-   */
-  getYMax: function()
-  {
-    if ( this.ymax ) return this.ymax;
-
-    var maxValue = -1;
-    for ( var i = 0; i < this.ydata.length; ++i )
-    {
-      var currentValue = this.ydata[i];
-      if ( currentValue > maxValue ) maxValue = currentValue;
-    }
-
-    return maxValue;
-  }
-});
-
-/** The model object used to represent the title of a chart. */
-echopoint.google.Title = Core.extend(
-{
-  /** An array that is used to hold the lines of text in the title. */
-  _title: null,
-
-  /** Create a new instance with a single line text */
-  $construct: function( text )
-  {
-    this._title = new Array();
-    if ( text ) this._title.push( text );
-  },
-
-  /** Add a line of text to the title. */
-  add: function( line )
-  {
-    this._title.push( line );
-  },
-
-  /** Return the title text as represented in this object. */
-  getText: function()
-  {
-    var text =  this._title.join( "|" );
-    return text.replace( /\s+/g, "+" );
-  },
-
-  /** Return a string representation of this object.  Returns {@link #getText}. */
-  toString: function()
-  {
-    return this.getText();
-  }
-});
-
-/** The model object used to represent the range of a chart axis (and data). */
-echopoint.google.Range = Core.extend(
-{
-  /** The minimum (starting) value of the range. */
-  minimum: null,
-
-  /** The maximum (ending) value of the range. */
-  maximum: null,
-
-  /** Create a new instance with the values specified. */
-  $construct: function( min, max )
-  {
-    this.minimum = min;
-    this.maximum = max;
-  }
-});
-
-/**
- * A style object used to represent the style for a line drawn.  See
- * <a href='http://code.google.com/apis/chart/#line_styles'>Line styles</a>
- * documentation for specifications.
- */
-echopoint.google.LineStyle = Core.extend(
-{
-  /** The thickness of the line to plot. */
-  thickness: null,
-
-  /** The size of a line segment.  Set to 1 for solid lines. */
-  segmentLength: null,
-
-  /** The length of a blank segment.  Set to 0 for solid lines. */
-  blankSegmentLength: null,
-
-  $construct: function( thick, segment, blank )
-  {
-    this.thickness = ( thick ) ? thick : 1;
-    this.segmentLength = ( segment ) ? segment : 1;
-    this.blankSegmentLength = ( blank ) ? blank : 0;
-  }
 });

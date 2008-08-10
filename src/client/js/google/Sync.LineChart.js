@@ -4,7 +4,8 @@
  * @author Rakesh 2008-08-08
  * @version: $Id$
  */
-echopoint.google.LineChartSync = Core.extend( echopoint.internal.AbstractChartSync,
+echopoint.google.LineChartSync = Core.extend(
+    echopoint.google.internal.AbstractChartSync,
 {
   $load: function()
   {
@@ -14,7 +15,7 @@ echopoint.google.LineChartSync = Core.extend( echopoint.internal.AbstractChartSy
   /** Over-ridden to return the appropriate chart type. */
   getChartType: function()
   {
-    var data = this.component.get( echopoint.internal.AbstractChart.DATA );
+    var data = this.component.get( echopoint.google.internal.AbstractChart.DATA );
     return ( ( data[0].ydata ) ? echopoint.google.LineChart.XY_DATA :
              echopoint.google.LineChart.X_DATA );
   },
@@ -29,6 +30,7 @@ echopoint.google.LineChartSync = Core.extend( echopoint.internal.AbstractChartSy
    * @see #setAxisStyle
    * @see #setLineStyles
    * @see #setGridLines
+   * @see #setMarkers
    * @param url The URL that is to be updated with axis label information.
    * @return The modified URL object.
    */
@@ -41,6 +43,7 @@ echopoint.google.LineChartSync = Core.extend( echopoint.internal.AbstractChartSy
     url = this.setAxisStyle( url );
     url = this.setLineStyles( url );
     url = this.setGridLines( url );
+    url = this.setMarkers( url );
     return url;
   },
 
@@ -167,6 +170,109 @@ echopoint.google.LineChartSync = Core.extend( echopoint.internal.AbstractChartSy
   {
     var style = this.component.render( echopoint.google.LineChart.GRID_LINES );
     if ( style ) url += "&chg=" + style;
+
+    return url;
+  },
+
+  /**
+   * Set the shape and range markers for the data points being plotted.
+   *
+   * @see #_setShapeMarkers
+   * @see #_setRangeMarkers
+   */
+  setMarkers: function( url )
+  {
+    var data = this.component.get( echopoint.google.internal.AbstractChart.DATA );
+    var rangeMarkers = this.component.get( echopoint.google.LineChart.RANGE_MARKERS );
+    var fillArea = this.component.get( echopoint.google.LineChart.FILL_AREA );
+
+    var hasMarkers = false;
+    if ( rangeMarkers ) hasMarkers = true;
+    if ( fillArea ) hasMarkers = true;
+    var i;
+
+    if ( ! hasMarkers )
+    {
+      for ( i = 0; i < data.length; ++i )
+      {
+        if ( data[i].markers ) hasMarkers = true;
+      }
+    }
+
+    if ( ! hasMarkers ) return url;
+
+    url += "&chm=";
+
+    for ( i = 0; i < data.length; ++i )
+    {
+      url = this._setShapeMarkers( url, data[i], i );
+    }
+
+    url = this._setRangeMarkers( url, rangeMarkers );
+    url = this._setFillArea( url, fillArea );
+    return this._trimPipes( url );
+  },
+
+  /** Set the shape markers for the data set. */
+  _setShapeMarkers: function( url, data, index )
+  {
+    var markers = data.markers;
+    var marker;
+
+    if ( markers )
+    {
+      if ( markers.length == 1 )
+      {
+        marker = markers[0];
+        url += marker.markerType + "," + marker.color + "," + index + ",-1," +
+               marker.size + "," + marker.priority + "|";
+      }
+      else
+      {
+        for ( var i = 0; i < markers.length; ++i )
+        {
+          marker = markers[i];
+
+          if ( marker )
+          {
+            url += marker.markerType + "," + marker.color + "," + index + "," +
+                   i + "," + marker.size + "," + marker.priority + "|";
+          }
+        }
+      }
+    }
+
+    return url;
+  },
+
+  /** Set the range markers for the data set. */
+  _setRangeMarkers: function( url, markers )
+  {
+    if ( markers )
+    {
+      for ( var i = 0; i < markers.length; ++i )
+      {
+        var marker = markers[i];
+        url += marker.markerType + "," + marker.color + ",0," +
+               marker.startPoint + "," + marker.endPoint + "|";
+      }
+    }
+
+    return url;
+  },
+
+  /** Set the fill areas between plotted line(s). */
+  _setFillArea: function( url, array )
+  {
+    if ( array )
+    {
+      for ( var i = 0; i < array.length; ++i )
+      {
+        var fillArea = array[i];
+        url += fillArea.markerType + "," + fillArea.color + "," +
+               fillArea.startIndex + "," + fillArea.endIndex + ",0|";
+      }
+    }
 
     return url;
   },

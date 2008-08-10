@@ -48,7 +48,7 @@ echopoint.internal =
    * @type Number
    */
   uniqueId: 20080627
-}
+};
 
 /**
  * The namespace for holding constants used by the framework.  Constants
@@ -69,20 +69,42 @@ echopoint.constants =
 echopoint.model =
 {
    /**
-   * Maintains a unique id for the echopoint.constants namespace.
+   * Maintains a unique id for the echopoint.model namespace.
    *
    * @type Number
    */
   uniqueId: 20080720
-}
+};
 
 /** The namespace for Google API related components. */
 echopoint.google =
 {
   /**
-   * Maintains a unique id for the echopoint.constants namespace.
+   * Maintains a unique id for the echopoint.google namespace.
    *
    * @type Number
    */
   uniqueId: 20080808
-}
+};
+
+/** The namespace for internal comopnents of Google API related components. */
+echopoint.google.internal =
+{
+  /**
+   * Maintains a unique id for the echopoint.google.internal namespace.
+   *
+   * @type Number
+   */
+  uniqueId: 200808091
+};
+
+/** The namespace for model objects of Google API related components. */
+echopoint.google.model =
+{
+  /**
+   * Maintains a unique id for the echopoint.google.model namespace.
+   *
+   * @type Number
+   */
+  uniqueId: 200808092
+};

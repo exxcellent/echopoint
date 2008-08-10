@@ -7,7 +7,8 @@
  * @author Rakesh 2008-08-08
  * @version: $Id$
  */
-echopoint.internal.AbstractChartSync = Core.extend( echopoint.internal.AbstractContainerSync,
+echopoint.google.internal.AbstractChartSync = Core.extend(
+    echopoint.internal.AbstractContainerSync,
 {
   $abstract: true,
 
@@ -90,7 +91,7 @@ echopoint.internal.AbstractChartSync = Core.extend( echopoint.internal.AbstractC
      **/
     getUrl: function()
     {
-      var data = this.component.get( echopoint.internal.AbstractChart.DATA );
+      var data = this.component.get( echopoint.google.internal.AbstractChart.DATA );
 
       var url = "http://chart.apis.google.com/chart?chs=";
       url += this.getWidth() + "x" + this.getHeight();
@@ -118,9 +119,9 @@ echopoint.internal.AbstractChartSync = Core.extend( echopoint.internal.AbstractC
     /** Return the alt content to use for the chart and image. */
     getAltContent: function()
     {
-      var alt = this.component.get( echopoint.internal.AbstractChart.ALT );
+      var alt = this.component.get( echopoint.google.internal.AbstractChart.ALT );
       return ( ( alt ) ? alt :
-                         echopoint.internal.AbstractChartSync.ALT_CONTENT );
+                         echopoint.google.internal.AbstractChartSync.ALT_CONTENT );
     },
 
     /**
@@ -142,10 +143,10 @@ echopoint.internal.AbstractChartSync = Core.extend( echopoint.internal.AbstractC
      */
     setColors: function( url )
     {
-      var data = this.component.get( echopoint.internal.AbstractChart.DATA );
+      var data = this.component.get( echopoint.google.internal.AbstractChart.DATA );
       url += "&chco=";
       var index = 0;
-      var size = echopoint.internal.AbstractChartSync.COLORS.length;
+      var size = echopoint.google.internal.AbstractChartSync.COLORS.length;
 
       for ( var i = 0; i < data.length; ++i )
       {
@@ -156,7 +157,7 @@ echopoint.internal.AbstractChartSync = Core.extend( echopoint.internal.AbstractC
         else
         {
           index = i % size;
-          url += echopoint.internal.AbstractChartSync.COLORS[index];
+          url += echopoint.google.internal.AbstractChartSync.COLORS[index];
         }
 
         if ( i != data.length - 1 ) url += ",";
@@ -173,7 +174,7 @@ echopoint.internal.AbstractChartSync = Core.extend( echopoint.internal.AbstractC
      */
     setLegend: function( url )
     {
-      var data = this.component.get( echopoint.internal.AbstractChart.DATA );
+      var data = this.component.get( echopoint.google.internal.AbstractChart.DATA );
       if ( ! data[0].legend ) return url;
       url += "&chdl=";
 
@@ -196,7 +197,7 @@ echopoint.internal.AbstractChartSync = Core.extend( echopoint.internal.AbstractC
     setLegendPosition: function( url )
     {
       var position = this.component.render(
-          echopoint.internal.AbstractChart.LEGEND_POSITION );
+          echopoint.google.internal.AbstractChart.LEGEND_POSITION );
       if ( position ) url += "&chdlp=" + position;
       return url;
     },
@@ -204,7 +205,7 @@ echopoint.internal.AbstractChartSync = Core.extend( echopoint.internal.AbstractC
     /** Set the fill to apply to the chart. */
     setFill: function( url )
     {
-      var fill = this.component.render( echopoint.internal.AbstractChart.FILL );
+      var fill = this.component.render( echopoint.google.internal.AbstractChart.FILL );
       if ( fill ) url += "&chf=" + fill;
 
       return url;
@@ -231,7 +232,7 @@ echopoint.internal.AbstractChartSync = Core.extend( echopoint.internal.AbstractC
     /** Return the title for the chart. */
     setTitle: function( url )
     {
-      var title = this.component.get( echopoint.internal.AbstractChart.TITLE );
+      var title = this.component.get( echopoint.google.internal.AbstractChart.TITLE );
       if ( title ) url += "&chtt=" + title.getText();
       return url;
     }
@@ -262,12 +263,12 @@ echopoint.internal.AbstractChartSync = Core.extend( echopoint.internal.AbstractC
   },
 
   /** Over-ridden to return the value to use. */
-  getDefaultHeight: function() { return echopoint.internal.AbstractChartSync.DEFAULT_HEIGHT; },
+  getDefaultHeight: function() { return echopoint.google.internal.AbstractChartSync.DEFAULT_HEIGHT; },
 
   /** Over-ridden to return the value to use. */
-  getDefaultWidth: function() { return echopoint.internal.AbstractChartSync.DEFAULT_WIDTH; },
+  getDefaultWidth: function() { return echopoint.google.internal.AbstractChartSync.DEFAULT_WIDTH; },
 
-  /** Encode the {@link echopoint.google.ChartData#xdata} array of values. */
+  /** Encode the {@link echopoint.google.model.ChartData#xdata} array of values. */
   _encodeXData: function( data, chartData )
   {
     var xmax = data.getXMax();
@@ -289,7 +290,7 @@ echopoint.internal.AbstractChartSync = Core.extend( echopoint.internal.AbstractC
     }
   },
 
-  /** Encode the {@link echopoint.google.ChartData#ydata} array of values. */
+  /** Encode the {@link echopoint.google.model.ChartData#ydata} array of values. */
   _encodeYData: function( data, chartData )
   {
     if ( data.ydata )

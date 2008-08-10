@@ -218,6 +218,9 @@
         <file name='Sync.Strut.js'/>
         <file name='Application.TagCloud.js'/>
         <file name='Sync.TagCloud.js'/>
+      </filelist>
+      <filelist dir='${dir.src.client.app}/google'>
+        <file name='Model.Google.js'/>
         <file name='Application.Chart.js'/>
         <file name='Sync.AbstractChart.js'/>
         <file name='Sync.LineChart.js'/>
