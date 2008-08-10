@@ -22,9 +22,13 @@ echopoint.test.TestApp.StyleSheet = new Echo.StyleSheet(
   {
     "echopoint.google.LineChart":
     {
-      backgroundFill: "efefef",
+      axisType: "x,y",
+      axisStyles: "0,00ff33,13,1|1,0033ff,13,-1",
       border: "2px groove #cfdfff",
-      chartFill: "00000080",
+      fill: "bg,s,efefef|c,s,00000080",
+      font: { size: "12" },
+      foreground: "ff0000",
+      gridLines: "10,10,1,0",
       width: "600",
       height: "400",
       insets: 10
@@ -34,12 +38,16 @@ echopoint.test.TestApp.StyleSheet = new Echo.StyleSheet(
   {
     "echopoint.google.LineChart":
     {
+      axisType: "x,y,t,r",
       border: "2px groove #cfdfff",
+      fill: "bg,s,efefef|c,lg,45,ffffff,0,76a4fb,0.75",
+      foreground: "ff0000",
+      font: { size: "10" },
+      gridLines: "10,20,5,2",
+      legendPosition: "l",
       width: "600",
       height: "400",
-      insets: 10,
-      //transparency: "efefeff0"
-      linearGradient: "45,ffffff,0,76A4FB,0.75"
+      insets: 10
     }
   },
   "ControlPane": {

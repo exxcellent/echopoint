@@ -1,6 +1,9 @@
 /**
  * Component rendering peer: AbstractChart
  *
+ * <p>All chart implementations must implement the {@link #getChartType}
+ * abstract method.</p>
+ *
  * @author Rakesh 2008-08-08
  * @version: $Id$
  */
@@ -11,11 +14,15 @@ echopoint.internal.AbstractChartSync = Core.extend( echopoint.internal.AbstractC
   $static:
   {
     ALT_CONTENT: "Echopoint Chart",
+    ALT: "alt",
 
     // An array of colours that will be sequentially applied to each data
     // set defined in the DATA property.
     COLORS: [ "ff0033", "66ffff", "00ff33", "ffcc00", "ff00ff",
-      "3399ff", "996666", "ff3333", "9933ff", "ffff33" ]
+      "3399ff", "996666", "ff3333", "9933ff", "ffff33" ],
+
+    DEFAULT_HEIGHT: "600",
+    DEFAULT_WIDTH: "500"
   },
 
   $load: function()
@@ -26,10 +33,27 @@ echopoint.internal.AbstractChartSync = Core.extend( echopoint.internal.AbstractC
   $virtual:
   {
     /** The encoding matrix used to encode numbers. */
-    simpleEncoding: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",
+    _simpleEncoding: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",
 
     /** The container element that is used to render the chart. */
     _chart: null,
+
+    /**
+     * Abstract method that is used to return the chart type value to set.
+     * Implementations <b>must</b> implement this method to return the
+     * chart type appropriate to it.
+     */
+    getChartType: function() { throw "getChartType must be implemented"; },
+
+    /**
+     * Set the axis labels for the chart.  Since axis label support differs
+     * based upon the type of chart, the default implementation does nothing.
+     * Sub-classes must over-ride as appropriate.
+     *
+     * @param url The url that is to be updated.
+     * @return The modified url object.
+     */
+    setAxisLabels: function( url ) { return url; },
 
     /**
      * The function used to encode the chart data using simple encoding
@@ -50,22 +74,76 @@ echopoint.internal.AbstractChartSync = Core.extend( echopoint.internal.AbstractC
       return chartData.join( "" );
     },
 
-    /** Return the <code>alt</code> attribute for the image */
+    /**
+     * Create the Google Chart API URL to use with this chart.
+     *
+     * @see #getChartType
+     * @see #encode
+     * @see #setAxisLabels
+     * @see #setColors
+     * @see #setLegend
+     * @see #setLegendPosition
+     * @see #setFill
+     * @see #setTitle
+     * @see #setFont
+     * @see #setAltContent
+     **/
+    getUrl: function()
+    {
+      var data = this.component.get( echopoint.internal.AbstractChart.DATA );
+
+      var url = "http://chart.apis.google.com/chart?chs=";
+      url += this.getWidth() + "x" + this.getHeight();
+      url += "&cht=" + this.getChartType();
+      url += "&chd=s:";
+
+      for ( var i = 0; i < data.length; ++i )
+      {
+        if ( i > 0 ) url += ",";
+        url += this.encode( data[i] );
+      }
+
+      url = this.setAxisLabels( url );
+      url = this.setColors( url );
+      url = this.setLegend( url );
+      url = this.setLegendPosition( url );
+      url = this.setFill( url );
+      url = this.setTitle( url );
+      url = this.setFont( url );
+      url = this.setAltContent( url );
+
+      return url;
+    },
+
+    /** Return the alt content to use for the chart and image. */
     getAltContent: function()
     {
       var alt = this.component.get( echopoint.internal.AbstractChart.ALT );
-      return ( alt ) ? alt : echopoint.internal.AbstractChartSync.ALT_CONTENT;
+      return ( ( alt ) ? alt :
+                         echopoint.internal.AbstractChartSync.ALT_CONTENT );
     },
 
     /**
-     * Return the colours to set to plot data set.
+     * Set the <code>alt</code> attribute for the image.
      *
-     * @return The URL parameter that may be added to the Google Chart API URL
+     * @see #getAltContent
      */
-    getColors: function()
+    setAltContent: function( url )
+    {
+      url += "&alt=" + this.getAltContent();
+      return url;
+    },
+
+    /**
+     * Add the colours to set to plot data set.
+     *
+     * @param The URL that will be updated.
+     * @return The modified URL object.
+     */
+    setColors: function( url )
     {
       var data = this.component.get( echopoint.internal.AbstractChart.DATA );
-      var url = "&chco=";
+      url += "&chco=";
       var index = 0;
       var size = echopoint.internal.AbstractChartSync.COLORS.length;
 
@@ -88,21 +166,106 @@ echopoint.internal.AbstractChartSync = Core.extend( echopoint.internal.AbstractC
     },
 
     /**
-     * Return the solid fill to apply to the chart.  Implementations must
-     * over-ride to add support for additional fill properties than the
-     * base supported by all charts.  Note that it is not safe to invoke
-     * this implementation from over-ridden sub-class implementations.
+     * Set the legends for the data set if specified.
+     *
+     * @param The URL that will be updated.
+     * @return The modified URL object.
      */
-    getSolidFill: function()
+    setLegend: function( url )
     {
-      var url = "&chf=";
+      var data = this.component.get( echopoint.internal.AbstractChart.DATA );
+      if ( ! data[0].legend ) return url;
+      url += "&chdl=";
 
-      var background = this.component.render( echopoint.internal.AbstractChart.BACKGROUND_FILL );
-      if ( background ) url += "bg,s," + background;
+      for ( var i = 0; i < data.length; ++i )
+      {
+        url += data[i].legend;
+        if ( i != data.length - 1 ) url += "|";
+      }
 
+      return url;
+    },
+
+    /**
+     * Set the legend position for the chart.  This will have no effect if no
+     * legend has been specified.
+     *
+     * @param The URL that will be updated.
+     * @return The modified URL object.
+     */
+    setLegendPosition: function( url )
+    {
+      var position = this.component.render(
+          echopoint.internal.AbstractChart.LEGEND_POSITION );
+      if ( position ) url += "&chdlp=" + position;
+      return url;
+    },
+
+    /** Set the fill to apply to the chart. */
+    setFill: function( url )
+    {
+      var fill = this.component.render( echopoint.internal.AbstractChart.FILL );
+      if ( fill ) url += "&chf=" + fill;
+
+      return url;
+    },
+
+    /** Set the font style to apply to the chart title. */
+    setFont: function( url )
+    {
+      url += "&chts=";
+
+      var foreground = this.component.render(
+          echopoint.internal.AbstractContainer.FOREGROUND );
+      url += ( foreground ) ? foreground : "000000";
+
+      var font = this.component.render( echopoint.internal.AbstractContainer.FONT );
+      if ( font )
+      {
+        url += "," + font.size;
+      }
+
+      return url;
+    },
+
+    /** Return the title for the chart. */
+    setTitle: function( url )
+    {
+      var title = this.component.get( echopoint.internal.AbstractChart.TITLE );
+      if ( title ) url += "&chtt=" + title.getText();
       return url;
     }
   },
+
+  renderAdd: function( update, parentElement )
+  {
+    this._chart = document.createElement( "img" );
+    this._chart.id = this.component.renderId;
+    this.renderStyle( this._chart );
+
+    this._chart.setAttribute( "src", this.getUrl() );
+    this._chart.setAttribute( "alt", this.getAltContent() );
+
+    parentElement.appendChild( this._chart );
+  },
+
+  renderDispose: function( update )
+  {
+    this._chart = null;
+  },
+
+  renderUpdate: function( update )
+  {
+    var parent = this._chart.parentNode;
+    this.renderDispose( update );
+    this.renderAdd( update, parent );
+  },
+
+  /** Over-ridden to return the value to use. */
+  getDefaultHeight: function() { return echopoint.internal.AbstractChartSync.DEFAULT_HEIGHT; },
+
+  /** Over-ridden to return the value to use. */
+  getDefaultWidth: function() { return echopoint.internal.AbstractChartSync.DEFAULT_WIDTH; },
 
   /** Encode the {@link echopoint.google.ChartData#xdata} array of values. */
   _encodeXData: function( data, chartData )
@@ -115,8 +278,8 @@ echopoint.internal.AbstractChartSync = Core.extend( echopoint.internal.AbstractC
 
       if ( !isNaN( currentValue ) && currentValue >= 0 )
       {
-        chartData.push( this.simpleEncoding.charAt(
-            Math.round( ( this.simpleEncoding.length - 1 ) *
+        chartData.push( this._simpleEncoding.charAt(
+            Math.round( ( this._simpleEncoding.length - 1 ) *
                         currentValue / xmax ) ) );
       }
       else
@@ -140,8 +303,8 @@ echopoint.internal.AbstractChartSync = Core.extend( echopoint.internal.AbstractC
 
         if ( !isNaN( currentValue ) && currentValue >= 0 )
         {
-          chartData.push( this.simpleEncoding.charAt(
-              Math.round( ( this.simpleEncoding.length - 1 ) *
+          chartData.push( this._simpleEncoding.charAt(
+              Math.round( ( this._simpleEncoding.length - 1 ) *
                           currentValue / ymax ) ) );
         }
         else

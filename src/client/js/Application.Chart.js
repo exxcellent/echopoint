@@ -18,35 +18,41 @@ echopoint.constants.LINE_CHART = "echopoint.google.LineChart";
  * component from which <a href='http://code.google.com/apis/chart/'>Google
  * Chart API</a> components are derived.
  */
-echopoint.internal.AbstractChart = Core.extend( Echo.Component,
+echopoint.internal.AbstractChart = Core.extend( echopoint.internal.AbstractContainer,
 {
   $abstract: true,
 
-  /** Properties defined for this component. */
+  /**
+   * Properties defined for this component.
+   *
+   * <p><b>Notes:</b><p>
+   * <ol>
+   *   <li>Only raw numbers without units are to be specified for
+   *   chart dimensions.</li>
+   *   <li><code>BACKGROUND</code> is not supported.  Specify
+   *   <code>FILL</code> property instead.</li>
+   *   <li><code>BACKGROUND_IMAGE</code> is not supported.</li>
+   *   <li>Only size number is supported for the font as required by Google
+   *   Chart API.  Font typeface has no effect.</li>
+   *   <li>Foreground colour applies only to the chart title and must
+   *   be specified without the leading <code>#</code> as required by
+   *   Google Chart API.</li>
+   * </ol>
+   */
   $static:
   {
-    ALIGNMENT: "alignment",
+    /**
+     * The name of the property that defines the alternate content text for
+     * the chart and image.
+     */
     ALT: "alt",
 
     /**
-     * The background fill property for the chart.  All chart types support
-     * background fill.  Chart implementations may define additional solid
-     * fill properties as supported by Google.  Note that this fill
-     * property will over-ride any other fill proeprty specified since only
-     * one type of fill is supported per chart.  Values specified must be
-     * <code>RRGGBB</code> format hexadecimal string.
+     * The colour fill property for the chart.  Refer to the colour fill
+     * and linear gradient notes for the Google Chart API to determine the
+     * proper formatted string values that may be specified for charts.
      */
-    BACKGROUND_FILL: "backgroundFill",
-
-    BORDER: "border",
-    INSETS: "insets",
-
-    /**
-     * Note that only raw numbers without units are to be specified for
-     * chart dimensions
-     */
-    HEIGHT: "height",
-    WIDTH: "width",
+    FILL: "fill",
 
     /**
      * An array of ChartData model objects that are to be plotted.
@@ -54,7 +60,19 @@ echopoint.internal.AbstractChart = Core.extend( Echo.Component,
      * Either all model elements must be simple (only xdata), or should have
      * both xdata and ydata
      */
-    DATA: "data"
+    DATA: "data",
+
+    /**
+     * The legend position for the chart.  Specify the values as defined by
+     * the Google Chart API documentation.
+     */
+    LEGEND_POSITION: "legendPosition",
+
+    /**
+     * The title to display for chart.  Must be of type {@link
+     * echopoint.google.Title}.
+     */
+    TITLE: "title"
   },
 
   $load: function()
@@ -77,43 +95,63 @@ echopoint.google.LineChart = Core.extend( echopoint.internal.AbstractChart,
     XY_DATA: "lxy", // Each line is represented by two sets of data for x and y
 
     /**
-     * The fill colour for the chart.  All charts support specifying the
-     * chart fill colour.  Values specified must be <code>RRGGBB</code>
-     * format hexadecimal string.
+     * The axis type specification for the chart.  This property may be
+     * specified as a style.  See
+     * <a href='http://code.google.com/apis/chart/#axis_type'>Axis type</a>
+     * documentation.
      */
-    CHART_FILL: "chartFill",
+    AXIS_TYPE: "axisType",
 
     /**
-     * A linear gradient to apply to the chart.  This will be applied to
-     * <code>CHART_FILL</code> if <code>BACKGROUND_FILL</code> is defined,
-     * otherwise, it will be applied to <code>BACKGROUND_FILL</code>.  When
-     * specifying this property, ensure that at most only
-     * <code>BACKGROUND_FILL</code> is specified.  Linear gradient is defined
-     * as <code>&lt;Angle&gt;,RRGGBB,&lt;Offset1&gt;,RRGGBB,&lt;Offset2&gt;</code>.
-     * The components of a linear gradient are defined as:
-     *
-     * <ol>
-     *   <li><code>Angle</code> - The angle of the gradient between 0
-     *   (horizontal) and 90 (vertical).</li>
-     *   <li><code>RRGGBB</code> - The first hexadecimal colour value to apply.</li>
-     *   <li><code>Offset1</code> - The point the first colour is pure where:
-      *  0 specifies the right-most chart position and 1 the left-most.</li>
-     *   <li><code>RRGGBB</code> - The second hexadecimal colour value to apply.</li>
-     *   <li><code>Offset1</code> - The point the second colour is pure where:
-     *  0 specifies the right-most chart position and 1 the left-most.</li>
-     * </ol>
+     * The array of array of labels (string) for the axes.  This must have as
+     * many child arrays as there are axis types defined in AXIS_TYPE.  See
+     * <a href='http://code.google.com/apis/chart/#axes_labels'>Axis labels</a>
+     * documentation.
      */
-    LINEAR_GRADIENT: "linearGradient",
+    AXIS_LABELS: "axisLabels",
 
     /**
-     * The fill colour for the chart as a whole.  The colour value must be
-     * specified in <code>RRGGBBTT</code> hexadecimal string format, where
-     * <code>TT</code> represents the transparency to apply as a hexadecimal
-     * value.  Note that specifying this value renders the
-     * <code>BACKGROUND_FILL</code> and <code>CHART_FILL</code> properties
-     * redundant since they are not applied.
+     * The label positions for the axis labels.  This can be used to present
+     * labels that are non-unoformly distributed along the axis.  Similar to
+     * AXIS_LABELS, this is specified as an array of array of label positions
+     * (numbers). See
+     * <a href='http://code.google.com/apis/chart/#axes_label_positions'>Axis
+     * positions</a> documentation.
      */
-    TRANSPARENCY: "transparency"
+    LABEL_POSITIONS: "labelPositions",
+
+    /**
+     * The ranges for the axes defined for the chart.  The value is expressed
+     * as an array of {@link echoppoint.google.Range} object instances with
+     * the array size being equal to the number of axes defined for the chart.
+     * See <a href='http://code.google.com/apis/chart/#axis_range'>Axis
+     * ranges</a> documentation.
+     */
+    AXIS_RANGES: "axisRanges",
+
+    /**
+     * The styles to apply for the axis labels.  The value is expressed as
+     * a string with the specified format without the <code>&amp;chxs=</code>
+     * prefix.  This allows this property to be specified via a stylesheet.
+     * See <a href='http://code.google.com/apis/chart/#axes_styles'>Axis
+     * styles</a> documentation for specification.
+     */
+    AXIS_STYLES: "axisStyles",
+
+    /**
+     * The line styles for the data sets plotted.  Value is expressed as an
+     * array of {@link echopoint.google.LineStyle} objects.  This property
+     * is not styleable.
+     */
+    LINE_STYLES: "lineStyles",
+
+    /**
+     * Style that controls display of grid lines.  See
+     * <a href='http://code.google.com/apis/chart/#grid'>Grid lines</a>
+     * documentation for specification.  Express the values without the
+     * <code>&amp;chls=</code> prefix in the style sheet.
+     */
+    GRID_LINES: "gridLines"
   },
 
   $load: function()
@@ -138,7 +176,7 @@ echopoint.google.LineChart = Core.extend( echopoint.internal.AbstractChart,
 echopoint.google.ChartData = Core.extend(
 {
   /** The mandatory array of numbers to be displayed along the x-axis. */
-  xdata: new Array(),
+  xdata: null,
 
   /** The mandatory maximum value to use for numbers plotted along x-axis. */
   xmax: null,
@@ -155,6 +193,12 @@ echopoint.google.ChartData = Core.extend(
    * echopoint.internal.AbstractChartSync#COLORS}.
    */
   color: null,
+
+  /**
+   * The legend text to apply to the data set.  If legend is specified, it
+   * must be specified for all instances in the data array.
+   */
+  legend: null,
 
   $construct: function( xvalues, xmaximum )
   {
@@ -199,3 +243,76 @@ echopoint.google.ChartData = Core.extend(
   }
 });
 
+/** The model object used to represent the title of a chart. */
+echopoint.google.Title = Core.extend(
+{
+  /** An array that is used to hold the lines of text in the title. */
+  _title: null,
+
+  /** Create a new instance with a single line text */
+  $construct: function( text )
+  {
+    this._title = new Array();
+    if ( text ) this._title.push( text );
+  },
+
+  /** Add a line of text to the title. */
+  add: function( line )
+  {
+    this._title.push( line );
+  },
+
+  /** Return the title text as represented in this object. */
+  getText: function()
+  {
+    var text =  this._title.join( "|" );
+    return text.replace( /\s+/g, "+" );
+  },
+
+  /** Return a string representation of this object.  Returns {@link #getText}. */
+  toString: function()
+  {
+    return this.getText();
+  }
+});
+
+/** The model object used to represent the range of a chart axis (and data). */
+echopoint.google.Range = Core.extend(
+{
+  /** The minimum (starting) value of the range. */
+  minimum: null,
+
+  /** The maximum (ending) value of the range. */
+  maximum: null,
+
+  /** Create a new instance with the values specified. */
+  $construct: function( min, max )
+  {
+    this.minimum = min;
+    this.maximum = max;
+  }
+});
+
+/**
+ * A style object used to represent the style for a line drawn.  See
+ * <a href='http://code.google.com/apis/chart/#line_styles'>Line styles</a>
+ * documentation for specifications.
+ */
+echopoint.google.LineStyle = Core.extend(
+{
+  /** The thickness of the line to plot. */
+  thickness: null,
+
+  /** The size of a line segment.  Set to 1 for solid lines. */
+  segmentLength: null,
+
+  /** The length of a blank segment.  Set to 0 for solid lines. */
+  blankSegmentLength: null,
+
+  $construct: function( thick, segment, blank )
+  {
+    this.thickness = ( thick ) ? thick : 1;
+    this.segmentLength = ( segment ) ? segment : 1;
+    this.blankSegmentLength = ( blank ) ? blank : 0;
+  }
+});
