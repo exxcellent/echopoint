@@ -58,7 +58,7 @@ echopoint.google.model.ChartData = Core.extend(
   },
 
   /**
-   * Return the {@link #xmax} value.  If {@link xmax} is not defined, return
+   * Return the {@link #xmax} value.  If {@link #xmax} is not defined, return
    * the maximum value from {@link #xdata}.
    */
   getXMax: function()
@@ -222,7 +222,7 @@ echopoint.google.model.ShapeMarker = Core.extend(
  * <a href='http://code.google.com/apis/chart/#hor_line_marker'>Range
  * marker</a> specifications.
  */
-echopoint.google.model.RangerMarker = Core.extend(
+echopoint.google.model.RangeMarker = Core.extend(
     echopoint.google.internal.Marker,
 {
   /** The start point for the marked region. Betweem 0.0 and 1.0. */

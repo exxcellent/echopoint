@@ -15,9 +15,212 @@ echopoint.google.LineChartSync = Core.extend(
   /** Over-ridden to return the appropriate chart type. */
   getChartType: function()
   {
-    var data = this.component.get( echopoint.google.internal.AbstractChart.DATA );
+    var data = this.getData();
     return ( ( data[0].ydata ) ? echopoint.google.LineChart.XY_DATA :
              echopoint.google.LineChart.X_DATA );
+  },
+
+  /**
+   * Return the axis labels for the chart.  Special handling to parse JSON
+   * data structure from the server.
+   *
+   * @see #_processArrays
+   */
+  getAxisLabels: function()
+  {
+    return this._processArrays( echopoint.google.LineChart.AXIS_LABELS );
+  },
+
+  /**
+   * Return the label positions for the chart.  Special handling to parse JSON
+   * data structure from the server.
+   *
+   * @see #_processArrays
+   */
+  getLabelPositions: function()
+  {
+    return this._processArrays( echopoint.google.LineChart.LABLE_POSITIONS );
+  },
+
+  /**
+   * Common method for processing data types that are array of array of
+   * simple types.
+   *
+   * @param key The key to use to fetch the property.
+   */
+  _processArrays: function( key )
+  {
+    var _labels = this._objectMap[key];
+    if ( _labels ) return _labels;
+
+    var value = this.component.get( key );
+    if ( ! value ) return null;
+
+    if ( value instanceof Array )
+    {
+      this._objectMap[key] = value;
+    }
+    else
+    {
+      var json = eval( "(" + value + ")" );
+      var array = new Array();
+
+      for ( var i = 0; i < json.list.length; ++i )
+      {
+        var labels = new Array();
+        var jsonLabels = json.list[i][0];
+
+        for ( var j = 0; j < jsonLabels.length; ++j )
+        {
+          labels[j] = jsonLabels[j];
+        }
+
+        array[i] = labels;
+      }
+
+      this._objectMap[key] = array;
+    }
+
+    return this._objectMap[key];
+  },
+
+  /**
+   * Return the axis ranges for the chart.  Special handling to parse JSON
+   * data structure from the server.
+   */
+  getAxisRanges: function()
+  {
+    var key = echopoint.google.LineChart.AXIS_RANGES;
+    var _ranges = this._objectMap[key];
+    if ( _ranges ) return _ranges;
+
+    var value = this.component.get( key );
+    if ( ! value ) return null;
+
+    if ( value instanceof Array )
+    {
+      this._objectMap[key] = value;
+    }
+    else
+    {
+      var json = eval( "(" + value + ")" );
+      var array = new Array();
+
+      for ( var i = 0; i < json.list.length; ++i )
+      {
+        array[i] = new echopoint.google.model.Range(
+            json.list[i].minimum, json.list[i].maximum );
+      }
+
+      this._objectMap[key] = array;
+    }
+
+    return this._objectMap[key];
+  },
+
+  /**
+   * Return the line styles for the chart.  Special handling to parse JSON
+   * data structure from the server.
+   */
+  getLineStyles: function()
+  {
+    var key = echopoint.google.LineChart.LINE_STYLES;
+    var _styles = this._objectMap[key];
+    if ( _styles ) return _styles;
+
+    var value = this.component.get( key );
+    if ( ! value ) return null;
+
+    if ( value instanceof Array )
+    {
+      this._objectMap[key] = value;
+    }
+    else
+    {
+      var json = eval( "(" + value + ")" );
+      var array = new Array();
+
+      for ( var i = 0; i < json.list.length; ++i )
+      {
+        array[i] = new echopoint.google.model.LineStyle(
+            json.list[i].thickness, json.list[i].segmentLength,
+            json.list[i].blankSegmentLength );
+      }
+
+      this._objectMap[key] = array;
+    }
+
+    return this._objectMap[key];
+  },
+
+  /**
+   * Return the range markers for the chart.  Special handling to parse JSON
+   * data structure from the server.
+   */
+  getRangeMarkers: function()
+  {
+    var key = echopoint.google.LineChart.RANGE_MARKERS;
+    var _markers = this._objectMap[key];
+    if ( _markers ) return _markers;
+
+    var value = this.component.get( key );
+    if ( ! value ) return null;
+
+    if ( value instanceof Array )
+    {
+      this._objectMap[key] = value;
+    }
+    else
+    {
+      var json = eval( "(" + value + ")" );
+      var array = new Array();
+
+      for ( var i = 0; i < json.list.length; ++i )
+      {
+        array[0] = new echopoint.google.model.RangeMarker(
+            json.list[i].markerType, json.list[i].color,
+            json.list[i].startPoint, json.list[i].endPoint );
+      }
+
+      this._objectMap[key] = array;
+    }
+
+    return this._objectMap[key];
+  },
+
+  /**
+   * Return the fill areas for the chart.  Special handling to parse JSON
+   * data structure from the server.
+   */
+  getFillArea: function()
+  {
+    var key = echopoint.google.LineChart.FILL_AREA;
+    var _fill = this._objectMap[key];
+    if ( _fill ) return _fill;
+
+    var value = this.component.get( key );
+    if ( ! value ) return null;
+
+    if ( value instanceof Array )
+    {
+      this._objectMap[key] = value;
+    }
+    else
+    {
+      var json = eval( "(" + value + ")" );
+      var array = new Array();
+
+      for ( var i = 0; i < json.list.length; ++i )
+      {
+        array[0] = new echopoint.google.model.FillArea(
+            json.list[i].markerType, json.list[i].color,
+            json.list[i].startIndex, json.list[i].endIndex );
+      }
+
+      this._objectMap[key] = array;
+    }
+
+    return this._objectMap[key];
   },
 
   /**
@@ -58,7 +261,7 @@ echopoint.google.LineChartSync = Core.extend(
   /** Set the axis labels for the chart from an array of string arrays. */
   setLabels: function( url )
   {
-    var array = this.component.get( echopoint.google.LineChart.AXIS_LABELS );
+    var array = this.getAxisLabels();
     if ( ! array ) return url;
 
     url += "&chxl=";
@@ -88,7 +291,7 @@ echopoint.google.LineChartSync = Core.extend(
   /** Sets the axis label positions to allow non-uniform spacing. */
   setLabelPositions: function( url )
   {
-    var array = this.component.get( echopoint.google.LineChart.LABEL_POSITIONS );
+    var array = this.getLabelPositions();
     if ( ! array ) return url;
 
     url += "&chxp=";
@@ -119,7 +322,7 @@ echopoint.google.LineChartSync = Core.extend(
   /** Sets the axis label positions to allow non-uniform spacing. */
   setAxisRange: function( url )
   {
-    var array = this.component.get( echopoint.google.LineChart.AXIS_RANGES );
+    var array = this.getAxisRanges();
     if ( ! array ) return url;
 
     url += "&chxr=";
@@ -149,7 +352,7 @@ echopoint.google.LineChartSync = Core.extend(
   /** Set the line styles for the lines plotted. */
   setLineStyles: function( url )
   {
-    var array = this.component.get( echopoint.google.LineChart.LINE_STYLES );
+    var array = this.getLineStyles();
     if ( array )
     {
       url += "&chls=";
@@ -182,9 +385,9 @@ echopoint.google.LineChartSync = Core.extend(
    */
   setMarkers: function( url )
   {
-    var data = this.component.get( echopoint.google.internal.AbstractChart.DATA );
-    var rangeMarkers = this.component.get( echopoint.google.LineChart.RANGE_MARKERS );
-    var fillArea = this.component.get( echopoint.google.LineChart.FILL_AREA );
+    var data = this.getData();
+    var rangeMarkers = this.getRangeMarkers();
+    var fillArea = this.getFillArea();
 
     var hasMarkers = false;
     if ( rangeMarkers ) hasMarkers = true;

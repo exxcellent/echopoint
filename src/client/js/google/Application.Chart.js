@@ -123,7 +123,7 @@ echopoint.google.LineChart = Core.extend( echopoint.google.internal.AbstractChar
 
     /**
      * The ranges for the axes defined for the chart.  The value is expressed
-     * as an array of {@link echoppoint.google.Range} object instances with
+     * as an array of {@link echopoint.google.model.Range} object instances with
      * the array size being equal to the number of axes defined for the chart.
      * See <a href='http://code.google.com/apis/chart/#axis_range'>Axis
      * ranges</a> documentation.

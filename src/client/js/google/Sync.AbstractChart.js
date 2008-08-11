@@ -39,6 +39,9 @@ echopoint.google.internal.AbstractChartSync = Core.extend(
     /** The container element that is used to render the chart. */
     _chart: null,
 
+    /** A map maintained to cache parsed JSON content. */
+    _objectMap: null,
+
     /**
      * Abstract method that is used to return the chart type value to set.
      * Implementations <b>must</b> implement this method to return the
@@ -76,6 +79,96 @@ echopoint.google.internal.AbstractChartSync = Core.extend(
     },
 
     /**
+     * Return the data array.  Special handling to parse JSON data structure
+     * from the server.
+     */
+    getData: function()
+    {
+      var key = echopoint.google.internal.AbstractChart.DATA;
+      var _data = this._objectMap[key];
+      if ( _data ) return _data;
+
+      var value = this.component.get( key );
+
+      if ( value instanceof Array )
+      {
+        this._objectMap[key] = value;
+      }
+      else
+      {
+        var json = eval( "(" + value + ")" );
+        var array = new Array();
+
+        for ( var i = 0; i < json.list.length; ++i )
+        {
+          var chartData = json.list[i];
+          var data = new echopoint.google.model.ChartData(
+              chartData.xdata, chartData.xmax );
+
+          if ( chartData.ydata.length > 0 ) data.ydata = chartData.ydata;
+          var ymax = chartData.ymax;
+          if ( ymax ) data.ymax = ymax;
+
+          data.color = chartData.color;
+          data.legend = chartData.legend;
+
+          var markers = new Array();
+          var mks = chartData.markers;
+          if ( mks )
+          {
+            for ( var j = 0; j < mks.length; ++j )
+            {
+              var marker = new echopoint.google.model.ShapeMarker(
+                  mks[j].markerType, mks[j].color, mks[j].size );
+              marker.priority = mks[j].priority;
+              markers[j] = marker;
+            }
+          }
+          data.markers = markers;
+
+          array[i] = data;
+        }
+
+        this._objectMap[key] = array;
+      }
+
+      return this._objectMap[key];
+    },
+
+    /**
+     * Return the title for the chart.  Special handling to parse JSON data
+     * structure from the server.
+     */
+    getTitle: function()
+    {
+      var key = echopoint.google.internal.AbstractChart.TITLE;
+      var _title = this._objectMap[key];
+      if ( _title ) return _title;
+
+      var value = this.component.get( key );
+      if ( ! value ) return null;
+
+      if ( value instanceof echopoint.google.model.Title )
+      {
+        this._objectMap[key] = value;
+      }
+      else
+      {
+        var json = eval( "(" + value + ")" );
+        var title = new echopoint.google.model.Title();
+
+        for ( var i = 0; i < json.Title.title.length; ++i )
+        {
+          title.add( json.Title.title[i] );
+        }
+
+        this._objectMap[key] = title;
+      }
+
+      return this._objectMap[key];
+    },
+
+    /**
      * Create the Google Chart API URL to use with this chart.
      *
      * @see #getChartType
@@ -91,7 +184,7 @@ echopoint.google.internal.AbstractChartSync = Core.extend(
      **/
     getUrl: function()
     {
-      var data = this.component.get( echopoint.google.internal.AbstractChart.DATA );
+      var data = this.getData();
 
       var url = "http://chart.apis.google.com/chart?chs=";
       url += this.getWidth() + "x" + this.getHeight();
@@ -143,7 +236,7 @@ echopoint.google.internal.AbstractChartSync = Core.extend(
      */
     setColors: function( url )
     {
-      var data = this.component.get( echopoint.google.internal.AbstractChart.DATA );
+      var data = this.getData();
       url += "&chco=";
       var index = 0;
       var size = echopoint.google.internal.AbstractChartSync.COLORS.length;
@@ -174,7 +267,7 @@ echopoint.google.internal.AbstractChartSync = Core.extend(
      */
     setLegend: function( url )
     {
-      var data = this.component.get( echopoint.google.internal.AbstractChart.DATA );
+      var data = this.getData();
       if ( ! data[0].legend ) return url;
       url += "&chdl=";
 
@@ -232,7 +325,7 @@ echopoint.google.internal.AbstractChartSync = Core.extend(
     /** Return the title for the chart. */
     setTitle: function( url )
     {
-      var title = this.component.get( echopoint.google.internal.AbstractChart.TITLE );
+      var title = this.getTitle();
       if ( title ) url += "&chtt=" + title.getText();
       return url;
     }
@@ -240,6 +333,7 @@ echopoint.google.internal.AbstractChartSync = Core.extend(
 
   renderAdd: function( update, parentElement )
   {
+    this._objectMap = new Array();
     this._chart = document.createElement( "img" );
     this._chart.id = this.component.renderId;
     this.renderStyle( this._chart );
@@ -253,6 +347,7 @@ echopoint.google.internal.AbstractChartSync = Core.extend(
   renderDispose: function( update )
   {
     this._chart = null;
+    this._objectMap = null;
   },
 
   renderUpdate: function( update )

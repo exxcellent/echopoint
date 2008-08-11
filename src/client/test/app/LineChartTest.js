@@ -29,16 +29,16 @@ echopoint.test.LineChartTest = Core.extend(
     title.add( "Simple Chart" );
 
     var labels = new Array();
-    labels[0] = [ 0, 20, 40, 60, 80, 100 ];
-    labels[1] = [ 0, 25, 50, 75, 100 ];
+    labels[0] = [ "0", "20", "40", "60", "80", "100" ];
+    labels[1] = [ "0", "25", "50", "75", "100" ];
 
     var ranges = new Array();
     ranges[0] = new echopoint.google.model.Range( 20, 125 );
     ranges[1] = new echopoint.google.model.Range( 25, 150 );
 
     var rangeMarkers = new Array();
-    rangeMarkers[0] = new echopoint.google.model.RangerMarker( "r", "ff0000", 0.1, 0.11 );
-    rangeMarkers[1] = new echopoint.google.model.RangerMarker( "R", "0000ff", 0.1, 0.11 );
+    rangeMarkers[0] = new echopoint.google.model.RangeMarker( "r", "ff0000", 0.1, 0.11 );
+    rangeMarkers[1] = new echopoint.google.model.RangeMarker( "R", "0000ff", 0.1, 0.11 );
 
     return new echopoint.google.LineChart(
     {
@@ -111,7 +111,7 @@ echopoint.test.LineChartTest = Core.extend(
     var positions = new Array();
     positions[0] = [];
     positions[1] = [];
-    positions[2] = [ 0, 33.3, 100.0 ]; // No idea what values to show, this does not work
+    positions[2] = [ 0, 33, 100 ]; // No idea what values to show, this does not work
     positions[3] = [];
 
     var lineStyles = new Array();
@@ -120,8 +120,8 @@ echopoint.test.LineChartTest = Core.extend(
     lineStyles[2] = new echopoint.google.model.LineStyle( 4 );
 
     var ranges = new Array();
-    ranges[0] = new echopoint.google.model.RangerMarker( "r", "e5ecf9", 0.35, 0.25 );
-    ranges[1] = new echopoint.google.model.RangerMarker( "R", "a0bae9", 0.35, 0.25 );
+    ranges[0] = new echopoint.google.model.RangeMarker( "r", "e5ecf9", 0.35, 0.25 );
+    ranges[1] = new echopoint.google.model.RangeMarker( "R", "a0bae9", 0.35, 0.25 );
 
 
     var fillArea = new Array();

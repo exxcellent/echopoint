@@ -42,6 +42,7 @@ public class ComponentList extends Column
           "HttpPane",
           "Strut",
           "TagCloud",
+          "LineChart",
       };
 
   /**
