@@ -24,6 +24,7 @@ import nextapp.echo.app.Component;
 
 import java.util.Collection;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
@@ -83,12 +84,12 @@ public class TagCloud extends Component
 
   /**
    * The JSON representation of {@link echopoint.model.Tag} instances to be
-   * represented in the component.  Note that this property should be
-   * treated as internal use only.
+   * represented in the component.
    */
-  public static final String PROPERTY_TAGS_JSON = "tagsJson";
+  public static final String PROPERTY_TAGS = "tags";
 
-  private Collection<Tag> tags = new ArrayList<Tag>( 20 );
+  /** The collection of tag instances that represents the data model. */
+  private Collection<Tag> data = new ArrayList<Tag>( 20 );
 
   /**
    * <b>TagCloud</b> is <i>NOT</i> allowed to have any children.
@@ -163,73 +164,57 @@ public class TagCloud extends Component
   }
 
   /**
-   * Return the value of the {@link #tags} propoerty.
+   * Return a ready only view of the {@link #data} model.
    *
    * @return The array of tags represented in this component.
    */
-  public Collection<Tag> getTags()
+  public Collection<Tag> getData()
   {
-    return tags;
+    return Collections.unmodifiableCollection( data );
   }
 
   /**
-   * Set the value of the {@link #tags} propoerty.
+   * Return the value of the {@link #PROPERTY_TAGS} propoerty.  Note
+   * that this method will return the JSON representation of {@link #data}.
    *
-   * @see #toJson
+   * @return The JSON data structure that represents {@link # collection}.
+   */
+  public String getTags()
+  {
+    return (String) getProperty( PROPERTY_TAGS );
+  }
+
+  /**
+   * Set the value of the {@link #PROPERTY_TAGS} propoerty.  This method is
+   * for <b>internal use only</b>.
+   *
+   * @see #setTags( Collection<Tag> )
+   * @param tags The JSON representation of the tags collection.
+   */
+  public void setTags( final String tags )
+  {
+    setProperty( PROPERTY_TAGS, tags );
+  }
+
+  /**
+   * Set the value of the {@link #data} propoerty.  The {@link # collection}
+   * collection will be converted to JSON to serialisation.
+   *
    * @param tags The collection of tag instances to be represented in this component.
    */
   public void setTags( final Collection<Tag> tags )
   {
-    this.tags.clear();
-    if ( tags != null )
-    {
-      this.tags.addAll( tags );
-    }
+    data.clear();
+    data.addAll( tags );
 
-    toJson();
-  }
-
-  /**
-   * Return the value of the {@link #PROPERTY_TAGS_JSON} propoerty.  Note
-   * that this method should be treated as for internal use only.
-   *
-   * @see #getTags
-   * @return The JSON data structure that represents {@link #tags}.
-   */
-  public String getTagsJson()
-  {
-    return (String) getProperty( PROPERTY_TAGS_JSON );
-  }
-
-  /**
-   * Set the value of the {@link #PROPERTY_TAGS_JSON} propoerty.  Note that
-   * this method should be treated as for internal use only.
-   *
-   * @see #setTags
-   * @param tagsJson The JSON data structure that represents {@link #tags}.
-   */
-  public void setTagsJson( final String tagsJson )
-  {
-    setProperty( PROPERTY_TAGS_JSON, tagsJson );
-  }
-
-  /**
-   * Convert the {@link #tags} collection to JSON and set the {@link
-   * #PROPERTY_TAGS_JSON} property.
-   *
-   * @see #createSerialiser
-   * @see #setTagsJson
-   */
-  protected void toJson()
-  {
     final XStream xstream = createSerialiser();
-    setTagsJson( xstream.toXML( tags ) );
+    setTags( xstream.toXML( data ) );
   }
 
   /**
    * Configure the JSON serialiser.
    *
-   * @return The configured serialiser to use to serialise {@link #tags}.
+   * @return The configured serialiser to use to serialise {@link #data}.
    */
   protected XStream createSerialiser()
   {

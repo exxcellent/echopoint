@@ -11,6 +11,7 @@ echopoint.TagCloudSync = Core.extend(Echo.Render.ComponentSync,
   },
 
   _element: null,
+  _tags: null,
 
   _getSpecificElement: function( target )
   {
@@ -65,14 +66,19 @@ echopoint.TagCloudSync = Core.extend(Echo.Render.ComponentSync,
 
   _getTags: function()
   {
-    var json = this.component.get( echopoint.TagCloud.TAGS_JSON );
+    if ( this._tags ) return this._tags;
+    var value = this.component.get( echopoint.TagCloud.TAGS );
 
-    if ( json )
+    if ( value instanceof Array )
     {
-      this._parseJson( json );
+      this._tags = value;
+    }
+    else
+    {
+      this._tags = this._parseJson( value );
     }
 
-    return this.component.get( echopoint.TagCloud.TAGS );
+    return this._tags;
   },
 
   _parseJson: function( json )
@@ -80,19 +86,13 @@ echopoint.TagCloudSync = Core.extend(Echo.Render.ComponentSync,
     var tags = new Array();
     var data = eval( "(" + json + ")" );
 
-    // This should work but does not seem to
-    //this.component.set( echopoint.TagCloud.TAGS, data.list );
-    // End
-
     for ( var i = 0; i < data.list.length; ++i )
     {
       tags[i] = new echopoint.model.Tag(
           data.list[i].name, data.list[i].count );
     }
 
-    this.component.set( echopoint.TagCloud.TAGS, tags );
-    this.component.set( echopoint.TagCloud.TAGS_JSON, null );
-    data = null;
+    return tags;
   },
 
   _renderStyle: function()
@@ -129,7 +129,7 @@ echopoint.TagCloudSync = Core.extend(Echo.Render.ComponentSync,
         }
       }
 
-      for ( var i = 0; i < tags.length; ++i )
+      for ( i = 0; i < tags.length; ++i )
       {
         var countValue = Math.floor(
             ( tags[i].count - minCount) / (maxCount - minCount) * 100 ) + 100;
@@ -156,20 +156,19 @@ echopoint.TagCloudSync = Core.extend(Echo.Render.ComponentSync,
 
   renderDispose: function( update )
   {
-    Core.Web.Event.removeAll(this._element);
-    this._Element = null;
+    Core.Web.Event.removeAll( this._element );
+    this._element = null;
+    this._data = null;
   },
 
   renderUpdate: function( update )
   {
     var property = update.getUpdatedProperty( echopoint.TagCloud.TAGS );
-    if ( ! property )
-    {
-      property = update.getUpdatedProperty( echopoint.TagCloud.TAGS_JSON );
-    }
 
     if ( property )
     {
+      this._tags = null;
+      
       if ( this._element.hasChildNodes() )
       {
         while( this._element.childNodes.length >= 1 )

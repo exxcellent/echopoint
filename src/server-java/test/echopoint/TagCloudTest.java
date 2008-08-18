@@ -83,7 +83,7 @@ public class TagCloudTest
   public void tags()
   {
     tagCloud.setTags( createTags() );
-    assertEquals( "Ensuring same size of tags", tagCloud.getTags().size(), 10 );
+    assertEquals( "Ensuring same size of tags", tagCloud.getData().size(), 10 );
   }
 
   @Test

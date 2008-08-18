@@ -117,6 +117,7 @@ public class ChartData<N extends Number> implements Serializable
   {
     this.xdata.clear();
     this.xdata.addAll( xdata );
+    xmax = getXmax();
   }
 
   /**
@@ -167,6 +168,7 @@ public class ChartData<N extends Number> implements Serializable
   {
     this.ydata.clear();
     this.ydata.addAll( ydata );
+    ymax = getYmax();
   }
 
   /**
@@ -179,7 +181,7 @@ public class ChartData<N extends Number> implements Serializable
     if ( ymax != -1 ) return ymax;
 
     double max = 0.0;
-    for ( N value : xdata )
+    for ( N value : ydata )
     {
       if ( value.doubleValue() > max ) max = value.doubleValue();
     }

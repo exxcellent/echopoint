@@ -24,8 +24,7 @@ echopoint.TagCloud = Core.extend( Echo.Component,
     ROLLOVER_ENABLED: "rolloverEnabled",
     ROLLOVER_BACKGROUND: "rolloverBackground",
     ROLLOVER_FOREGROUND: "rolloverForeground",
-    TAGS: "tags",
-    TAGS_JSON: "tagsJson"
+    TAGS: "tags"
   },
 
   componentType: echopoint.constants.TAG_CLOUD,
