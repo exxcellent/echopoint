@@ -226,6 +226,7 @@
         <file name='Sync.AdvancedChart.js'/>
         <file name='Sync.BarChart.js'/>
         <file name='Sync.LineChart.js'/>
+        <file name='Sync.Sparkline.js'/>
       </filelist>
       <filelist dir='${dir.src.client.test}/app'>
         <file name='TestAppDeploy.js'/>
@@ -240,6 +241,7 @@
         <file name='TagCloudTest.js'/>
         <file name='BarChartTest.js'/>
         <file name='LineChartTest.js'/>
+        <file name='SparklineTest.js'/>
       </filelist>
     </concat>
 

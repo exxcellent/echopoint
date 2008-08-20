@@ -44,6 +44,7 @@ public class ComponentList extends Column
           "TagCloud",
           "BarChart",
           "LineChart",
+          "Sparkline",
       };
 
   /**

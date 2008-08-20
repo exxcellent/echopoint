@@ -40,10 +40,10 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * <p>&copy; Copyright 2008 <a href='http://sptci.com/' target='_top'>Sans
- * Pareil Technologies, Inc.</a></p>
+ * Unit test suite for the {@link echopoint.google.LineChart} component
+ * wrapper.
  *
- * @author Rakesh Vidyadharan 2008-8-10
+ * @author Rakesh Vidyadharan 2008-08-10
  * @version $Id$
  */
 public class LineChartTest

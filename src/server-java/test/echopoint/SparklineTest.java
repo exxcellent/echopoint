@@ -18,14 +18,14 @@
 
 package echopoint;
 
-import echopoint.google.BarChart;
+import echopoint.google.Sparkline;
 import echopoint.google.model.ChartData;
 import echopoint.google.model.Range;
 import echopoint.google.model.RangeMarker;
 import echopoint.google.model.ShapeMarker;
 import echopoint.google.model.Title;
 import echopoint.google.model.LineStyle;
-import echopoint.google.model.BarChartSize;
+import echopoint.google.model.FillArea;
 import nextapp.echo.app.Component;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -40,36 +40,28 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Component wrapper for the {@link echopoint.google.BarChart} component
+ * Unit test suite for the {@link echopoint.google.Sparkline} component
  * wrapper.
  *
- * @author Rakesh Vidyadharan 2008-08-19
+ * @author Rakesh Vidyadharan 2008-08-20
  * @version $Id$
  */
-public class BarChartTest
+public class SparklineTest
 {
-  static BarChart<Integer> chart;
+  static Sparkline<Integer> chart;
   static ChartData<Integer> data;
 
   @BeforeClass
   public static void init()
   {
-    chart = new BarChart<Integer>();
+    chart = new Sparkline<Integer>();
     data = new ChartData<Integer>();
-  }
-
-  @Test
-  public void orientation()
-  {
-    chart.setOrientation( BarChart.Orientation.bhg );
-    assertEquals( "Ensuring orientation", chart.getOrientation(),
-        BarChart.Orientation.bhg.toString() );
   }
 
   @Test
   public void renderId()
   {
-    final String id = "echopointUnitTestSimpleBarChart";
+    final String id = "echopointUnitTestSimpleSparkline";
     chart.setRenderId( id );
     assertEquals( "Ensuring render id is same", id, chart.getRenderId() );
   }
@@ -107,64 +99,10 @@ public class BarChartTest
   public void title()
   {
     final Title title = new Title();
-    title.add( "Bar Chart" );
+    title.add( "Sparkline" );
     chart.setTitle( title );
 
     assertEquals( "Ensuring title set", title, chart.title() );
-  }
-
-  @Test
-  public void axisLabels()
-  {
-    final Collection<Collection<String>> labels =
-        new ArrayList<Collection<String>>();
-
-    String[] one =  new String[] { "0", "20", "40", "60", "80", "100" };
-    labels.add( Arrays.asList( one ) );
-
-    //String[] two = new String[] { "0", "25", "50", "75", "100" };
-    String[] two = new String[] { "Min", "Third", "Three Quarter", "Max" };
-    labels.add( Arrays.asList( two ) );
-
-    chart.setAxisLabels( labels );
-    assertNotNull( "Ensuring labels set", chart.getAxisLabels() );
-  }
-
-  @Test
-  public void labelPositions()
-  {
-    final Collection<Collection<Integer>> positions =
-        new ArrayList<Collection<Integer>>();
-    final Integer[] one = new Integer[] {};
-    positions.add( Arrays.asList( one ) );
-
-    final Integer[] two = new Integer[] { 0, 3, 7, 10 };
-    positions.add( Arrays.asList( two ) );
-
-    chart.setLabelPositions( positions );
-    assertNotNull( "Ensuring positions set", chart.getAxisLabels() );
-  }
-
-  @Test
-  public void axisRanges()
-  {
-    final Collection<Range> ranges = new ArrayList<Range>();
-    ranges.add( new Range( 20, 125 ) );
-    ranges.add( new Range( 25, 150 ) );
-
-    chart.setAxisRanges( ranges );
-    assertNotNull( "Ensuring axis ranges set", chart.getAxisRanges() );
-  }
-
-  @Test
-  public void rangeMarkers()
-  {
-    final Collection<RangeMarker> markers = new ArrayList<RangeMarker>();
-    markers.add( new RangeMarker( "r", "ff0000", 0.1, 0.11 ) );
-    markers.add( new RangeMarker( "R", "0000ff", 0.1, 0.11 ) );
-
-    chart.setRangeMarkers( markers );
-    assertNotNull( "Ensuring range markers set", chart.getRangeMarkers() );
   }
 
   @Test
@@ -175,21 +113,6 @@ public class BarChartTest
 
     chart.setLineStyles( styles );
     assertNotNull( "Ensuring line styles set", chart.getLineStyles() );
-  }
-
-  @Test
-  public void size()
-  {
-    final BarChartSize size = new BarChartSize( 20, 5, 15 );
-    chart.setSize( size );
-    assertNotNull( "Ensuring size set", chart.getSize() );
-  }
-
-  @Test
-  public void zeroLine()
-  {
-    chart.setZeroLine( 0.5 );
-    assertNotNull( "Ensuring zero-line set", chart.getZeroLine() );
   }
 
   @AfterClass
