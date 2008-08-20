@@ -10,8 +10,17 @@
 /** The name of the AbstractChart component. */
 echopoint.constants.ABSTRACT_CHART = "echopoint.google.internal.AbstractChart";
 
+/** The name of the advanced chart component. */
+echopoint.constants.ADVANCED_CHART = "echopoint.google.internal.AdvancedChart";
+
+/** The name of the BarChart component. */
+echopoint.constants.BAR_CHART = "echopoint.google.BarChart";
+
 /** The name of the LineChart component. */
 echopoint.constants.LINE_CHART = "echopoint.google.LineChart";
+
+/** The name of the Sparkline component. */
+echopoint.constants.SPARKLINE = "echopoint.google.Sparkline";
 
 /**
  * The class definition for the abstract chart component that is the root
@@ -84,17 +93,14 @@ echopoint.google.internal.AbstractChart = Core.extend(
 });
 
 /**
- * The class definition for line chart type supported by
- * <a href='http://code.google.com/apis/chart/'>Google Chart API</a>.
+ * The class definition for advanced charts (bar, line, ...) that support
+ * most options made available by the chart API.
  */
-echopoint.google.LineChart = Core.extend( echopoint.google.internal.AbstractChart,
+echopoint.google.internal.AdvancedChart = Core.extend(
+    echopoint.google.internal.AbstractChart,
 {
-  /** Constants to control the chart type as defined by google. */
   $static:
   {
-    X_DATA: "lc", // Multiple data sets are plotted as different lines
-    XY_DATA: "lxy", // Each line is represented by two sets of data for x and y
-
     /**
      * The axis type specification for the chart.  This property may be
      * specified as a style.  See
@@ -169,8 +175,101 @@ echopoint.google.LineChart = Core.extend( echopoint.google.internal.AbstractChar
 
   $load: function()
   {
+    Echo.ComponentFactory.registerType(
+        echopoint.constants.ADVANCED_CHART, this );
+  }
+});
+
+/**
+ * The class definition for bar chart type as specified by
+ * <a href='http://code.google.com/apis/chart/#bar_charts'>Google Chart API</a>.
+ */
+echopoint.google.BarChart = Core.extend( echopoint.google.internal.AdvancedChart,
+{
+  /** Constants to control the chart as defined by google. */
+  $static:
+  {
+    /** Constant that indicates a horizontal bar chart. */
+    HORIZONTAL: "bhs",
+
+    /** Constant that indicates a horizontal bar chart with multiple colours. */
+    HORIZONTAL_MULTI_COLOR: "bhg",
+
+    /** Constant that indicates a vertical bar chart (the default). */
+    VERTICAL: "bvs",
+
+    /** Constant that indicates a vertical bar chart with multiple colours. */
+    VERTICAL_MULTI_COLOR: "bvg",
+
+    /**
+     * The property that is used to specify the orientation type for the chart.
+     * This property may be styled.  Note that this property must be set
+     * before the chart can be configured.
+     */
+    ORIENTATION: "orientation",
+
+    /**
+     * The property used to configure the special bar chart width and size.
+     * This property is best styled.
+     */
+    SIZE: "size",
+
+    /**
+     * The property used to configure the zero line for the chart.  Note that
+     * the chart API supports achieving the same effect through the use of
+     * data scaling.  However, EchoPoint does not support this since we use
+     * only simple encoding and not text encoding for the data.  This property
+     * may be styled.
+     */
+    ZERO_LINE: "zeroLine"
+  },
+
+  $load: function()
+  {
+    Echo.ComponentFactory.registerType( echopoint.constants.BAR_CHART, this );
+  },
+
+  componentType: echopoint.constants.BAR_CHART
+});
+
+/**
+ * The class definition for line chart type as specified by
+ * <a href='http://code.google.com/apis/chart/#line_charts'>Google Chart API</a>.
+ */
+echopoint.google.LineChart = Core.extend( echopoint.google.internal.AdvancedChart,
+{
+  /** Constants to control the chart as defined by google. */
+  $static:
+  {
+    X_DATA: "lc", // Multiple data sets are plotted as different lines
+    XY_DATA: "lxy" // Each line is represented by two sets of data for x and y
+  },
+
+  $load: function()
+  {
     Echo.ComponentFactory.registerType( echopoint.constants.LINE_CHART, this );
   },
 
   componentType: echopoint.constants.LINE_CHART
+});
+
+/**
+ * The class definition for sparkline chart type as specified by
+ * <a href='http://code.google.com/apis/chart/#sparkline'>Google Chart API</a>.
+ */
+echopoint.google.Sparkline = Core.extend( echopoint.google.internal.AdvancedChart,
+{
+  /** Constants to control the chart as defined by google. */
+  $static:
+  {
+    /** The chart type for sparklines. */
+    CHART_TYPE: "ls"
+  },
+
+  $load: function()
+  {
+    Echo.ComponentFactory.registerType( echopoint.constants.SPARKLINE, this );
+  },
+
+  componentType: echopoint.constants.SPARKLINE
 });

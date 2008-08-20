@@ -16,31 +16,31 @@
  * License.
  */
 
-package echopoint.google;
+package echopoint.google.internal;
 
-import echopoint.google.internal.AdvancedChartPeer;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.util.Context;
-import nextapp.echo.webcontainer.service.JavaScriptService;
-import nextapp.echo.webcontainer.WebContainerServlet;
 import nextapp.echo.webcontainer.ServerMessage;
 import nextapp.echo.webcontainer.Service;
+import nextapp.echo.webcontainer.WebContainerServlet;
+import nextapp.echo.webcontainer.service.JavaScriptService;
 
 /**
- * Rendering peer for the {@link echopoint.google.LineChart} component.
+ * Rendering peer for the {@link echopoint.google.internal.AdvancedChart}
+ * component.
  *
- * @author Rakesh 2008-08-10
+ * @author Rakesh 2008-08-20
  * @version $Id$
  */
-public class LineChartPeer extends AdvancedChartPeer
+public class AdvancedChartPeer extends AbstractChartPeer
 {
   /** The component name for which this class is a peer. */
-  private static final String COMPONENT_NAME = LineChart.class.getName();
+  private static final String COMPONENT_NAME = AdvancedChart.class.getName();
 
   /** The service for the client side peer for this component. */
   private static final Service COMPONENT_SERVICE =
-      JavaScriptService.forResource( LineChartPeer.COMPONENT_NAME,
-          "resource/js/google/Sync.LineChart.js" );
+      JavaScriptService.forResource( AdvancedChartPeer.COMPONENT_NAME,
+          "resource/js/google/Sync.AdvancedChart.js" );
 
   /** Register the services */
   static
@@ -66,7 +66,7 @@ public class LineChartPeer extends AdvancedChartPeer
   @Override
   public Class getComponentClass()
   {
-    return LineChart.class;
+    return AdvancedChart.class;
   }
 
   /**

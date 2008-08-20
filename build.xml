@@ -223,6 +223,8 @@
         <file name='Model.Google.js'/>
         <file name='Application.Chart.js'/>
         <file name='Sync.AbstractChart.js'/>
+        <file name='Sync.AdvancedChart.js'/>
+        <file name='Sync.BarChart.js'/>
         <file name='Sync.LineChart.js'/>
       </filelist>
       <filelist dir='${dir.src.client.test}/app'>
@@ -236,6 +238,7 @@
         <file name='HttpPaneTest.js'/>
         <file name='StrutTest.js'/>
         <file name='TagCloudTest.js'/>
+        <file name='BarChartTest.js'/>
         <file name='LineChartTest.js'/>
       </filelist>
     </concat>

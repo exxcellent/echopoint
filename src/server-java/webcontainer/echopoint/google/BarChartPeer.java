@@ -27,20 +27,20 @@ import nextapp.echo.webcontainer.ServerMessage;
 import nextapp.echo.webcontainer.Service;
 
 /**
- * Rendering peer for the {@link echopoint.google.LineChart} component.
+ * Rendering peer for the {@link BarChart} component.
  *
  * @author Rakesh 2008-08-10
  * @version $Id$
  */
-public class LineChartPeer extends AdvancedChartPeer
+public class BarChartPeer extends AdvancedChartPeer
 {
   /** The component name for which this class is a peer. */
-  private static final String COMPONENT_NAME = LineChart.class.getName();
+  private static final String COMPONENT_NAME = BarChart.class.getName();
 
   /** The service for the client side peer for this component. */
   private static final Service COMPONENT_SERVICE =
-      JavaScriptService.forResource( LineChartPeer.COMPONENT_NAME,
-          "resource/js/google/Sync.LineChart.js" );
+      JavaScriptService.forResource( BarChartPeer.COMPONENT_NAME,
+          "resource/js/google/Sync.BarChart.js" );
 
   /** Register the services */
   static
@@ -66,7 +66,7 @@ public class LineChartPeer extends AdvancedChartPeer
   @Override
   public Class getComponentClass()
   {
-    return LineChart.class;
+    return BarChart.class;
   }
 
   /**

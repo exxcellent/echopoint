@@ -18,6 +18,23 @@ echopoint.test.TestApp.StyleSheet = new Echo.StyleSheet(
       width: "100px"
     }
   },
+  "BarChart":
+  {
+    "echopoint.google.BarChart":
+    {
+      axisType: "x,y,t,r",
+      border: "2px groove #cfdfff",
+      fill: "bg,s,efefef|c,lg,45,ffffff,0,76a4fb,0.75",
+      foreground: "ff0000",
+      font: { size: "10" },
+      gridLines: "10,20,5,2",
+      legendPosition: "l",
+      width: "400",
+      height: "400",
+      insets: 10,
+      size: "10,5,15"
+    }
+  },
   "SimpleChart":
   {
     "echopoint.google.LineChart":

@@ -205,9 +205,21 @@ echopoint.google.internal.AbstractChartSync = Core.extend(
       url = this.setTitle( url );
       url = this.setFont( url );
       url = this.setAltContent( url );
+      url = this.setAdditionalParameters( url );
 
       return url;
     },
+
+    /**
+     * An optional funtion that can be used to configure additional parameters
+     * for the chart.  Sub-classes may implement this method to configure
+     * additional properties that are supported by different chart types.
+     * The default implementation performs no actions.
+     *
+     * @param url The url that is to be modified.
+     * @return The modified url object.
+     */
+    setAdditionalParameters: function( url ) { return url; },
 
     /** Return the alt content to use for the chart and image. */
     getAltContent: function()

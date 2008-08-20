@@ -111,7 +111,7 @@ echopoint.test.LineChartTest = Core.extend(
     var positions = new Array();
     positions[0] = [];
     positions[1] = [];
-    positions[2] = [ 0, 33, 100 ]; // No idea what values to show, this does not work
+    positions[2] = [ 0, 3, 10 ]; // No idea what values to show, this does not work
     positions[3] = [];
 
     var lineStyles = new Array();
