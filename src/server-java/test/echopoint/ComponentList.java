@@ -45,6 +45,7 @@ public class ComponentList extends Column
           "BarChart",
           "LineChart",
           "Sparkline",
+          "PieChart",
       };
 
   /**

@@ -5,8 +5,10 @@
  * @version: $Id$
  */
 echopoint.google.internal.AdvancedChartSync = Core.extend(
-    echopoint.google.internal.AbstractChartSync,
+    echopoint.google.internal.SimpleChartSync,
 {
+  $abstract: true,
+
   $load: function()
   {
     Echo.Render.registerPeer( echopoint.constants.ADVANCED_CHART, this );
@@ -181,6 +183,8 @@ echopoint.google.internal.AdvancedChartSync = Core.extend(
      * @see #setAxisType
      * @see #setLabels
      * @see #setLabelPositions
+     * @see #setLegend
+     * @see #setLegendPositions
      * @see #setAxisRange
      * @see #setAxisStyle
      * @see #setLineStyles
@@ -189,11 +193,13 @@ echopoint.google.internal.AdvancedChartSync = Core.extend(
      * @param url The URL that is to be updated with axis label information.
      * @return The modified URL object.
      */
-    setAxisLabels: function( url )
+    setAdditionalParameters: function( url )
     {
       url = this.setAxisType( url );
       url = this.setLabels( url );
       url = this.setLabelPositions( url );
+      url = this.setLegend( url );
+      url = this.setLegendPosition( url );
       url = this.setAxisRange( url );
       url = this.setAxisStyle( url );
       url = this.setLineStyles( url );

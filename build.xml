@@ -223,10 +223,12 @@
         <file name='Model.Google.js'/>
         <file name='Application.Chart.js'/>
         <file name='Sync.AbstractChart.js'/>
+        <file name='Sync.SimpleChart.js'/>
         <file name='Sync.AdvancedChart.js'/>
         <file name='Sync.BarChart.js'/>
         <file name='Sync.LineChart.js'/>
         <file name='Sync.Sparkline.js'/>
+        <file name='Sync.PieChart.js'/>
       </filelist>
       <filelist dir='${dir.src.client.test}/app'>
         <file name='TestAppDeploy.js'/>
@@ -242,6 +244,7 @@
         <file name='BarChartTest.js'/>
         <file name='LineChartTest.js'/>
         <file name='SparklineTest.js'/>
+        <file name='PieChartTest.js'/>
       </filelist>
     </concat>
 

@@ -7,10 +7,13 @@
  * @version $Id$
  */
 
-/** The name of the AbstractChart component. */
+/** The name of the AbstractChart base class. */
 echopoint.constants.ABSTRACT_CHART = "echopoint.google.internal.AbstractChart";
 
-/** The name of the advanced chart component. */
+/** The name of the simple chart base class. */
+echopoint.constants.SIMPLE_CHART = "echopoint.google.internal.SimpleChart";
+
+/** The name of the advanced chart base class. */
 echopoint.constants.ADVANCED_CHART = "echopoint.google.internal.AdvancedChart";
 
 /** The name of the BarChart component. */
@@ -21,6 +24,9 @@ echopoint.constants.LINE_CHART = "echopoint.google.LineChart";
 
 /** The name of the Sparkline component. */
 echopoint.constants.SPARKLINE = "echopoint.google.Sparkline";
+
+/** The name of the PieChart component. */
+echopoint.constants.PIE_CHART = "echopoint.google.PieChart";
 
 /**
  * The class definition for the abstract chart component that is the root
@@ -61,6 +67,7 @@ echopoint.google.internal.AbstractChart = Core.extend(
      * The colour fill property for the chart.  Refer to the colour fill
      * and linear gradient notes for the Google Chart API to determine the
      * proper formatted string values that may be specified for charts.
+     * This property is best styled.
      */
     FILL: "fill",
 
@@ -71,12 +78,6 @@ echopoint.google.internal.AbstractChart = Core.extend(
      * both xdata and ydata
      */
     DATA: "data",
-
-    /**
-     * The legend position for the chart.  Specify the values as defined by
-     * the Google Chart API documentation.
-     */
-    LEGEND_POSITION: "legendPosition",
 
     /**
      * The title to display for chart.  Must be of type {@link
@@ -93,12 +94,39 @@ echopoint.google.internal.AbstractChart = Core.extend(
 });
 
 /**
+ * The class definition for simple charts (pie chart, venn diagram) that
+ * support only a sub-set of the configuration options.
+ */
+echopoint.google.internal.SimpleChart = Core.extend(
+    echopoint.google.internal.AbstractChart,
+{
+  $abstract: true,
+
+  $static:
+  {
+    /**
+     * The legend position for the chart.  Specify the values as defined by
+     * the Google Chart API documentation.
+     */
+    LEGEND_POSITION: "legendPosition"
+  },
+
+  $load: function()
+  {
+    Echo.ComponentFactory.registerType(
+        echopoint.constants.SIMPLE_CHART, this );
+  }
+});
+
+/**
  * The class definition for advanced charts (bar, line, ...) that support
  * most options made available by the chart API.
  */
 echopoint.google.internal.AdvancedChart = Core.extend(
-    echopoint.google.internal.AbstractChart,
+    echopoint.google.internal.SimpleChart,
 {
+  $abstract: true,
+
   $static:
   {
     /**
@@ -272,4 +300,41 @@ echopoint.google.Sparkline = Core.extend( echopoint.google.internal.AdvancedChar
   },
 
   componentType: echopoint.constants.SPARKLINE
+});
+
+/**
+ * The class definition for pie diagrams as specified by
+ * <a href='http://code.google.com/apis/chart/#pie_charts'>Google Chart API</a>.
+ */
+echopoint.google.PieChart = Core.extend( echopoint.google.internal.SimpleChart,
+{
+  $static:
+  {
+    /** The constant that configures a 2-dimensional pie chart. */
+    TWO_DIMENSIONAL: "p",
+
+    /** The constant that configures a 3-dimensional pie chart. */
+    THREE_DIMENSIONAL: "p3",
+
+    /**
+     * The property used to configure 2 or 3-dimensional charts.  This
+     * property is best styled.  Defaults to 2-d.
+     */
+    DIMENSIONS: "dimensions",
+
+    /**
+     * The property that holds the array of string labels to associate with
+     * the segments in the pie chart.  Please see
+     * <a href='http://code.google.com/apis/chart/#pie_labels'>Pie Labels</a>
+     * notes regarding size requirements when using labels.
+     */
+    LABELS: "labels"
+  },
+
+  $load: function()
+  {
+    Echo.ComponentFactory.registerType( echopoint.constants.PIE_CHART, this );
+  },
+
+  componentType: echopoint.constants.PIE_CHART
 });

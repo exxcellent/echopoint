@@ -50,16 +50,6 @@ echopoint.google.internal.AbstractChartSync = Core.extend(
     getChartType: function() { throw "getChartType must be implemented"; },
 
     /**
-     * Set the axis labels for the chart.  Since axis label support differs
-     * based upon the type of chart, the default implementation does nothing.
-     * Sub-classes must over-ride as appropriate.
-     *
-     * @param url The url that is to be updated.
-     * @return The modified url object.
-     */
-    setAxisLabels: function( url ) { return url; },
-
-    /**
      * The function used to encode the chart data using simple encoding
      * using sample code from Google.
      *
@@ -136,6 +126,24 @@ echopoint.google.internal.AbstractChartSync = Core.extend(
     },
 
     /**
+     * Over-ridden to return only the dimension with any units.
+     */
+    getHeight: function()
+    {
+      var height = this.component.render( echopoint.internal.AbstractContainer.HEIGHT );
+      return ( ( height ) ? this._stripPixels( height ) : this.getDefaultHeight() );
+    },
+
+    /**
+     * Over-ridden to return only the dimension with any units.
+     */
+    getWidth: function()
+    {
+      var width = this.component.render( echopoint.internal.AbstractContainer.WIDTH );
+      return ( ( width ) ? this._stripPixels( width ) : this.getDefaultWidth() );
+    },
+
+    /**
      * Return the title for the chart.  Special handling to parse JSON data
      * structure from the server.
      */
@@ -173,7 +181,6 @@ echopoint.google.internal.AbstractChartSync = Core.extend(
      *
      * @see #getChartType
      * @see #encode
-     * @see #setAxisLabels
      * @see #setColors
      * @see #setLegend
      * @see #setLegendPosition
@@ -197,10 +204,7 @@ echopoint.google.internal.AbstractChartSync = Core.extend(
         url += this.encode( data[i] );
       }
 
-      url = this.setAxisLabels( url );
       url = this.setColors( url );
-      url = this.setLegend( url );
-      url = this.setLegendPosition( url );
       url = this.setFill( url );
       url = this.setTitle( url );
       url = this.setFont( url );
@@ -268,42 +272,6 @@ echopoint.google.internal.AbstractChartSync = Core.extend(
         if ( i != data.length - 1 ) url += ",";
       }
 
-      return url;
-    },
-
-    /**
-     * Set the legends for the data set if specified.
-     *
-     * @param The URL that will be updated.
-     * @return The modified URL object.
-     */
-    setLegend: function( url )
-    {
-      var data = this.getData();
-      if ( ! data[0].legend ) return url;
-      url += "&chdl=";
-
-      for ( var i = 0; i < data.length; ++i )
-      {
-        url += data[i].legend;
-        if ( i != data.length - 1 ) url += "|";
-      }
-
-      return url;
-    },
-
-    /**
-     * Set the legend position for the chart.  This will have no effect if no
-     * legend has been specified.
-     *
-     * @param The URL that will be updated.
-     * @return The modified URL object.
-     */
-    setLegendPosition: function( url )
-    {
-      var position = this.component.render(
-          echopoint.google.internal.AbstractChart.LEGEND_POSITION );
-      if ( position ) url += "&chdlp=" + position;
       return url;
     },
 
@@ -421,5 +389,18 @@ echopoint.google.internal.AbstractChartSync = Core.extend(
         }
       }
     }
+  },
+
+  /** Strip px from extent value. */
+  _stripPixels: function( dimension )
+  {
+    var str = "" + dimension;
+    var index = str.indexOf( "px" );
+    if ( index != -1 )
+    {
+      str = str.substring( 0, index );
+    }
+
+    return str;
   }
 });

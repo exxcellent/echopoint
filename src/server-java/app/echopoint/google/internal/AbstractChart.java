@@ -64,12 +64,6 @@ public abstract class AbstractChart<N extends Number> extends AbstractContainer
   public static final String PROPERTY_DATA = "data";
 
   /**
-   * The legend position for the chart.  Specify the values as defined by
-   * the Google Chart API documentation.  This property is best styled.
-   */
-  public static final String PROPERTY_LEGEND_POSITION = "legendPosition";
-
-  /**
    * The title to display for chart.  Must be of type {@link
    * echopoint.google.model.Title}.  This property cannot be styled.
    */
@@ -168,26 +162,6 @@ public abstract class AbstractChart<N extends Number> extends AbstractContainer
 
     final XStream xstream = createSerialiser();
     setProperty( PROPERTY_DATA, xstream.toXML( data ) );
-  }
-
-  /**
-   * Get the value of the {@link #PROPERTY_LEGEND_POSITION} property.
-   *
-   * @return The value of the {@link #PROPERTY_LEGEND_POSITION} property.
-   */
-  public String getLegendPosition()
-  {
-    return (String) getProperty( PROPERTY_LEGEND_POSITION );
-  }
-
-  /**
-   * Set the value of the {@link #PROPERTY_LEGEND_POSITION} property.
-   *
-   * @param legendPosition The value to set for the property.
-   */
-  public void setLegendPosition( final String legendPosition )
-  {
-    setProperty( PROPERTY_LEGEND_POSITION, legendPosition );
   }
 
   /** @return The {@link #title} for this component. */

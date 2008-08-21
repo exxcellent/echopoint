@@ -19,7 +19,8 @@ echopoint.test.ComponentList = Core.extend( Echo.Column,
         "TagCloud",
         "BarChart",
         "LineChart",
-        "Sparkline"
+        "Sparkline",
+        "PieChart"
       )
   },
 

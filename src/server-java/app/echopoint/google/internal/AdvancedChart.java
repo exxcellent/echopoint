@@ -35,7 +35,7 @@ import com.thoughtworks.xstream.XStream;
  * @author Rakesh Vidyadharan 2008-08-20
  * @version $Id$
  */
-public class AdvancedChart<N extends Number> extends AbstractChart<N>
+public class AdvancedChart<N extends Number> extends SimpleChart<N>
 {
   private static final long serialVersionUID = 1l;
 
