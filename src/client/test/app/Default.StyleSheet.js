@@ -80,6 +80,19 @@ echopoint.test.TestApp.StyleSheet = new Echo.StyleSheet(
       insets: 10
     }
   },
+  "VennDiagram":
+  {
+    "echopoint.google.VennDiagram":
+    {
+      border: "2px groove #cfdfff",
+      fill: "bg,s,efefef|c,s,00000080",
+      font: { size: "12" },
+      foreground: "ff0000",
+      width: "600",
+      height: "400",
+      insets: 10
+    }
+  },
   "ControlPane": {
     "Row": {
       layoutData: {

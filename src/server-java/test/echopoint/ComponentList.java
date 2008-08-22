@@ -46,6 +46,7 @@ public class ComponentList extends Column
           "LineChart",
           "Sparkline",
           "PieChart",
+          "VennDiagram",
       };
 
   /**

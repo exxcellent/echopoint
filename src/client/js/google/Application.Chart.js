@@ -28,6 +28,9 @@ echopoint.constants.SPARKLINE = "echopoint.google.Sparkline";
 /** The name of the PieChart component. */
 echopoint.constants.PIE_CHART = "echopoint.google.PieChart";
 
+/** The name of the VennDiagram component. */
+echopoint.constants.VENN_DIAGRAM = "echopoint.google.VennDiagram";
+
 /**
  * The class definition for the abstract chart component that is the root
  * component from which <a href='http://code.google.com/apis/chart/'>Google
@@ -337,4 +340,24 @@ echopoint.google.PieChart = Core.extend( echopoint.google.internal.SimpleChart,
   },
 
   componentType: echopoint.constants.PIE_CHART
+});
+
+/**
+ * The class diagram for venn diagrams as specified by
+ * <a href='http://code.google.com/apis/chart/#venn'>Google Chart API</a>.
+ */
+echopoint.google.VennDiagram = Core.extend( echopoint.google.internal.SimpleChart,
+{
+  $static:
+  {
+    /** The constant that indicates the chart type. */
+    CHART_TYPE: "v"
+  },
+
+  $load: function()
+  {
+    Echo.ComponentFactory.registerType( echopoint.constants.VENN_DIAGRAM, this );
+  },
+
+  componentType: echopoint.constants.VENN_DIAGRAM
 });

@@ -151,7 +151,35 @@ public abstract class AbstractChart<N extends Number> extends AbstractContainer
   }
 
   /**
-   * Set the value of the {@link #PROPERTY_DATA} property.
+   * Set the value of the {@link #PROPERTY_DATA} property using the JSON
+   * data structure.  This method should be treated as <b>internal use
+   * only</b>.
+   *
+   * @param data The JSON data structure to set.
+   */
+  public void setData( final String data )
+  {
+    setProperty( PROPERTY_DATA, data );
+  }
+
+  /**
+   * Set the value of the {@link #PROPERTY_DATA} property using the specified
+   * single data model object instance.
+   *
+   * @param data The value to set for the property.
+   */
+  public void setData( final ChartData<N> data )
+  {
+    this.data.clear();
+    this.data.add( data );
+
+    final XStream xstream = createSerialiser();
+    setData( xstream.toXML( this.data ) );
+  }
+
+  /**
+   * Set the value of the {@link #PROPERTY_DATA} property using the collection
+   * of chart data model objects.
    *
    * @param data The value to set for the property.
    */
@@ -161,7 +189,7 @@ public abstract class AbstractChart<N extends Number> extends AbstractContainer
     this.data.addAll( data );
 
     final XStream xstream = createSerialiser();
-    setProperty( PROPERTY_DATA, xstream.toXML( data ) );
+    setData( xstream.toXML( this.data ) );
   }
 
   /** @return The {@link #title} for this component. */

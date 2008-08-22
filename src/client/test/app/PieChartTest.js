@@ -2,7 +2,7 @@
  * A test class for the echopoint.google.PieChart client-side component.
  * Displays simple bar charts to test Google Chart API interaction.
  *
- * @author Rakesh 2008-08-19
+ * @author Rakesh 2008-08-21
  * @version $Id$
  */
 echopoint.test.PieChartTest = Core.extend(
