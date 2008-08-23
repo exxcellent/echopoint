@@ -21,6 +21,7 @@ package echopoint.google.model;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * A model object that represents a data set that is to be plotted.  Note that
@@ -99,13 +100,14 @@ public class ChartData<N extends Number> implements Serializable
   }
 
   /**
-   * Accessor for property 'xdata'.
+   * Accessor for property 'xdata'.  Returns an unmodifiable view of the
+   * data.
    *
    * @return Value for property 'xdata'.
    */
   public Collection<N> getXdata()
   {
-    return xdata;
+    return Collections.unmodifiableCollection( xdata );
   }
 
   /**
@@ -150,13 +152,13 @@ public class ChartData<N extends Number> implements Serializable
   }
 
   /**
-   * Accessor for property 'ydata'.
+   * Accessor for property 'ydata'.  Returns an unmodifiable view of the data.
    *
    * @return Value for property 'ydata'.
    */
   public Collection<N> getYdata()
   {
-    return ydata;
+    return Collections.unmodifiableCollection( ydata );
   }
 
   /**

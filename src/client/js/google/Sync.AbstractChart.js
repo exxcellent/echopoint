@@ -64,9 +64,16 @@ echopoint.google.internal.AbstractChartSync = Core.extend(
       var chartData = new Array();
       this._encodeXData( data, chartData );
       this._encodeYData( data, chartData );
+      this.encodeSize( data, chartData );
 
       return chartData.join( "" );
     },
+
+    /**
+     * Abstract method that encodes the special size array used by scatter
+     * plots.
+     */
+    encodeSize: function( data, chartData ) {},
 
     /**
      * Return the data array.  Special handling to parse JSON data structure
@@ -98,6 +105,11 @@ echopoint.google.internal.AbstractChartSync = Core.extend(
           if ( chartData.ydata.length > 0 ) data.ydata = chartData.ydata;
           var ymax = chartData.ymax;
           if ( ymax ) data.ymax = ymax;
+
+          if ( chartData.size && chartData.size.length > 0 )
+          {
+            data.size = chartData.size;
+          }
 
           data.color = chartData.color;
           data.legend = chartData.legend;

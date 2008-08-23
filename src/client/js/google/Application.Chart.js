@@ -25,6 +25,9 @@ echopoint.constants.LINE_CHART = "echopoint.google.LineChart";
 /** The name of the Sparkline component. */
 echopoint.constants.SPARKLINE = "echopoint.google.Sparkline";
 
+/** The name of the ScatterPlot component. */
+echopoint.constants.SCATTER_PLOT = "echopoint.google.ScatterPlot";
+
 /** The name of the PieChart component. */
 echopoint.constants.PIE_CHART = "echopoint.google.PieChart";
 
@@ -303,6 +306,26 @@ echopoint.google.Sparkline = Core.extend( echopoint.google.internal.AdvancedChar
   },
 
   componentType: echopoint.constants.SPARKLINE
+});
+
+/**
+ * The class definition for the scatter plot type as specified by
+ * <a href='http://code.google.com/apis/chart/#scatter_plot'>Google Chart API</a>.
+ */
+echopoint.google.ScatterPlot = Core.extend( echopoint.google.internal.AdvancedChart,
+{
+  $static:
+  {
+    /** The chart type for scatter plots. */
+    CHART_TYPE: "s"
+  },
+
+  $load: function()
+  {
+    Echo.ComponentFactory.registerType( echopoint.constants.SCATTER_PLOT, this );
+  },
+
+  componentType: echopoint.constants.SCATTER_PLOT
 });
 
 /**

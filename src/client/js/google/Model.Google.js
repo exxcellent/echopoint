@@ -31,6 +31,13 @@ echopoint.google.model.ChartData = Core.extend(
   ymax: null,
 
   /**
+   * The array of sizes for each point represented on the plot.  If specified
+   * they size of this array must equal that of xdata and ydata.  This is
+   * used only for Scatter Plots.
+   */
+  size: null,
+
+  /**
    * The colour to apply to the data set.  Default values will be assigned
    * sequentially from the colour set defined in {@link
    * echopoint.google.internal.AbstractChartSync#COLORS}.
@@ -87,6 +94,21 @@ echopoint.google.model.ChartData = Core.extend(
     for ( var i = 0; i < this.ydata.length; ++i )
     {
       var currentValue = this.ydata[i];
+      if ( currentValue > maxValue ) maxValue = currentValue;
+    }
+
+    return maxValue;
+  },
+
+  /**
+   * Return the maximum value in the size {@link #array}.
+   */
+  getSizeMax: function()
+  {
+    var maxValue = -1;
+    for ( var i = 0; i < this.size.length; ++i )
+    {
+      var currentValue = this.size[i];
       if ( currentValue > maxValue ) maxValue = currentValue;
     }
 
