@@ -23,7 +23,7 @@ echopoint.test.VennDiagramTest = Core.extend(
     return new echopoint.google.VennDiagram(
     {
       renderId: "echopointUnitTestStrutComplexVennDiagram",
-      styleName: "VennDiagram",
+      styleName: "SimpleChart",
       data: data,
       title: title
     });

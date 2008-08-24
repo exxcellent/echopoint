@@ -15,15 +15,8 @@ echopoint.google.BarChartSync = Core.extend(
   /** Over-ridden to return the appropriate chart type. */
   getChartType: function()
   {
-    var orientation = this.component.get( echopoint.google.BarChart.ORIENTATION );
-    if ( orientation )
-    {
-      return orientation;
-    }
-    else
-    {
-      return echopoint.google.BarChart.VERTICAL;
-    }
+    var orientation = this.component.render( echopoint.google.BarChart.ORIENTATION );
+    return ( orientation ) ? orientation : echopoint.google.BarChart.VERTICAL;
   },
 
   /**

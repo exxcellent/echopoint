@@ -21,6 +21,7 @@ echopoint.test.ComponentList = Core.extend( Echo.Column,
         "LineChart",
         "Sparkline",
         "ScatterPlot",
+        "RadarChart",
         "PieChart",
         "VennDiagram"
       )

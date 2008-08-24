@@ -54,7 +54,7 @@ echopoint.test.BarChartTest = Core.extend(
     return new echopoint.google.BarChart(
     {
       renderId: "echopointUnitTestStrutComplexBarChart",
-      styleName: "BarChart",
+      styleName: "SimpleChart",
       data: data,
       title: title,
       axisLabels: labels,

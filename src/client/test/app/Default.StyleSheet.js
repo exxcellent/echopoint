@@ -18,7 +18,7 @@ echopoint.test.TestApp.StyleSheet = new Echo.StyleSheet(
       width: "100px"
     }
   },
-  "BarChart":
+  "SimpleChart":
   {
     "echopoint.google.BarChart":
     {
@@ -33,10 +33,7 @@ echopoint.test.TestApp.StyleSheet = new Echo.StyleSheet(
       height: "400",
       insets: 10,
       size: "10,5,15"
-    }
-  },
-  "SimpleChart":
-  {
+    },
     "echopoint.google.LineChart":
     {
       axisType: "x,y",
@@ -46,6 +43,39 @@ echopoint.test.TestApp.StyleSheet = new Echo.StyleSheet(
       font: { size: "12" },
       foreground: "ff0000",
       gridLines: "10,10,1,0",
+      width: "600",
+      height: "400",
+      insets: 10
+    },
+    "echopoint.google.Sparkline":
+    {
+      axisType: "x,y",
+      axisStyles: "0,00ff33,13,1|1,0033ff,13,-1",
+      border: "2px groove #cfdfff",
+      fill: "bg,s,efefef|c,s,00000080",
+      font: { size: "12" },
+      foreground: "ff0000",
+      gridLines: "10,10,1,0",
+      width: "600",
+      height: "400",
+      insets: 10
+    },
+    "echopoint.google.PieChart":
+    {
+      border: "2px groove #cfdfff",
+      fill: "bg,s,efefef|c,s,00000080",
+      font: { size: "12" },
+      foreground: "ff0000",
+      width: "600",
+      height: "400",
+      insets: 10
+    },
+    "echopoint.google.VennDiagram":
+    {
+      border: "2px groove #cfdfff",
+      fill: "bg,s,efefef|c,s,00000080",
+      font: { size: "12" },
+      foreground: "ff0000",
       width: "600",
       height: "400",
       insets: 10
@@ -65,29 +95,41 @@ echopoint.test.TestApp.StyleSheet = new Echo.StyleSheet(
       width: "600",
       height: "400",
       insets: 10
-    }
-  },
-  "PieChart":
-  {
-    "echopoint.google.PieChart":
+    },
+    "echopoint.google.ScatterPlot":
     {
+      axisType: "x,y,t,r",
       border: "2px groove #cfdfff",
-      fill: "bg,s,efefef|c,s,00000080",
-      font: { size: "12" },
       foreground: "ff0000",
+      font: { size: "10" },
+      gridLines: "10,20,5,2",
+      legendPosition: "l",
       width: "600",
       height: "400",
       insets: 10
-    }
-  },
-  "VennDiagram":
-  {
-    "echopoint.google.VennDiagram":
+    },
+    "echopoint.google.Sparkline":
     {
+      axisType: "x,y,t,r",
       border: "2px groove #cfdfff",
-      fill: "bg,s,efefef|c,s,00000080",
-      font: { size: "12" },
+      fill: "bg,s,efefef|c,lg,45,ffffff,0,76a4fb,0.75",
       foreground: "ff0000",
+      font: { size: "10" },
+      gridLines: "10,20,5,2",
+      legendPosition: "l",
+      width: "600",
+      height: "400",
+      insets: 10
+    },
+    "echopoint.google.RadarChart":
+    {
+      axisType: "x",
+      border: "2px groove #cfdfff",
+      fill: "bg,s,efefef|c,lg,45,ffffff,0,76a4fb,0.75",
+      foreground: "ff0000",
+      font: { size: "10" },
+      gridLines: "10,20,5,2",
+      legendPosition: "l",
       width: "600",
       height: "400",
       insets: 10

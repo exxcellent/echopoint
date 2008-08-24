@@ -229,6 +229,7 @@
         <file name='Sync.LineChart.js'/>
         <file name='Sync.Sparkline.js'/>
         <file name='Sync.ScatterPlot.js'/>
+        <file name='Sync.RadarChart.js'/>
         <file name='Sync.PieChart.js'/>
         <file name='Sync.VennDiagram.js'/>
       </filelist>
@@ -247,6 +248,7 @@
         <file name='LineChartTest.js'/>
         <file name='SparklineTest.js'/>
         <file name='ScatterPlotTest.js'/>
+        <file name='RadarChartTest.js'/>
         <file name='PieChartTest.js'/>
         <file name='VennDiagramTest.js'/>
       </filelist>

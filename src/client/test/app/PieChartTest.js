@@ -26,7 +26,7 @@ echopoint.test.PieChartTest = Core.extend(
     return new echopoint.google.PieChart(
     {
       renderId: "echopointUnitTestStrutComplexPieChart",
-      styleName: "PieChart",
+      styleName: "SimpleChart",
       data: data,
       title: title,
       labels: labels

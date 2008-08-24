@@ -28,6 +28,9 @@ echopoint.constants.SPARKLINE = "echopoint.google.Sparkline";
 /** The name of the ScatterPlot component. */
 echopoint.constants.SCATTER_PLOT = "echopoint.google.ScatterPlot";
 
+/** The name of the RadarChart component. */
+echopoint.constants.RADAR_CHART = "echopoint.google.RadarChart";
+
 /** The name of the PieChart component. */
 echopoint.constants.PIE_CHART = "echopoint.google.PieChart";
 
@@ -238,7 +241,9 @@ echopoint.google.BarChart = Core.extend( echopoint.google.internal.AdvancedChart
     /**
      * The property that is used to specify the orientation type for the chart.
      * This property may be styled.  Note that this property must be set
-     * before the chart can be configured.
+     * before the chart can be used.  Specified values must match one of the
+     * <code>HORIZONTAL&lt;_xxx&gt;</code> or <code>VERTICAL&lt;_xxx&gt;</code>
+     * constants.
      */
     ORIENTATION: "orientation",
 
@@ -326,6 +331,36 @@ echopoint.google.ScatterPlot = Core.extend( echopoint.google.internal.AdvancedCh
   },
 
   componentType: echopoint.constants.SCATTER_PLOT
+});
+
+/**
+ * The class definition for the radar chart type as specified by
+ * <a href='http://code.google.com/apis/chart/#radar'>Google Chart API</a>.
+ */
+echopoint.google.RadarChart = Core.extend( echopoint.google.internal.AdvancedChart,
+{
+  $static:
+  {
+    /** The chart type for straight line plots.  This is the default. */
+    STRAIGHT_LINE: "r",
+
+    /** The chart type for spline plots. */
+    SPLINE: "rs",
+
+    /**
+     * The property used to configure the line style.  The value specified
+     * must be one of {@link #STRAIGHT_LINE} or {@link #SPLINE}.
+     * This property is best styled.
+     */
+    LINE_STYLE: "lineStyle"
+  },
+
+  $load: function()
+  {
+    Echo.ComponentFactory.registerType( echopoint.constants.RADAR_CHART, this );
+  },
+
+  componentType: echopoint.constants.RADAR_CHART
 });
 
 /**
