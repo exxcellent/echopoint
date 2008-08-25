@@ -37,6 +37,9 @@ echopoint.constants.PIE_CHART = "echopoint.google.PieChart";
 /** The name of the VennDiagram component. */
 echopoint.constants.VENN_DIAGRAM = "echopoint.google.VennDiagram";
 
+/** The name of the Map component. */
+echopoint.constants.MAP = "echopoint.google.Map";
+
 /**
  * The class definition for the abstract chart component that is the root
  * component from which <a href='http://code.google.com/apis/chart/'>Google
@@ -418,4 +421,55 @@ echopoint.google.VennDiagram = Core.extend( echopoint.google.internal.SimpleChar
   },
 
   componentType: echopoint.constants.VENN_DIAGRAM
+});
+
+/**
+ * The class diagram for maps as specified by
+ * <a href='http://code.google.com/apis/chart/#maps'>Google Chart API</a>.
+ */
+echopoint.google.Map = Core.extend( echopoint.google.internal.AbstractChart,
+{
+  $static:
+  {
+    /** The geographical areas supported by the map. */
+    AFRICA: "africa",
+    ASIA: "asia",
+    EUROPE: "europe",
+    MIDDLE_EAST: "middle_east",
+    SOUTH_AMERICA: "south_america",
+    USA: "usa",
+    WORLD: "world", // This is the default
+
+    /** The constant that indicates the chart type. */
+    CHART_TYPE: "t",
+
+    /** The maximum size supported for a map. */
+    MAX_SIZE: 440 * 220,
+
+    /**
+     * The property used to configure map geographical area.  This property
+     * may be styled.
+     */
+    GEOGRAPHICAL_AREA: "region",
+
+    /**
+     * The property used to configure map colours.  This property is best
+     * styled.  Note that colours are specified in a different way from regular
+     * charts.  See the Google Chart API documentation for details.
+     */
+    COLORS: "colors",
+
+    /**
+     * The property used to configure country/state codes that indicate the
+     * regions to be coloured.  This property may be styled.
+     */
+    CODES: "codes"
+  },
+
+  $load: function()
+  {
+    Echo.ComponentFactory.registerType( echopoint.constants.MAP, this );
+  },
+
+  componentType: echopoint.constants.MAP
 });

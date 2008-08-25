@@ -79,6 +79,14 @@ echopoint.test.TestApp.StyleSheet = new Echo.StyleSheet(
       width: "600",
       height: "400",
       insets: 10
+    },
+    "echopoint.google.Map":
+    {
+      border: "2px groove #cfdfff",
+      fill: "bg,s,efefef|c,lg,45,ffffff,0,76a4fb,0.75",
+      foreground: "ff0000",
+      font: { size: "10" },
+      insets: 10
     }
   },
   "ComplexChart":
@@ -133,6 +141,16 @@ echopoint.test.TestApp.StyleSheet = new Echo.StyleSheet(
       width: "600",
       height: "400",
       insets: 10
+    },
+    "echopoint.google.Map":
+    {
+      border: "2px groove #cfdfff",
+      fill: "bg,s,efefef|c,lg,45,ffffff,0,76a4fb,0.75",
+      foreground: "ff0000",
+      font: { size: "10" },
+      insets: 10,
+      region: "africa",
+      codes: "MGKETN"
     }
   },
   "ControlPane": {

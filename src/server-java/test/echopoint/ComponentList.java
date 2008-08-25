@@ -49,6 +49,7 @@ public class ComponentList extends Column
           "RadarChart",
           "PieChart",
           "VennDiagram",
+          "Map",
       };
 
   /**
