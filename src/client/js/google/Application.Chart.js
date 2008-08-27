@@ -40,6 +40,9 @@ echopoint.constants.VENN_DIAGRAM = "echopoint.google.VennDiagram";
 /** The name of the Map component. */
 echopoint.constants.MAP = "echopoint.google.Map";
 
+/** The name of the Google-o-meter component. */
+echopoint.constants.METER = "echopoint.google.Meter";
+
 /**
  * The class definition for the abstract chart component that is the root
  * component from which <a href='http://code.google.com/apis/chart/'>Google
@@ -443,6 +446,7 @@ echopoint.google.Map = Core.extend( echopoint.google.internal.AbstractChart,
     /** The constant that indicates the chart type. */
     CHART_TYPE: "t",
 
+
     /** The maximum size supported for a map. */
     MAX_SIZE: 440 * 220,
 
@@ -472,4 +476,33 @@ echopoint.google.Map = Core.extend( echopoint.google.internal.AbstractChart,
   },
 
   componentType: echopoint.constants.MAP
+});
+
+/**
+ * The class diagram for Google-o-meter as specified by
+ * <a href='http://code.google.com/apis/chart/#gom'>Google Chart API</a>.
+ */
+echopoint.google.Meter = Core.extend( echopoint.google.internal.AbstractChart,
+{
+  $static:
+  {
+    /** The constant that indicates the chart type. */
+    CHART_TYPE: "gom",
+
+    /**
+     * The property that holds the label to associate with the value displayed
+     * in the label.  Please see
+     * <a href='http://code.google.com/apis/chart/#pie_labels'>label</a>
+     * notes regarding size requirements when using labels.  This property
+     * may be styled.
+     */
+    LABEL: "label"
+  },
+
+  $load: function()
+  {
+    Echo.ComponentFactory.registerType( echopoint.constants.METER, this );
+  },
+
+  componentType: echopoint.constants.METER
 });

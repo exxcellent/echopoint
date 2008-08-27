@@ -24,7 +24,8 @@ echopoint.test.ComponentList = Core.extend( Echo.Column,
         "RadarChart",
         "PieChart",
         "VennDiagram",
-        "Map"
+        "Map",
+        "Meter"
       )
   },
 

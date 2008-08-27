@@ -233,6 +233,7 @@
         <file name='Sync.PieChart.js'/>
         <file name='Sync.VennDiagram.js'/>
         <file name='Sync.Map.js'/>
+        <file name='Sync.Meter.js'/>
       </filelist>
       <filelist dir='${dir.src.client.test}/app'>
         <file name='TestAppDeploy.js'/>
@@ -253,6 +254,7 @@
         <file name='PieChartTest.js'/>
         <file name='VennDiagramTest.js'/>
         <file name='MapTest.js'/>
+        <file name='MeterTest.js'/>
       </filelist>
     </concat>
 
