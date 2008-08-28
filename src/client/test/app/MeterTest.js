@@ -2,7 +2,7 @@
  * A test class for the echopoint.google.Meter client-side component.
  * Displays simple and multi value charts to test Google Chart API interaction.
  *
- * @author Rakesh 2008-08-26
+ * @author Rakesh 2008-08-27
  * @version $Id$
  */
 echopoint.test.MeterTest = Core.extend(

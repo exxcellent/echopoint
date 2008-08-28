@@ -200,7 +200,7 @@ echopoint.google.internal.AbstractChartSync = Core.extend(
      * @see #setTitle
      * @see #setFont
      * @see #setAltContent
-     **/
+     */
     getUrl: function()
     {
       var data = this.getData();

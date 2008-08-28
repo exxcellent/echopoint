@@ -234,6 +234,7 @@
         <file name='Sync.VennDiagram.js'/>
         <file name='Sync.Map.js'/>
         <file name='Sync.Meter.js'/>
+        <file name='Sync.QRCode.js'/>
       </filelist>
       <filelist dir='${dir.src.client.test}/app'>
         <file name='TestAppDeploy.js'/>
@@ -255,6 +256,7 @@
         <file name='VennDiagramTest.js'/>
         <file name='MapTest.js'/>
         <file name='MeterTest.js'/>
+        <file name='QRCodeTest.js'/>
       </filelist>
     </concat>
 

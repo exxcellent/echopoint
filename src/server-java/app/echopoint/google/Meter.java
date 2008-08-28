@@ -26,7 +26,7 @@ import echopoint.google.internal.AbstractChart;
  * provided by <a href='http://code.google.com/apis/chart/'>Google Chart
  * API</a>.
  *
- * @author Rakesh Vidyadharan 2008-08-26
+ * @author Rakesh Vidyadharan 2008-08-27
  * @version $Id$
  */
 public class Meter extends AbstractChart<Integer>

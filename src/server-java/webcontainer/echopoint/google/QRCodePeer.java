@@ -27,20 +27,20 @@ import nextapp.echo.webcontainer.service.JavaScriptService;
 import echopoint.google.internal.AbstractChartPeer;
 
 /**
- * Rendering peer for the {@link Meter} component.
+ * Rendering peer for the {@link echopoint.google.QRCode} component.
  *
- * @author Rakesh 2008-08-27
+ * @author Rakesh 2008-08-28
  * @version $Id$
  */
-public class MeterPeer extends AbstractChartPeer
+public class QRCodePeer extends AbstractChartPeer
 {
   /** The component name for which this class is a peer. */
-  private static final String COMPONENT_NAME = Meter.class.getName();
+  private static final String COMPONENT_NAME = QRCode.class.getName();
 
   /** The service for the client side peer for this component. */
   private static final Service COMPONENT_SERVICE =
-      JavaScriptService.forResource( MeterPeer.COMPONENT_NAME,
-          "resource/js/google/Sync.Meter.js" );
+      JavaScriptService.forResource( QRCodePeer.COMPONENT_NAME,
+          "resource/js/google/Sync.QRCode.js" );
 
   /** Register the services */
   static
@@ -66,7 +66,7 @@ public class MeterPeer extends AbstractChartPeer
   @Override
   public Class getComponentClass()
   {
-    return Meter.class;
+    return QRCode.class;
   }
 
   /**

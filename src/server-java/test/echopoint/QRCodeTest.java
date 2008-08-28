@@ -18,8 +18,7 @@
 
 package echopoint;
 
-import echopoint.google.Meter;
-import echopoint.google.model.ChartData;
+import echopoint.google.QRCode;
 import echopoint.google.model.Title;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.Extent;
@@ -30,50 +29,29 @@ import static org.junit.Assert.assertNotNull;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 /**
- * Unit test suite for the {@link echopoint.google.Meter} component
+ * Unit test suite for the {@link echopoint.google.QRCode} component
  * wrapper.
  *
- * @author Rakesh Vidyadharan 2008-08-27
+ * @author Rakesh Vidyadharan 2008-08-28
  * @version $Id$
  */
-public class MeterTest
+public class QRCodeTest
 {
-  static Meter chart;
-  static ChartData<Integer> data;
+  static QRCode chart;
 
   @BeforeClass
   public static void init()
   {
-    chart = new Meter();
-    data = new ChartData<Integer>();
+    chart = new QRCode();
   }
 
   @Test
   public void renderId()
   {
-    final String id = "echopointUnitTestSimpleMeter";
+    final String id = "echopointUnitTestSimpleQRCode";
     chart.setRenderId( id );
     assertEquals( "Ensuring render id is same", id, chart.getRenderId() );
-  }
-
-  @Test
-  public void data()
-  {
-    final Integer[] array = new Integer[] { 70 };
-    data.setXdata( Arrays.asList( array ) );
-    data.setXmax( 100 );
-  }
-
-  @Test
-  public void color()
-  {
-    final String color = "00ff00";
-    data.setColor( color );
-    assertEquals( "Ensuring color set", color, data.getColor() );
   }
 
   @Test
@@ -88,7 +66,7 @@ public class MeterTest
   public void title()
   {
     final Title title = new Title();
-    title.add( "Google-o-meter" );
+    title.add( "QR Codes" );
     chart.setTitle( title );
 
     assertEquals( "Ensuring title set", title, chart.title() );
@@ -116,11 +94,11 @@ public class MeterTest
   }
 
   @Test
-  public void label()
+  public void text()
   {
-    final String label = "70 %";
-    chart.setLabel( label );
-    assertEquals( "Ensuring label set", label, chart.getLabel() );
+    final String text = "EchoPoint text to be encoded";
+    chart.setText( text );
+    assertEquals( "Ensuring text set", text, chart.getText() );
   }
 
   @AfterClass
@@ -128,12 +106,6 @@ public class MeterTest
   {
     final Component content = Application.getContent().getTestArea();
     content.removeAll();
-
-    final ArrayList<ChartData<Integer>> collection = new ArrayList<ChartData<Integer>>();
-    collection.add( data );
-    chart.setData( collection );
-    assertNotNull( "Ensuring that data is set", chart.getData() );
-
     content.add( chart );
   }
 }

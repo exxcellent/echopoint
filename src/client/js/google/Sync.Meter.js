@@ -1,7 +1,7 @@
 /**
  * Component rendering peer: Meter
  *
- * @author Rakesh 2008-08-26
+ * @author Rakesh 2008-08-27
  * @version: $Id$
  */
 echopoint.google.MeterSync = Core.extend(

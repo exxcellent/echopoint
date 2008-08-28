@@ -51,6 +51,7 @@ public class ComponentList extends Column
           "VennDiagram",
           "Map",
           "Meter",
+          "QRCode",
       };
 
   /**

@@ -43,6 +43,9 @@ echopoint.constants.MAP = "echopoint.google.Map";
 /** The name of the Google-o-meter component. */
 echopoint.constants.METER = "echopoint.google.Meter";
 
+/** The name of the QR Code component. */
+echopoint.constants.QRCODE = "echopoint.google.QRCode";
+
 /**
  * The class definition for the abstract chart component that is the root
  * component from which <a href='http://code.google.com/apis/chart/'>Google
@@ -407,7 +410,7 @@ echopoint.google.PieChart = Core.extend( echopoint.google.internal.SimpleChart,
 });
 
 /**
- * The class diagram for venn diagrams as specified by
+ * The class definition for venn diagrams as specified by
  * <a href='http://code.google.com/apis/chart/#venn'>Google Chart API</a>.
  */
 echopoint.google.VennDiagram = Core.extend( echopoint.google.internal.SimpleChart,
@@ -427,7 +430,7 @@ echopoint.google.VennDiagram = Core.extend( echopoint.google.internal.SimpleChar
 });
 
 /**
- * The class diagram for maps as specified by
+ * The class definition for maps as specified by
  * <a href='http://code.google.com/apis/chart/#maps'>Google Chart API</a>.
  */
 echopoint.google.Map = Core.extend( echopoint.google.internal.AbstractChart,
@@ -479,7 +482,7 @@ echopoint.google.Map = Core.extend( echopoint.google.internal.AbstractChart,
 });
 
 /**
- * The class diagram for Google-o-meter as specified by
+ * The class definition for Google-o-meter as specified by
  * <a href='http://code.google.com/apis/chart/#gom'>Google Chart API</a>.
  */
 echopoint.google.Meter = Core.extend( echopoint.google.internal.AbstractChart,
@@ -505,4 +508,35 @@ echopoint.google.Meter = Core.extend( echopoint.google.internal.AbstractChart,
   },
 
   componentType: echopoint.constants.METER
+});
+
+/**
+ * The class definition for QR codes as specified by
+ * <a href='http://code.google.com/apis/chart/#qrcodes'>Google Chart API</a>.
+ */
+echopoint.google.QRCode = Core.extend( echopoint.google.internal.AbstractChart,
+{
+  $static:
+  {
+    /** The constant that indicates the chart type. */
+    CHART_TYPE: "qr",
+
+    /**
+     * The property that holds the text to encode as a QR code.
+     */
+    TEXT: "text",
+
+    /**
+     * The property that holds the output encoding for the QR code.  Default
+     * value used by Google Chart API is UTF-8.  This property may be styled.
+     */
+    ENCODING: "encoding"
+  },
+
+  $load: function()
+  {
+    Echo.ComponentFactory.registerType( echopoint.constants.QRCODE, this );
+  },
+
+  componentType: echopoint.constants.QRCODE
 });
