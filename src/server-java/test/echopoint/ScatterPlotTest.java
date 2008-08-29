@@ -18,11 +18,11 @@
 
 package echopoint;
 
-import echopoint.google.ScatterPlot;
-import echopoint.google.model.ChartData;
-import echopoint.google.model.Range;
-import echopoint.google.model.ScatterPlotData;
-import echopoint.google.model.Title;
+import echopoint.google.chart.ScatterPlot;
+import echopoint.google.chart.model.ChartData;
+import echopoint.google.chart.model.Range;
+import echopoint.google.chart.model.ScatterPlotData;
+import echopoint.google.chart.model.Title;
 import nextapp.echo.app.Component;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -36,7 +36,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Component wrapper for the {@link echopoint.google.ScatterPlot} component
+ * Component wrapper for the {@link echopoint.google.chart.ScatterPlot} component
  * wrapper.
  *
  * @author Rakesh Vidyadharan 2008-08-23

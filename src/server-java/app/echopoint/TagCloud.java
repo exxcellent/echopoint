@@ -103,7 +103,7 @@ public class TagCloud extends Component
   }
 
   /**
-   * Return the value of the {@link #PROPERTY_ROLLOVER_ENABLED} propoerty.
+   * Return the value of the {@link #PROPERTY_ROLLOVER_ENABLED} property.
    *
    * @return The flag indicating whether rollover behaviour is enabled or not.
    */
@@ -113,7 +113,7 @@ public class TagCloud extends Component
   }
 
   /**
-   * Set the value of the {@link #PROPERTY_ROLLOVER_ENABLED} propoerty.
+   * Set the value of the {@link #PROPERTY_ROLLOVER_ENABLED} property.
    *
    * @param enabled The flag indicating whether rollover behaviour is to be
    *   enabled or not.
@@ -124,7 +124,7 @@ public class TagCloud extends Component
   }
 
   /**
-   * Return the value of the {@link #PROPERTY_ROLLOVER_BACKGROUND} propoerty.
+   * Return the value of the {@link #PROPERTY_ROLLOVER_BACKGROUND} property.
    *
    * @return The colour used as the background while rolling over the tag.
    */
@@ -134,7 +134,7 @@ public class TagCloud extends Component
   }
 
   /**
-   * Set the value of the {@link #PROPERTY_ROLLOVER_BACKGROUND} propoerty.
+   * Set the value of the {@link #PROPERTY_ROLLOVER_BACKGROUND} property.
    *
    * @param background The colour used as the background while rolling over.
    */
@@ -144,7 +144,7 @@ public class TagCloud extends Component
   }
 
   /**
-   * Return the value of the {@link #PROPERTY_ROLLOVER_BACKGROUND} propoerty.
+   * Return the value of the {@link #PROPERTY_ROLLOVER_BACKGROUND} property.
    *
    * @return The colour used as the foreground while rolling over the tag.
    */
@@ -154,7 +154,7 @@ public class TagCloud extends Component
   }
 
   /**
-   * Set the value of the {@link #PROPERTY_ROLLOVER_BACKGROUND} propoerty.
+   * Set the value of the {@link #PROPERTY_ROLLOVER_BACKGROUND} property.
    *
    * @param foreground The colour used as the foreground while rolling over.
    */
@@ -174,10 +174,10 @@ public class TagCloud extends Component
   }
 
   /**
-   * Return the value of the {@link #PROPERTY_TAGS} propoerty.  Note
+   * Return the value of the {@link #PROPERTY_TAGS} property.  Note
    * that this method will return the JSON representation of {@link #data}.
    *
-   * @return The JSON data structure that represents {@link # collection}.
+   * @return The JSON data structure that represents {@link #data}.
    */
   public String getTags()
   {
@@ -185,10 +185,10 @@ public class TagCloud extends Component
   }
 
   /**
-   * Set the value of the {@link #PROPERTY_TAGS} propoerty.  This method is
+   * Set the value of the {@link #PROPERTY_TAGS} property.  This method is
    * for <b>internal use only</b>.
    *
-   * @see #setTags( Collection<Tag> )
+   * @see #setTags( Collection )
    * @param tags The JSON representation of the tags collection.
    */
   public void setTags( final String tags )
@@ -197,7 +197,7 @@ public class TagCloud extends Component
   }
 
   /**
-   * Set the value of the {@link #data} propoerty.  The {@link # collection}
+   * Set the value of the {@link #data} property.  The {@link #data}
    * collection will be converted to JSON to serialisation.
    *
    * @param tags The collection of tag instances to be represented in this component.

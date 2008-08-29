@@ -18,9 +18,9 @@
 
 package echopoint;
 
-import echopoint.google.Map;
-import echopoint.google.model.ChartData;
-import echopoint.google.model.Title;
+import echopoint.google.chart.Map;
+import echopoint.google.chart.model.ChartData;
+import echopoint.google.chart.model.Title;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.Extent;
 import nextapp.echo.app.Insets;
@@ -34,7 +34,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * Unit test suite for the {@link echopoint.google.Map} component
+ * Unit test suite for the {@link echopoint.google.chart.Map} component
  * wrapper.
  *
  * @author Rakesh Vidyadharan 2008-08-25

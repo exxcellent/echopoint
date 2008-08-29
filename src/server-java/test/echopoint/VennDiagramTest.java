@@ -18,10 +18,9 @@
 
 package echopoint;
 
-import echopoint.google.VennDiagram;
-import echopoint.google.model.ChartData;
-import echopoint.google.model.Title;
-import echopoint.google.model.VennDiagramModel;
+import echopoint.google.chart.VennDiagram;
+import echopoint.google.chart.model.Title;
+import echopoint.google.chart.model.VennDiagramModel;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.Extent;
 import org.junit.AfterClass;
@@ -30,11 +29,8 @@ import static org.junit.Assert.assertNotNull;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 /**
- * Unit test suite for the {@link echopoint.google.VennDiagram} component
+ * Unit test suite for the {@link echopoint.google.chart.VennDiagram} component
  * wrapper.
  *
  * @author Rakesh Vidyadharan 2008-08-20

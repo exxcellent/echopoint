@@ -18,9 +18,9 @@
 
 package echopoint;
 
-import echopoint.google.PieChart;
-import echopoint.google.model.ChartData;
-import echopoint.google.model.Title;
+import echopoint.google.chart.PieChart;
+import echopoint.google.chart.model.ChartData;
+import echopoint.google.chart.model.Title;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.Extent;
 import org.junit.AfterClass;
@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * Unit test suite for the {@link echopoint.google.PieChart} component
+ * Unit test suite for the {@link echopoint.google.chart.PieChart} component
  * wrapper.
  *
  * @author Rakesh Vidyadharan 2008-08-20

@@ -1,5 +1,5 @@
 /**
- * A test class for the echopoint.google.VennDiagram client-side component.
+ * A test class for the echopoint.google.chart.VennDiagram client-side component.
  * Displays simple bar charts to test Google Chart API interaction.
  *
  * @author Rakesh 2008-08-22
@@ -15,12 +15,12 @@ echopoint.test.VennDiagramTest = Core.extend(
   _createChart: function()
   {
     var data = new Array();
-    data[0] = new echopoint.google.model.ChartData(
+    data[0] = new echopoint.google.chart.model.ChartData(
         [ 100, 80, 60, 30, 30, 30, 10 ] );
 
-    var title = new echopoint.google.model.Title( "Venn Diagram" );
+    var title = new echopoint.google.chart.model.Title( "Venn Diagram" );
 
-    return new echopoint.google.VennDiagram(
+    return new echopoint.google.chart.VennDiagram(
     {
       renderId: "echopointUnitTestStrutComplexVennDiagram",
       styleName: "SimpleChart",

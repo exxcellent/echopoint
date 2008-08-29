@@ -18,14 +18,14 @@
 
 package echopoint;
 
-import echopoint.google.RadarChart;
-import echopoint.google.model.ChartData;
-import echopoint.google.model.Range;
-import echopoint.google.model.RangeMarker;
-import echopoint.google.model.ShapeMarker;
-import echopoint.google.model.Title;
-import echopoint.google.model.LineStyle;
-import echopoint.google.model.FillArea;
+import echopoint.google.chart.RadarChart;
+import echopoint.google.chart.model.ChartData;
+import echopoint.google.chart.model.Range;
+import echopoint.google.chart.model.RangeMarker;
+import echopoint.google.chart.model.ShapeMarker;
+import echopoint.google.chart.model.Title;
+import echopoint.google.chart.model.LineStyle;
+import echopoint.google.chart.model.FillArea;
 import nextapp.echo.app.Component;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -40,7 +40,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Unit test suite for the {@link echopoint.google.RadarChart} component
+ * Unit test suite for the {@link echopoint.google.chart.RadarChart} component
  * wrapper.
  *
  * @author Rakesh Vidyadharan 2008-08-24

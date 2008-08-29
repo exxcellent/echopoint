@@ -1,5 +1,5 @@
 /**
- * A test class for the echopoint.google.PieChart client-side component.
+ * A test class for the echopoint.google.chart.PieChart client-side component.
  * Displays simple bar charts to test Google Chart API interaction.
  *
  * @author Rakesh 2008-08-21
@@ -15,15 +15,15 @@ echopoint.test.PieChartTest = Core.extend(
   _createChart: function()
   {
     var data = new Array();
-    data[0] = new echopoint.google.model.ChartData(
+    data[0] = new echopoint.google.chart.model.ChartData(
         [ 31, 28, 31, 30, 31, 31, 31, 31, 30, 31, 30, 31 ] );
 
-    var title = new echopoint.google.model.Title( "Pie Chart" );
+    var title = new echopoint.google.chart.model.Title( "Pie Chart" );
 
     var labels = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun",
         "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
 
-    return new echopoint.google.PieChart(
+    return new echopoint.google.chart.PieChart(
     {
       renderId: "echopointUnitTestStrutComplexPieChart",
       styleName: "SimpleChart",

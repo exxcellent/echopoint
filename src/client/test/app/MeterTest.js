@@ -1,5 +1,5 @@
 /**
- * A test class for the echopoint.google.Meter client-side component.
+ * A test class for the echopoint.google.chart.Meter client-side component.
  * Displays simple and multi value charts to test Google Chart API interaction.
  *
  * @author Rakesh 2008-08-27
@@ -15,11 +15,11 @@ echopoint.test.MeterTest = Core.extend(
   _createMeter: function()
   {
     var xdata = [ 70 ];
-    var data = new echopoint.google.model.ChartData( xdata, 100 );
-    var title = new echopoint.google.model.Title();
+    var data = new echopoint.google.chart.model.ChartData( xdata, 100 );
+    var title = new echopoint.google.chart.model.Title();
     title.add( "Google-o-meter" );
 
-    return new echopoint.google.Meter(
+    return new echopoint.google.chart.Meter(
     {
       renderId: "echopointUnitTestSimpleMeter",
       styleName: "SimpleChart",

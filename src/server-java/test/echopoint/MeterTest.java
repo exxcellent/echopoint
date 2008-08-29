@@ -18,9 +18,9 @@
 
 package echopoint;
 
-import echopoint.google.Meter;
-import echopoint.google.model.ChartData;
-import echopoint.google.model.Title;
+import echopoint.google.chart.Meter;
+import echopoint.google.chart.model.ChartData;
+import echopoint.google.chart.model.Title;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.Extent;
 import nextapp.echo.app.Insets;
@@ -34,7 +34,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * Unit test suite for the {@link echopoint.google.Meter} component
+ * Unit test suite for the {@link echopoint.google.chart.Meter} component
  * wrapper.
  *
  * @author Rakesh Vidyadharan 2008-08-27

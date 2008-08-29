@@ -76,22 +76,33 @@ echopoint.model =
   uniqueId: 20080720
 };
 
-/** The namespace for Google API related components. */
+/** The root namespace for Google API related components. */
 echopoint.google =
 {
   /**
-   * Maintains a unique id for the echopoint.google namespace.
+   * Maintains a unique id for the echopoint.google.chart namespace.
    *
    * @type Number
    */
   uniqueId: 20080808
 };
 
-/** The namespace for internal comopnents of Google API related components. */
-echopoint.google.internal =
+/** The namespace for Google API related components. */
+echopoint.google.chart =
 {
   /**
-   * Maintains a unique id for the echopoint.google.internal namespace.
+   * Maintains a unique id for the echopoint.google.chart namespace.
+   *
+   * @type Number
+   */
+  uniqueId: 20080829
+};
+
+/** The namespace for internal comopnents of Google API related components. */
+echopoint.google.chart.internal =
+{
+  /**
+   * Maintains a unique id for the echopoint.google.chart.internal namespace.
    *
    * @type Number
    */
@@ -99,10 +110,10 @@ echopoint.google.internal =
 };
 
 /** The namespace for model objects of Google API related components. */
-echopoint.google.model =
+echopoint.google.chart.model =
 {
   /**
-   * Maintains a unique id for the echopoint.google.model namespace.
+   * Maintains a unique id for the echopoint.google.chart.model namespace.
    *
    * @type Number
    */

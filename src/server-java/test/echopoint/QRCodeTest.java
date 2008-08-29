@@ -18,8 +18,8 @@
 
 package echopoint;
 
-import echopoint.google.QRCode;
-import echopoint.google.model.Title;
+import echopoint.google.chart.QRCode;
+import echopoint.google.chart.model.Title;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.Extent;
 import nextapp.echo.app.Insets;
@@ -30,7 +30,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- * Unit test suite for the {@link echopoint.google.QRCode} component
+ * Unit test suite for the {@link echopoint.google.chart.QRCode} component
  * wrapper.
  *
  * @author Rakesh Vidyadharan 2008-08-28

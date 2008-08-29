@@ -1,5 +1,5 @@
 /**
- * A test class for the echopoint.google.QRCode client-side component.
+ * A test class for the echopoint.google.chart.QRCode client-side component.
  * Displays simple and multi value charts to test Google Chart API interaction.
  *
  * @author Rakesh 2008-08-27
@@ -14,12 +14,12 @@ echopoint.test.QRCodeTest = Core.extend(
 
   _createQRCode: function()
   {
-    var title = new echopoint.google.model.Title();
+    var title = new echopoint.google.chart.model.Title();
     title.add( "QRCode" );
 
     var text = "EchoPoint text to be encoded."
 
-    return new echopoint.google.QRCode(
+    return new echopoint.google.chart.QRCode(
     {
       renderId: "echopointUnitTestSimpleQRCode",
       styleName: "SimpleChart",

@@ -18,14 +18,11 @@
 
 package echopoint;
 
-import echopoint.google.Sparkline;
-import echopoint.google.model.ChartData;
-import echopoint.google.model.Range;
-import echopoint.google.model.RangeMarker;
-import echopoint.google.model.ShapeMarker;
-import echopoint.google.model.Title;
-import echopoint.google.model.LineStyle;
-import echopoint.google.model.FillArea;
+import echopoint.google.chart.Sparkline;
+import echopoint.google.chart.model.ChartData;
+import echopoint.google.chart.model.ShapeMarker;
+import echopoint.google.chart.model.Title;
+import echopoint.google.chart.model.LineStyle;
 import nextapp.echo.app.Component;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -40,7 +37,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Unit test suite for the {@link echopoint.google.Sparkline} component
+ * Unit test suite for the {@link echopoint.google.chart.Sparkline} component
  * wrapper.
  *
  * @author Rakesh Vidyadharan 2008-08-20

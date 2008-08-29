@@ -20,7 +20,7 @@ echopoint.test.TestApp.StyleSheet = new Echo.StyleSheet(
   },
   "SimpleChart":
   {
-    "echopoint.google.BarChart":
+    "echopoint.google.chart.BarChart":
     {
       axisType: "x,y,t,r",
       border: "2px groove #cfdfff",
@@ -34,7 +34,7 @@ echopoint.test.TestApp.StyleSheet = new Echo.StyleSheet(
       insets: 10,
       size: "10,5,15"
     },
-    "echopoint.google.LineChart":
+    "echopoint.google.chart.LineChart":
     {
       axisType: "x,y",
       axisStyles: "0,00ff33,13,1|1,0033ff,13,-1",
@@ -47,7 +47,7 @@ echopoint.test.TestApp.StyleSheet = new Echo.StyleSheet(
       height: "400",
       insets: 10
     },
-    "echopoint.google.Sparkline":
+    "echopoint.google.chart.Sparkline":
     {
       axisType: "x,y",
       axisStyles: "0,00ff33,13,1|1,0033ff,13,-1",
@@ -60,7 +60,7 @@ echopoint.test.TestApp.StyleSheet = new Echo.StyleSheet(
       height: "400",
       insets: 10
     },
-    "echopoint.google.PieChart":
+    "echopoint.google.chart.PieChart":
     {
       border: "2px groove #cfdfff",
       fill: "bg,s,efefef|c,s,00000080",
@@ -70,7 +70,7 @@ echopoint.test.TestApp.StyleSheet = new Echo.StyleSheet(
       height: "400",
       insets: 10
     },
-    "echopoint.google.VennDiagram":
+    "echopoint.google.chart.VennDiagram":
     {
       border: "2px groove #cfdfff",
       fill: "bg,s,efefef|c,s,00000080",
@@ -80,7 +80,7 @@ echopoint.test.TestApp.StyleSheet = new Echo.StyleSheet(
       height: "400",
       insets: 10
     },
-    "echopoint.google.Map":
+    "echopoint.google.chart.Map":
     {
       border: "2px groove #cfdfff",
       fill: "bg,s,efefef|c,lg,45,ffffff,0,76a4fb,0.75",
@@ -88,7 +88,7 @@ echopoint.test.TestApp.StyleSheet = new Echo.StyleSheet(
       font: { size: "10" },
       insets: 10
     },
-    "echopoint.google.Meter":
+    "echopoint.google.chart.Meter":
     {
       border: "2px groove #cfdfff",
       fill: "bg,s,efefef|c,lg,45,ffffff,0,76a4fb,0.75",
@@ -99,7 +99,7 @@ echopoint.test.TestApp.StyleSheet = new Echo.StyleSheet(
       height: "300",
       label: "70 %"
     },
-    "echopoint.google.QRCode":
+    "echopoint.google.chart.QRCode":
     {
       border: "2px groove #cfdfff",
       fill: "bg,s,efefef|c,lg,45,ffffff,0,76a4fb,0.75",
@@ -113,7 +113,7 @@ echopoint.test.TestApp.StyleSheet = new Echo.StyleSheet(
   },
   "ComplexChart":
   {
-    "echopoint.google.LineChart":
+    "echopoint.google.chart.LineChart":
     {
       axisType: "x,y,t,r",
       border: "2px groove #cfdfff",
@@ -126,7 +126,7 @@ echopoint.test.TestApp.StyleSheet = new Echo.StyleSheet(
       height: "400",
       insets: 10
     },
-    "echopoint.google.ScatterPlot":
+    "echopoint.google.chart.ScatterPlot":
     {
       axisType: "x,y,t,r",
       border: "2px groove #cfdfff",
@@ -138,7 +138,7 @@ echopoint.test.TestApp.StyleSheet = new Echo.StyleSheet(
       height: "400",
       insets: 10
     },
-    "echopoint.google.Sparkline":
+    "echopoint.google.chart.Sparkline":
     {
       axisType: "x,y,t,r",
       border: "2px groove #cfdfff",
@@ -151,7 +151,7 @@ echopoint.test.TestApp.StyleSheet = new Echo.StyleSheet(
       height: "400",
       insets: 10
     },
-    "echopoint.google.RadarChart":
+    "echopoint.google.chart.RadarChart":
     {
       axisType: "x",
       border: "2px groove #cfdfff",
@@ -164,7 +164,7 @@ echopoint.test.TestApp.StyleSheet = new Echo.StyleSheet(
       height: "400",
       insets: 10
     },
-    "echopoint.google.Map":
+    "echopoint.google.chart.Map":
     {
       border: "2px groove #cfdfff",
       fill: "bg,s,efefef|c,lg,45,ffffff,0,76a4fb,0.75",

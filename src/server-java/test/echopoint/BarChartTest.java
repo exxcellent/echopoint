@@ -18,14 +18,14 @@
 
 package echopoint;
 
-import echopoint.google.BarChart;
-import echopoint.google.model.ChartData;
-import echopoint.google.model.Range;
-import echopoint.google.model.RangeMarker;
-import echopoint.google.model.ShapeMarker;
-import echopoint.google.model.Title;
-import echopoint.google.model.LineStyle;
-import echopoint.google.model.BarChartSize;
+import echopoint.google.chart.BarChart;
+import echopoint.google.chart.model.ChartData;
+import echopoint.google.chart.model.Range;
+import echopoint.google.chart.model.RangeMarker;
+import echopoint.google.chart.model.ShapeMarker;
+import echopoint.google.chart.model.Title;
+import echopoint.google.chart.model.LineStyle;
+import echopoint.google.chart.model.BarChartSize;
 import nextapp.echo.app.Component;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -40,7 +40,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Component wrapper for the {@link echopoint.google.BarChart} component
+ * Component wrapper for the {@link echopoint.google.chart.BarChart} component
  * wrapper.
  *
  * @author Rakesh Vidyadharan 2008-08-19
