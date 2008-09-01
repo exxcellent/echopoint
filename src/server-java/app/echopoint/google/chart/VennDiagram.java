@@ -30,6 +30,16 @@ import java.util.ArrayList;
  * provided by <a href='http://code.google.com/apis/chart/'>Google Chart
  * API</a>.
  *
+ * <p>The following code shows sample use of this component:</p>
+ * <pre>
+ *   import echopoint.google.chart.VennDiagram;
+ *
+ *     ...
+ *     final VennDiagram chart = new VennDiagram();
+ *     final VennDiagramModel model = new VennDiagramModel( 100, 80, 60, 30, 30, 30, 10 );
+ *     chart.setData( model );
+ * </pre>
+ *
  * @author Rakesh Vidyadharan 2008-08-22
  * @version $Id$
  */

@@ -27,6 +27,27 @@ import echopoint.google.chart.model.BarChartSize;
  * provided by <a href='http://code.google.com/apis/chart/'>Google Chart
  * API</a>.
  *
+ * <p>The following code shows sample use of this component:</p>
+ * <pre>
+ *   import echopoint.google.chart.BarChart;
+ *   import echopoint.google.chart.model.ChartData;
+ *
+ *     ...
+ *     final ChartData&lt;Integer&gt; data = new ChartData&lt;Integer&gt;();
+ *     final Integer[] array = new Integer[] { 30,60,70,90,95,110 };
+ *     final List&lt;Integer&gt; xdata = Arrays.asList( array );
+ *     final int xmax = 120;
+ *
+ *     data.setXdata( xdata );
+ *     data.setXmax( xmax );
+ *
+ *     final BarChart&lt;Integer&gt; chart = new BarChart&lt;Integer&gt;();
+ *     chart.setOrientation( BarChart.Orientation.bhg );
+ *     final ArrayList&lt;ChartData&lt;Integer&gt;&gt; collection = new ArrayList&lt;ChartData&lt;Integer&gt;&gt;();
+ *     collection.add( data );
+ *     chart.setData( collection );
+ * </pre>
+ *
  * @author Rakesh Vidyadharan 2008-08-20
  * @version $Id$
  */

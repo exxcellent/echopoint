@@ -118,7 +118,6 @@ public class SparklineTest
     final Component content = Application.getContent().getTestArea();
     content.removeAll();
 
-
     final ArrayList<ChartData<Integer>> collection = new ArrayList<ChartData<Integer>>();
     collection.add( data );
     chart.setData( collection );

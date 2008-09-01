@@ -26,6 +26,23 @@ import echopoint.google.chart.internal.AbstractChart;
  * provided by <a href='http://code.google.com/apis/chart/'>Google Chart
  * API</a>.
  *
+ * <p>The following code shows sample use of this component:</p>
+ * <pre>
+ *   import echopoint.google.chart.Map;
+ *   import echopoint.google.chart.model.ChartData;
+ *
+ *     ...
+ *     final ChartData&lt;Integer&gt; data = new ChartData&lt;Integer&gt;();
+ *     final Integer[] array = new Integer[] { 0, 5, 9 };
+ *     data.setXdata( Arrays.asList( array ) );
+ *
+ *     final Map chart = new Map();
+ *     final ArrayList&lt;ChartData&lt;Integer&gt;&gt; collection = new ArrayList&lt;ChartData&lt;Integer&gt;&gt;();
+ *     collection.add( data );
+ *     chart.setData( collection );
+ *     chart.setCodes( "MGKETN" );
+ * </pre>
+ *
  * @author Rakesh Vidyadharan 2008-08-25
  * @version $Id$
  */

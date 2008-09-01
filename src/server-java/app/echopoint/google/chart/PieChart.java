@@ -28,6 +28,24 @@ import java.util.Collection;
  * provided by <a href='http://code.google.com/apis/chart/'>Google Chart
  * API</a>.
  *
+ * <p>The following code shows sample use of this component:</p>
+ * <pre>
+ *   import echopoint.google.chart.PieChart;
+ *   import echopoint.google.chart.model.ChartData;
+ *
+ *     ...
+ *     final ChartData&lt;Integer&gt; data = new ChartData&lt;Integer&gt;();
+ *     final Integer[] array = new Integer[]
+ *        { 31, 28, 31, 30, 31, 31, 31, 31, 30, 31, 30, 31 };
+ *     data.setXdata( Arrays.asList( array ) );
+ *
+ *     final PieChart&lt;Integer&gt; chart = new PieChart&lt;Integer&gt;();
+ *     chart.setDimensions( PieChart.Dimensions.p3 );
+ *     final ArrayList&lt;ChartData&lt;Integer&gt;&gt; collection = new ArrayList&lt;ChartData&lt;Integer&gt;&gt;();
+ *     collection.add( data );
+ *     chart.setData( collection );
+ * </pre>
+ *
  * @author Rakesh Vidyadharan 2008-08-21
  * @version $Id$
  */

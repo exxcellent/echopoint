@@ -26,6 +26,15 @@ import echopoint.google.chart.internal.AbstractChart;
  * provided by <a href='http://code.google.com/apis/chart/'>Google Chart
  * API</a>.
  *
+ * <p>The following code shows sample use of this component:</p>
+ * <pre>
+ *   import echopoint.google.chart.QRCode;
+ *
+ *     ...
+ *     QRCode chart = new QRCode();
+ *     chart.setText( text );
+ * </pre>
+ *
  * @author Rakesh Vidyadharan 2008-08-28
  * @version $Id$
  */

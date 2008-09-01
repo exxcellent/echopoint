@@ -26,6 +26,31 @@ import echopoint.google.chart.internal.AdvancedChart;
  * provided by <a href='http://code.google.com/apis/chart/'>Google Chart
  * API</a>.
  *
+ * <p>The following code shows sample use of this component:</p>
+ * <pre>
+ *   import echopoint.google.chart.ScatterPlot;
+ *   import echopoint.google.chart.model.ChartData;
+ *
+ *     ...
+ *     final ChartData&lt;Integer&gt; data = new ChartData&lt;Integer&gt;();
+ *     final Integer[] array = new Integer[] { 0, 30, 60, 70, 90, 95, 100 };
+ *     final List<Integer> xdata = Arrays.asList( array );
+ *     final int xmax = 120;
+ *
+ *     final Integer[] ydata = { 20, 30, 40, 50, 60, 70, 80 };
+ *     final Integer[] size = { 1, 2, 3, 4, 5, 6, 7 };
+ *
+ *     data.setXdata( xdata );
+ *     data.setXmax( xmax );
+ *     data.setYdata( Arrays.asList( ydata ) );
+ *     data.setSize( Arrays.asList( size ) );
+ *
+ *     final ScatterPlot&lt;Integer&gt; chart = new ScatterPlot&lt;Integer&gt;();
+ *     final ArrayList&lt;ChartData&lt;Integer&gt;&gt; collection = new ArrayList&lt;ChartData&lt;Integer&gt;&gt;();
+ *     collection.add( data );
+ *     chart.setData( collection );
+ * </pre>
+ *
  * @author Rakesh Vidyadharan 2008-08-23
  * @version $Id$
  */

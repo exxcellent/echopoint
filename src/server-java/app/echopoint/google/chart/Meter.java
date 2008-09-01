@@ -26,6 +26,24 @@ import echopoint.google.chart.internal.AbstractChart;
  * provided by <a href='http://code.google.com/apis/chart/'>Google Chart
  * API</a>.
  *
+ * <p>The following code shows sample use of this component:</p>
+ * <pre>
+ *   import echopoint.google.chart.Meter;
+ *   import echopoint.google.chart.model.ChartData;
+ *
+ *     ...
+ *     final ChartData&lt;Integer&gt; data = new ChartData&lt;Integer&gt;();
+ *     final Integer[] array = new Integer[] { 70 };
+ *     data.setXdata( Arrays.asList( array ) );
+ *     data.setXmax( 100 );
+ *
+ *     final Meter chart = new Meter();
+ *     final ArrayList&lt;ChartData&lt;Integer&gt;&gt; collection = new ArrayList&lt;ChartData&lt;Integer&gt;&gt;();
+ *     collection.add( data );
+ *     chart.setData( collection );
+ *     chart.setLabel( "70 %" );
+ * </pre>
+ *
  * @author Rakesh Vidyadharan 2008-08-27
  * @version $Id$
  */
