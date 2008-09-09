@@ -77,7 +77,7 @@ public class PieChart<N extends Number> extends SimpleChart<N>
    */
   public String getDimensions()
   {
-    return (String) getProperty( PROPERTY_DIMENSIONS );
+    return (String) get( PROPERTY_DIMENSIONS );
   }
 
   /**
@@ -89,7 +89,7 @@ public class PieChart<N extends Number> extends SimpleChart<N>
    */
   public void setDimensions( final String dimension )
   {
-    setProperty( PROPERTY_DIMENSIONS, dimension );
+    set( PROPERTY_DIMENSIONS, dimension );
   }
 
   /**
@@ -109,7 +109,7 @@ public class PieChart<N extends Number> extends SimpleChart<N>
    */
   public String getLabels()
   {
-    return (String) getProperty( PROPERTY_LABELS );
+    return (String) get( PROPERTY_LABELS );
   }
 
   /**
@@ -121,7 +121,7 @@ public class PieChart<N extends Number> extends SimpleChart<N>
    */
   public void setLabels( final String labels )
   {
-    setProperty( PROPERTY_LABELS, labels );
+    set( PROPERTY_LABELS, labels );
   }
 
   /**

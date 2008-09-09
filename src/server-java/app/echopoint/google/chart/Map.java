@@ -80,7 +80,7 @@ public class Map extends AbstractChart<Integer>
    */
   public String getGeographicalArea()
   {
-    return (String) getProperty( PROPERTY_GEOGRAPHICAL_AREA );
+    return (String) get( PROPERTY_GEOGRAPHICAL_AREA );
   }
 
   /**
@@ -92,7 +92,7 @@ public class Map extends AbstractChart<Integer>
    */
   public void setGeographicalArea( final String region )
   {
-    setProperty( PROPERTY_GEOGRAPHICAL_AREA, region );
+    set( PROPERTY_GEOGRAPHICAL_AREA, region );
   }
 
   /**
@@ -112,7 +112,7 @@ public class Map extends AbstractChart<Integer>
    */
   public String getColors()
   {
-    return (String) getProperty( PROPERTY_COLORS );
+    return (String) get( PROPERTY_COLORS );
   }
 
   /**
@@ -122,7 +122,7 @@ public class Map extends AbstractChart<Integer>
    */
   public void setColors( final String colors )
   {
-    setProperty( PROPERTY_COLORS, colors );
+    set( PROPERTY_COLORS, colors );
   }
 
   /**
@@ -132,7 +132,7 @@ public class Map extends AbstractChart<Integer>
    */
   public String getCodes()
   {
-    return (String) getProperty( PROPERTY_CODES );
+    return (String) get( PROPERTY_CODES );
   }
 
   /**
@@ -142,6 +142,6 @@ public class Map extends AbstractChart<Integer>
    */
   public void setCodes( final String codes )
   {
-    setProperty( PROPERTY_CODES, codes );
+    set( PROPERTY_CODES, codes );
   }
 }

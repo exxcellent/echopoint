@@ -109,7 +109,7 @@ public class TagCloud extends Component
    */
   public boolean getRolloverEnabled()
   {
-    return (Boolean) getProperty( PROPERTY_ROLLOVER_ENABLED );
+    return (Boolean) get( PROPERTY_ROLLOVER_ENABLED );
   }
 
   /**
@@ -120,7 +120,7 @@ public class TagCloud extends Component
    */
   public void setRolloverEnabled( final boolean enabled )
   {
-    setProperty( PROPERTY_ROLLOVER_ENABLED, enabled );
+    set( PROPERTY_ROLLOVER_ENABLED, enabled );
   }
 
   /**
@@ -130,7 +130,7 @@ public class TagCloud extends Component
    */
   public Color getRolloverBackground()
   {
-    return (Color) getProperty( PROPERTY_ROLLOVER_BACKGROUND );
+    return (Color) get( PROPERTY_ROLLOVER_BACKGROUND );
   }
 
   /**
@@ -140,7 +140,7 @@ public class TagCloud extends Component
    */
   public void setRolloverBackground( final Color background )
   {
-    setProperty( PROPERTY_ROLLOVER_BACKGROUND, background );
+    set( PROPERTY_ROLLOVER_BACKGROUND, background );
   }
 
   /**
@@ -150,7 +150,7 @@ public class TagCloud extends Component
    */
   public Color getRolloverForeground()
   {
-    return (Color) getProperty( PROPERTY_ROLLOVER_FOREGROUND );
+    return (Color) get( PROPERTY_ROLLOVER_FOREGROUND );
   }
 
   /**
@@ -160,7 +160,7 @@ public class TagCloud extends Component
    */
   public void setRolloverForeground( final Color foreground )
   {
-    setProperty( PROPERTY_ROLLOVER_FOREGROUND, foreground );
+    set( PROPERTY_ROLLOVER_FOREGROUND, foreground );
   }
 
   /**
@@ -181,7 +181,7 @@ public class TagCloud extends Component
    */
   public String getTags()
   {
-    return (String) getProperty( PROPERTY_TAGS );
+    return (String) get( PROPERTY_TAGS );
   }
 
   /**
@@ -193,7 +193,7 @@ public class TagCloud extends Component
    */
   public void setTags( final String tags )
   {
-    setProperty( PROPERTY_TAGS, tags );
+    set( PROPERTY_TAGS, tags );
   }
 
   /**

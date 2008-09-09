@@ -24,7 +24,7 @@ dir.dist                          dist
 dir.build                         build
 dir.build.api                     ${dir.build}/api
 dir.build.resource                ${dir.build.api}/resource/js
-dir.build.images                ${dir.build.api}/resource/images
+dir.build.images                i ${dir.build.api}/resource/images
 dir.build.test                    ${dir.build}/test
 dir.docs                          docs
 dir.docs.api                      ${dir.docs}/api
@@ -48,7 +48,8 @@ clienttestwarfile                 echopointclienttest.war
 yuicompressor.lib.jar             ${dir.lib}/yuicompressor-2.3.5.jar
 
 # Javadoc configuration
-javadoc.header                    <b>EchoPoint API - ${version}</b><br/><a href='${echopoint.app.doc.link}' target='_top'>App<a/> <a href='${echopoint.webcontainer.doc.link}' target='_top'>Webcontainer</a>
+javadoc.cssfile                   ${dir.docs}/javadoc.css
+javadoc.header                    <b><a href='https://echopoint.dev.java.net/'>EchoPoint</a> API - ${version}</b><br/><a href='${echopoint.app.doc.link}' target='_top'>App<a/> <a href='${echopoint.webcontainer.doc.link}' target='_top'>Webcontainer</a>
 javadoc.doctitle.app              EchoPoint App<br/> API Specificiation
 javadoc.doctitle.webcontainer     EchoPoint Webcontainer<br/> API Specificiation
 javadoc.windowtitle               EchoPoint API Specification

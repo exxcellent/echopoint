@@ -70,7 +70,7 @@ public class RadarChart<N extends Number> extends AdvancedChart<N>
    */
   public String getLineStyle()
   {
-    return (String) getProperty( PROPERTY_LINE_STYLE );
+    return (String) get( PROPERTY_LINE_STYLE );
   }
 
   /**
@@ -82,7 +82,7 @@ public class RadarChart<N extends Number> extends AdvancedChart<N>
    */
   public void setLineStyle( final String style )
   {
-    setProperty( PROPERTY_LINE_STYLE, style );
+    set( PROPERTY_LINE_STYLE, style );
   }
 
   /**

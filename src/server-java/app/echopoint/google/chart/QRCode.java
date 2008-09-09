@@ -60,7 +60,7 @@ public class QRCode extends AbstractChart<Integer>
    */
   public String getText()
   {
-    return (String) getProperty( PROPERTY_TEXT );
+    return (String) get( PROPERTY_TEXT );
   }
 
   /**
@@ -70,7 +70,7 @@ public class QRCode extends AbstractChart<Integer>
    */
   public void setText( final String text )
   {
-    setProperty( PROPERTY_TEXT, text );
+    set( PROPERTY_TEXT, text );
   }
 
   /**
@@ -80,7 +80,7 @@ public class QRCode extends AbstractChart<Integer>
    */
   public String getEncoding()
   {
-    return (String) getProperty( PROPERTY_ENCODING );
+    return (String) get( PROPERTY_ENCODING );
   }
 
   /**
@@ -90,6 +90,6 @@ public class QRCode extends AbstractChart<Integer>
    */
   public void setEncoding( final String encoding )
   {
-    setProperty( PROPERTY_ENCODING, encoding );
+    set( PROPERTY_ENCODING, encoding );
   }
 }

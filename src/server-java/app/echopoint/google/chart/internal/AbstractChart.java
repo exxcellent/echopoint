@@ -104,7 +104,7 @@ public abstract class AbstractChart<N extends Number> extends AbstractContainer
    */
   public String getAlt()
   {
-    return (String) getProperty( PROPERTY_ALT );
+    return (String) get( PROPERTY_ALT );
   }
 
   /**
@@ -114,7 +114,7 @@ public abstract class AbstractChart<N extends Number> extends AbstractContainer
    */
   public void setAlt( final String alt )
   {
-    setProperty( PROPERTY_ALT, alt );
+    set( PROPERTY_ALT, alt );
   }
 
   /**
@@ -124,7 +124,7 @@ public abstract class AbstractChart<N extends Number> extends AbstractContainer
    */
   public String getFill()
   {
-    return (String) getProperty( PROPERTY_FILL );
+    return (String) get( PROPERTY_FILL );
   }
 
   /**
@@ -134,7 +134,7 @@ public abstract class AbstractChart<N extends Number> extends AbstractContainer
    */
   public void setFill( final String fill )
   {
-    setProperty( PROPERTY_FILL, fill );
+    set( PROPERTY_FILL, fill );
   }
 
   /** @return The {@link #data} collection. */
@@ -147,7 +147,7 @@ public abstract class AbstractChart<N extends Number> extends AbstractContainer
    */
   public String getData()
   {
-    return (String) getProperty( PROPERTY_DATA );
+    return (String) get( PROPERTY_DATA );
   }
 
   /**
@@ -159,7 +159,7 @@ public abstract class AbstractChart<N extends Number> extends AbstractContainer
    */
   public void setData( final String data )
   {
-    setProperty( PROPERTY_DATA, data );
+    set( PROPERTY_DATA, data );
   }
 
   /**
@@ -202,7 +202,7 @@ public abstract class AbstractChart<N extends Number> extends AbstractContainer
    */
   public String getTitle()
   {
-    return (String) getProperty( PROPERTY_TITLE );
+    return (String) get( PROPERTY_TITLE );
   }
 
   /**
@@ -216,6 +216,6 @@ public abstract class AbstractChart<N extends Number> extends AbstractContainer
 
     final XStream xstream = createSerialiser();
     xstream.processAnnotations( Title.class );
-    setProperty( PROPERTY_TITLE, xstream.toXML( title ) );
+    set( PROPERTY_TITLE, xstream.toXML( title ) );
   }
 }

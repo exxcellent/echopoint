@@ -85,7 +85,7 @@ public abstract class AbstractHtmlComponent extends AbstractContainer
    */
   public String getText()
   {
-    return (String) getProperty( PROPERTY_TEXT );
+    return (String) get( PROPERTY_TEXT );
   }
 
   /**
@@ -95,7 +95,7 @@ public abstract class AbstractHtmlComponent extends AbstractContainer
    */
   public void setText( final String text )
   {
-    setProperty( PROPERTY_TEXT, text );
+    set( PROPERTY_TEXT, text );
   }
 
   /**
@@ -106,7 +106,7 @@ public abstract class AbstractHtmlComponent extends AbstractContainer
    */
   public String getTarget()
   {
-    return (String) getProperty( PROPERTY_TARGET );
+    return (String) get( PROPERTY_TARGET );
   }
 
   /**
@@ -119,6 +119,6 @@ public abstract class AbstractHtmlComponent extends AbstractContainer
    */
   public void setTarget( final String target )
   {
-    setProperty( PROPERTY_TARGET, target );
+    set( PROPERTY_TARGET, target );
   }
 }

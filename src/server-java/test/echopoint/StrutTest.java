@@ -150,7 +150,7 @@ public class StrutTest
       {
         final int value = Integer.parseInt( textField.getText() );
         final Extent extent = new Extent( value, Extent.PX );
-        strut.setProperty( property, extent );
+        strut.set( property, extent );
       }
     });
 

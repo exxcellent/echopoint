@@ -120,7 +120,7 @@ public class AdvancedChart<N extends Number> extends SimpleChart<N>
    */
   public String getAxisType()
   {
-    return (String) getProperty( PROPERTY_AXIS_TYPE );
+    return (String) get( PROPERTY_AXIS_TYPE );
   }
 
   /**
@@ -130,7 +130,7 @@ public class AdvancedChart<N extends Number> extends SimpleChart<N>
    */
   public void setAxisType( final String type )
   {
-    setProperty( PROPERTY_AXIS_TYPE, type );
+    set( PROPERTY_AXIS_TYPE, type );
   }
 
   /**
@@ -140,7 +140,7 @@ public class AdvancedChart<N extends Number> extends SimpleChart<N>
    */
   public String getAxisLabels()
   {
-    return (String) getProperty( PROPERTY_AXIS_LABELS );
+    return (String) get( PROPERTY_AXIS_LABELS );
   }
 
   /**
@@ -152,7 +152,7 @@ public class AdvancedChart<N extends Number> extends SimpleChart<N>
    */
   public void setAxisLabels( final String labels )
   {
-    setProperty( PROPERTY_AXIS_LABELS, labels );
+    set( PROPERTY_AXIS_LABELS, labels );
   }
 
   /**
@@ -174,7 +174,7 @@ public class AdvancedChart<N extends Number> extends SimpleChart<N>
    */
   public String getLabelPositions()
   {
-    return (String) getProperty( PROPERTY_LABEL_POSITIONS );
+    return (String) get( PROPERTY_LABEL_POSITIONS );
   }
 
   /**
@@ -187,7 +187,7 @@ public class AdvancedChart<N extends Number> extends SimpleChart<N>
    */
   public void setLabelPositions( final String positions )
   {
-    setProperty( PROPERTY_LABEL_POSITIONS, positions );
+    set( PROPERTY_LABEL_POSITIONS, positions );
   }
 
   /**
@@ -209,7 +209,7 @@ public class AdvancedChart<N extends Number> extends SimpleChart<N>
    */
   public String getAxisRanges()
   {
-    return (String) getProperty( PROPERTY_AXIS_RANGES );
+    return (String) get( PROPERTY_AXIS_RANGES );
   }
 
   /**
@@ -222,7 +222,7 @@ public class AdvancedChart<N extends Number> extends SimpleChart<N>
    */
   public void setAxisRanges( final String ranges )
   {
-    setProperty( PROPERTY_AXIS_RANGES, ranges );
+    set( PROPERTY_AXIS_RANGES, ranges );
   }
 
   /**
@@ -244,7 +244,7 @@ public class AdvancedChart<N extends Number> extends SimpleChart<N>
    */
   public String getAxisStyles()
   {
-    return (String) getProperty( PROPERTY_AXIS_STYLES );
+    return (String) get( PROPERTY_AXIS_STYLES );
   }
 
   /**
@@ -254,7 +254,7 @@ public class AdvancedChart<N extends Number> extends SimpleChart<N>
    */
   public void setAxisStyles( final String styles )
   {
-    setProperty( PROPERTY_AXIS_STYLES, styles );
+    set( PROPERTY_AXIS_STYLES, styles );
   }
 
   /**
@@ -264,7 +264,7 @@ public class AdvancedChart<N extends Number> extends SimpleChart<N>
    */
   public String getLineStyles()
   {
-    return (String) getProperty( PROPERTY_LINE_STYLES );
+    return (String) get( PROPERTY_LINE_STYLES );
   }
 
   /**
@@ -277,7 +277,7 @@ public class AdvancedChart<N extends Number> extends SimpleChart<N>
    */
   public void setLineStyles( final String styles )
   {
-    setProperty( PROPERTY_LINE_STYLES, styles );
+    set( PROPERTY_LINE_STYLES, styles );
   }
 
   /**
@@ -298,7 +298,7 @@ public class AdvancedChart<N extends Number> extends SimpleChart<N>
    */
   public String getGridLines()
   {
-    return (String) getProperty( PROPERTY_GRID_LINES );
+    return (String) get( PROPERTY_GRID_LINES );
   }
 
   /**
@@ -308,7 +308,7 @@ public class AdvancedChart<N extends Number> extends SimpleChart<N>
    */
   public void setGridLines( final String gridLines )
   {
-    setProperty( PROPERTY_GRID_LINES, gridLines );
+    set( PROPERTY_GRID_LINES, gridLines );
   }
 
   /**
@@ -318,7 +318,7 @@ public class AdvancedChart<N extends Number> extends SimpleChart<N>
    */
   public String getRangeMarkers()
   {
-    return (String) getProperty( PROPERTY_RANGE_MARKERS );
+    return (String) get( PROPERTY_RANGE_MARKERS );
   }
 
   /**
@@ -331,7 +331,7 @@ public class AdvancedChart<N extends Number> extends SimpleChart<N>
    */
   public void setRangeMarkers( final String markers )
   {
-    setProperty( PROPERTY_RANGE_MARKERS, markers );
+    set( PROPERTY_RANGE_MARKERS, markers );
   }
 
   /**
@@ -352,7 +352,7 @@ public class AdvancedChart<N extends Number> extends SimpleChart<N>
    */
   public String getFillArea()
   {
-    return (String) getProperty( PROPERTY_FILL_AREA );
+    return (String) get( PROPERTY_FILL_AREA );
   }
 
   /**
@@ -365,7 +365,7 @@ public class AdvancedChart<N extends Number> extends SimpleChart<N>
    */
   public void setFillArea( final String area )
   {
-    setProperty( PROPERTY_FILL_AREA, area );
+    set( PROPERTY_FILL_AREA, area );
   }
 
   /**

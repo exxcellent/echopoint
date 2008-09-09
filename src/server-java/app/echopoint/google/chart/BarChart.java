@@ -88,7 +88,7 @@ public class BarChart<N extends Number> extends AdvancedChart<N>
    */
   public String getOrientation()
   {
-    return (String) getProperty( PROPERTY_ORIENTATION );
+    return (String) get( PROPERTY_ORIENTATION );
   }
 
   /**
@@ -100,7 +100,7 @@ public class BarChart<N extends Number> extends AdvancedChart<N>
    */
   public void setOrientation( final String orientation )
   {
-    setProperty( PROPERTY_ORIENTATION, orientation );
+    set( PROPERTY_ORIENTATION, orientation );
   }
 
   /**
@@ -121,7 +121,7 @@ public class BarChart<N extends Number> extends AdvancedChart<N>
    */
   public String getSize()
   {
-    return (String) getProperty( PROPERTY_SIZE );
+    return (String) get( PROPERTY_SIZE );
   }
 
   /**
@@ -132,7 +132,7 @@ public class BarChart<N extends Number> extends AdvancedChart<N>
    */
   public void setSize( final String size )
   {
-    setProperty( PROPERTY_SIZE, size );
+    set( PROPERTY_SIZE, size );
   }
 
   /**
@@ -154,7 +154,7 @@ public class BarChart<N extends Number> extends AdvancedChart<N>
    */
   public String getZeroLine()
   {
-    return (String) getProperty( PROPERTY_ZERO_LINE );
+    return (String) get( PROPERTY_ZERO_LINE );
   }
 
   /**
@@ -165,7 +165,7 @@ public class BarChart<N extends Number> extends AdvancedChart<N>
    */
   public void setZeroLine( final String zeroLine )
   {
-    setProperty( PROPERTY_ZERO_LINE, zeroLine );
+    set( PROPERTY_ZERO_LINE, zeroLine );
   }
 
   /**

@@ -318,7 +318,7 @@
       author='yes' use='yes' splitindex='yes'
       Overview='${dir.src.server.app}/overview.html'
       Header='${javadoc.header}' DocTitle='${javadoc.doctitle.app}'
-      Windowtitle='${javadoc.windowtitle}'
+      Windowtitle='${javadoc.windowtitle}' stylesheetfile='${javadoc.cssfile}'
       linksource='yes' access='protected' defaultexcludes='yes' >
 
       <link href='http://docs.rakeshv.org/java/j2sdk1.5/docs/api/' />
@@ -338,7 +338,7 @@
       author='yes' use='yes' splitindex='yes'
       Overview='${dir.src.server.webcontainer}/overview.html'
       Header='${javadoc.header}' DocTitle='${javadoc.doctitle.webcontainer}'
-      Windowtitle='${javadoc.windowtitle}'
+      Windowtitle='${javadoc.windowtitle}' stylesheetfile='${javadoc.cssfile}'
       linksource='yes' access='protected' defaultexcludes='yes' >
 
       <link href='${jse.doc.link}' />

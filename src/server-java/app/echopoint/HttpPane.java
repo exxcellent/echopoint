@@ -75,7 +75,7 @@ public class HttpPane extends AbstractContainer
    */
   public String getUri()
   {
-    return (String) getProperty( PROPERTY_URI );
+    return (String) get( PROPERTY_URI );
   }
 
   /**
@@ -85,7 +85,7 @@ public class HttpPane extends AbstractContainer
    */
   public void setUri( final String uri )
   {
-    setProperty( PROPERTY_URI, uri );
+    set( PROPERTY_URI, uri );
   }
 
   /**

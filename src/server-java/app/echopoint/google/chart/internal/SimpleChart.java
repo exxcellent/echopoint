@@ -43,7 +43,7 @@ public class SimpleChart<N extends Number> extends AbstractChart<N>
    */
   public String getLegendPosition()
   {
-    return (String) getProperty( PROPERTY_LEGEND_POSITION );
+    return (String) get( PROPERTY_LEGEND_POSITION );
   }
 
   /**
@@ -53,6 +53,6 @@ public class SimpleChart<N extends Number> extends AbstractChart<N>
    */
   public void setLegendPosition( final String legendPosition )
   {
-    setProperty( PROPERTY_LEGEND_POSITION, legendPosition );
+    set( PROPERTY_LEGEND_POSITION, legendPosition );
   }
 }

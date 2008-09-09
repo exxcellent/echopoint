@@ -65,7 +65,7 @@ public class Meter extends AbstractChart<Integer>
    */
   public String getLabel()
   {
-    return (String) getProperty( PROPERTY_LABEL );
+    return (String) get( PROPERTY_LABEL );
   }
 
   /**
@@ -75,6 +75,6 @@ public class Meter extends AbstractChart<Integer>
    */
   public void setLabel( final String label )
   {
-    setProperty( PROPERTY_LABEL, label );
+    set( PROPERTY_LABEL, label );
   }
 }

@@ -77,7 +77,7 @@ public class AbstractContainer extends Component
    */
   public Alignment getAlignment()
   {
-    return (Alignment) getProperty( PROPERTY_ALIGNMENT );
+    return (Alignment) get( PROPERTY_ALIGNMENT );
   }
 
   /**
@@ -87,7 +87,7 @@ public class AbstractContainer extends Component
    */
   public void setAlignment( final Alignment alignment )
   {
-    setProperty( PROPERTY_ALIGNMENT, alignment );
+    set( PROPERTY_ALIGNMENT, alignment );
   }
 
   /**
@@ -97,7 +97,7 @@ public class AbstractContainer extends Component
    */
   public ImageReference getBackgroundImage()
   {
-    return (ImageReference) getProperty( PROPERTY_BACKGROUND_IMAGE );
+    return (ImageReference) get( PROPERTY_BACKGROUND_IMAGE );
   }
 
   /**
@@ -107,7 +107,7 @@ public class AbstractContainer extends Component
    */
   public void setBackgroundImage( final ImageReference backgroundImage )
   {
-    setProperty( PROPERTY_BACKGROUND_IMAGE, backgroundImage );
+    set( PROPERTY_BACKGROUND_IMAGE, backgroundImage );
   }
 
   /**
@@ -117,7 +117,7 @@ public class AbstractContainer extends Component
    */
   public Border getBorder()
   {
-    return (Border) getProperty( PROPERTY_BORDER );
+    return (Border) get( PROPERTY_BORDER );
   }
 
   /**
@@ -127,7 +127,7 @@ public class AbstractContainer extends Component
    */
   public void setBorder( final Border border )
   {
-    setProperty( PROPERTY_BORDER, border );
+    set( PROPERTY_BORDER, border );
   }
 
   /**
@@ -137,7 +137,7 @@ public class AbstractContainer extends Component
    */
   public Insets getInsets()
   {
-    return (Insets) getProperty( PROPERTY_INSETS );
+    return (Insets) get( PROPERTY_INSETS );
   }
 
   /**
@@ -147,7 +147,7 @@ public class AbstractContainer extends Component
    */
   public void setInsets( final Insets insets )
   {
-    setProperty( PROPERTY_INSETS, insets );
+    set( PROPERTY_INSETS, insets );
   }
 
   /**
@@ -157,7 +157,7 @@ public class AbstractContainer extends Component
    */
   public Extent getHeight()
   {
-    return (Extent) getProperty( PROPERTY_HEIGHT );
+    return (Extent) get( PROPERTY_HEIGHT );
   }
 
   /**
@@ -167,7 +167,7 @@ public class AbstractContainer extends Component
    */
   public void setHeight( final Extent height )
   {
-    setProperty( PROPERTY_HEIGHT, height );
+    set( PROPERTY_HEIGHT, height );
   }
 
   /**
@@ -177,7 +177,7 @@ public class AbstractContainer extends Component
    */
   public Extent getWidth()
   {
-    return (Extent) getProperty( PROPERTY_WIDTH );
+    return (Extent) get( PROPERTY_WIDTH );
   }
 
   /**
@@ -187,6 +187,6 @@ public class AbstractContainer extends Component
    */
   public void setWidth( final Extent width )
   {
-    setProperty( PROPERTY_WIDTH, width );
+    set( PROPERTY_WIDTH, width );
   }
 }
