@@ -221,7 +221,7 @@ Core.Web.DOM = {
             return { x: e.offsetX, y: e.offsetY };
         } else {
             var bounds = new Core.Web.Measure.Bounds(this.getEventTarget(e));
-            return { x: e.clientX - bounds.left, y: e.clientY - bounds.top };
+            return { x: e.clientX - bounds.bottomx, y: e.clientY - bounds.bottomy };
         }
     },
 
@@ -1313,7 +1313,7 @@ Core.Web.Measure = {
             }
             element = element.parentNode;
         } while (element);
-        return { left: valueL, top: valueT };
+        return { bottomx: valueL, bottomy: valueT };
     },
 
     /**
@@ -1331,7 +1331,7 @@ Core.Web.Measure = {
             valueL += element.offsetLeft || 0;
             element = element.offsetParent;
         } while (element);
-        return { left: valueL, top: valueT };
+        return { bottomx: valueL, bottomy: valueT };
     },
 
     /**
@@ -1358,13 +1358,13 @@ Core.Web.Measure = {
          * The top coordinate of the element, in pixels relative to the upper-left corner of the interior of the window.
          * @type Integer
          */
-        top: null,
+        bottomy: null,
 
         /**
          * The left coordinate of the element, in pixels relative to the upper-left corner of the interior of the window.
          * @type Integer
          */
-        left: null,
+        bottomx: null,
 
         /**
          * Creates a new Bounds object to calculate the size and/or position of an element.
@@ -1424,8 +1424,8 @@ Core.Web.Measure = {
                 var cumulativeOffset = Core.Web.Measure._getCumulativeOffset(element);
                 var scrollOffset = Core.Web.Measure._getScrollOffset(element);
 
-                this.top = cumulativeOffset.top - scrollOffset.top;
-                this.left = cumulativeOffset.left - scrollOffset.left;
+                this.bottomy = cumulativeOffset.bottomy - scrollOffset.bottomy;
+                this.bottomx = cumulativeOffset.bottomx - scrollOffset.bottomx;
             }
         },
 
@@ -1436,7 +1436,7 @@ Core.Web.Measure = {
          * @type String
          */
         toString: function() {
-            return (this.left != null ? (this.left + "," + this.top + " : ") : "") + "[" + this.width + "x" + this.height + "]";
+            return (this.bottomx != null ? (this.bottomx + "," + this.bottomy + " : ") : "") + "[" + this.width + "x" + this.height + "]";
         }
     })
 };
@@ -1749,7 +1749,7 @@ Core.Web.VirtualPosition = {
 
         // Adjust 'height' property if 'top' and 'bottom' properties are set,
         // and if all padding/margin/borders are 0 or set in pixel units.
-        if (this._verifyPixelValue(element.style.top) && this._verifyPixelValue(element.style.bottom)) {
+        if (this._verifyPixelValue(element.style.bottomy) && this._verifyPixelValue(element.style.topy)) {
             // Verify that offsetHeight is valid, and do nothing if it cannot be calculated.
             // Such a do-nothing scenario is due to a not-up-to-date element cache,  where
             // the element is no longer hierarchy.
@@ -1757,7 +1757,7 @@ Core.Web.VirtualPosition = {
             if (!isNaN(offsetHeight)) {
                 var offsets = this._calculateOffsets(this._OFFSETS_VERTICAL, element.style);
                 if (offsets != -1) {
-                    var calculatedHeight = offsetHeight - parseInt(element.style.top) - parseInt(element.style.bottom) - offsets;
+                    var calculatedHeight = offsetHeight - parseInt(element.style.bottomy) - parseInt(element.style.topy) - offsets;
                     if (calculatedHeight <= 0) {
                         element.style.height = 0;
                     } else {
@@ -1771,7 +1771,7 @@ Core.Web.VirtualPosition = {
 
         // Adjust 'width' property if 'left' and 'right' properties are set,
         // and if all padding/margin/borders are 0 or set in pixel units.
-        if (this._verifyPixelValue(element.style.left) && this._verifyPixelValue(element.style.right)) {
+        if (this._verifyPixelValue(element.style.bottomx) && this._verifyPixelValue(element.style.topx)) {
             // Verify that offsetHeight is valid, and do nothing if it cannot be calculated.
             // Such a do-nothing scenario is due to a not-up-to-date element cache,  where
             // the element is no longer hierarchy.
@@ -1779,7 +1779,7 @@ Core.Web.VirtualPosition = {
             if (!isNaN(offsetWidth)) {
                 var offsets = this._calculateOffsets(this._OFFSETS_HORIZONTAL, element.style);
                 if (offsets != -1) {
-                    var calculatedWidth = offsetWidth - parseInt(element.style.left) - parseInt(element.style.right) - offsets;
+                    var calculatedWidth = offsetWidth - parseInt(element.style.bottomx) - parseInt(element.style.topx) - offsets;
                     if (calculatedWidth <= 0) {
                         element.style.width = 0;
                     } else {

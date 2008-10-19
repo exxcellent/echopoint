@@ -252,10 +252,10 @@ echopoint.test.TestApp.StyleSheet = new Echo.StyleSheet(
       menuOpacity: 92,
       menuBackgroundImage: "image/GreyMenuBackground.png",
       menuBorder: {
-        top: "1px solid #3f3f3f",
-        left: "1px solid #3f3f3f",
-        right: "1px solid #1f1f1f",
-        bottom: "1px solid #1f1f1f"
+        bottomy: "1px solid #3f3f3f",
+        bottomx: "1px solid #3f3f3f",
+        topx: "1px solid #1f1f1f",
+        topy: "1px solid #1f1f1f"
       },
       selectionBackground: "#fffac1",
       selectionBackgroundImage: {
@@ -296,12 +296,12 @@ echopoint.test.TestApp.StyleSheet = new Echo.StyleSheet(
         contentInsets: "8px 14px 14px 8px",
         borderInsets: "17px 23px 23px 17px",
         topLeft: "image/window/simple/BorderTopLeft.png",
-        top: "image/window/simple/BorderTop.png",
+        bottomy: "image/window/simple/BorderTop.png",
         topRight: "image/window/simple/BorderTopRight.png",
-        left: "image/window/simple/BorderLeft.png",
-        right: "image/window/simple/BorderRight.png",
+        bottomx: "image/window/simple/BorderLeft.png",
+        topx: "image/window/simple/BorderRight.png",
         bottomLeft: "image/window/simple/BorderBottomLeft.png",
-        bottom: "image/window/simple/BorderBottom.png",
+        topy: "image/window/simple/BorderBottom.png",
         bottomRight: "image/window/simple/BorderBottomRight.png"
       }
     },
@@ -360,7 +360,7 @@ echopoint.test.TestApp.StyleSheet = new Echo.StyleSheet(
       alignment: "center",
       background: "#1f1f1f",
       textAlignment: "center",
-      textPosition: "bottom",
+      textPosition: "topy",
       rolloverEnabled: true,
       rolloverBackground: "#5c5c5c",
       foreground: "#ffffff",
@@ -380,7 +380,7 @@ echopoint.test.TestApp.StyleSheet = new Echo.StyleSheet(
     "Button": {
       alignment: "center",
       textAlignment: "center",
-      textPosition: "bottom",
+      textPosition: "topy",
       foreground: "#ffffff",
       backgroundImage: "image/DemoSelectButtonSelectedBackground.png",
       font: { size: "9pt" },
@@ -408,12 +408,12 @@ echopoint.test.TestApp.StyleSheet = new Echo.StyleSheet(
         contentInsets: "6px 15px 15px 12px",
         borderInsets: "34px 20px 20px 20px",
         topLeft: "image/window/glassblue/BorderTopLeft.png",
-        top: "image/window/glassblue/BorderTop.png",
+        bottomy: "image/window/glassblue/BorderTop.png",
         topRight: "image/window/glassblue/BorderTopRight.png",
-        left: "image/window/glassblue/BorderLeft.png",
-        right: "image/window/glassblue/BorderRight.png",
+        bottomx: "image/window/glassblue/BorderLeft.png",
+        topx: "image/window/glassblue/BorderRight.png",
         bottomLeft: "image/window/glassblue/BorderBottomLeft.png",
-        bottom: "image/window/glassblue/BorderBottom.png",
+        topy: "image/window/glassblue/BorderBottom.png",
         bottomRight: "image/window/glassblue/BorderBottomRight.png"
       }
     }
@@ -437,12 +437,12 @@ echopoint.test.TestApp.StyleSheet = new Echo.StyleSheet(
         contentInsets: "6px 15px 15px 12px",
         borderInsets: "34px 20px 20px 20px",
         topLeft: "image/window/glassblue2/BorderTopLeft.png",
-        top: "image/window/glassblue2/BorderTop.png",
+        bottomy: "image/window/glassblue2/BorderTop.png",
         topRight: "image/window/glassblue2/BorderTopRight.png",
-        left: "image/window/glassblue2/BorderLeft.png",
-        right: "image/window/glassblue2/BorderRight.png",
+        bottomx: "image/window/glassblue2/BorderLeft.png",
+        topx: "image/window/glassblue2/BorderRight.png",
         bottomLeft: "image/window/glassblue2/BorderBottomLeft.png",
-        bottom: "image/window/glassblue2/BorderBottom.png",
+        topy: "image/window/glassblue2/BorderBottom.png",
         bottomRight: "image/window/glassblue2/BorderBottomRight.png"
       }
     }
@@ -554,7 +554,7 @@ echopoint.test.TestApp.StyleSheet = new Echo.StyleSheet(
       rolloverForeground: "#fffed0",
       alignment: "center",
       textAlignment: "center",
-      textPosition: "bottom",
+      textPosition: "topy",
       iconTextMargin: 1,
       layoutData: {
         alignment: "center"
@@ -564,10 +564,10 @@ echopoint.test.TestApp.StyleSheet = new Echo.StyleSheet(
   "PreferencesColumn": {
     "Column": {
       border: {
-        left: "1px solid #afafaf",
-        top: "1px solid #afafaf",
-        right: "1px solid #dfdfdf",
-        bottom: "1px solid #dfdfdf"
+        bottomx: "1px solid #afafaf",
+        bottomy: "1px solid #afafaf",
+        topx: "1px solid #dfdfdf",
+        topy: "1px solid #dfdfdf"
       },
       cellSpacing: 8,
       insets: "8px 20px"
@@ -619,12 +619,12 @@ echopoint.test.TestApp.StyleSheet = new Echo.StyleSheet(
         contentInsets: "6px 15px 15px 12px",
         borderInsets: "34px 20px 20px 20px",
         topLeft: "image/window/transgreen/BorderTopLeft.png",
-        top: "image/window/transgreen/BorderTop.png",
+        bottomy: "image/window/transgreen/BorderTop.png",
         topRight: "image/window/transgreen/BorderTopRight.png",
-        left: "image/window/transgreen/BorderLeft.png",
-        right: "image/window/transgreen/BorderRight.png",
+        bottomx: "image/window/transgreen/BorderLeft.png",
+        topx: "image/window/transgreen/BorderRight.png",
         bottomLeft: "image/window/transgreen/BorderBottomLeft.png",
-        bottom: "image/window/transgreen/BorderBottom.png",
+        topy: "image/window/transgreen/BorderBottom.png",
         bottomRight: "image/window/transgreen/BorderBottomRight.png"
       }
     }

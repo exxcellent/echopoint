@@ -214,6 +214,8 @@
         <file name='Sync.HtmlLabel.js'/>
         <file name='Application.HttpPane.js'/>
         <file name='Sync.HttpPane.js'/>
+        <file name='Application.ImageMap.js'/>
+        <file name='Sync.ImageMap.js'/>
         <file name='Application.Strut.js'/>
         <file name='Sync.Strut.js'/>
         <file name='Application.TagCloud.js'/>
@@ -245,6 +247,7 @@
         <file name='DirectHtmlTest.js'/>
         <file name='HtmlLabelTest.js'/>
         <file name='HttpPaneTest.js'/>
+        <file name='ImageMapTest.js'/>
         <file name='StrutTest.js'/>
         <file name='TagCloudTest.js'/>
         <file name='BarChartTest.js'/>

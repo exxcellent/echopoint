@@ -4,23 +4,23 @@
 Echo.Sync.SplitPane = Core.extend(Echo.Render.ComponentSync, {
 
     $static: {
-    
-        /**    
+
+        /**
          * @class Describes the configuration of a child pane of the SplitPane,
          *        including the child component and scroll bar positions.
          */
         ChildPane: Core.extend({
-        
+
             minimumSize: 0,
             maximumSize: null,
             component: null,
             layoutData: null,
             scrollLeft: 0,
             scrolltop: 0,
-        
+
             /**
              * Creates a new PaneConfiguration instance
-             * 
+             *
              * @param {Echo.Sync.SplitPane} splitPanePeer the relevant componentPeer
              * @param {Echo.Component} component the child component
              */
@@ -29,21 +29,21 @@ Echo.Sync.SplitPane = Core.extend(Echo.Render.ComponentSync, {
                 this.layoutData = component.render("layoutData");
                 if (this.layoutData) {
                     if (this.layoutData.minimumSize) {
-                        this.minimumSize = Echo.Sync.Extent.toPixels(this.layoutData.minimumSize, 
+                        this.minimumSize = Echo.Sync.Extent.toPixels(this.layoutData.minimumSize,
                                 !splitPanePeer._orientationVertical);
                     }
                     if (this.layoutData.maximumSize) {
-                        this.maximumSize = Echo.Sync.Extent.toPixels(this.layoutData.maximumSize, 
+                        this.maximumSize = Echo.Sync.Extent.toPixels(this.layoutData.maximumSize,
                                 !splitPanePeer._orientationVertical);
                     }
                 }
             },
-            
+
             loadScrollPositions: function(paneDiv) {
                 paneDiv.scrollLeft = this.scrollLeft;
                 paneDiv.scrollTop = this.scrollTop;
             },
-            
+
             storeScrollPositions: function(paneDiv) {
                 this.scrollLeft = paneDiv.scrollLeft;
                 this.scrollTop = paneDiv.scrollTop;
@@ -62,7 +62,7 @@ Echo.Sync.SplitPane = Core.extend(Echo.Render.ComponentSync, {
     _childPanes: null,
     _paneDivs: null,
     _separatorDiv: null,
-    
+
     /**
      * The user's desired position of the separator.  This is the last
      * position to which the user dragged the separator or the last position
@@ -72,14 +72,14 @@ Echo.Sync.SplitPane = Core.extend(Echo.Render.ComponentSync, {
      * @type Integer
      */
     _requested: null,
-    
+
     /**
      * Current rendered separator position.
      */
     _rendered: null,
 
     _processSeparatorMouseMoveRef: null,
-    
+
     _processSeparatorMouseUpRef: null,
 
     $construct: function() {
@@ -90,11 +90,11 @@ Echo.Sync.SplitPane = Core.extend(Echo.Render.ComponentSync, {
     },
 
     loadRenderData: function() {
-        var orientation = this.component.render("orientation", 
+        var orientation = this.component.render("orientation",
                 Echo.SplitPane.ORIENTATION_HORIZONTAL_LEADING_TRAILING);
         // FIXME: RTL is hardcoded to false.
         var rtl = false;
-     
+
         switch (orientation) {
         case Echo.SplitPane.ORIENTATION_HORIZONTAL_LEADING_TRAILING:
             this._orientationTopLeft = !rtl;
@@ -127,10 +127,10 @@ Echo.Sync.SplitPane = Core.extend(Echo.Render.ComponentSync, {
         this._requested = this.component.render("separatorPosition");
         this._separatorSize = Echo.Sync.Extent.toPixels(this.component.render(
                 this._orientationVertical ? "separatorHeight" : "separatorWidth",
-                this._resizable ? Echo.SplitPane.DEFAULT_SEPARATOR_SIZE_RESIZABLE 
+                this._resizable ? Echo.SplitPane.DEFAULT_SEPARATOR_SIZE_RESIZABLE
                 : Echo.SplitPane.DEFAULT_SEPARATOR_SIZE_FIXED), this._orientationVertical);
     },
-    
+
     _processKeyPress: function(e) {
         switch (e.keyCode) {
         case 37:
@@ -173,57 +173,57 @@ Echo.Sync.SplitPane = Core.extend(Echo.Render.ComponentSync, {
             break;
         }
         return true;
-    }, 
-    
+    },
+
     _processSeparatorMouseDown: function(e) {
         if (!this.client.verifyInput(this.component)) {
             return true;
         }
-    
+
         Core.Web.DOM.preventEventDefault(e);
-        
+
         Core.Web.dragInProgress = true;
-    
+
         this._dragInitPosition = this._rendered;
         if (this._orientationVertical) {
             this._dragInitMouseOffset = e.clientY;
         } else {
             this._dragInitMouseOffset = e.clientX;
         }
-        
+
         Core.Web.Event.add(document.body, "mousemove", this._processSeparatorMouseMoveRef, true);
         Core.Web.Event.add(document.body, "mouseup", this._processSeparatorMouseUpRef, true);
     },
-    
+
     _processSeparatorMouseMove: function(e) {
         var mousePosition = this._orientationVertical ? e.clientY : e.clientX;
         this._setSeparatorPosition(this._orientationTopLeft
                 ? this._dragInitPosition + mousePosition - this._dragInitMouseOffset
                 : this._dragInitPosition - mousePosition + this._dragInitMouseOffset);
     },
-    
+
     _processSeparatorMouseUp: function(e) {
         Core.Web.DOM.preventEventDefault(e);
-        
+
         Core.Web.dragInProgress = false;
-    
+
         this._removeSeparatorListeners();
         this.component.set("separatorPosition", this._rendered);
-        
+
         // inform renderer that separatorposition is currently drawn as this._rendered
-        
+
         this._requested = this._rendered;
-    
+
         if (this._paneDivs[0]) {
             Core.Web.VirtualPosition.redraw(this._paneDivs[0]);
         }
         if (this._paneDivs[1]) {
             Core.Web.VirtualPosition.redraw(this._paneDivs[1]);
         }
-    
+
         Echo.Render.notifyResize(this.component);
     },
-    
+
     _getInsetsSizeAdjustment: function(layoutData) {
         if (!layoutData || layoutData.insets == null || layoutDataInsets == 0) {
             return 0;
@@ -231,26 +231,26 @@ Echo.Sync.SplitPane = Core.extend(Echo.Render.ComponentSync, {
         var layoutDataInsets = Echo.Sync.Insets.toPixels(layoutData.insets);
         var adjustment;
         if (this._orientationVertical) {
-            adjustment = layoutDataInsets.top + layoutDataInsets.bottom;
+            adjustment = layoutDataInsets.bottomy + layoutDataInsets.topy;
         } else {
-            adjustment = layoutDataInsets.left + layoutDataInsets.right;
+            adjustment = layoutDataInsets.bottomx + layoutDataInsets.topx;
         }
         if (adjustment > this._rendered) {
             adjustment = this._rendered;
         }
         return adjustment;
     },
-    
+
     _hasRelocatedChildren: function(update) {
-        var oldChild0 = this._childPanes[0] ? this._childPanes[0].component : null; 
-        var oldChild1 = this._childPanes[1] ? this._childPanes[1].component : null; 
+        var oldChild0 = this._childPanes[0] ? this._childPanes[0].component : null;
+        var oldChild1 = this._childPanes[1] ? this._childPanes[1].component : null;
         var childCount = this.component.getComponentCount();
         var newChild0 = childCount > 0 ? this.component.getComponent(0) : null;
         var newChild1 = childCount > 1 ? this.component.getComponent(1) : null;
-        return (oldChild0 != null && oldChild0 == newChild1) 
+        return (oldChild0 != null && oldChild0 == newChild1)
                 || (oldChild1 != null && oldChild1 == newChild0);
     },
-    
+
     _redraw: function() {
         var insetsAdjustment = 0;
         if (this.component.getComponentCount() > 0) {
@@ -260,24 +260,24 @@ Echo.Sync.SplitPane = Core.extend(Echo.Render.ComponentSync, {
 
         var sizeAttr = this._orientationVertical ? "height" : "width";
         var positionAttr = this._orientationVertical
-                ? (this._orientationTopLeft ? "top" : "bottom")
-                : (this._orientationTopLeft ? "left" : "right");
+                ? (this._orientationTopLeft ? "bottomy" : "topy")
+                : (this._orientationTopLeft ? "bottomx" : "topx");
         this._redrawItem(this._paneDivs[0], sizeAttr, (this._rendered - insetsAdjustment) + "px");
         this._redrawItem(this._paneDivs[1], positionAttr, (this._rendered + this._separatorSize) + "px");
         this._redrawItem(this._separatorDiv, positionAttr, this._rendered + "px");
     },
-    
+
     _redrawItem: function(element, styleProperty, newValue) {
         if (element) {
             element.style[styleProperty] = newValue;
         }
     },
-    
+
     _removeSeparatorListeners: function() {
         Core.Web.Event.remove(document.body, "mousemove", this._processSeparatorMouseMoveRef, true);
         Core.Web.Event.remove(document.body, "mouseup", this._processSeparatorMouseUpRef, true);
     },
-    
+
     renderAdd: function(update, parentElement) {
         this.loadRenderData();
 
@@ -287,20 +287,20 @@ Echo.Sync.SplitPane = Core.extend(Echo.Render.ComponentSync, {
         }
         var child0 = childCount < 1 ? null : this.component.getComponent(0);
         var child1 = childCount < 2 ? null : this.component.getComponent(1);
-    
+
         this._splitPaneDiv = document.createElement("div");
         this._splitPaneDiv.id = this.component.renderId;
         this._splitPaneDiv.style.cssText = "position:absolute;overflow:hidden;top:0;left:0;right:0;bottom:0;";
-        
+
         Echo.Sync.Color.renderFB(this.component, this._splitPaneDiv);
         Echo.Sync.Font.render(this.component.render("font"), this._splitPaneDiv);
-        
+
         if (this._separatorSize > 0) {
             this._separatorDiv = document.createElement("div");
             this._separatorDiv.style.cssText = "position:absolute;font-size:1px;line-height:0;z-index:2;";
-            Echo.Sync.Color.render(this.component.render("separatorColor", Echo.SplitPane.DEFAULT_SEPARATOR_COLOR), 
+            Echo.Sync.Color.render(this.component.render("separatorColor", Echo.SplitPane.DEFAULT_SEPARATOR_COLOR),
                     this._separatorDiv, "backgroundColor");
-    
+
             var resizeCursor = null;
             if (this._orientationVertical) {
                 resizeCursor = this._orientationTopLeft ? "s-resize" : "n-resize";
@@ -320,31 +320,31 @@ Echo.Sync.SplitPane = Core.extend(Echo.Render.ComponentSync, {
         } else {
             this._separatorDiv = null;
         }
-        
+
         for (var i = 0; i < childCount && i < 2; ++i) {
             var child = this.component.getComponent(i);
             this._renderAddChild(update, child, i);
         }
-        
+
         parentElement.appendChild(this._splitPaneDiv);
-        
-        Core.Web.Event.add(this._splitPaneDiv, 
-                Core.Web.Env.QUIRK_IE_KEY_DOWN_EVENT_REPEAT ? "keydown" : "keypress", 
+
+        Core.Web.Event.add(this._splitPaneDiv,
+                Core.Web.Env.QUIRK_IE_KEY_DOWN_EVENT_REPEAT ? "keydown" : "keypress",
                 Core.method(this, this._processKeyPress), false);
-                
+
         if (this._resizable) {
-            Core.Web.Event.add(this._separatorDiv, "mousedown", 
+            Core.Web.Event.add(this._separatorDiv, "mousedown",
                     Core.method(this, this._processSeparatorMouseDown), false);
         }
     },
-    
+
     _renderAddChild: function(update, child, index) {
         var childIndex = this.component.indexOf(child);
         var paneDiv = document.createElement("div");
         this._paneDivs[index] = paneDiv;
-        
+
         paneDiv.style.cssText = "position: absolute; overflow: auto; z-index: 1;";
-        
+
         var layoutData = child.render("layoutData");
         if (layoutData) {
             Echo.Sync.Alignment.render(layoutData.alignment, paneDiv, false, this.component);
@@ -365,62 +365,62 @@ Echo.Sync.SplitPane = Core.extend(Echo.Render.ComponentSync, {
         if (child.pane) {
             paneDiv.style.overflow = "hidden";
         }
-        
+
         var insetsAdjustment = this._getInsetsSizeAdjustment(layoutData);
         var renderingTopLeft = (index == 0 && this._orientationTopLeft) || (index != 0 && !this._orientationTopLeft);
-                
+
         if (this._orientationVertical) {
-            paneDiv.style.left = "0";
-            paneDiv.style.right = "0";
+            paneDiv.style.bottomx = "0";
+            paneDiv.style.topx = "0";
             if (this._orientationTopLeft) {
                 if (index == 0) {
-                    paneDiv.style.top = "0";
+                    paneDiv.style.bottomy = "0";
                     paneDiv.style.height = (this._rendered - insetsAdjustment) + "px";
                 } else {
-                    paneDiv.style.top = (this._rendered + this._separatorSize) + "px";
-                    paneDiv.style.bottom = "0";
+                    paneDiv.style.bottomy = (this._rendered + this._separatorSize) + "px";
+                    paneDiv.style.topy = "0";
                 }
             } else {
                 if (index == 0) {
-                    paneDiv.style.bottom = "0";
+                    paneDiv.style.topy = "0";
                     paneDiv.style.height = (this._rendered - insetsAdjustment) + "px";
                 } else {
-                    paneDiv.style.top = "0";
-                    paneDiv.style.bottom = (this._rendered + this._separatorSize) + "px";
+                    paneDiv.style.bottomy = "0";
+                    paneDiv.style.topy = (this._rendered + this._separatorSize) + "px";
                 }
             }
         } else {
-            paneDiv.style.top = "0";
-            paneDiv.style.bottom = "0";
+            paneDiv.style.bottomy = "0";
+            paneDiv.style.topy = "0";
             if (this._orientationTopLeft) {
                 if (index == 0) {
-                    paneDiv.style.left = "0";
+                    paneDiv.style.bottomx = "0";
                     paneDiv.style.width = (this._rendered - insetsAdjustment) + "px";
                 } else {
-                    paneDiv.style.left = (this._rendered + this._separatorSize) + "px";
-                    paneDiv.style.right = "0";
+                    paneDiv.style.bottomx = (this._rendered + this._separatorSize) + "px";
+                    paneDiv.style.topx = "0";
                 }
             } else {
                 if (index == 0) {
                     paneDiv.style.width = (this._rendered - insetsAdjustment) + "px";
-                    paneDiv.style.right = "0";
+                    paneDiv.style.topx = "0";
                 } else {
-                    paneDiv.style.left = "0";
-                    paneDiv.style.right = (this._rendered + this._separatorSize) + "px";
+                    paneDiv.style.bottomx = "0";
+                    paneDiv.style.topx = (this._rendered + this._separatorSize) + "px";
                 }
             }
         }
-        
+
         Echo.Render.renderComponentAdd(update, child, paneDiv);
         this._splitPaneDiv.appendChild(paneDiv);
-    
+
         if (this._childPanes[index] && this._childPanes[index].component == child) {
             this._childPanes[index].loadScrollPositions(paneDiv);
         } else {
             this._childPanes[index] = new Echo.Sync.SplitPane.ChildPane(this, child);
         }
     },
-    
+
     renderDisplay: function() {
         Core.Web.VirtualPosition.redraw(this._splitPaneDiv);
         this._setSeparatorPosition(this._requested);
@@ -431,7 +431,7 @@ Echo.Sync.SplitPane = Core.extend(Echo.Render.ComponentSync, {
             Core.Web.VirtualPosition.redraw(this._paneDivs[1]);
         }
     },
-    
+
     renderDispose: function(update) {
         for (var i = 0; i < 2; ++i) {
             if (this._paneDivs[i]) {
@@ -441,17 +441,17 @@ Echo.Sync.SplitPane = Core.extend(Echo.Render.ComponentSync, {
                 this._paneDivs[i] = null;
             }
         }
-        
+
         if (this._separatorDiv) {
             Core.Web.Event.removeAll(this._separatorDiv);
             this._separatorDiv = null;
         }
 
         Core.Web.Event.removeAll(this._splitPaneDiv);
-    
+
         this._splitPaneDiv = null;
     },
-    
+
     _renderRemoveChild: function(update, child) {
         var index;
         if (this._childPanes[0] && this._childPanes[0].component == child) {
@@ -464,14 +464,14 @@ Echo.Sync.SplitPane = Core.extend(Echo.Render.ComponentSync, {
         }
 
         this._childPanes[index] = null;
-        
+
         Core.Web.DOM.removeNode(this._paneDivs[index]);
         this._paneDivs[index] = null;
     },
-        
+
     renderUpdate: function(update) {
         var fullRender = false;
-        
+
         if (this._hasRelocatedChildren()) {
             fullRender = true;
         } else if (update.hasUpdatedProperties() || update.hasUpdatedLayoutDataChildren()) {
@@ -482,7 +482,7 @@ Echo.Sync.SplitPane = Core.extend(Echo.Render.ComponentSync, {
                 fullRender = true;
             }
         }
-        
+
         if (!fullRender && (update.hasAddedChildren() || update.hasRemovedChildren())) {
             var removedChildren = update.getRemovedChildren();
             if (removedChildren) {
@@ -495,11 +495,11 @@ Echo.Sync.SplitPane = Core.extend(Echo.Render.ComponentSync, {
             if (addedChildren) {
                 // Add children.
                 for (var i = 0; i < addedChildren.length; ++i) {
-                    this._renderAddChild(update, addedChildren[i], this.component.indexOf(addedChildren[i])); 
+                    this._renderAddChild(update, addedChildren[i], this.component.indexOf(addedChildren[i]));
                 }
             }
         }
-        
+
         if (fullRender) {
             var element = this._splitPaneDiv;
             var containerElement = element.parentNode;
@@ -507,13 +507,13 @@ Echo.Sync.SplitPane = Core.extend(Echo.Render.ComponentSync, {
             containerElement.removeChild(element);
             this.renderAdd(update, containerElement);
         }
-        
+
         return fullRender;
     },
-    
+
     _setSeparatorPosition: function(newValue) {
         var oldValue = this._rendered;
-        
+
         if (newValue == null) {
             // If new value is null, attempt to retrieve from minimumSize property
             // of pane 0, then 1, then maximumSize property of pane 0, then 1, then
@@ -524,17 +524,17 @@ Echo.Sync.SplitPane = Core.extend(Echo.Render.ComponentSync, {
                     || (this._childPanes[1] ? this._childPanes[1].maximumSize : null)
                     || Echo.SplitPane.DEFAULT_SEPARATOR_POSITION;
         }
-        
+
         if (Echo.Sync.Extent.isPercent(newValue)) {
-            var totalSize = this._orientationVertical ? 
+            var totalSize = this._orientationVertical ?
                     this._splitPaneDiv.offsetHeight : this._splitPaneDiv.offsetWidth;
             newValue = parseInt((parseInt(newValue) / 100) * totalSize);
         } else {
             newValue = Echo.Sync.Extent.toPixels(newValue, !this._orientationVertical);
         }
-    
+
         if (this._childPanes[1]) {
-            var totalSize = this._orientationVertical ? 
+            var totalSize = this._orientationVertical ?
                     this._splitPaneDiv.offsetHeight : this._splitPaneDiv.offsetWidth;
             if (newValue > totalSize - this._childPanes[1].minimumSize - this._separatorSize) {
                 newValue = totalSize - this._childPanes[1].minimumSize - this._separatorSize;
@@ -550,9 +550,9 @@ Echo.Sync.SplitPane = Core.extend(Echo.Render.ComponentSync, {
                 newValue = this._childPanes[0].maximumSize;
             }
         }
-        
+
         this._rendered = newValue;
-        
+
         this._redraw();
     }
 });

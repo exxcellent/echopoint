@@ -206,8 +206,8 @@ Extras.Sync.RichTextArea = Core.extend(Echo.Arc.ComponentSync, {
     },
 
     createComponent: function() {
-        var borderSize = Echo.Sync.Border.getPixelSize(this.component.render("border", Extras.RichTextArea.DEFAULT_BORDER), "top")
-                + Echo.Sync.Border.getPixelSize(this.component.render("border", Extras.RichTextArea.DEFAULT_BORDER), "bottom");
+        var borderSize = Echo.Sync.Border.getPixelSize(this.component.render("border", Extras.RichTextArea.DEFAULT_BORDER), "bottomy")
+                + Echo.Sync.Border.getPixelSize(this.component.render("border", Extras.RichTextArea.DEFAULT_BORDER), "topy");
         this._trimHeight = borderSize;
 
         var features = this.component.render("features", Extras.Sync.RichTextArea.defaultFeatures);

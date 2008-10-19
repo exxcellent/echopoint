@@ -238,8 +238,8 @@ Extras.Sync.Menu.RenderedMenu = Core.extend({
     },
 
     add: function(x, y) {
-        this.element.style.left = x + "px";
-        this.element.style.top = y + "px";
+        this.element.style.bottomx = x + "px";
+        this.element.style.bottomy = y + "px";
 
         var animationTime = this.component.render("animationTime", 0);
         if (!animationTime || Core.Web.Env.NOT_SUPPORTED_CSS_OPACITY) {
@@ -353,9 +353,9 @@ Extras.Sync.Menu.RenderedMenu = Core.extend({
 
         if (hasIcons) {
             var pixelInsets = Echo.Sync.Insets.toPixels(Extras.Sync.Menu.RenderedMenu.defaultMenuItemInsets);
-            iconPadding = "0px 0px 0px " + pixelInsets.left + "px";
-            textPadding = pixelInsets.top + "px " + pixelInsets.right + "px " +
-                    pixelInsets.bottom + "px " + pixelInsets.left + "px";
+            iconPadding = "0px 0px 0px " + pixelInsets.bottomx + "px";
+            textPadding = pixelInsets.bottomy + "px " + pixelInsets.topx + "px " +
+                    pixelInsets.topy + "px " + pixelInsets.bottomx + "px";
         } else {
             textPadding = Extras.Sync.Menu.RenderedMenu.defaultMenuItemInsets;
         }
@@ -406,7 +406,7 @@ Extras.Sync.Menu.RenderedMenu = Core.extend({
                 if (item instanceof Extras.MenuModel) {
                     // Submenus have adjacent column containing 'expand' icons.
                     var menuItemArrowTdElement = document.createElement("td");
-                    menuItemArrowTdElement.style.textAlign = "right";
+                    menuItemArrowTdElement.style.textAlign = "topx";
                     var imgElement = document.createElement("img");
                     var expandImage = this.component.render("menuExpandIcon",
                             this.client.getResourceUrl("Extras", "image/menu/ArrowRight.gif"));
@@ -483,7 +483,7 @@ Extras.Sync.Menu.RenderedMenu = Core.extend({
         var itemBounds = new Core.Web.Measure.Bounds(menuElement);
         var menuBounds = new Core.Web.Measure.Bounds(this.element);
 
-        return { x: menuBounds.left + menuBounds.width, y: itemBounds.top };
+        return { x: menuBounds.bottomx + menuBounds.width, y: itemBounds.bottomy };
     },
 
     _processClick: function(e) {
@@ -666,8 +666,8 @@ Extras.Sync.DropDownMenu = Core.extend(Extras.Sync.Menu, {
 
     getSubMenuPosition: function(menuModel, width, height) {
         var bounds = new Core.Web.Measure.Bounds(this.element);
-        var x = bounds.left
-        var y = bounds.top + bounds.height;
+        var x = bounds.bottomx
+        var y = bounds.bottomy + bounds.height;
 
         var availableWidth = document.body.offsetWidth;
 
@@ -742,8 +742,8 @@ Extras.Sync.DropDownMenu = Core.extend(Extras.Sync.Menu, {
         var expandElement = document.createElement("span");
         expandElement.style.position = "absolute";
         expandElement.style.height = "100%";
-        expandElement.style.top = "0px";
-        expandElement.style.right = "0px";
+        expandElement.style.bottomy = "0px";
+        expandElement.style.topx = "0px";
         var imgElement = document.createElement("img");
         Echo.Sync.ImageReference.renderImg(expandIcon, imgElement);
         expandElement.appendChild(imgElement);
@@ -757,7 +757,7 @@ Extras.Sync.DropDownMenu = Core.extend(Extras.Sync.Menu, {
             Echo.Sync.Insets.render(insets, this._containerDivElement, "padding");
             if (height) {
                 var insetsPx = Echo.Sync.Insets.toPixels(insets);
-                var compensatedHeight = Math.max(0, Echo.Sync.Extent.toPixels(height) - insetsPx.top - insetsPx.bottom);
+                var compensatedHeight = Math.max(0, Echo.Sync.Extent.toPixels(height) - insetsPx.bottomy - insetsPx.topy);
                 this._containerDivElement.style.height = compensatedHeight + "px";
             }
         } else {
@@ -916,8 +916,8 @@ Extras.Sync.MenuBarPane = Core.extend(Extras.Sync.Menu, {
         var containerBounds = new Core.Web.Measure.Bounds(this.element);
         var itemBounds = new Core.Web.Measure.Bounds(itemElement);
 
-        var x = itemBounds.left
-        var y = containerBounds.top + containerBounds.height;
+        var x = itemBounds.bottomx
+        var y = containerBounds.bottomy + containerBounds.height;
 
         var availableWidth = document.body.offsetWidth;
 
@@ -992,10 +992,10 @@ Extras.Sync.MenuBarPane = Core.extend(Extras.Sync.Menu, {
         var menuBarDivElement = document.createElement("div");
         menuBarDivElement.id = this.component.renderId;
         menuBarDivElement.style.position = "absolute";
-        menuBarDivElement.style.left = "0px";
-        menuBarDivElement.style.right = "0px";
-        menuBarDivElement.style.top = "0px";
-        menuBarDivElement.style.bottom = "0px";
+        menuBarDivElement.style.bottomx = "0px";
+        menuBarDivElement.style.topx = "0px";
+        menuBarDivElement.style.bottomy = "0px";
+        menuBarDivElement.style.topy = "0px";
 
         Echo.Sync.Color.renderFB(this.component, menuBarDivElement);
         var border = this.component.render("border", Extras.Sync.Menu._defaultBorder);
