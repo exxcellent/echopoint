@@ -40,6 +40,7 @@ public class ComponentList extends Column
           "DirectHtml",
           "HtmlLabel",
           "HttpPane",
+          "ImageMap",
           "Strut",
           "TagCloud",
           "BarChart",

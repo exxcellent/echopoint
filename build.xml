@@ -151,6 +151,7 @@
       <lib file='${dir.dist}/${jarfile}' />
       <lib file='${dir.dist}/echopointtest.jar' />
       <lib dir='${dir.lib}' />
+      <fileset dir='${dir.src.client.test}/' includes='image/' />
     </war>
 
     <delete file='${dir.dist}/echopointtest.jar' />

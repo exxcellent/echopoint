@@ -19,18 +19,28 @@ package echopoint;
 
 import echopoint.internal.AbstractContainer;
 import echopoint.model.MapSection;
+import echopoint.model.CircleSection;
+import echopoint.model.PolygonSection;
+import echopoint.model.RectangleSection;
 import nextapp.echo.app.ImageReference;
 import nextapp.echo.app.HttpImageReference;
+import nextapp.echo.app.event.ActionListener;
+import nextapp.echo.app.event.ActionEvent;
 
 import java.util.Map;
 import java.util.LinkedHashMap;
 import java.util.Collections;
+import java.util.Collection;
+import java.util.EventListener;
+
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
 
 /**
  * The <code>ImageMap</code> class provides a {@link nextapp.echo.app.Component}
  * that allows a user to click on region(s) within a provided region.
  *
- * <p>A series of {@link echopoint.model.MapSection} instances are provided
+ * <p>A series of {@link echopoint.model.MapSection} instances are specified
  * that indicate what areas on the region should produce an
  * {@link nextapp.echo.app.event.ActionEvent}.</p>
  *
@@ -39,9 +49,30 @@ import java.util.Collections;
  * This means that there can be at  most one set of coordinates for a given
  * {@link echopoint.model.MapSection#actionCommand}.</p>
  *
- * <p><b>Note:</b> Development of this component was sponsoreed by
+ * <p><b>Note:</b> Development of this component was sponsored by
  * <a href='http://tcnbroadcasting.com/index.jsp' target='_top'>TCN
- * Braadcasting</a>.  We are grateful for their support and sponsorship.</p>
+ * Broadcasting</a>.  We are grateful for their support and sponsorship.</p>
+ *
+ * <p>The following shows sample usage of this component:</p>
+ * <pre>
+ *   import echopoint.ImageMap;
+ *   import echopoint.model.MapSection;
+ *   import echopoint.model.CircleSection;
+ *   import echopoint.model.RectangleSection;
+ *
+ *     ...
+ *     final Column column = new Column();
+ *     final String url = "image/imagemap.gif";
+ *     final ImageMap map = new ImageMap( url );
+ *     map.addActionListener( ... );
+ *
+ *     final Collection<MapSection> sections = new ArrayList<MapSection>();
+ *     sections.add( new CircleSection( 10, 10, 25, "circle" );
+ *     sections.add( new RectangleSection( 10, 10, 25, 25, "rectangle", "Rectangular area" );
+ *     map.addSections( sections );
+ *
+ *     column.add( map );
+ * </pre>
  *
  * @author Rakesh 2008-10-19, Brad Baker (originally for EPNG)
  * @version $Id$
@@ -50,8 +81,20 @@ public class ImageMap extends AbstractContainer
 {
   private static final long serialVersionUID = 1l;
 
+  /** The constant used to track changes to the action listener list. */
+  public static final String ACTION_LISTENERS_CHANGED_PROPERTY = "actionListeners";
+
+  /** The property name for the action command to be updated from client. */
+  public static final String ACTION_COMMAND_PROPERTY = "actionCommand";
+
+  /**
+   * The name of the action event registered in the peer when action
+   * listeners are added or removed.
+   */
+  public static final String INPUT_ACTION = "action";
+
   /** The image that is to be used as the map region. */
-  public static final String PROPERTY_IMAGE = "image";
+  public static final String PROPERTY_IMAGE = "url";
 
   /**
    * The JSON representation of the map of {@link echopoint.model.MapSection}
@@ -65,6 +108,9 @@ public class ImageMap extends AbstractContainer
    * {@link echopoint.model.MapSection#actionCommand} for the section.
    */
   private Map<String,MapSection> data = new LinkedHashMap<String,MapSection>();
+
+  /** The action command that was triggered by user interaction with map. */
+  private String actionCommand;
 
   /** Default constructor. */
   public ImageMap() {}
@@ -86,7 +132,7 @@ public class ImageMap extends AbstractContainer
    */
   public ImageMap( final String url )
   {
-    setImage( new HttpImageReference( url ) );
+    setImage( url );
   }
 
   /**
@@ -107,6 +153,16 @@ public class ImageMap extends AbstractContainer
   public void setImage( final ImageReference image )
   {
     set( PROPERTY_IMAGE, image );
+  }
+
+  /**
+   * Set the value of the {@link #PROPERTY_IMAGE} property.
+   *
+   * @param url The URL for the image to use as the map region.
+   */
+  public void setImage( final String url )
+  {
+    setImage( new HttpImageReference( url ) );
   }
 
   /**
@@ -133,12 +189,126 @@ public class ImageMap extends AbstractContainer
   }
 
   /**
+   * Add the specified collection of sections to the image map.
+   *
+   * @param sections The collection of sections to be added.
+   */
+  public void addSections( final Collection<MapSection> sections )
+  {
+    for ( MapSection section : sections )
+    {
+      if ( section.getActionCommand() != null )
+      {
+        data.put( section.getActionCommand(), section );
+      }
+    }
+
+    setSections( createSerialiser().toXML( data ) );
+  }
+
+  /**
    * Add the specified clickable section to the image map.
    *
    * @param section The section that is to be added.
    */
   public void addSection( final MapSection section )
   {
+    if ( section.getActionCommand() == null ) return;
+    data.put( section.getActionCommand(), section );
+    setSections( createSerialiser().toXML( data ) );
+  }
+
+  /**
+   * Remove the specified clickable section from the image map.
+   *
+   * @param section The section that is to be deleted.
+   */
+  public void removeSection( final MapSection section )
+  {
+    if ( section.getActionCommand() == null ) return;
+    data.remove( section.getActionCommand() );
+    setSections( createSerialiser().toXML( data ) );
+  }
+
+  /**
+   * Remove all the clickable sections from the image map.
+   */
+  public void removeAllSections()
+  {
+    data.clear();
+    setSections( createSerialiser().toXML( data ) );
+  }
+
+  /**
+   * Add the specified action listener to this component.
+   *
+   * @see nextapp.echo.app.Component#firePropertyChange(String, Object, Object)
+   * @param listener The action listener to add.
+   */
+  public void addActionListener( final ActionListener listener )
+  {
+    getEventListenerList().addListener( ActionListener.class, listener );
+    firePropertyChange( ACTION_LISTENERS_CHANGED_PROPERTY, null, listener );
+  }
+
+  /**
+   * Determines if the button has any <code>ActionListener</code>s
+   * registered.
+   *
+   * @return true if any action listeners are registered
+   */
+  public boolean hasActionListeners()
+  {
+    return ( hasEventListenerList() &&
+        getEventListenerList().getListenerCount(ActionListener.class) != 0 );
+  }
+
+  /**
+   * Notifies all listeners that have registered for this event type.
+   *
+   * @param event The {@link nextapp.echo.app.event.ActionEvent} to send
+   */
+  public void fireActionPerformed( final ActionEvent event )
+  {
+    if ( !hasEventListenerList() ) return;
+
+    EventListener[] listeners =
+        getEventListenerList().getListeners( ActionListener.class );
+    for ( EventListener listener : listeners )
+    {
+      ( (ActionListener) listener ).actionPerformed( event );
+    }
+  }
+
+  /**
+   * @inheritDoc
+   */
+  @Override
+  public void processInput( String name, Object value )
+  {
+    super.processInput( name, value );
+    if ( ACTION_COMMAND_PROPERTY.equals( name ) )
+    {
+      this.actionCommand = (String) value;
+    }
+    if ( INPUT_ACTION.equals( name ) )
+    {
+      fireActionPerformed( new ActionEvent( this, actionCommand ) );
+    }
+  }
+
+  /**
+   * Remove the specified action listener from the component.
+   *
+   * @see nextapp.echo.app.Component#firePropertyChange(String, Object, Object)
+   * @param listener The listener that is to be removed.
+   */
+  public void removeActionListener( final ActionListener listener )
+  {
+    if ( ! hasEventListenerList() ) return;
+
+    getEventListenerList().removeListener( ActionListener.class, listener );
+    firePropertyChange( ACTION_LISTENERS_CHANGED_PROPERTY, listener, null );
   }
 
   /**
@@ -149,5 +319,22 @@ public class ImageMap extends AbstractContainer
   public Map<String, MapSection> getData()
   {
     return Collections.unmodifiableMap( data );
+  }
+
+  /**
+   * Configure the JSON serialiser.
+   *
+   * @return The configured serialiser to use to serialise {@link #data}.
+   */
+  protected XStream createSerialiser()
+  {
+    final XStream xstream = new XStream( new JsonHierarchicalStreamDriver() );
+    xstream.processAnnotations( MapSection.class );
+    xstream.processAnnotations( CircleSection.class );
+    xstream.processAnnotations( PolygonSection.class );
+    xstream.processAnnotations( RectangleSection.class );
+    xstream.alias( "list", LinkedHashMap.class );
+
+    return xstream;
   }
 }

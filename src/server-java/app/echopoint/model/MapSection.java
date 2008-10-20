@@ -17,6 +17,8 @@
  */
 package echopoint.model;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+
 import java.io.Serializable;
 
 /**
@@ -25,13 +27,14 @@ import java.io.Serializable;
  * represent the different types of shapes that are supported by HTML image
  * maps.
  *
- * <p><b>Note:</b> Development of this component was sponsoreed by
+ * <p><b>Note:</b> Development of this component was sponsored by
  * <a href='http://tcnbroadcasting.com/index.jsp' target='_top'>TCN
- * Braadcasting</a>.  We are grateful for their support and sponsorship.</p>
+ * Broadcasting</a>.  We are grateful for their support and sponsorship.</p>
  *
  * @author Rakesh 2008-10-19
  * @version $Id$
  */
+@XStreamAlias( "mapSection" )
 public abstract class MapSection implements Serializable
 {
   private static final long serialVersionUID = 1l;

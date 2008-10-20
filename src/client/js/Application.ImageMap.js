@@ -21,6 +21,7 @@ echopoint.ImageMap = Core.extend( echopoint.internal.AbstractContainer,
   /** Properties defined for this component. */
   $static:
   {
+    ACTION_TYPE: "action",
     ACTION_COMMAND: "actionCommand",
     // The property that holds the URI for the image.
     URL: "url",
@@ -35,8 +36,9 @@ echopoint.ImageMap = Core.extend( echopoint.internal.AbstractContainer,
     /** Programmatically performs a map section click action. */
     doAction: function()
     {
-      this.fireEvent( { type: "action", source: this,
-        actionCommand: this.get( echopoint.ImageMap.ACTION_COMMAND ) } );
+      var ac = this.get( echopoint.ImageMap.ACTION_COMMAND );
+      this.fireEvent( { type: echopoint.ImageMap.ACTION_TYPE, source: this,
+        actionCommand: ac } );
     },
 
     /**

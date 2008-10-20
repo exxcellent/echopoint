@@ -34,6 +34,12 @@ Echo.Client = Core.extend({
         // Register resize listener on containing window one time.
         Core.Web.DOM.addEventListener(window, "resize", this._globalWindowResizeListener, false);
     },
+
+    /**
+     * Flag indicating the user interface should be rendered in design-mode, where all rendered component elements are
+     * assigned an id.
+     */
+    designMode: false,
     
     /**
      * The root DOM element in which the application is contained.
@@ -44,11 +50,6 @@ Echo.Client = Core.extend({
      * The application being managed by this client.
      */
     application: null,
-    
-    /**
-     * Flag indicating whether a focus update is required once the renderer has completed its next update cycle.
-     */
-    focusUpdateRequired: false,
     
     /**
      * Id of last issued input restriction id (incremented to deliver unique identifiers). 
@@ -133,9 +134,9 @@ Echo.Client = Core.extend({
          */
         verifyInput: function(component, flags) {
             // Check for input restrictions.
-            if (this._inputRestrictionCount != 0) {
+            if (this._inputRestrictionCount !== 0) {
                 if (!flags & Echo.Client.FLAG_INPUT_PROPERTY) {
-                    // Input is not a property update, automatically return false if any input restrictions pressent.
+                    // Input is not a property update, automatically return false if any input restrictions present.
                     return false;
                 }
                 for (var x in this._inputRestrictionMap) {
@@ -194,7 +195,7 @@ Echo.Client = Core.extend({
     
     /**
      * Registers a new input restriction.  Input will be restricted until this and all other
-     * input restrictiosn are removed.
+     * input restrictions are removed.
      *
      * @param {Boolean} allowPropertyUpdates flag indicating whether property updates should be
      *        allowed (if true) or whether all input should be restricted (if false)
@@ -218,9 +219,6 @@ Echo.Client = Core.extend({
         var focusedComponent = this.application.getFocusedComponent();
         if (focusedComponent && focusedComponent.peer && focusedComponent.peer.renderFocus) {
             focusedComponent.peer.renderFocus();
-            this.focusUpdateRequired = false;
-        } else {
-            this.focusUpdateRequired = true;
         }
     },
     
@@ -258,7 +256,12 @@ Echo.Client = Core.extend({
      * @param e the DOM resize event
      */
     _windowResizeListener: function(e) {
-        Echo.Render.notifyResize(this.application.rootComponent);
+        if (Core.Web.Env.QUIRK_OPERA_WINDOW_RESIZE_POSITIONING) {
+            // FIXME Opera currently fails to redraw screen in certain scenarios.
+            Echo.Render.notifyResize(this.application.rootComponent);
+        } else {
+            Echo.Render.notifyResize(this.application.rootComponent);
+        }
     }
 });
 

@@ -1,16 +1,16 @@
 /**
  * @fileoverview
- * <ul>
+ * <ul> 
  *  <li>Provides property rendering utilities for core properties.</li>
  *  <li>Provides TriCellTable rendering utility (used by buttons and labels).</li>
- *  <li>Provides a floating pane z-index management system.</li>
+ *  <li>Provides a floating pane z-index management system.</li> 
  * </ul>
  */
 
 /**
  * @namespace
  */
-Echo.Sync = {
+Echo.Sync = { 
 
     getEffectProperty: function(component, defaultPropertyName, effectPropertyName, effectState,
             defaultDefaultPropertyValue, effectDefaultPropertyValue) {
@@ -29,31 +29,31 @@ Echo.Sync = {
  * Provides tools for rendering alignment properties.
  * @class
  */
-Echo.Sync.Alignment = {
+Echo.Sync.Alignment = { 
 
-    _HORIZONTALS: { bottomx: true, center: true, topx: true, leading: true, trailing: true },
-    _VERTICALS: { bottomy: true, middle: true, topy: true },
+    _HORIZONTALS: { left: true, center: true, right: true, leading: true, trailing: true },
+    _VERTICALS: { top: true, middle: true, bottom: true },
 
     getRenderedHorizontal: function(alignment, layoutDirectionProvider) {
         if (alignment == null) {
             return null;
         }
-
-        var layoutDirection = layoutDirectionProvider ?
+    
+        var layoutDirection = layoutDirectionProvider ? 
                 layoutDirectionProvider.getRenderLayoutDirection() : Echo.LayoutDirection.LTR;
-
-        var horizontal = typeof(alignment) == "object" ? alignment.horizontal : alignment;
-
+         
+        var horizontal = typeof(alignment) == "object" ? alignment.horizontal : alignment; 
+                
         switch (horizontal) {
         case "leading":
-            return layoutDirection.isLeftToRight() ? "bottomx" : "topx";
+            return layoutDirection.isLeftToRight() ? "left" : "right";
         case "trailing":
-            return layoutDirection.isLeftToRight() ? "topx" : "bottomx";
+            return layoutDirection.isLeftToRight() ? "right" : "left";
         default:
             return horizontal in this._HORIZONTALS ? horizontal : null;
         }
     },
-
+    
     getHorizontal: function(alignment) {
         if (alignment == null) {
             return null;
@@ -80,25 +80,25 @@ Echo.Sync.Alignment = {
         if (alignment == null) {
             return;
         }
-
+        
         var horizontal = Echo.Sync.Alignment.getRenderedHorizontal(alignment, layoutDirectionProvider);
         var vertical = typeof(alignment) == "object" ? alignment.vertical : alignment;
-
+    
         var horizontalValue;
         switch (horizontal) {
-        case "bottomx":   horizontalValue = "bottomx";   break;
+        case "left":   horizontalValue = "left";   break;
         case "center": horizontalValue = "center"; break;
-        case "topx":  horizontalValue = "topx";  break;
+        case "right":  horizontalValue = "right";  break;
         default:       horizontalValue = "";       break;
         }
         var verticalValue;
         switch (vertical) {
-        case "bottomy":    verticalValue = "bottomy";      break;
+        case "top":    verticalValue = "top";      break;
         case "middle": verticalValue = "middle";   break;
-        case "topy": verticalValue = "topy";   break;
+        case "bottom": verticalValue = "bottom";   break;
         default:       verticalValue = "";         break;
         }
-
+        
         if (renderToElement) {
             element.align = horizontalValue;
             element.vAlign = verticalValue;
@@ -119,18 +119,18 @@ Echo.Sync.Border = {
      * Regular expression to validate/parse a CSS border expression, e.g., "1px solid #abcdef".
      * Supports omission of any term, or empty strings.
      */
-    _PARSER_PX: new RegExp("^(-?\\d+px)?(?:^|$|(?= )) ?(none|hidden|dotted|dashed|solid|"
-            + "double|groove|ridge|inset|outset)?(?:^|$|(?= )) ?(#[0-9a-fA-F]{6})?$"),
+    _PARSER_PX: new RegExp("^(-?\\d+px)?(?:^|$|(?= )) ?(none|hidden|dotted|dashed|solid|" + 
+            "double|groove|ridge|inset|outset)?(?:^|$|(?= )) ?(#[0-9a-fA-F]{6})?$"),
 
     /**
      * Regular expression to validate/parse a pixel-based CSS border expression, e.g., "1px solid #abcdef".
      * Supports omission of any term, or empty strings.
      */
-    _PARSER: new RegExp("^(-?\\d+(?:px|pt|pc|cm|mm|in|em|ex))?(?:^|$|(?= )) ?(none|hidden|dotted|dashed|solid|"
-            + "double|groove|ridge|inset|outset)?(?:^|$|(?= )) ?(#[0-9a-fA-F]{6})?$"),
-
+    _PARSER: new RegExp("^(-?\\d+(?:px|pt|pc|cm|mm|in|em|ex))?(?:^|$|(?= )) ?(none|hidden|dotted|dashed|solid|" +
+            "double|groove|ridge|inset|outset)?(?:^|$|(?= )) ?(#[0-9a-fA-F]{6})?$"),
+            
     _TEST_EXTENT_PX: /^(-?\d+px*)$/,
-
+    
     compose: function(size, style, color) {
         if (typeof size == "number") {
             size += "px";
@@ -147,17 +147,17 @@ Echo.Sync.Border = {
         }
         return out.join(" ");
     },
-
+    
     parse: function(border) {
         if (!border) {
             return { };
         }
         if (typeof(border) == "string") {
             var parts = this._PARSER.exec(border);
-            return { size: parts[1], style: parts[2], color: parts[3] }
+            return { size: parts[1], style: parts[2], color: parts[3] }; 
         } else {
             // FIXME support multisided borders.
-            return { }
+            return { };
         }
     },
 
@@ -176,20 +176,20 @@ Echo.Sync.Border = {
                 }
             }
         } else {
-            this.render(border.bottomy, element, styleName + "Top");
-            if (border.topx !== null) {
-                this.render(border.topx || border.bottomy, element, styleName + "Right");
+            this.render(border.top, element, styleName + "Top");
+            if (border.right !== null) {
+                this.render(border.right || border.top, element, styleName + "Right");
             }
-            if (border.topy !== null) {
-                this.render(border.topy || border.bottomy, element, styleName + "Bottom");
+            if (border.bottom !== null) {
+                this.render(border.bottom || border.top, element, styleName + "Bottom");
             }
-            if (border.bottomx !== null) {
-                this.render(border.bottomx || border.topx || border.bottomy, element, styleName + "Left");
+            if (border.left !== null) {
+                this.render(border.left || border.right || border.top, element, styleName + "Left");
             }
-
+            
         }
     },
-
+    
     renderClear: function(border, element) {
         if (border) {
             this.render(border, element);
@@ -202,32 +202,32 @@ Echo.Sync.Border = {
         if (!border) {
             return 0;
         }
-
+        
         if (typeof(border) == "string") {
             var extent = this._PARSER.exec(border)[1];
             if (extent == null) {
                 return 0;
             } else if (this._TEST_EXTENT_PX.test(extent)) {
-                return parseInt(extent);
+                return parseInt(extent, 10);
             } else {
                 return Echo.Sync.Extent.toPixels(extent);
             }
         } else if (typeof(border) == "object") {
-            // Retrieve value for indivudal side.
+            // Retrieve value for individual side.
             // Specified side is queried first, followed by alternatives.
             while (true) {
                 var side = this.getPixelSize(border[sideName]);
                 if (side == null) {
                     switch (sideName) {
-                    case "bottomx":
+                    case "left": 
                         // If left side specified but value null, try again with right.
-                        sideName = "topx";
+                        sideName = "right"; 
                         continue;
-                    case "topx":
-                    case "topy":
+                    case "right":
+                    case "bottom": 
                         // If bottom or right side specified, try again with top.
-                        sideName = "bottomy";
-                        continue;
+                        sideName = "top";
+                        continue; 
                     }
                 }
                 return side;
@@ -246,7 +246,7 @@ Echo.Sync.Color = {
      * Adjusts the value of the color's RGB values by the
      * specified amounts, returning a new Color.
      * The original color is unchanged.
-     *
+     * 
      * @param color the color to adjust (a 24 bit hex value, e.g., #1a2b3c)
      * @param r the amount to adjust the red value of the color (-255 to 255)
      * @param g the amount to adjust the green value of the color (-255 to 255)
@@ -255,13 +255,13 @@ Echo.Sync.Color = {
      */
     adjust: function(value, r, g, b) {
         var colorInt = parseInt(value.substring(1), 16);
-        var red = parseInt(colorInt / 0x10000) + r;
+        var red = Math.floor(colorInt / 0x10000) + r;
         if (red < 0) {
             red = 0;
         } else if (red > 255) {
             red = 255;
         }
-        var green = parseInt(colorInt / 0x100) % 0x100 + g;
+        var green = Math.floor(colorInt / 0x100) % 0x100 + g;
         if (green < 0) {
             green = 0;
         } else if (green > 255) {
@@ -273,9 +273,9 @@ Echo.Sync.Color = {
         } else if (blue > 255) {
             blue = 255;
         }
-        return "#" + (red < 16 ? "0" : "") + red.toString(16)
-                + (green < 16 ? "0" : "") + green.toString(16)
-                + (blue < 16 ? "0" : "") + blue.toString(16);
+        return "#" + (red < 16 ? "0" : "") + red.toString(16) +
+                (green < 16 ? "0" : "") + green.toString(16) +
+                (blue < 16 ? "0" : "") + blue.toString(16); 
     },
 
     render: function(color, element, styleProperty) {
@@ -283,17 +283,17 @@ Echo.Sync.Color = {
             element.style[styleProperty] = color;
         }
     },
-
+    
     renderClear: function(color, element, styleProperty) {
         element.style[styleProperty] = color ? color : "";
     },
-
-    renderFB: function(component, element) {
+    
+    renderFB: function(component, element) { 
         var color;
-        if (color = component.render("foreground")) {
+        if ((color = component.render("foreground"))) {
             element.style.color = color;
         }
-        if (color = component.render("background")) {
+        if ((color = component.render("background"))) {
             element.style.backgroundColor = color;
         }
     }
@@ -303,7 +303,7 @@ Echo.Sync.Color = {
  * Provides tools for rendering extent (dimension) properties.
  * @class
  */
-Echo.Sync.Extent = {
+Echo.Sync.Extent = { 
 
     /**
      * Regular expression to parse an extent value, e.g., "12px" into its value and unit components.
@@ -311,7 +311,7 @@ Echo.Sync.Extent = {
     _PARSER: /^(-?\d+(?:\.\d+)?)(.+)?$/,
 
     _FORMATTED_PIXEL_TEST: /^(-?\d+px *)$/,
-
+    
     isPercent: function(extent) {
         if (extent == null || typeof(extent) == "number") {
             return false;
@@ -328,7 +328,6 @@ Echo.Sync.Extent = {
         switch(typeof(extent)) {
             case "number":
                 return extent + "px";
-                break;
             case "string":
                 if (this._FORMATTED_PIXEL_TEST.test(extent)) {
                     return extent;
@@ -351,13 +350,7 @@ Echo.Sync.Extent = {
         } else if (typeof(extent) == "number") {
             return extent;
         } else {
-            var parts = this._PARSER.exec(extent);
-            if (!parts) {
-                throw new Error("Invalid Extent: " + extent);
-            }
-            var value = parseFloat(parts[1]);
-            var units = parts[2] ? parts[2] : "px";
-            return Core.Web.Measure.extentToPixels(value, units, horizontal);
+            return Core.Web.Measure.extentToPixels(extent, horizontal);
         }
     }
 };
@@ -366,7 +359,7 @@ Echo.Sync.Extent = {
  * Provides tools for rendering fill image (background image) properties.
  * @class
  */
-Echo.Sync.FillImage = {
+Echo.Sync.FillImage = { 
 
     _REPEAT_VALUES: {
         "0": "no-repeat",
@@ -380,7 +373,7 @@ Echo.Sync.FillImage = {
     },
 
     FLAG_ENABLE_IE_PNG_ALPHA_FILTER: 0x1,
-
+    
     getPosition: function(fillImage) {
         if (fillImage.x || fillImage.y) {
             var x, y;
@@ -399,53 +392,52 @@ Echo.Sync.FillImage = {
             return null;
         }
     },
-
+    
     getRepeat: function(fillImage) {
         if (this._REPEAT_VALUES[fillImage.repeat]) {
-            return this._REPEAT_VALUES[fillImage.repeat];
+            return this._REPEAT_VALUES[fillImage.repeat]; 
         } else {
             return null;
         }
     },
-
+    
     getUrl: function(fillImage) {
         if (fillImage == null) {
             return null;
         }
         return typeof(fillImage) == "object" ? fillImage.url : fillImage;
     },
-
+    
     render: function(fillImage, element, flags) {
         if (fillImage == null) {
             // No image specified, do nothing.
             return;
         }
-
+        
         var isObject = typeof(fillImage) == "object";
         var url = isObject ? fillImage.url : fillImage;
 
         if (Core.Web.Env.PROPRIETARY_IE_PNG_ALPHA_FILTER_REQUIRED &&
                 flags && (flags & this.FLAG_ENABLE_IE_PNG_ALPHA_FILTER)) {
             // IE6 PNG workaround required.
-            element.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"
-                + url + "', sizingMethod='scale')";
+            element.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + url + "', sizingMethod='scale')";
         } else {
             // IE6 PNG workaround not required.
             element.style.backgroundImage = "url(" + url + ")";
         }
-
+        
         if (isObject) {
             if (this._REPEAT_VALUES[fillImage.repeat]) {
-                element.style.backgroundRepeat = this._REPEAT_VALUES[fillImage.repeat];
+                element.style.backgroundRepeat = this._REPEAT_VALUES[fillImage.repeat]; 
             }
-
+            
             var position = Echo.Sync.FillImage.getPosition(fillImage);
             if (position) {
                 element.style.backgroundPosition = position;
             }
         }
     },
-
+    
     renderClear: function(fillImage, element, flags) {
         if (fillImage) {
             this.render(fillImage, element, flags);
@@ -461,7 +453,7 @@ Echo.Sync.FillImage = {
  * Provides tools for rendering font properties.
  * @class
  */
-Echo.Sync.Font = {
+Echo.Sync.Font = { 
 
     render: function(font, element) {
         if (!font) {
@@ -492,10 +484,25 @@ Echo.Sync.Font = {
             element.style.textDecoration = "line-through";
         }
     },
-
+    
     renderClear: function(font, element) {
         if (font) {
             this.render(font, element);
+            if (!font.typeface) {
+                element.style.fontFamily = "";
+            }
+            if (!font.underline) {
+                element.style.textDecoration = "";
+            }
+            if (!font.bold) {
+                element.style.fontWeight = "";
+            }
+            if (!font.size) {
+                element.style.fontSize = "";
+            }
+            if (!font.italic) {
+                element.style.fontStyle = "";
+            }
         } else {
             element.style.fontFamily = "";
             element.style.fontSize = "";
@@ -520,7 +527,7 @@ Echo.Sync.ImageReference = {
         if (!imageReference) {
             return;
         }
-
+        
         if (typeof(imageReference) == "string") {
             imgElement.src = imageReference;
         } else {
@@ -547,17 +554,17 @@ Echo.Sync.Insets = {
      */
     _FORMATTED_PIXEL_INSETS: /^(-?\d+px *){1,4}$/,
 
-    _ZERO: { bottomy: 0, topx: 0, topy: 0, bottomx: 0 },
-
+    _ZERO: { top: 0, right: 0, bottom: 0, left: 0 },
+    
     /**
      * Mapping between number of inset values provided and arrays which represent the
-     * inset value index for the top, right, bottom, and left value.
+     * inset value index for the top, right, bottom, and left value. 
      */
     _INDEX_MAPS: {
-        1: [0, 0, 0, 0],
-        2: [0, 1, 0, 1],
-        3: [0, 1, 2, 1],
-        4: [0, 1, 2, 3]
+        1: [0, 0, 0, 0], 
+        2: [0, 1, 0, 1], 
+        3: [0, 1, 2, 1], 
+        4: [0, 1, 2, 3] 
     },
 
     render: function(insets, element, styleAttribute) {
@@ -570,45 +577,44 @@ Echo.Sync.Insets = {
                     element.style[styleAttribute] = insets;
                 } else {
                     var pixelInsets = this.toPixels(insets);
-                    element.style[styleAttribute] = pixelInsets.bottomy + "px " + pixelInsets.topx + "px "
-                            + pixelInsets.topy + "px " + pixelInsets.bottomx + "px";
+                    element.style[styleAttribute] = pixelInsets.top + "px " + pixelInsets.right + "px " +
+                            pixelInsets.bottom + "px " + pixelInsets.left + "px";
                 }
                 break;
         }
     },
-
+    
     toCssValue: function(insets) {
         switch(typeof(insets)) {
             case "number":
                 return insets + "px";
-                break;
             case "string":
                 if (this._FORMATTED_PIXEL_INSETS.test(insets)) {
                     return insets;
                 } else {
                     var pixelInsets = this.toPixels(insets);
-                    return pixelInsets.bottomy + "px " + pixelInsets.topx + "px "
-                            + pixelInsets.topy + "px " + pixelInsets.bottomx + "px";
+                    return pixelInsets.top + "px " + pixelInsets.right + "px " +
+                            pixelInsets.bottom + "px " + pixelInsets.left + "px";
                 }
                 break;
         }
         return "";
     },
-
+    
     toPixels: function(insets) {
         if (insets == null) {
             return this._ZERO;
         } else if (typeof(insets) == "number") {
-            return { bottomy: insets, topx: insets, topy: insets, bottomx: insets };
+            return { top: insets, right: insets, bottom: insets, left: insets };
         }
-
+        
         insets = insets.split(" ");
         var map = this._INDEX_MAPS[insets.length];
         return {
-            bottomy: Echo.Sync.Extent.toPixels(insets[map[0]], false),
-            topx: Echo.Sync.Extent.toPixels(insets[map[1]], true),
-            topy: Echo.Sync.Extent.toPixels(insets[map[2]], false),
-            bottomx: Echo.Sync.Extent.toPixels(insets[map[3]], true)
+            top: Echo.Sync.Extent.toPixels(insets[map[0]], false),
+            right: Echo.Sync.Extent.toPixels(insets[map[1]], true),
+            bottom: Echo.Sync.Extent.toPixels(insets[map[2]], false),
+            left: Echo.Sync.Extent.toPixels(insets[map[3]], true)
         };
     }
 };
@@ -629,12 +635,12 @@ Echo.Sync.FloatingPaneManager = Core.extend({
         this._floatingPanes = null;
         this._listeners = null;
     },
-
+    
     /**
      * Adds a floating pane to be managed, or, if the floating pane already exists,
      * raises it to the top.
      * The floating pane will be placed above all others, at the highest z-index.
-     *
+     * 
      * @param {String} renderId the id of the floating pane
      * @return the initial z-index of the added floating pane
      */
@@ -647,10 +653,10 @@ Echo.Sync.FloatingPaneManager = Core.extend({
         this._fireZIndexEvent();
         return this._floatingPanes.length;
     },
-
+    
     /**
-     * Adds a z-index listener.
-     *
+     * Adds a z-index listener.  
+     * 
      * @param {Function} the listener to add
      */
     addZIndexListener: function(l) {
@@ -659,7 +665,7 @@ Echo.Sync.FloatingPaneManager = Core.extend({
         }
         this._listeners.addListener("zIndex", l);
     },
-
+    
     /**
      * Notifies listeners of a z-index change.
      */
@@ -668,11 +674,11 @@ Echo.Sync.FloatingPaneManager = Core.extend({
             this._listeners.fireEvent({type: "zIndex", source: this});
         }
     },
-
+    
     /**
      * Returns the z-index of the floating pane with the specified id.
      * -1 is returned if the pane is not registered.
-     *
+     * 
      * @param {String} renderId the id of the floating pane
      * @return the z-index
      */
@@ -684,10 +690,10 @@ Echo.Sync.FloatingPaneManager = Core.extend({
             return -1;
         }
     },
-
+    
     /**
      * Removes a floating pane from being managed.
-     *
+     * 
      * @param {String} renderId the id of the floating pane
      */
     remove: function(renderId) {
@@ -697,10 +703,10 @@ Echo.Sync.FloatingPaneManager = Core.extend({
         Core.Arrays.remove(this._floatingPanes, renderId);
         this._fireZIndexEvent();
     },
-
+    
     /**
      * Removes a z-index listener.
-     *
+     * 
      * @param {Function} the listener to remove
      */
     removeZIndexListener: function(l) {
@@ -712,16 +718,16 @@ Echo.Sync.FloatingPaneManager = Core.extend({
 });
 
 /**
- * Renders a table with two or three cells, suitable for laying out buttons, labels,
+ * Renders a table with two or three cells, suitable for laying out buttons, labels, 
  * and similar components.
  */
 Echo.Sync.TriCellTable = Core.extend({
 
     $static: {
-
+        
         INVERTED: 1,
         VERTICAL: 2,
-
+        
         LEADING_TRAILING: 0,
         TRAILING_LEADING: 1, // INVERTED
         TOP_BOTTOM: 2,       // VERTICAL
@@ -735,12 +741,12 @@ Echo.Sync.TriCellTable = Core.extend({
                 switch (Echo.Sync.Alignment.getRenderedHorizontal(position, component)) {
                 case "leading":  orientation = this.LEADING_TRAILING; break;
                 case "trailing": orientation = this.TRAILING_LEADING; break;
-                case "bottomx":     orientation = this.LEADING_TRAILING; break;
-                case "topx":    orientation = this.TRAILING_LEADING; break;
+                case "left":     orientation = this.LEADING_TRAILING; break;
+                case "right":    orientation = this.TRAILING_LEADING; break;
                 default:
                     switch (Echo.Sync.Alignment.getVertical(position, component)) {
-                    case "bottomy":    orientation = this.TOP_BOTTOM;       break;
-                    case "topy": orientation = this.BOTTOM_TOP;       break;
+                    case "top":    orientation = this.TOP_BOTTOM;       break;
+                    case "bottom": orientation = this.BOTTOM_TOP;       break;
                     default:       orientation = this.TRAILING_LEADING; break;
                     }
                 }
@@ -749,29 +755,29 @@ Echo.Sync.TriCellTable = Core.extend({
             }
             return orientation;
         },
-
+        
         _createTablePrototype: function() {
             var tableElement = document.createElement("table");
             tableElement.style.borderCollapse = "collapse";
             tableElement.style.padding = "0";
-
+            
             var tbodyElement = document.createElement("tbody");
             tableElement.appendChild(tbodyElement);
-
+            
             return tableElement;
         }
     },
-
+    
     $load: function() {
-        this._tablePrototype = this._createTablePrototype();
+        this._tablePrototype = this._createTablePrototype(); 
     },
-
+    
     /**
      * The rendered TABLE element.
      * @type Element
      */
     tableElement: null,
-
+    
     /**
      * The rendered TBODY element.
      * @type Element
@@ -780,8 +786,8 @@ Echo.Sync.TriCellTable = Core.extend({
 
     /**
      * Creates a new <code>TriCellTable</code>
-     *
-     * @param orientation0_1 the orientation of element 0 with respect to element 1, one of
+     * 
+     * @param orientation0_1 the orientation of element 0 with respect to element 1, one of 
      *        the following values:
      *        <ul>
      *        <li>LEADING_TRAILING (element 0 is leading element 1)</li>
@@ -791,7 +797,7 @@ Echo.Sync.TriCellTable = Core.extend({
      *        </ul>
      * @param margin0_1 the margin size between element 0 and element 1
      * @param orientation01_2 (omitted for two-cell tables)
-     *        the orientation of Elements 0 and 1 with
+     *        the orientation of Elements 0 and 1 with 
      *        respect to Element 2, one of the following values:
      *        <ul>
      *        <li>LEADING_TRAILING (elements 0 and 1 are leading element 2)</li>
@@ -806,20 +812,20 @@ Echo.Sync.TriCellTable = Core.extend({
     $construct: function(orientation0_1, margin0_1, orientation01_2, margin01_2) {
         this.tableElement = Echo.Sync.TriCellTable._tablePrototype.cloneNode(true);
         this.tbodyElement = this.tableElement.firstChild;
-
+        
         if (orientation01_2 == null) {
             this.configure2(orientation0_1, margin0_1);
         } else {
             this.configure3(orientation0_1, margin0_1, orientation01_2, margin01_2);
         }
     },
-
+    
     addColumn: function(trElement, tdElement) {
         if (tdElement != null) {
             trElement.appendChild(tdElement);
         }
     },
-
+    
     addRow: function(tdElement) {
         if (tdElement == null) {
             return;
@@ -828,7 +834,7 @@ Echo.Sync.TriCellTable = Core.extend({
         trElement.appendChild(tdElement);
         this.tbodyElement.appendChild(trElement);
     },
-
+    
     addSpacer: function(parentElement, size, vertical) {
         var divElement = document.createElement("div");
         if (vertical) {
@@ -838,17 +844,17 @@ Echo.Sync.TriCellTable = Core.extend({
         }
         parentElement.appendChild(divElement);
     },
-
+    
     configure2: function(orientation0_1, margin0_1) {
         this.tdElements = [document.createElement("td"), document.createElement("td")];
         this.tdElements[0].style.padding = "0";
         this.tdElements[1].style.padding = "0";
         this.marginTdElements = new Array(1);
-
+        
         if (margin0_1) {
             this.marginTdElements[0] = document.createElement("td");
             this.marginTdElements[0].style.padding = "0";
-            if ((orientation0_1 & Echo.Sync.TriCellTable.VERTICAL) == 0) {
+            if ((orientation0_1 & Echo.Sync.TriCellTable.VERTICAL) === 0) {
                 this.marginTdElements[0].style.width = margin0_1 + "px";
                 this.addSpacer(this.marginTdElements[0], margin0_1, false);
             } else {
@@ -856,7 +862,7 @@ Echo.Sync.TriCellTable = Core.extend({
                 this.addSpacer(this.marginTdElements[0], margin0_1, true);
             }
         }
-
+        
         if (orientation0_1 & Echo.Sync.TriCellTable.VERTICAL) {
             // Vertically oriented.
             if (orientation0_1 & Echo.Sync.TriCellTable.INVERTED) {
@@ -887,7 +893,7 @@ Echo.Sync.TriCellTable = Core.extend({
             this.tbodyElement.appendChild(trElement);
         }
     },
-
+    
     configure3: function(orientation0_1, margin0_1, orientation01_2, margin01_2) {
         this.tdElements = new Array(3);
         for (var i = 0; i < 3; ++i) {
@@ -895,7 +901,7 @@ Echo.Sync.TriCellTable = Core.extend({
             this.tdElements[i].style.padding = "0";
         }
         this.marginTdElements = new Array(2);
-
+        
         if (margin0_1 || margin01_2 != null) {
             if (margin0_1 && margin0_1 > 0) {
                 this.marginTdElements[0] = document.createElement("td");
@@ -918,18 +924,18 @@ Echo.Sync.TriCellTable = Core.extend({
                 }
             }
         }
-
+        
         if (orientation0_1 & Echo.Sync.TriCellTable.VERTICAL) {
             // Vertically oriented 0/1.
             if (orientation01_2 & Echo.Sync.TriCellTable.VERTICAL) {
                 // Vertically oriented 01/2
-
+                
                 if (orientation01_2 & Echo.Sync.TriCellTable.INVERTED) {
                     // 2 before 01: render #2 and margin at beginning of TABLE.
                     this.addRow(this.tdElements[2]);
                     this.addRow(this.marginTdElements[1]);
                 }
-
+                
                 // Render 01
                 if (orientation0_1 & Echo.Sync.TriCellTable.INVERTED) {
                     // Inverted (bottom to top)
@@ -942,7 +948,7 @@ Echo.Sync.TriCellTable = Core.extend({
                     this.addRow(this.marginTdElements[0]);
                     this.addRow(this.tdElements[1]);
                 }
-
+    
                 if (!(orientation01_2 & Echo.Sync.TriCellTable.INVERTED)) {
                     // 01 before 2: render #2 and margin at end of TABLE.
                     this.addRow(this.marginTdElements[1]);
@@ -950,14 +956,14 @@ Echo.Sync.TriCellTable = Core.extend({
                 }
             } else {
                 // Horizontally oriented 01/2
-
+                
                 // Determine and apply row span based on presence of margin between 0 and 1.
                 var rows = (margin0_1 && margin0_1 > 0) ? 3 : 2;
                 this.tdElements[2].rowSpan = rows;
                 if (this.marginTdElements[1]) {
                     this.marginTdElements[1].rowSpan = rows;
                 }
-
+                
                 var trElement = document.createElement("tr");
                 if (orientation01_2 & Echo.Sync.TriCellTable.INVERTED) {
                     this.addColumn(trElement, this.tdElements[2]);
@@ -977,7 +983,7 @@ Echo.Sync.TriCellTable = Core.extend({
                     this.addColumn(trElement, this.tdElements[2]);
                 }
                 this.tbodyElement.appendChild(trElement);
-
+                
                 this.addRow(this.marginTdElements[0]);
                 if (orientation0_1 & Echo.Sync.TriCellTable.INVERTED) {
                     this.addRow(this.tdElements[0]);
@@ -989,23 +995,23 @@ Echo.Sync.TriCellTable = Core.extend({
             // horizontally oriented 0/1
             if (orientation01_2 & Echo.Sync.TriCellTable.VERTICAL) {
                 // vertically oriented 01/2
-
+    
                 // determine and apply column span based on presence of margin between 0 and 1
                 var columns = margin0_1 ? 3 : 2;
                 this.tdElements[2].setAttribute("colspan", columns);
                 if (this.marginTdElements[1] != null) {
-                    this.marginTdElements[1].setAttribute("colspan", Integer.toString(columns));
+                    this.marginTdElements[1].setAttribute("colspan", columns);
                 }
-
+                
                 if (orientation01_2 & Echo.Sync.TriCellTable.INVERTED) {
                     // 2 before 01: render #2 and margin at beginning of TR.
                     this.addRow(this.tdElements[2]);
                     this.addRow(this.marginTdElements[1]);
                 }
-
+                
                 // Render 01
                 trElement = document.createElement("tr");
-                if ((orientation0_1 & Echo.Sync.TriCellTable.INVERTED) == 0) {
+                if ((orientation0_1 & Echo.Sync.TriCellTable.INVERTED) === 0) {
                     // normal (left to right)
                     this.addColumn(trElement, this.tdElements[0]);
                     this.addColumn(trElement, this.marginTdElements[0]);
@@ -1017,7 +1023,7 @@ Echo.Sync.TriCellTable = Core.extend({
                     this.addColumn(trElement, this.tdElements[0]);
                 }
                 this.tbodyElement.appendChild(trElement);
-
+                
                 if (!(orientation01_2 & Echo.Sync.TriCellTable.INVERTED)) {
                     // 01 before 2: render margin and #2 at end of TR.
                     this.addRow(this.marginTdElements[1]);
@@ -1031,7 +1037,7 @@ Echo.Sync.TriCellTable = Core.extend({
                     this.addColumn(trElement, this.tdElements[2]);
                     this.addColumn(trElement, this.marginTdElements[1]);
                 }
-
+                
                 // Render 01
                 if (orientation0_1 & Echo.Sync.TriCellTable.INVERTED) {
                     // inverted (right to left)
@@ -1044,13 +1050,13 @@ Echo.Sync.TriCellTable = Core.extend({
                     this.addColumn(trElement, this.marginTdElements[0]);
                     this.addColumn(trElement, this.tdElements[1]);
                 }
-
+                
                 if (!(orientation01_2 & Echo.Sync.TriCellTable.INVERTED)) {
                     this.addColumn(trElement, this.marginTdElements[1]);
                     this.addColumn(trElement, this.tdElements[2]);
                 }
-
-                this.tbodyElement.appendChild(trElement);
+                
+                this.tbodyElement.appendChild(trElement);        
             }
         }
     }

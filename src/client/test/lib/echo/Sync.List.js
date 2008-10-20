@@ -11,6 +11,10 @@ Echo.Sync.ListComponent = Core.extend(Echo.Render.ComponentSync, {
     },
 
     $abstract: true,
+    
+    $virtual: {
+        listBox: false
+    },
 
     _hasRenderedSelectedItems: false,
     
@@ -35,12 +39,21 @@ Echo.Sync.ListComponent = Core.extend(Echo.Render.ComponentSync, {
     _div: null,
     
     /**
+     * Rendered focus state of component, based on received DOM focus/blur events.
+     */
+    _focused: false,
+    
+    _processBlur: function(e) {
+        this._focused = false;
+    },
+    
+    /**
      * Processes a click event.
      * This event handler is registered only in the case of the "alternate" DHTML-based rendered
      * listbox for IE6, i.e., the _alternateRender flag will be true. 
      */
     _processClick: function(e) {
-        if (!this.client.verifyInput(this.component)) {
+        if (!this.client || !this.client.verifyInput(this.component)) {
             Core.Web.DOM.preventEventDefault(e);
             this._renderSelection();
             return true;
@@ -64,6 +77,8 @@ Echo.Sync.ListComponent = Core.extend(Echo.Render.ComponentSync, {
             var selection = this._getSelection();
             if (selection == null) {
                 selection = [];
+            } else if (typeof (selection) == "number") {
+                selection = [selection];
             }
             var arrayIndex = Core.Arrays.indexOf(selection, i); 
             if (arrayIndex == -1) {
@@ -86,7 +101,7 @@ Echo.Sync.ListComponent = Core.extend(Echo.Render.ComponentSync, {
      * This event handler is registered only for traditional SELECT elements, i.e., the _alternateRender flag will be false.
      */
     _processChange: function(e) {
-        if (!this.client.verifyInput(this.component)) {
+        if (!this.client || !this.client.verifyInput(this.component)) {
             Core.Web.DOM.preventEventDefault(e);
             this._renderSelection();
             return false;
@@ -110,6 +125,14 @@ Echo.Sync.ListComponent = Core.extend(Echo.Render.ComponentSync, {
         this.component.doAction();
     },
     
+    _processFocus: function(e) {
+        this._focused = true;
+        if (!this.client || !this.client.verifyInput(this.component, Echo.Client.FLAG_INPUT_PROPERTY)) {
+            return true;
+        }
+        this.component.application.setFocusedComponent(this.component);
+    },
+    
     /**
      * IE-specific event handler to prevent mouse-selection of text in DOM-rendered listbox component.
      */
@@ -125,10 +148,10 @@ Echo.Sync.ListComponent = Core.extend(Echo.Render.ComponentSync, {
      * when rendered by DOM manipulation).
      * This strategy is used when the _alternateRender flag is false.
      */
-    _renderMainAsSelect: function(update, parentElement, listBox) {
+    _renderMainAsSelect: function(update, parentElement) {
         this._element = document.createElement("select");
         this._element.id = this.component.renderId;
-        this._element.size = listBox ? 6 : 1;
+        this._element.size = this.listBox ? 6 : 1;
 
         if (!this._enabled) {
             this._element.disabled = true;
@@ -177,6 +200,8 @@ Echo.Sync.ListComponent = Core.extend(Echo.Render.ComponentSync, {
     
         if (this._enabled) {
             Core.Web.Event.add(this._element, "change", Core.method(this, this._processChange), false);
+            Core.Web.Event.add(this._element, "blur", Core.method(this, this._processBlur), false);
+            Core.Web.Event.add(this._element, "focus", Core.method(this, this._processFocus), false);
         }
 
         parentElement.appendChild(this._element);
@@ -242,6 +267,8 @@ Echo.Sync.ListComponent = Core.extend(Echo.Render.ComponentSync, {
         }
         
         if (this._enabled) {
+            Core.Web.Event.add(this._element, "blur", Core.method(this, this._processBlur), false);
+            Core.Web.Event.add(this._element, "focus", Core.method(this, this._processFocus), false);
             Core.Web.Event.add(this._div, "click", Core.method(this, this._processClick), false);
             Core.Web.Event.add(this._div, "selectstart", Core.method(this, this._processSelectStart), false);
         }
@@ -252,9 +279,9 @@ Echo.Sync.ListComponent = Core.extend(Echo.Render.ComponentSync, {
     /**
      * Delegates to _renderMainAsSelect() or _renderMainAsDiv() depending on type of list selection component and browser bugs.
      */
-    _renderMain: function(update, parentElement, listBox) {
+    _renderMain: function(update, parentElement) {
         this._multipleSelect = this.component.get("selectionMode") == Echo.ListBox.MULTIPLE_SELECTION;
-        if (listBox && Core.Web.Env.QUIRK_IE_SELECT_LIST_DOM_UPDATE) {
+        if (this.listBox && Core.Web.Env.QUIRK_IE_SELECT_LIST_DOM_UPDATE) {
             this._alternateRender = true;
         }
         this._enabled = this.component.isRenderEnabled();
@@ -262,7 +289,7 @@ Echo.Sync.ListComponent = Core.extend(Echo.Render.ComponentSync, {
         if (this._alternateRender) {
             this._renderMainAsDiv(update, parentElement);
         } else {
-            this._renderMainAsSelect(update, parentElement, listBox);
+            this._renderMainAsSelect(update, parentElement);
         }
     },
     
@@ -277,6 +304,15 @@ Echo.Sync.ListComponent = Core.extend(Echo.Render.ComponentSync, {
             Core.Web.Event.removeAll(this._div);
             this._div = null;
         }
+    },
+    
+    renderFocus: function() {
+        if (this._focused) {
+            return;
+        }
+        
+        this._focused = true;
+        Core.Web.DOM.focusElement(this._element);
     },
     
     _getSelection: function() {
@@ -298,10 +334,10 @@ Echo.Sync.ListComponent = Core.extend(Echo.Render.ComponentSync, {
                 }
             }
             
-            // If selection is null (selectedId not set, or not corresponding item not found),
+            // If selection is null (selectedId not set, or corresponding item not found),
             // set selection to null/default value.
             if (selection == null) {
-                selection = this._multipleSelect ? [] : 0;
+                selection = this.listBox ? [] : 0;
             }
         }
         
@@ -310,12 +346,13 @@ Echo.Sync.ListComponent = Core.extend(Echo.Render.ComponentSync, {
     
     _renderSelection: function() {
         // Set selection.
-        var selection = this._getSelection();
+        var selection = this._getSelection(),
+            i;
         
         if (this._alternateRender) {
             if (this._hasRenderedSelectedItems) {
                 var items = this.component.get("items");
-                for (var i = 0; i < items.length; ++i) {
+                for (i = 0; i < items.length; ++i) {
                     Echo.Sync.Color.renderClear(items[i].foreground, this._div.childNodes[i], 
                             "color");
                     Echo.Sync.Color.renderClear(items[i].background, this._div.childNodes[i], 
@@ -323,7 +360,7 @@ Echo.Sync.ListComponent = Core.extend(Echo.Render.ComponentSync, {
                 }
             }
             if (selection instanceof Array) {
-                for (var i = 0; i < selection.length; ++i) {
+                for (i = 0; i < selection.length; ++i) {
                     if (selection[i] >= 0 && selection[i] < this._div.childNodes.length) {
                         Echo.Sync.Color.render(Echo.Sync.ListComponent.DEFAULT_SELECTED_FOREGROUND,
                                 this._div.childNodes[selection[i]], "color");
@@ -342,7 +379,7 @@ Echo.Sync.ListComponent = Core.extend(Echo.Render.ComponentSync, {
                 this._element.selectedIndex = -1;
             }
             if (selection instanceof Array) {
-                for (var i = 0; i < selection.length; ++i) {
+                for (i = 0; i < selection.length; ++i) {
                     if (selection[i] >= 0 && selection[i] < this._element.options.length) {
                         this._element.options[selection[i]].selected = true;
                     }
@@ -404,6 +441,8 @@ Echo.Sync.ListComponent = Core.extend(Echo.Render.ComponentSync, {
  * Component rendering peer: ListBox
  */
 Echo.Sync.ListBox = Core.extend(Echo.Sync.ListComponent, {
+    
+    listBox: true,
 
     $load: function() {
         Echo.Render.registerPeer("ListBox", this);

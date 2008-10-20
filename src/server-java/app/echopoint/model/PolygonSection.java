@@ -17,17 +17,20 @@
  */
 package echopoint.model;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+
 /**
  * A model object that represents a clickable polygon section in an {@link
  * echopoint.ImageMap}.
  *
- * <p><b>Note:</b> Development of this component was sponsoreed by
+ * <p><b>Note:</b> Development of this component was sponsored by
  * <a href='http://tcnbroadcasting.com/index.jsp' target='_top'>TCN
- * Braadcasting</a>.  We are grateful for their support and sponsorship.</p>
+ * Broadcasting</a>.  We are grateful for their support and sponsorship.</p>
  *
  * @author Rakesh 2008-10-19
  * @version $Id$
  */
+@XStreamAlias( "polygonSection" )
 public class PolygonSection extends MapSection
 {
   private static final long serialVersionUID = 1l;

@@ -17,30 +17,36 @@
  */
 package echopoint;
 
-import echopoint.internal.AbstractPeer;
+import echopoint.internal.AbstractContainerPeer;
 import nextapp.echo.webcontainer.service.JavaScriptService;
+import nextapp.echo.webcontainer.ServerMessage;
 import nextapp.echo.webcontainer.WebContainerServlet;
 import nextapp.echo.webcontainer.Service;
-import nextapp.echo.webcontainer.ServerMessage;
-import nextapp.echo.app.Component;
+import nextapp.echo.webcontainer.AbstractComponentSynchronizePeer;
 import nextapp.echo.app.util.Context;
+import nextapp.echo.app.Component;
+import nextapp.echo.app.update.ClientUpdateManager;
 
 /**
- * Component rendering peer for {@link echopoint.TagCloud}.
+ * Component rendering peer for the {@link echopoint.ImageMap} component.
  *
- * @author Rakesh 2008-07-20
+ * <p><b>Note:</b> Development of this component was sponsored by
+ * <a href='http://tcnbroadcasting.com/index.jsp' target='_top'>TCN
+ * Broadcasting</a>.  We are grateful for their support and sponsorship.</p>
+ *
+ * @author Rakesh Vidyadharan 2008-10-19
  * @version $Id$
  */
-public class TagCloudPeer extends AbstractPeer
+public class ImageMapPeer extends AbstractContainerPeer
 {
   /** The component name for which this class is a peer. */
-  private static final String COMPONENT_NAME = TagCloud.class.getName();
+  private static final String COMPONENT_NAME = ImageMap.class.getName();
 
   /** The JS service files to load. */
   private static final String[] SERVICE_FILES =
       {
-          "resource/js/Application.TagCloud.js",
-          "resource/js/Sync.TagCloud.js"
+          "resource/js/Application.ImageMap.js",
+          "resource/js/Sync.ImageMap.js"
       };
 
   /** The service for the client side peer for this component. */
@@ -51,6 +57,19 @@ public class TagCloudPeer extends AbstractPeer
   static
   {
     WebContainerServlet.getServiceRegistry().add( COMPONENT_SERVICE );
+  }
+
+  public ImageMapPeer()
+  {
+    addEvent( new AbstractComponentSynchronizePeer.EventPeer(
+        ImageMap.INPUT_ACTION, ImageMap.ACTION_LISTENERS_CHANGED_PROPERTY )
+    {
+      @Override
+      public boolean hasListeners( Context context, Component component )
+      {
+        return ( (ImageMap) component ).hasActionListeners();
+      }
+    } );
   }
 
   /**
@@ -72,7 +91,7 @@ public class TagCloudPeer extends AbstractPeer
    */
   public Class getComponentClass()
   {
-    return TagCloud.class;
+    return ImageMap.class;
   }
 
   /**
@@ -82,5 +101,34 @@ public class TagCloudPeer extends AbstractPeer
   public String getClientComponentType( final boolean shortType )
   {
     return COMPONENT_NAME;
+  }
+
+  /** @inheritDoc */
+  @Override
+  public Class getInputPropertyClass( final String propertyName )
+  {
+    if ( ImageMap.ACTION_COMMAND_PROPERTY.equals( propertyName ) )
+    {
+      return String.class;
+    }
+
+    return super.getInputPropertyClass( propertyName );
+  }
+
+  /**
+   * @inheritDoc
+   */
+  @Override
+  public void storeInputProperty( final Context context,
+      final Component component, final String propertyName,
+      final int propertyIndex, final Object newValue )
+  {
+    if ( ImageMap.ACTION_COMMAND_PROPERTY.equals( propertyName ) )
+    {
+      final ClientUpdateManager clientUpdateManager =
+          (ClientUpdateManager) context.get( ClientUpdateManager.class );
+      clientUpdateManager.setComponentProperty( component,
+          ImageMap.ACTION_COMMAND_PROPERTY, newValue );
+    }
   }
 }

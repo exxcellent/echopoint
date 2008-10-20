@@ -13,7 +13,13 @@ Echo = {
 
 /**
  * Representation of a single application instance.
- * Derived objects must invoke construtor with root component id.
+ * Derived objects must invoke constructor with root component id.
+ * 
+ * @event componentUpdate An event fired when any component within the application is updated.
+ *        Listening for this event may degrade the performance of an application, due to the
+ *        frequency with which it will be fired.
+ * @event focus An event fired when the focused component of the application changes.
+ * @event modal An event fired when the modal state of the application changes.
  */
 Echo.Application = Core.extend({
     
@@ -33,7 +39,7 @@ Echo.Application = Core.extend({
     },
     
     $abstract: true,
-
+    
     /** 
      * Mapping between component ids and component instances.
      * @type Core.Arrays.LargeMap
@@ -127,10 +133,10 @@ Echo.Application = Core.extend({
     },
     
     /**
-     * Recurisvely determines the current root component of the modal context.
+     * Recursively determines the current root component of the modal context.
      *
      * @param {Echo.Component} searchComponent (optional) the component from which to search
-     *        (this paramater is provided when recursively searching, if omitted the sear
+     *        (this parameter is provided when recursively searching, if omitted the sear
      *        will begin at the root component of the application).
      * @return the current modal context root component
      */
@@ -224,7 +230,7 @@ Echo.Application = Core.extend({
      * @return the root component of the modal context
      */
     getModalContextRoot: function() {
-        if (this._modalComponents.length == 0) {
+        if (this._modalComponents.length === 0) {
             return null;
         } else if (this._modalComponents.length == 1) {
             return this._modalComponents[0];
@@ -324,6 +330,10 @@ Echo.Application = Core.extend({
             }
         }
         
+        if (this._focusedComponent == newValue) {
+            return;
+        }
+        
         this._focusedComponent = newValue;
         this._listenerList.fireEvent({type: "focus", source: this});
     },
@@ -368,6 +378,8 @@ Echo.Application = Core.extend({
                 }
             }
         }
+        
+        this.fireEvent({ source: this, type: "modal", modal: this._modalComponents.length > 0 });
     },
     
     /**
@@ -399,7 +411,7 @@ Echo.Application = Core.extend({
 
 /**
  * Factory to create new instances of arbitrary components.  This object is 
- * used to instantiate new components during XML deserialization.
+ * used to instantiate new components during XML de-serialization.
  * @class
  */
 Echo.ComponentFactory = {
@@ -444,7 +456,7 @@ Echo.ComponentFactory = {
      * Determines the super type of a component, based on the type name of the component.
      *
      * @param {String} typeName the component type
-     * @return the parent componetn type
+     * @return the parent component type
      * @type String
      */
     getSuperType: function(typeName) {
@@ -484,7 +496,16 @@ Echo.ComponentFactory = {
  * @sp {#Color} background the background color
  * @sp {#Font} font the component font
  * @sp {#Color} foreground the foreground color
- * @sp {Object} layoutData layout data information, describng how the component should be rendered by its container 
+ * @sp {Object} layoutData layout data information, describing how the component should be rendered by its container 
+ * @event property An event fired when the a property of the component changes.  The <code>propertyName</code> property
+ *        will specify the name of the changed property.  The <code>oldValue</code> and <code>newValue</code> properties
+ *        (may) describe the previous and current states of the property, respectively.
+ * @event init An event which is fired when the Component is added to a component hierarchy which is registered to an
+ *        application.  The "application" property of the Component will be available when the event is fired.
+ * @event dispose An event which is fired when the Component is about to be removed from a component hierarchy which is
+ *        registered to an application.  The "application" property of the Component will be available when the event is fired.
+ * @event parent An event which is fired when the Component's parent is changed.
+ * @event children An event which is fired when a child is added to or removed from the Component.
  */
 Echo.Component = Core.extend({
     
@@ -609,7 +630,7 @@ Echo.Component = Core.extend({
      *         <li><code>style</code> specifies the referenced component style</li>
      *         <li><code>renderId</code> specifies the render id</li>
      *         <li><code>children</code> an array specifying the initial children of the component</li>
-     *         <li><code>events</code> an associative mapping between event names and listener methdos</li>
+     *         <li><code>events</code> an associative mapping between event names and listener methods</li>
      *        </ul>
      * @constructor
      */
@@ -635,7 +656,6 @@ Echo.Component = Core.extend({
                     break;
                 default:
                     this._localStyle[name] = properties[name];
-                    break;
                 }
             }
         }
@@ -650,12 +670,12 @@ Echo.Component = Core.extend({
      */
     add: function(component, index) {
         if (!(component instanceof Echo.Component)) {
-            throw new Error("Cannot add child: specified component object is not derived from Echo.Component. "
-                    + "Parent: " + this + ", Child: " + component);
+            throw new Error("Cannot add child: specified component object is not derived from Echo.Component. " +
+                    "Parent: " + this + ", Child: " + component);
         }
         if (!component.componentType) {
-            throw new Error("Cannot add child: specified component object does not have a componentType property. "
-                    + "Parent: " + this + ", Child: " + component);
+            throw new Error("Cannot add child: specified component object does not have a componentType property. " +
+                    "Parent: " + this + ", Child: " + component);
         }
     
         if (component.parent) {
@@ -783,7 +803,7 @@ Echo.Component = Core.extend({
     
     /**
      * Retrieves local style property map associations.
-     * This method should only be used by a deserialized for
+     * This method should only be used by a de-serialized for
      * the purpose of rapidly loading properties into a new
      * component.
      * 
@@ -960,11 +980,13 @@ Echo.Component = Core.extend({
         if (application && this.application) {
             throw new Error("Attempt to re-register or change registered application of component.");
         }
+        
+        var i;
     
         if (!application) { // unregistering
             // Recursively unregister children.
             if (this.children != null) {
-                for (var i = 0; i < this.children.length; ++i) {
+                for (i = 0; i < this.children.length; ++i) {
                      this.children[i].register(false); // Recursively unregister children.
                 }
             }
@@ -973,7 +995,7 @@ Echo.Component = Core.extend({
             this.application._unregisterComponent(this);
 
             // Change application focus in the event the focused component is being removed.
-            // Note that this is performed after deregistration to ensure any removed modal context is cleared.
+            // Note that this is performed after de-registration to ensure any removed modal context is cleared.
             if (this.application._focusedComponent == this) {
                 this.application.setFocusedComponent(this.parent);
             }
@@ -990,7 +1012,7 @@ Echo.Component = Core.extend({
         if (application) { // registering
             // Assign render id if required.
             if (this.renderId == null) {
-                this.renderId = "cl_" + ++Echo.Component._nextRenderId;
+                this.renderId = "cl_" + (++Echo.Component._nextRenderId);
             }
     
             // Notify application.
@@ -1003,7 +1025,7 @@ Echo.Component = Core.extend({
 
             // Recursively register children.
             if (this.children != null) {
-                for (var i = 0; i < this.children.length; ++i) {
+                for (i = 0; i < this.children.length; ++i) {
                      this.children[i].register(application); // Recursively unregister children.
                 }
             }
@@ -1026,8 +1048,9 @@ Echo.Component = Core.extend({
             if (this._style != null) {
                 value = this._style[name];
             }
-            if (value == null && this._styleName && this.application && this.application._styleSheet) {
-                var style = this.application._styleSheet.getRenderStyle(this._styleName, this.componentType);
+            if (value == null && this.application && this.application._styleSheet) {
+                var style = this.application._styleSheet.getRenderStyle(
+                        this._styleName != null ? this._styleName : "", this.componentType);
                 if (style) {
                     value = style[name];
                 }
@@ -1056,7 +1079,8 @@ Echo.Component = Core.extend({
                 value = valueArray ? valueArray[index] : null;
             }
             if (value == null && this._styleName && this.application && this.application._styleSheet) {
-                var style = this.application._styleSheet.getRenderStyle(this._styleName, this.componentType);
+                var style = this.application._styleSheet.getRenderStyle(
+                        this._styleName != null ? this._styleName : "", this.componentType);
                 if (style) {
                     valueArray = style[name];
                     value = valueArray ? valueArray[index] : null;
@@ -1329,7 +1353,7 @@ Echo.FocusManager = Core.extend({
         
         while (true) {
             /** The candidate next component to be focused */
-            var nextComponent = null;
+            var nextComponent = null, componentIndex;
 
             if ((reverse && component == originComponent) || (lastComponent && lastComponent.parent == component)) {
                 // Searching in reverse on origin component (OR) Previously moved up: do not move down.
@@ -1351,12 +1375,12 @@ Echo.FocusManager = Core.extend({
                 if (component.parent) {
                     // Get previous sibling.
                     if (reverse) {
-                        var componentIndex = component.parent.indexOf(component);
+                        componentIndex = component.parent.indexOf(component);
                         if (componentIndex > 0) {
                             nextComponent = component.parent.getComponent(componentIndex - 1);
                         }
                     } else {
-                        var componentIndex = component.parent.indexOf(component);
+                        componentIndex = component.parent.indexOf(component);
                         if (componentIndex < component.parent.getComponentCount() - 1) {
                             nextComponent = component.parent.getComponent(componentIndex + 1);
                         }
@@ -1437,8 +1461,6 @@ Echo.FocusManager = Core.extend({
     }
 });
 
-// Fundamental Property Types
-
 /**
  * Describes the layout direction of text and content to provide support 
  * for bidirectional localization.
@@ -1483,8 +1505,6 @@ Echo.LayoutDirection.LTR = new Echo.LayoutDirection(true);
  * @final
  */
 Echo.LayoutDirection.RTL = new Echo.LayoutDirection(false);
-
-// StyleSheets
 
 /**
  * An application style sheet.
@@ -1734,12 +1754,14 @@ Echo.Update.ComponentUpdate = Core.extend({
      *        removed components/descendants
      */
     _appendRemovedDescendants: function(update) {
+        var i;
+        
         // Append removed descendants.
         if (update._removedDescendantIds != null) {
             if (this._removedDescendantIds == null) {
                 this._removedDescendantIds = [];
             }
-            for (var i = 0; i < update._removedDescendantIds.length; ++i) {
+            for (i = 0; i < update._removedDescendantIds.length; ++i) {
                 this._removedDescendantIds.push(update._removedDescendantIds[i]);
             }
         }
@@ -1749,7 +1771,7 @@ Echo.Update.ComponentUpdate = Core.extend({
             if (this._removedDescendantIds == null) {
                 this._removedDescendantIds = [];
             }
-            for (var i = 0; i < update._removedChildIds.length; ++i) {
+            for (i = 0; i < update._removedChildIds.length; ++i) {
                 this._removedDescendantIds.push(update._removedChildIds[i]);
             }
         }
@@ -1978,7 +2000,7 @@ Echo.Update.ComponentUpdate = Core.extend({
     
     /**
      * Records the removal of a descendant of the parent component.
-     * All children of a removed compoent are recorded as removed
+     * All children of a removed component are recorded as removed
      * descendants when the child is removed.
      * This method will recursively invoke itself on children of
      * the specified descendant.
@@ -2072,10 +2094,10 @@ Echo.Update.Manager = Core.extend({
      * Flag indicating whether a full refresh or incremental update will be performed.
      * @type Boolean
      */
-    _fullRefreshRequired: false,
+    fullRefreshRequired: false,
     
     /**
-     * The application whose updates are being manged.
+     * The application whose updates are being managed.
      * @type Echo.Application
      */
     application: null,
@@ -2236,7 +2258,7 @@ Echo.Update.Manager = Core.extend({
         }
         if (this._isAncestorBeingAdded(child)) {
             return;
-        };
+        }
         var update = this._createComponentUpdate(parent);
         update._addChild(child);
     },
@@ -2399,7 +2421,7 @@ Echo.Update.Manager = Core.extend({
  * Base class from which button components are derived.
  *
  * @sp {String} actionCommand the action command fired in action events 
- *     when the buttton is pushed
+ *     when the button is pushed
  * @sp {#Alignment} alignment the alignment of the button's content
  * @sp {#FillImage} backgroundImage the background image
  * @sp {#Border} border the default button border
@@ -2440,6 +2462,8 @@ Echo.Update.Manager = Core.extend({
  * @sp {#Alignment} textPosition the position of the text relative to the icon
  * @sp {String} toolTipText the tool tip text
  * @sp {#Extent} width the width of the button
+ * @event action An event fired when the button is pressed (clicked).  The <code>actionCommand</code> property of the pressed
+ *        button is provided as a property.
  */
 Echo.AbstractButton = Core.extend(Echo.Component, {
 
@@ -2456,7 +2480,7 @@ Echo.AbstractButton = Core.extend(Echo.Component, {
     $virtual: {
         
         /**
-         * Programatically performs a button action.
+         * Programmatically performs a button action.
          */
         doAction: function() {
             this.fireEvent({type: "action", source: this, actionCommand: this.get("actionCommand")});
@@ -2540,7 +2564,7 @@ Echo.RadioButton = Core.extend(Echo.ToggleButton, {
  *     will be displayed in the selection component.
  * @cp selectedId the values of the id property of the selected item,
  *     or an array of the id values when multiple items are selected
- * @cp selection the index of the selcted item, or an array of the 
+ * @cp selection the index of the selected item, or an array of the 
  *     indices of selected items when multiple items are selected
  *
  * @sp {#Border} border the default border
@@ -2555,6 +2579,7 @@ Echo.RadioButton = Core.extend(Echo.ToggleButton, {
  * @sp {#Font} rolloverFont the rollover font
  * @sp {#Color} rolloverForeground the rollover foreground color
  * @sp {#Extent} width the component width 
+ * @event action An event fired when an item is selected (clicked).
  */
 Echo.AbstractListComponent = Core.extend(Echo.Component, {
 
@@ -2571,7 +2596,7 @@ Echo.AbstractListComponent = Core.extend(Echo.Component, {
     $virtual: {
         
         /**
-         * Programatically performs a list select action.
+         * Programmatically performs a list select action.
          */
         doAction: function() {
             this.fireEvent({type: "action", source: this, actionCommand: this.get("actionCommand")});
@@ -2627,7 +2652,7 @@ Echo.SelectField = Core.extend(Echo.AbstractListComponent, {
 /**
  * A container component which displays cells in a column in vertical order.
  *
- * @sp {#Border} border the border dispalyed around the entire column
+ * @sp {#Border} border the border displayed around the entire column
  * @sp {#Extent} cellSpacing the extent margin between cells of the column
  * @sp {#Insets} insets the inset margin between the column border and its cells
  *
@@ -2728,7 +2753,7 @@ Echo.ContentPane = Core.extend(Echo.Component, {
  * A container component which displays children in a grid.
  * Cells may be configured to span multiple rows and/or columns.
  *
- * @sp {#Border} border the border dispalyed around the grid, and between cells
+ * @sp {#Border} border the border displayed around the grid, and between cells
  * @sp {#Extent} columnWidth an indexed property whose indices represent the width 
  *     of each column of the grid
  * @sp {#Extent} height the overall height of the grid
@@ -2738,7 +2763,7 @@ Echo.ContentPane = Core.extend(Echo.Component, {
  *     following values:
  *     <ul>
  *      <li><code>ORIENTATION_HORIZONTAL</code> (the default) lay children out horizontally, then vertically</li> 
- *      <li><code>ORIENTATION_VERTICAL</code> lay children out verticall, then horizontally</li> 
+ *      <li><code>ORIENTATION_VERTICAL</code> lay children out vertically, then horizontally</li> 
  *     </ul>
  * @sp {#Extent} rowWidth an indexed property whose indices represent the height 
  *     of each row of the grid
@@ -2752,7 +2777,7 @@ Echo.ContentPane = Core.extend(Echo.Component, {
  * @ldp {Number} columnSpan the number of column the containing cell should span
  *      (a value of <code>SPAN_FILL</code> indicates that cell should fill all columns until
  *      the end of the grid is reached; this value may only be used in
- *      this property for hoirzontally oriented grids)
+ *      this property for horizontally oriented grids)
  * @ldp {#Insets} insets the insets margin of the child component's cell 
  *      (this inset is added to any inset set on the container component)
  * @ldp {Number} rowSpan the number of rows the containing cell should span
@@ -2827,7 +2852,7 @@ Echo.Label = Core.extend(Echo.Component, {
 /**
  * A container component which displays cells in a row in horizontal order.
  *
- * @sp {#Border} border the border dispalyed around the entire column
+ * @sp {#Border} border the border displayed around the entire column
  * @sp {#Extent} cellSpacing the extent margin between cells of the column
  * @sp {#Insets} insets the inset margin between the column border and its cells
  *
@@ -2867,10 +2892,12 @@ Echo.Row = Core.extend(Echo.Component, {
  *     of the separator in vertical orientations 
  * @sp {#FillImage} separatorHorizontalImage a FillImage used to paint the separator for horizontal orientations
  * @sp {#Extent} separatorPosition an extent specifying the position of the separator
+ * @sp {Boolean} autoPositioned flag indicating whether the pane should set the separator position automatically
+ *     based on size of first child.  This feature is only available on vertically oriented panes, where the
+ *     first child contains non-pane content. 
  * @sp {#FillImage} separatorVerticalImage a FillImage used to paint the separator for vertical orientations
  * @sp {#Extent} separatorWidth the width of the separator (this property is used to determine the size
  *     of the separator in horizontal orientations
- *
  * @ldp {#Alignment} alignment the alignment of the child component within its subpane
  * @ldp {#Color} background the background of the child component's subpane
  * @ldp {#FillImage} backrgoundImage the background image of the child component's subpane
@@ -2945,6 +2972,7 @@ Echo.SplitPane = Core.extend(Echo.Component, {
  * @sp {String} toolTipText the tool tip text
  * @sp {#Extent} verticalScroll the vertical scrollbar position
  * @sp {#Extent} width the width of the component
+ * @event action An event fired when the enter/return key is pressed while the field is focused.
  */
 Echo.TextComponent = Core.extend(Echo.Component, {
 
@@ -2958,7 +2986,7 @@ Echo.TextComponent = Core.extend(Echo.Component, {
     $virtual: {
         
         /**
-         * Programatically performs a text component action.
+         * Programmatically performs a text component action.
          */
         doAction: function() {
             this.fireEvent({type: "action", source: this, actionCommand: this.get("actionCommand")});
@@ -3012,10 +3040,11 @@ Echo.PasswordField = Core.extend(Echo.TextField, {
  * WindowPane component.
  *
  * @sp {#FillImage} backgroundImage the background image to display within the content area
- * @sp {#FillImageBorder} border the border frame containing thw WindowPane
+ * @sp {#FillImageBorder} border the border frame containing the WindowPane
  * @sp {Boolean} closable flag indicating whether the window is closable
  * @sp {#ImageReference} closeIcon the close button icon
  * @sp {#Insets} controlsInsets the inset margin around the controls area
+ * @sp {#Extent} controlsSpacing the spacing between controls in the controls area
  * @sp {#Insets} closeIconInsets the inset margin around the close button icon
  * @sp {#Insets} maximizeIconInsets the inset margin around the maximize button icon
  * @sp {#Insets} minimizeIconInsets the inset margin around the minimize button icon
@@ -3042,7 +3071,10 @@ Echo.PasswordField = Core.extend(Echo.TextField, {
  * @sp {#Color} titleForeground the foreground color of the title text
  * @sp {#Extent} titleHeight the height of the title bar
  * @sp {#Insets} titleInsets the inset margin of the title text
- * @sp {#Extent} width the outside width of the window, including its border 
+ * @sp {#Extent} width the outside width of the window, including its border
+ * @event close An event fired when the close button is pressed.
+ * @event maximize An event fired when the maximize button is pressed.
+ * @event minimize An event fired when the minimize button is pressed.
  */
 Echo.WindowPane = Core.extend(Echo.Component, {
 
@@ -3056,11 +3088,12 @@ Echo.WindowPane = Core.extend(Echo.Component, {
         DEFAULT_BACKGROUND: "#ffffff",
         DEFAULT_FOREGROUND: "#000000",
         DEFAULT_CONTROLS_INSETS: 4,
-        DEFAULT_HEIGHT: 200,
+        DEFAULT_CONTROLS_SPACING: 4,
+        DEFAULT_HEIGHT: "15em",
         DEFAULT_MINIMUM_WIDTH: 100,
         DEFAULT_MINIMUM_HEIGHT: 100,
         DEFAULT_TITLE_HEIGHT: 30,
-        DEFAULT_WIDTH: 400
+        DEFAULT_WIDTH: "30em"
     },
 
     componentType: "WindowPane",

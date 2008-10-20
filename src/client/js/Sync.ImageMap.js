@@ -40,6 +40,9 @@ echopoint.ImageMapSync = Core.extend( echopoint.internal.AbstractContainerSync,
   /** The map built on top of the image. */
   _map: null,
 
+  /** The map of clickable sections for the map.  Cached to process JSON */
+  _sections: null,
+
   renderAdd: function( update, parentElement )
   {
     echopoint.ImageMapSync.instances.map[ this.component.renderId ] = this;
@@ -105,7 +108,7 @@ echopoint.ImageMapSync = Core.extend( echopoint.internal.AbstractContainerSync,
       }
     }
 
-    var sections = this.component.get( echopoint.ImageMap.SECTIONS );
+    var sections = this._getSections();
     for ( var i in sections )
     {
       if ( sections[i] instanceof echopoint.model.MapSection )
@@ -157,5 +160,60 @@ echopoint.ImageMapSync = Core.extend( echopoint.internal.AbstractContainerSync,
     }
 
     return shape;
+  },
+
+  /** Return the map of clickable sections used to build the map element. */
+  _getSections: function()
+  {
+    if ( this._sections ) return this._sections;
+    var value = this.component.get( echopoint.ImageMap.SECTIONS );
+
+    if ( value instanceof Core.Arrays.LargeMap )
+    {
+      this._sections = value;
+    }
+    else
+    {
+      this._sections = this._parseJson( value );
+    }
+
+    return this._sections;
+  },
+
+  /** Parse the JSON structure into a LargeMap */
+  _parseJson: function( json )
+  {
+    var sections = new Core.Arrays.LargeMap();
+    var data = eval( "(" + json + ")" );
+
+    for ( var i = 0; i < data.list.length; ++i )
+    {
+      var map = data.list[i];
+      var actionCommand = map[0];
+      var mapSection = map[1];
+      var section = null;
+
+      if ( mapSection.x )
+      {
+        section = new echopoint.model.CircleSection( mapSection.x,
+            mapSection.y, mapSection.radius, actionCommand,
+            mapSection.altText );
+      }
+      else if ( mapSection.bottomx )
+      {
+        section = new echopoint.model.RectangleSection( mapSection.bottomx,
+            mapSection.bottomy, mapSection.topx, mapSection.topy, actionCommand,
+            mapSection.altText );
+      }
+      else if ( mapSection.vertices )
+      {
+        section = new echopoint.model.PolygonSection( mapSection.vertices,
+            actionCommand, mapSection.altText );
+      }
+
+      sections[actionCommand] = section;
+    }
+
+    return sections;
   }
 });

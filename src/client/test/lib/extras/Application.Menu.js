@@ -10,14 +10,26 @@
  * @sp {#Color} selectionBackground the background color used to highlight the currently selected menu item
  * @sp {#FillImage} selectionBackgroundImage the background image used to highlight the currently selected menu item
  * @sp {#Color} selectionForeground the foreground color used to highlight the currently selected menu item
+ * @sp {Number} activationMode a flag indicating how the context menu may be activated, one or more of the following
+ *     values ORed together:
+ *     <ul>
+ *      <li><code>ACTIVATION_MODE_CLICK</code>: activate menu when contents are clicked.</li>
+ *      <li><code>ACTIVATION_MODE_CONTEXT_CLICK</code>: (the default) actiate menu when contents are context-clicked.</li>
+ *     </ul>
  */
 Extras.ContextMenu = Core.extend(Echo.Component, {
+
+    $static: {
+        ACTIVATION_MODE_CLICK: 1,
+        ACTIVATION_MODE_CONTEXT_CLICK: 2
+    },
 
     $load: function() {
         Echo.ComponentFactory.registerType("Extras.ContextMenu", this);
     },
 
-    componentType: "Extras.ContextMenu"
+    componentType: "Extras.ContextMenu",
+    modalSupport: true
 });
 
 /**
@@ -25,7 +37,7 @@ Extras.ContextMenu = Core.extend(Echo.Component, {
  *
  * @sp {Number} animationTime the animation time (in milliseconds) (A value of zero indicates animation is disabled.)
  * @sp {#FillImage} backgroundImage the background image that will be displayed in the drop down box
- *     (This image will also be used in child menus unless a value is specified for the <code>menuBackgroundImage</code>
+ *     (This image will also be used in child menus unless a value is specified for the <code>menuBackgroundImage</code> 
  *     property.)
  * @sp {#Border} border the border that will be displayed around the drop down box (This border will also be used around
  *     child menus unless a value is specified for the <code>menuBorder</code> property.)
@@ -58,7 +70,8 @@ Extras.DropDownMenu = Core.extend(Echo.Component, {
         Echo.ComponentFactory.registerType("Extras.DropDownMenu", this);
     },
 
-    componentType: "Extras.DropDownMenu"
+    componentType: "Extras.DropDownMenu",
+    modalSupport: true
 });
 
 /**
@@ -90,8 +103,13 @@ Extras.MenuBarPane = Core.extend(Echo.Component, {
     $load: function() {
         Echo.ComponentFactory.registerType("Extras.MenuBarPane", this);
     },
+    
+    $static: {
+        DEFAULT_INSETS: "3px 0px"
+    },
 
-    componentType: "Extras.MenuBarPane"
+    componentType: "Extras.MenuBarPane",
+    modalSupport: true
 });
 
 /**
@@ -100,13 +118,13 @@ Extras.MenuBarPane = Core.extend(Echo.Component, {
 Extras.ItemModel = Core.extend({
 
     $abstract: true,
-
+    
     /**
      * The id of the item model.
      * @type String
      */
     modelId: null,
-
+    
     /**
      * The parent menu model
      * @type Extras.ItemModel
@@ -118,25 +136,25 @@ Extras.ItemModel = Core.extend({
  * Representation of a menu that may contain submenus, options, and separators.
  */
 Extras.MenuModel = Core.extend(Extras.ItemModel, {
-
+    
     /**
      * The menu title.
      * @type String
      */
     text: null,
-
+    
     /**
      * The menu icon.
      * @type #ImageReference
      */
     icon: null,
-
+    
     /**
      * The child menu items.
      * @type Array
      */
     items: null,
-
+    
     /**
      * Creates a new menu model
      *
@@ -160,7 +178,7 @@ Extras.MenuModel = Core.extend(Extras.ItemModel, {
         }
         this.items = items ? items : [];
     },
-
+    
     /**
      * Adds an item to the MenuModel.
      *
@@ -170,7 +188,7 @@ Extras.MenuModel = Core.extend(Extras.ItemModel, {
         this.items.push(item);
         item.parent = this;
     },
-
+    
     /**
      * Finds an item by id in the <code>MenuModel</code>, searching descendant <code>MenuModel</code>s as necessary.
      * @param id the id of the menu item to find
@@ -193,7 +211,7 @@ Extras.MenuModel = Core.extend(Extras.ItemModel, {
         }
         return null;
     },
-
+    
     /**
      * Determines the index of the specified menu item.
      *
@@ -209,7 +227,7 @@ Extras.MenuModel = Core.extend(Extras.ItemModel, {
         }
         return -1;
     },
-
+    
     getItemModelFromPositions: function(itemPositions) {
         var menuModel = this;
         for (var i = 0; i < itemPositions.length; ++i) {
@@ -217,7 +235,7 @@ Extras.MenuModel = Core.extend(Extras.ItemModel, {
         }
         return menuModel;
     },
-
+    
     /**
      * toString() implementation.
      */
@@ -230,26 +248,26 @@ Extras.MenuModel = Core.extend(Extras.ItemModel, {
  * Representation of a menu option.
  */
 Extras.OptionModel = Core.extend(Extras.ItemModel, {
-
+    
     /**
      * The menu title.
      * @type String
      */
     text: null,
-
+    
     /**
      * The menu icon.
      * @type #ImageReference
      */
     icon: null,
-
+    
     /**
      * Creates a new menu option.
      *
      * @param {String} modelId the id of the menu model
      * @param {String} text the menu item title
      * @param {#ImageReference} icon the menu item icon
-     */
+     */ 
     $construct: function(modelId, text, icon) {
         this.modelId = modelId;
         this.id = Extras.uniqueId++;
@@ -257,11 +275,11 @@ Extras.OptionModel = Core.extend(Extras.ItemModel, {
         this.text = text;
         this.icon = icon;
     },
-
+    
     /**
-     * Returns an array containing the path of this model to its most distant ancestor, consisting of
+     * Returns an array containing the path of this model to its most distant ancestor, consisting of 
      * positions.
-     *
+     * 
      * @return the array of positions
      * @type Array
      */
@@ -274,7 +292,7 @@ Extras.OptionModel = Core.extend(Extras.ItemModel, {
         }
         return path;
     },
-
+    
     /**
      * toString() implementation.
      */
@@ -294,7 +312,7 @@ Extras.ToggleOptionModel = Core.extend(Extras.OptionModel, {
      * @param {String} modelId the id of the menu model
      * @param {String} text the menu item title
      * @param {Boolean} initial selection state
-     */
+     */ 
     $construct: function(modelId, text, selected) {
         Extras.OptionModel.call(this, modelId, text, null);
         this.selected = selected;
@@ -312,7 +330,7 @@ Extras.RadioOptionModel = Core.extend(Extras.ToggleOptionModel, {
      * @param {String} modelId the id of the menu model
      * @param {String} text the menu item title
      * @param {Boolean} initial selection state
-     */
+     */ 
     $construct: function(modelId, text, selected) {
         Extras.ToggleOptionModel.call(this, modelId, text, selected);
     }
@@ -327,7 +345,7 @@ Extras.SeparatorModel = Core.extend(Extras.ItemModel, {
 
 /**
  * Representation of menu model state, describing which items are selected and/or disabled.
- */
+ */ 
 Extras.MenuStateModel = Core.extend({
 
     /**
@@ -335,7 +353,7 @@ Extras.MenuStateModel = Core.extend({
      * @type Array
      */
     _disabledItems: null,
-
+    
     /**
      * Selected menu item ids.
      * @type Array
@@ -349,7 +367,7 @@ Extras.MenuStateModel = Core.extend({
         this._disabledItems = [];
         this._selectedItems = [];
     },
-
+    
     /**
      * Determines if the specified menu item is enabled.
      *
@@ -367,7 +385,7 @@ Extras.MenuStateModel = Core.extend({
         }
         return true;
     },
-
+    
     /**
      * Determines if the specified menu item is selected.
      *
@@ -385,7 +403,7 @@ Extras.MenuStateModel = Core.extend({
         }
         return false;
     },
-
+    
     /**
      * Sets the enabled state of a menu item.
      *
@@ -398,7 +416,7 @@ Extras.MenuStateModel = Core.extend({
             this._disabledItems.push(modelId);
         }
     },
-
+    
     /**
      * Sets the selection state of a menu item.
      *

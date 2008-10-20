@@ -55,8 +55,8 @@ Echo.Sync.ArrayContainer = Core.extend(Echo.Render.ComponentSync, {
                 index = null;
             }
         }
-        if (index == null) {
-            // Full render or append-at-end scenario
+        if (index == null || !this.containerElement.firstChild) {
+            // Full render, append-at-end scenario, or index 0 specified and no children rendered.
             
             // Render spacing cell first if index != 0 and cell spacing enabled.
             if (this.cellSpacing && this.containerElement.firstChild) {
@@ -124,7 +124,7 @@ Echo.Sync.ArrayContainer = Core.extend(Echo.Render.ComponentSync, {
     },
 
     renderUpdate: function(update) {
-        var fullRender = false;
+        var i, fullRender = false;
         if (update.hasUpdatedProperties() || update.hasUpdatedLayoutDataChildren()) {
             // Full render
             fullRender = true;
@@ -132,14 +132,14 @@ Echo.Sync.ArrayContainer = Core.extend(Echo.Render.ComponentSync, {
             var removedChildren = update.getRemovedChildren();
             if (removedChildren) {
                 // Remove children.
-                for (var i = 0; i < removedChildren.length; ++i) {
+                for (i = 0; i < removedChildren.length; ++i) {
                     this.renderRemoveChild(update, removedChildren[i]);
                 }
             }
             var addedChildren = update.getAddedChildren();
             if (addedChildren) {
                 // Add children.
-                for (var i = 0; i < addedChildren.length; ++i) {
+                for (i = 0; i < addedChildren.length; ++i) {
                     this.renderAddChild(update, addedChildren[i], this.component.indexOf(addedChildren[i])); 
                 }
             }
@@ -262,6 +262,7 @@ Echo.Sync.Row = Core.extend(Echo.Sync.ArrayContainer, {
         this.cellSpacing = Echo.Sync.Extent.toPixels(this.component.render("cellSpacing"), false);
         if (this.cellSpacing) {
             this.spacingPrototype = document.createElement("td");
+            this.spacingPrototype.style.padding = 0;
             this.spacingPrototype.style.width = this.cellSpacing + "px";
         }
         

@@ -60,7 +60,7 @@ echopoint.TagCloudSync = Core.extend(Echo.Render.ComponentSync,
     var tag = this._getSpecificElement(e.target);
     if ( tag )
     {
-      this.component.doAction(tag);
+      this.component.doAction( tag );
     }
   },
 
@@ -168,7 +168,7 @@ echopoint.TagCloudSync = Core.extend(Echo.Render.ComponentSync,
     if ( property )
     {
       this._tags = null;
-      
+
       if ( this._element.hasChildNodes() )
       {
         while( this._element.childNodes.length >= 1 )

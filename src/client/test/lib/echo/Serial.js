@@ -2,45 +2,45 @@
  * Tools for serializing components, stylesheets, and property instances to and from XML.
  * @namespace
  */
-Echo.Serial = {
+Echo.Serial = { 
 
     /**
      * Map between property class names and property translators.
      * Property translators stored in this map will be used when an object
      * provides a "className" property.
      */
-    _propertyTranslatorMap: { },
-
+    _translatorMap: { },
+    
     /**
      * Array describing mapping between object constructors and property translators.
      * Even indices of the map contain constructors, and the subsequent odd indices
      * contain the property translator suitable for the constructor at the previous
      * index.  This array is iterated to determine the appropriate property translator.
-     * This array is only used for a very small number of non-primitive
+     * This array is only used for a very small number of non-primitive 
      * property types which are provided by JavaScript itself, e.g., Date.
      */
-    _propertyTranslatorTypeData: [ ],
-
+    _translatorTypeData: [ ],
+    
     /**
      * Adds a property translator for a specific class name.
      *
      * @param className the class name
-     * @param propertyTranslator the property translator
+     * @param translator the property translator 
      */
-    addPropertyTranslator: function(className, propertyTranslator) {
-        this._propertyTranslatorMap[className] = propertyTranslator;
+    addPropertyTranslator: function(className, translator) {
+        this._translatorMap[className] = translator;
     },
-
+    
     /**
      * Adds a property translator for a specific constructor.
      *
      * @param type the constructor
-     * @param propertyTranslator the property translator
+     * @param translator the property translator 
      */
-    addPropertyTranslatorByType: function(type, propertyTranslator) {
-        this._propertyTranslatorTypeData.push(type, propertyTranslator);
+    addPropertyTranslatorByType: function(type, translator) {
+        this._translatorTypeData.push(type, translator);
     },
-
+    
     /**
      * Retrieves a property translator for a specific class name.
      *
@@ -48,9 +48,9 @@ Echo.Serial = {
      * @return the property translator
      */
     getPropertyTranslator: function(className) {
-        return this._propertyTranslatorMap[className];
+        return this._translatorMap[className];
     },
-
+    
     /**
      * Retrieves a property translator for a specific constructor.
      *
@@ -58,14 +58,14 @@ Echo.Serial = {
      * @return the property translator
      */
     getPropertyTranslatorByType: function(type) {
-        for (var i = 0; i < this._propertyTranslatorTypeData.length; i += 2) {
-            if (this._propertyTranslatorTypeData[i] == type) {
-                return this._propertyTranslatorTypeData[i + 1];
-            }
+        for (var i = 0; i < this._translatorTypeData.length; i += 2) {
+            if (this._translatorTypeData[i] == type) {
+                return this._translatorTypeData[i + 1];
+            } 
         }
         return null;
     },
-
+    
     /**
      * Deserializes an XML representation of a component into a component instance.
      * Any child components will be added to the created component instance.
@@ -73,22 +73,22 @@ Echo.Serial = {
      * "addComponentListener()" method on the provided 'client', passing in
      * the properties 'component' (the component instance) and 'event' (the event
      * type as a string).
-     *
+     * 
      * @param client the containing client
-     * @param componentElement the 'c' DOM element to deserialize
+     * @param cElement the 'c' DOM element to deserialize
      * @return the instantiated component.
      */
-    loadComponent: function(client, componentElement, referenceMap) {
-        if (!componentElement.nodeName == "c") {
+    loadComponent: function(client, cElement, referenceMap) {
+        if (!cElement.nodeName == "c") {
             throw new Error("Element is not a component.");
         }
-        var type = componentElement.getAttribute("t");
-        var id = componentElement.getAttribute("i");
-
+        var type = cElement.getAttribute("t");
+        var id = cElement.getAttribute("i");
+    
         var component = Echo.ComponentFactory.newInstance(type, id);
         var styleData = component.getLocalStyleData();
-
-        var element = componentElement.firstChild;
+        
+        var element = cElement.firstChild;
         while (element) {
             if (element.nodeType == 1) {
                 switch (element.nodeName) {
@@ -112,28 +112,27 @@ Echo.Serial = {
                     component.setLocale(element.firstChild ? element.firstChild.nodeValue : null);
                     break;
                 case "dir": // Layout direction update.
-                    component.setLayoutDirection(element.firstChild
-                            ? (element.firstChild.nodeValue == "rtl" ? Echo.LayoutDirection.RTL : Echo.LayoutDirection.LTR)
-                            : null);
+                    component.setLayoutDirection(element.firstChild ?
+                            (element.firstChild.nodeValue == "rtl" ? Echo.LayoutDirection.RTL : Echo.LayoutDirection.LTR) : null);
                 }
             }
             element = element.nextSibling;
         }
-
+        
         return component;
     },
-
+    
     _loadComponentEvent: function(client, eventElement, component) {
         var eventType = eventElement.getAttribute("t");
         client.addComponentListener(component, eventType);
     },
-
+    
     /**
      * Deserializes an XML representation of a property into an instance,
      * and assigns it to the specified object.
-     *
+     * 
      * @param client the containing client
-     * @param {Element} propertyElement the property element to parse
+     * @param {Element} pElement the property element to parse
      * @param object the object on which the properties should be set (this object
      *        must contain set() and setIndex() methods
      * @param styleData (optional) an associative array on which properties can
@@ -141,70 +140,70 @@ Echo.Serial = {
      * @param referenceMap (optional) an associative array containing previously
      *        loaded reference-based properties
      */
-    loadProperty: function(client, propertyElement, object, styleData, referenceMap) {
-        var propertyName = propertyElement.getAttribute("n");
-        var propertyType = propertyElement.getAttribute("t");
-        var propertyIndex = propertyElement.getAttribute("x");
-        var propertyValue;
-
-        if (propertyType) {
+    loadProperty: function(client, pElement, object, styleData, referenceMap) {
+        var name = pElement.getAttribute("n");
+        var type = pElement.getAttribute("t");
+        var index = pElement.getAttribute("x");
+        var value;
+        
+        if (type) {
             // Invoke custom property processor.
-            var translator = Echo.Serial._propertyTranslatorMap[propertyType];
+            var translator = Echo.Serial._translatorMap[type];
             if (!translator) {
-                throw new Error("Translator not available for property type: " + propertyType);
+                throw new Error("Translator not available for property type: " + type);
             }
-            propertyValue = translator.toProperty(client, propertyElement);
+            value = translator.toProperty(client, pElement);
         } else {
             if (referenceMap) {
-                var propertyReference = propertyElement.getAttribute("r");
+                var propertyReference = pElement.getAttribute("r");
                 if (propertyReference) {
-                    propertyValue = referenceMap[propertyReference];
+                    value = referenceMap[propertyReference];
                 } else {
-                    propertyValue = Echo.Serial.String.toProperty(client, propertyElement);
+                    value = Echo.Serial.String.toProperty(client, pElement);
                 }
             } else {
-                propertyValue = Echo.Serial.String.toProperty(client, propertyElement);
+                value = Echo.Serial.String.toProperty(client, pElement);
             }
         }
-
-        if (propertyName) {
+        
+        if (name) {
             if (styleData) {
-                if (propertyIndex == null) {
-                    styleData[propertyName] = propertyValue;
+                if (index == null) {
+                    styleData[name] = value;
                 } else {
-                    var indexValues = styleData[propertyName];
+                    var indexValues = styleData[name];
                     if (!indexValues) {
                         indexValues = [];
-                        styleData[propertyName] = indexValues;
+                        styleData[name] = indexValues;
                     }
-                    indexValues[propertyIndex] = propertyValue;
+                    indexValues[index] = value;
                 }
             } else {
                 // Property has property name: invoke set(Indexed)Property.
-                if (propertyIndex == null) {
-                    object.set(propertyName, propertyValue);
+                if (index == null) {
+                    object.set(name, value);
                 } else {
-                    object.setIndex(propertyName, propertyIndex, propertyValue);
+                    object.setIndex(name, index, value);
                 }
             }
         } else {
             // Property has method name: invoke method.
-            var propertyMethod = propertyElement.getAttribute("m");
-            if (propertyIndex == null) {
-                object[propertyMethod](propertyValue);
+            var propertyMethod = pElement.getAttribute("m");
+            if (index == null) {
+                object[propertyMethod](value);
             } else {
-                object[propertyMethod](propertyIndex, propertyValue);
+                object[propertyMethod](index, value);
             }
         }
     },
-
+    
     /**
      * Deserializes an XML representation of a style sheet into a
      * StyleSheet instance.
      */
     loadStyleSheet: function(client, ssElement, referenceMap) {
         var styleSheet = new Echo.StyleSheet();
-
+        
         var ssChild = ssElement.firstChild;
         while (ssChild) {
             if (ssChild.nodeType == 1) {
@@ -213,10 +212,8 @@ Echo.Serial = {
                     var sChild = ssChild.firstChild;
                     while (sChild) {
                         if (sChild.nodeType == 1) {
-                            switch (sChild.nodeName) {
-                            case "p":
+                            if (sChild.nodeName == "p") {
                                 this.loadProperty(client, sChild, null, style, referenceMap);
-                                break;
                             }
                         }
                         sChild = sChild.nextSibling;
@@ -228,30 +225,30 @@ Echo.Serial = {
         }
         return styleSheet;
     },
-
+    
     /**
      * Serializes a property value into an XML representation.
      */
-    storeProperty: function(client, propertyElement, propertyValue) {
-        if (propertyValue == null) {
+    storeProperty: function(client, pElement, value) {
+        if (value == null) {
             //FIXME.  Send nulled values.
-        } else if (typeof (propertyValue) == "object") {
+        } else if (typeof (value) == "object") {
             var translator = null;
-            if (propertyValue.className) {
-                translator = this._propertyTranslatorMap[propertyValue.className];
+            if (value.className) {
+                translator = this._translatorMap[value.className];
             } else {
-                translator = this.getPropertyTranslatorByType(propertyValue.constructor);
+                translator = this.getPropertyTranslatorByType(value.constructor);
             }
-
+            
             if (!translator || !translator.toXml) {
                 // If appropriate translator does not exist, or translator does not support to-XML translation,
                 // simply ignore the property.
                 return;
             }
-            translator.toXml(client, propertyElement, propertyValue);
+            translator.toXml(client, pElement, value);
         } else {
             // call toString here, IE will otherwise convert boolean values to integers
-            propertyElement.appendChild(propertyElement.ownerDocument.createTextNode(propertyValue.toString()));
+            pElement.appendChild(pElement.ownerDocument.createTextNode(value.toString()));
         }
     }
 };
@@ -262,7 +259,7 @@ Echo.Serial = {
  */
 Echo.Serial.Null = {
 
-    toProperty: function(client, propertyElement) {
+    toProperty: function(client, pElement) {
         return null;
     }
 };
@@ -275,8 +272,8 @@ Echo.Serial.addPropertyTranslator("0", Echo.Serial.Null);
  */
 Echo.Serial.Boolean = {
 
-    toProperty: function(client, propertyElement) {
-        return propertyElement.firstChild.data == "true";
+    toProperty: function(client, pElement) {
+        return pElement.firstChild.data == "true";
     }
 };
 
@@ -288,8 +285,8 @@ Echo.Serial.addPropertyTranslator("b", Echo.Serial.Boolean);
  */
 Echo.Serial.Float = {
 
-    toProperty: function(client, propertyElement) {
-        return parseFloat(propertyElement.firstChild.data);
+    toProperty: function(client, pElement) {
+        return parseFloat(pElement.firstChild.data);
     }
 };
 
@@ -299,10 +296,10 @@ Echo.Serial.addPropertyTranslator("f", Echo.Serial.Float);
  * Integer Property Translator Singleton.
  * @class
  */
-Echo.Serial.Integer = {
+Echo.Serial.Integer = { 
 
-    toProperty: function(client, propertyElement) {
-        return parseInt(propertyElement.firstChild.data);
+    toProperty: function(client, pElement) {
+        return parseInt(pElement.firstChild.data, 10);
     }
 };
 
@@ -314,8 +311,8 @@ Echo.Serial.addPropertyTranslator("i", Echo.Serial.Integer);
  */
 Echo.Serial.String = {
 
-    toProperty: function(client, propertyElement) {
-        var textNode = propertyElement.firstChild;
+    toProperty: function(client, pElement) {
+        var textNode = pElement.firstChild;
         if (!textNode) {
             return "";
         }
@@ -338,18 +335,18 @@ Echo.Serial.Date = {
 
     _expr: /(\d{4})\.(\d{2}).(\d{2})/,
 
-    toProperty: function(client, propertyElement) {
-        var value = Echo.Serial.String.toProperty(client, propertyElement);
+    toProperty: function(client, pElement) {
+        var value = Echo.Serial.String.toProperty(client, pElement);
         var result = this._expr.exec(value);
         if (!result) {
             return null;
         }
-        return new Date(result[1], parseInt(result[2]) - 1, result[3]);
+        return new Date(result[1], parseInt(result[2], 10) - 1, result[3]);
     },
-
-    toXml: function(client, propertyElement, propertyValue) {
-        propertyElement.appendChild(propertyElement.ownerDocument.createTextNode(
-                propertyValue.getFullYear() + "." + (propertyValue.getMonth() + 1) + "." + propertyValue.getDate()));
+    
+    toXml: function(client, pElement, value) {
+        pElement.appendChild(pElement.ownerDocument.createTextNode(
+                value.getFullYear() + "." + (value.getMonth() + 1) + "." + value.getDate()));
     }
 };
 
@@ -362,14 +359,14 @@ Echo.Serial.addPropertyTranslatorByType(Date, Echo.Serial.Date);
  */
 Echo.Serial.Map = {
 
-    toProperty: function(client, propertyElement) {
+    toProperty: function(client, pElement) {
         var mapObject = {};
-        var element = propertyElement.firstChild;
+        var element = pElement.firstChild;
         while (element) {
             if (element.nodeType != 1) {
                 continue;
             }
-
+    
             Echo.Serial.loadProperty(client, element, null, mapObject, null);
             element = element.nextSibling;
         }
@@ -388,22 +385,22 @@ Echo.Serial.Alignment = {
     _HORIZONTAL_MAP: {
         "leading": "leading",
         "trailing": "trailing",
-        "bottomx": "bottomx",
+        "left": "left",
         "center": "center",
-        "topx": "topx"
+        "right": "right"
     },
-
+    
     _VERTICAL_MAP: {
-        "bottomy": "bottomy",
+        "top": "top",
         "center": "middle",
-        "topy": "topy"
+        "bottom": "bottom"
     },
 
-    toProperty: function(client, propertyElement) {
-        var element = Core.Web.DOM.getChildElementByTagName(propertyElement, "a");
+    toProperty: function(client, pElement) {
+        var element = Core.Web.DOM.getChildElementByTagName(pElement, "a");
         var h = this._HORIZONTAL_MAP[element.getAttribute("h")];
         var v = this._VERTICAL_MAP[element.getAttribute("v")];
-
+        
         if (h) {
             if (v) {
                 return { horizontal: h, vertical: v };
@@ -426,26 +423,27 @@ Echo.Serial.addPropertyTranslator("AL", Echo.Serial.Alignment);
  */
 Echo.Serial.Border = {
 
-    toProperty: function(client, propertyElement) {
-        var value = propertyElement.getAttribute("v");
-        if (value) {
-            return value;
+    toProperty: function(client, pElement) {
+	    if (pElement.firstChild.nodeType == 3) { // Text content
+	        return pElement.firstChild.data;
+	    } else if (pElement.getAttribute("v")) {
+            return pElement.getAttribute("v");
         } else {
-            var element = Core.Web.DOM.getChildElementByTagName(propertyElement, "b");
+            var element = Core.Web.DOM.getChildElementByTagName(pElement, "b");
             var border = {};
-
-            value = element.getAttribute("t");
+            
+            var value = element.getAttribute("t");
             if (value) {
-                border.bottomy = value;
+                border.top = value;
                 value = element.getAttribute("r");
                 if (value) {
-                    border.topx = value;
+                    border.right = value;
                     value = element.getAttribute("b");
                     if (value) {
-                        border.topy = value;
+                        border.bottom = value;
                         value = element.getAttribute("l");
                         if (value) {
-                            border.bottomx = value;
+                            border.left = value;
                         }
                     }
                 }
@@ -467,12 +465,12 @@ Echo.Serial.addPropertyTranslator("BO", Echo.Serial.Border);
  */
 Echo.Serial.Extent = {
 
-    toProperty: function(client, propertyElement) {
-        return  propertyElement.firstChild.data;
+    toProperty: function(client, pElement) {
+        return  pElement.firstChild.data;
     },
-
-    toXml: function(client, propertyElement, propertyValue) {
-        propertyElement.appendChild(propertyElement.ownerDocument.createTextNode(propertyValue.toString()));
+    
+    toXml: function(client, pElement, value) {
+        pElement.appendChild(pElement.ownerDocument.createTextNode(value.toString()));
     }
 };
 
@@ -485,11 +483,11 @@ Echo.Serial.addPropertyTranslator("X", Echo.Serial.Extent);
  */
 Echo.Serial.FillImage = {
 
-    toProperty: function(client, propertyElement) {
-        var element = Core.Web.DOM.getChildElementByTagName(propertyElement, "fi");
+    toProperty: function(client, pElement) {
+        var element = Core.Web.DOM.getChildElementByTagName(pElement, "fi");
         return this._parseElement(client, element);
     },
-
+    
     _parseElement: function(client, fiElement) {
         var url = fiElement.getAttribute("u");
         if (client.decompressUrl) {
@@ -498,7 +496,7 @@ Echo.Serial.FillImage = {
         var repeat = fiElement.getAttribute("r");
         var x = fiElement.getAttribute("x");
         var y = fiElement.getAttribute("y");
-
+        
         if (repeat || x || y) {
             return { url: url, repeat: repeat, x: x, y: y };
         } else {
@@ -516,20 +514,20 @@ Echo.Serial.addPropertyTranslator("FI", Echo.Serial.FillImage);
  */
 Echo.Serial.FillImageBorder = {
 
-    _NAMES: [ "topLeft", "bottomy", "topRight", "bottomx", "topx", "bottomLeft", "topy", "bottomRight" ],
+    _NAMES: [ "topLeft", "top", "topRight", "left", "right", "bottomLeft", "bottom", "bottomRight" ],
 
-    toProperty: function(client, propertyElement) {
-        var element = Core.Web.DOM.getChildElementByTagName(propertyElement, "fib");
+    toProperty: function(client, pElement) {
+        var element = Core.Web.DOM.getChildElementByTagName(pElement, "fib");
         return Echo.Serial.FillImageBorder._parseElement(client, element);
     },
-
+    
     _parseElement: function(client, fibElement) {
-        var fillImageBorder = {
-            contentInsets: fibElement.getAttribute("ci") == "" ? null : fibElement.getAttribute("ci"),
-            borderInsets: fibElement.getAttribute("bi") == "" ? null : fibElement.getAttribute("bi"),
+        var fillImageBorder = { 
+            contentInsets: fibElement.getAttribute("ci") ? fibElement.getAttribute("ci") : null,
+            borderInsets: fibElement.getAttribute("bi") ? fibElement.getAttribute("bi") : null,
             color: fibElement.getAttribute("bc")
         };
-
+        
         var element = fibElement.firstChild;
         var i = 0;
         while(element) {
@@ -543,10 +541,10 @@ Echo.Serial.FillImageBorder = {
             }
             element = element.nextSibling;
         }
-        if (!(i == 0 || i == 8)) {
+        if (!(i === 0 || i == 8)) {
             throw new Error("Invalid FillImageBorder image count: " + i);
         }
-
+    
         return fillImageBorder;
     }
 };
@@ -560,32 +558,32 @@ Echo.Serial.addPropertyTranslator("FIB", Echo.Serial.FillImageBorder);
  */
 Echo.Serial.Font = {
 
-    toProperty: function(client, propertyElement) {
-        var element = Core.Web.DOM.getChildElementByTagName(propertyElement, "f");
+    toProperty: function(client, pElement) {
+        var element = Core.Web.DOM.getChildElementByTagName(pElement, "f");
         var tfElements = Core.Web.DOM.getChildElementsByTagName(element, "tf");
-
+        
         var font = { };
-
+        
         if (tfElements.length > 1) {
             font.typeface = new Array(tfElements.length);
             for (var i = 0; i < tfElements.length; ++i) {
-                font.typeface[i] = tfElements[i].getAttribute("n");
+                font.typeface[i] = tfElements[i].firstChild.data;
             }
         } else if (tfElements.length == 1) {
-            font.typeface = tfElements[0].getAttribute("n");
+            font.typeface = tfElements[0].firstChild.data;
         }
-
+        
         var size = element.getAttribute("sz");
         if (size) {
             font.size = size;
         }
-
+        
         if (element.getAttribute("bo")) { font.bold        = true; }
         if (element.getAttribute("it")) { font.italic      = true; }
         if (element.getAttribute("un")) { font.underline   = true; }
         if (element.getAttribute("ov")) { font.overline    = true; }
         if (element.getAttribute("lt")) { font.lineThrough = true; }
-
+        
         return font;
     }
 };
@@ -599,21 +597,28 @@ Echo.Serial.addPropertyTranslator("F", Echo.Serial.Font);
  */
 Echo.Serial.ImageReference = {
 
-    toProperty: function(client, propertyElement) {
-        var url = propertyElement.firstChild.data;
-        if (client.decompressUrl) {
-            url = client.decompressUrl(url);
-        }
-        var width = propertyElement.getAttribute("w");
-        width = width ? width : null;
-        var height = propertyElement.getAttribute("h");
-        height = height ? height : null;
-
-        if (width || height) {
-            return { url: url, width: width, height: height };
-        } else {
-            return url;
-        }
+    toProperty: function(client, pElement) {
+        var url;
+	    if (pElement.firstChild.nodeType == 1) {
+	    	var iElement = pElement.firstChild;
+	        url = iElement.firstChild.data;
+	        if (client.decompressUrl) {
+	            url = client.decompressUrl(url);
+	        }
+	        var width = iElement.getAttribute("w");
+	        width = width ? width : null;
+	        var height = iElement.getAttribute("h");
+	        height = height ? height : null;
+	        
+	        if (width || height) {
+	            return { url: url, width: width, height: height };
+	        } else {
+	            return url;
+	        }
+	    } else {
+	     url = pElement.firstChild.data;
+	    	return client.decompressUrl ? client.decompressUrl(url) : url;
+	    }
     }
 };
 
@@ -626,8 +631,8 @@ Echo.Serial.addPropertyTranslator("I", Echo.Serial.ImageReference);
  */
 Echo.Serial.Insets = {
 
-    toProperty: function(client, propertyElement) {
-        return propertyElement.firstChild.data;
+    toProperty: function(client, pElement) {
+        return pElement.firstChild.data;
     }
 };
 
@@ -640,15 +645,13 @@ Echo.Serial.addPropertyTranslator("N", Echo.Serial.Insets);
  */
 Echo.Serial.LayoutData = {
 
-    toProperty: function(client, propertyElement) {
+    toProperty: function(client, pElement) {
         var layoutData = {};
-        var element = propertyElement.firstChild;
+        var element = pElement.firstChild;
         while (element) {
             if (element.nodeType == 1) {
-                switch (element.nodeName) {
-                case "p":
+                if (element.nodeName == "p") {
                     Echo.Serial.loadProperty(client, element, null, layoutData);
-                    break;
                 }
             }
             element = element.nextSibling;
