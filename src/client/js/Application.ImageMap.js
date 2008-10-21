@@ -92,6 +92,26 @@ echopoint.ImageMap = Core.extend( echopoint.internal.AbstractContainer,
 });
 
 /**
+ * A model object used to represent a point on the map.  A point using
+ * regular cartesian co-ordinate system consists of an x co-ordinate value
+ * and a y co-ordinate value.
+ */
+echopoint.model.Point = Core.extend(
+{
+  /** The x co-ordinate of the point. */
+  x: 0,
+
+  /** The y co-ordinate of the point. */
+  y: 0,
+
+  $construct: function( xcoord, ycoord )
+  {
+    this.x = xcoord;
+    this.y = ycoord;
+  }
+} );
+
+/**
  * The model object used to represent a co-ordinate set within the map that
  * represents a discrete area in the map that is clickable.  Concrete
  * sub-classes are used to represent circles, rectangles and polygons that
@@ -114,11 +134,8 @@ echopoint.model.MapSection = Core.extend(
 /** The model object used to represent a circular region on a map. */
 echopoint.model.CircleSection = Core.extend( echopoint.model.MapSection,
 {
-  /** The x-coordinate of the centroid of the circle. */
-  x: 0,
-
-  /** The y-coordinate of the centroid of the circle. */
-  y: 0,
+  /** The point that represents the centroid of the circle. */
+  centre: null,
 
   /** The radius of the circle. */
   radius: 0,
@@ -126,16 +143,14 @@ echopoint.model.CircleSection = Core.extend( echopoint.model.MapSection,
   /**
    * Create a new instance using the specified values.
    *
-   * @param xcoord The x-coordinate of the centroid of the circle.
-   * @param ycoord The y-coordinate of the centroid of the circle.
+   * @param point The centroid of the circle.
    * @param rad The radius of the circle.
    * @param command Action command to associate with this section.
    * @param text Optional alternate text for the section.
    */
-  $construct: function( xcoord, ycoord, rad, command, text )
+  $construct: function( point, rad, command, text )
   {
-    this.x = xcoord;
-    this.y = ycoord;
+    this.centre = point;
     this.radius = rad;
     this.actionCommand = command;
     this.altText = text;
@@ -147,41 +162,31 @@ echopoint.model.CircleSection = Core.extend( echopoint.model.MapSection,
    */
   toString: function()
   {
-    return ( "" + this.x + "," + this.y + "," + this.radius );
+    return ( "" + this.centre.x + "," + this.centre.y + "," + this.radius );
   }
 });
 
 /** The model object used to represent a rectangular region on a map. */
 echopoint.model.RectangleSection = Core.extend( echopoint.model.MapSection,
 {
-  /** The x-coordinate of the origin (bottom-left) of the rectangle. */
-  bottomx: 0,
+  /** The point that represents the bottom-left corner of the rectangle. */
+  bottom: null,
 
-  /** The y-coordinate of the origin (bottom-left) of the rectangle. */
-  bottomy: 0,
-
-  /** The x-coordinate of the end (top-right) of the rectangle. */
-  topx: 0,
-
-  /** The y-coordinate of the end (top-right) of the rectangle. */
-  topy: 0,
+  /** The point that represents the top-right corner of the rectangle. */
+  top: null,
 
   /**
    * Create a new instance using the specified values.
    *
-   * @param l The x-coordinate of the bottom of the rectangle.
-   * @param t The y-coordinate of the bottom of the rectangle.
-   * @param r The x-coordinate of the end of the rectangle.
-   * @param b The y-coordinate of the end of the rectangle.
+   * @param b The point that represents the bottom-left corner.
+   * @param t The point that represents the top-right corner.
    * @param command Action command to associate with this section.
    * @param text Optional alternate text for the section.
    */
-  $construct: function( l, t, r, b, command, text )
+  $construct: function( b, t, command, text )
   {
-    this.bottomx = l;
-    this.bottomy = t;
-    this.topx = r;
-    this.topy = b;
+    this.bottom = b;
+    this.top = t;
     this.actionCommand = command;
     this.altText = text;
   },
@@ -192,21 +197,21 @@ echopoint.model.RectangleSection = Core.extend( echopoint.model.MapSection,
    */
   toString: function()
   {
-    return ( "" + this.bottomx + "," + this.bottomy + "," +
-           this.topx + "," + this.topy );
+    return ( "" + this.bottom.x + "," + this.bottom.y + "," +
+           this.top.x + "," + this.top.y );
   }
 });
 
 /** The model object used to represent a polygon region on a map. */
 echopoint.model.PolygonSection = Core.extend( echopoint.model.MapSection,
 {
-  /** The array of coordinates that represent the polygon. */
+  /** The array of points that represent the polygon. */
   vertices: null,
 
   /**
    * Create a new instance using the specified values.
    *
-   * @param coords The array of vertices of the polygon.
+   * @param coords The array of points that represent the vertices of the polygon.
    * @param command Action command to associate with this section.
    * @param text Optional alternate text for the section.
    */
@@ -231,7 +236,7 @@ echopoint.model.PolygonSection = Core.extend( echopoint.model.MapSection,
       if ( first ) first = false;
       else text += ",";
 
-      text += this.vertices[i];
+      text += this.vertices[i].x + "," + this.vertices[i].y;
     }
 
     return text;

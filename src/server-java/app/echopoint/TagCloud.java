@@ -188,9 +188,10 @@ public class TagCloud extends Component
    * Set the value of the {@link #PROPERTY_TAGS} property.  This method is
    * for <b>internal use only</b>.
    *
-   * @see #setTags( Collection )
+   * @deprecated Internal use only.  Use {@link #setTags( Collection )}.
    * @param tags The JSON representation of the tags collection.
    */
+  @Deprecated
   public void setTags( final String tags )
   {
     set( PROPERTY_TAGS, tags );

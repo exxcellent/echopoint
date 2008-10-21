@@ -35,11 +35,8 @@ public class CircleSection extends MapSection
 {
   private static final long serialVersionUID = 1l;
 
-  /** The x-coordinate of the centroid of the circular section. */
-  private int x;
-
-  /** The y-coordinate of the centroid of the circular section. */
-  private int y;
+  /** The point that represents the centroid of the circle. */
+  private Point centre;
 
   /** The radius of the circular section. */
   private int radius;
@@ -60,8 +57,23 @@ public class CircleSection extends MapSection
   public CircleSection( final int x, final int y, final int radius,
       final String... values )
   {
-    setX( x );
-    setY( y );
+    this( new Point( x, y ), radius, values );
+  }
+
+  /**
+   * Designated constructor.  Create a new circular section using the
+   * specified values.
+   *
+   * @param centre The point that represents the centroid of the circle.
+   * @param radius The radius of the circular section.
+   * @param values Optionally the {@link #actionCommand} and {@link
+   *   #altText} values.  Note that unless {@link #actionCommand} is
+   *   specified the section will not be saved in the image map.
+   */
+  public CircleSection( final Point centre, final int radius,
+      final String... values )
+  {
+    setCentre( centre );
     setRadius( radius );
 
     if ( values.length > 0 ) setActionCommand( values[0] );
@@ -79,9 +91,12 @@ public class CircleSection extends MapSection
   {
     if ( this == o ) return true;
     if ( o == null || getClass() != o.getClass() ) return false;
+    if ( !super.equals( o ) ) return false;
 
     CircleSection that = (CircleSection) o;
-    return super.equals( o ) && radius == that.radius && x == that.x && y == that.y;
+
+    return ( super.equals( o ) && radius == that.radius &&
+        !( centre != null ? !centre.equals( that.centre ) : that.centre != null ) );
   }
 
   /**
@@ -92,52 +107,30 @@ public class CircleSection extends MapSection
   @Override
   public int hashCode()
   {
-    int result;
-    result = super.hashCode();
-    result = 31 * result + x;
-    result = 31 * result + y;
+    int result = super.hashCode();
+    result = 31 * result + ( centre != null ? centre.hashCode() : 0 );
     result = 31 * result + radius;
     return result;
   }
 
   /**
-   * Accessor for property 'x'.
+   * Accessor for property 'centre'.
    *
-   * @return Value for property 'x'.
+   * @return Value for property 'centre'.
    */
-  public int getX()
+  public Point getCentre()
   {
-    return x;
+    return centre;
   }
 
   /**
-   * Mutator for property 'x'.
+   * Mutator for property 'centre'.
    *
-   * @param x Value to set for property 'x'.
+   * @param centre Value to set for property 'centre'.
    */
-  public void setX( final int x )
+  public void setCentre( final Point centre )
   {
-    this.x = x;
-  }
-
-  /**
-   * Accessor for property 'y'.
-   *
-   * @return Value for property 'y'.
-   */
-  public int getY()
-  {
-    return y;
-  }
-
-  /**
-   * Mutator for property 'y'.
-   *
-   * @param y Value to set for property 'y'.
-   */
-  public void setY( final int y )
-  {
-    this.y = y;
+    this.centre = centre;
   }
 
   /**

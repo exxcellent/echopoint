@@ -338,6 +338,13 @@ echopoint.test.TestApp.StyleSheet = new Echo.StyleSheet(
         repeat: "repeat"
       },
       insets: 10
+    },
+    "echopoint.ImageIcon":
+    {
+      border: "2px groove #cfdfff",
+      url: "image/imagemap.gif",
+      width: "500px",
+      height: "300px"
     }
   },
   "DefaultResizableLarge": {

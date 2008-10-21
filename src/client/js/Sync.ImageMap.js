@@ -193,17 +193,15 @@ echopoint.ImageMapSync = Core.extend( echopoint.internal.AbstractContainerSync,
       var mapSection = map[1];
       var section = null;
 
-      if ( mapSection.x )
+      if ( mapSection.centre )
       {
-        section = new echopoint.model.CircleSection( mapSection.x,
-            mapSection.y, mapSection.radius, actionCommand,
-            mapSection.altText );
+        section = new echopoint.model.CircleSection( mapSection.centre,
+            mapSection.radius, actionCommand, mapSection.altText );
       }
-      else if ( mapSection.bottomx )
+      else if ( mapSection.bottom )
       {
-        section = new echopoint.model.RectangleSection( mapSection.bottomx,
-            mapSection.bottomy, mapSection.topx, mapSection.topy, actionCommand,
-            mapSection.altText );
+        section = new echopoint.model.RectangleSection( mapSection.bottom,
+            mapSection.top, actionCommand, mapSection.altText );
       }
       else if ( mapSection.vertices )
       {

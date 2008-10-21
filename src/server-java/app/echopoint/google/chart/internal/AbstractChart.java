@@ -155,8 +155,11 @@ public abstract class AbstractChart<N extends Number> extends AbstractContainer
    * data structure.  This method should be treated as <b>internal use
    * only</b>.
    *
+   * @deprecated Internal use only.  Use {@link #setData(echopoint.google.chart.model.ChartData)}
+   *   or {@link #setData(java.util.Collection)}.
    * @param data The JSON data structure to set.
    */
+  @Deprecated
   public void setData( final String data )
   {
     set( PROPERTY_DATA, data );

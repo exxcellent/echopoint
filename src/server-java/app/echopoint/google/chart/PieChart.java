@@ -84,9 +84,10 @@ public class PieChart<N extends Number> extends SimpleChart<N>
    * Set the value of the {@link #PROPERTY_DIMENSIONS} property.  This method
    * should be treated as <b>internal use only</b>.
    *
-   * @see #setDimensions( Dimensions )
+   * @deprecated Internal use only.  Use {@link #setDimensions( Dimensions )}
    * @param dimension The value to set.
    */
+  @Deprecated
   public void setDimensions( final String dimension )
   {
     set( PROPERTY_DIMENSIONS, dimension );
@@ -116,9 +117,10 @@ public class PieChart<N extends Number> extends SimpleChart<N>
    * Set the value of the {@link #PROPERTY_LABELS} property.  This method
    * should be treated as <b>internal use only</b>.
    *
-   * @see #setLabels(java.util.Collection)
+   * @deprecated Internal use only.  Use {@link #setLabels(java.util.Collection)}
    * @param labels The value to set.
    */
+  @Deprecated
   public void setLabels( final String labels )
   {
     set( PROPERTY_LABELS, labels );

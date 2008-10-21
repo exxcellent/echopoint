@@ -147,9 +147,10 @@ public class AdvancedChart<N extends Number> extends SimpleChart<N>
    * Set the value of the {@link #PROPERTY_AXIS_LABELS} property.  This
    * method is for <b>internal use only</b>, since it requires JSON data.
    *
-   * @see #setAxisLabels( Collection )
+   * @deprecated Internal use only.  Use {@link #setAxisLabels( Collection )}
    * @param labels The value to set using JSON data structure.
    */
+  @Deprecated
   public void setAxisLabels( final String labels )
   {
     set( PROPERTY_AXIS_LABELS, labels );
@@ -182,9 +183,10 @@ public class AdvancedChart<N extends Number> extends SimpleChart<N>
    * method should be treated as <b>internal use only</b>, since this method
    * requires a JSON data structure.
    *
-   * @see #setLabelPositions( Collection )
+   * @deprecated Internal use only.  Use {@link #setLabelPositions( Collection )}
    * @param positions The value to set in JSON format.
    */
+  @Deprecated
   public void setLabelPositions( final String positions )
   {
     set( PROPERTY_LABEL_POSITIONS, positions );
@@ -217,9 +219,10 @@ public class AdvancedChart<N extends Number> extends SimpleChart<N>
    * method should be treated as <b>internal use only</b> since this requires
    * a JSON data structure.
    *
-   * @see #setAxisRanges( Collection )
+   * @deprecated Internal use only.  Use {@link #setAxisRanges( Collection )}
    * @param ranges The value to set in JSON format.
    */
+  @Deprecated
   public void setAxisRanges( final String ranges )
   {
     set( PROPERTY_AXIS_RANGES, ranges );
@@ -272,9 +275,10 @@ public class AdvancedChart<N extends Number> extends SimpleChart<N>
    * method should be treated as <b>internal use only</b> since this requires
    * a JSON data structure.
    *
-   * @see #setLineStyles( Collection )
+   * @deprecated Internal use only.  Use {@link #setLineStyles( Collection )}
    * @param styles The value of the property to in JSON format.
    */
+  @Deprecated
   public void setLineStyles( final String styles )
   {
     set( PROPERTY_LINE_STYLES, styles );
@@ -326,9 +330,10 @@ public class AdvancedChart<N extends Number> extends SimpleChart<N>
    * method should be treated as <b>internal use only</b> since this requires
    * JSON data.
    *
-   * @see #setRangeMarkers( Collection )
+   * @deprecated Internal use only.  Use {@link #setRangeMarkers( Collection )}
    * @param markers The value of the property to set in JSON format.
    */
+  @Deprecated
   public void setRangeMarkers( final String markers )
   {
     set( PROPERTY_RANGE_MARKERS, markers );
@@ -360,9 +365,10 @@ public class AdvancedChart<N extends Number> extends SimpleChart<N>
    * should be treated as <b>internal use only</b> since it requires JSON
    * data structure.
    *
-   * @see #setFillArea( Collection )
+   * @deprecated Internal use only.  Use {@link #setFillArea( Collection )}
    * @param area The value of the property to set in JSON format.
    */
+  @Deprecated
   public void setFillArea( final String area )
   {
     set( PROPERTY_FILL_AREA, area );

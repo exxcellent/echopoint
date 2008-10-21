@@ -30,6 +30,7 @@ import echopoint.model.CircleSection;
 import echopoint.model.RectangleSection;
 import echopoint.model.PolygonSection;
 import echopoint.model.MapSection;
+import echopoint.model.Point;
 
 import java.util.Collection;
 import java.util.ArrayList;
@@ -84,12 +85,13 @@ public class ImageMapTest
   {
     final Collection<MapSection> sections = new ArrayList<MapSection>( 3 );
 
-    final CircleSection circle = new CircleSection( 70, 84, 51,
-        "circle", "Circular section" );
+    final CircleSection circle = new CircleSection(
+        new Point( 70, 84 ), 51, "circle", "Circular section" );
     sections.add( circle );
 
-    final RectangleSection rectangle = new RectangleSection( 25, 180,
-        125, 280, "rectangle", "Rectangular section" );
+    final RectangleSection rectangle = new RectangleSection(
+        new Point( 25, 180 ), new Point( 125, 280 ),
+        "rectangle", "Rectangular section" );
     sections.add( rectangle );
     imageMap.addSections( sections );
     assertEquals( "Ensuring circle and rectangle added", sections.size(),

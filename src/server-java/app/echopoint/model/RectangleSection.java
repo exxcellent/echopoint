@@ -35,17 +35,11 @@ public class RectangleSection extends MapSection
 {
   private static final long serialVersionUID = 1l;
 
-  /** The x-coordinate of the origin (bottom-left) of the rectangle. */
-  private int bottomx;
+  /** The bottom-left corner (origin) of the rectangle. */
+  private Point bottom;
 
-  /** The y-coordinate of the origin (bottom-left) of the rectangle. */
-  private int bottomy;
-
-  /** The x-coordinate of the end (top-right) of the rectangle. */
-  private int topx;
-
-  /** The y-coordinate of the end (top-right) of the rectangle. */
-  private int topy;
+  /** The top-right (end) of the rectangle. */
+  private Point top;
 
   /** Default constructor. */
   public RectangleSection() {}
@@ -64,92 +58,88 @@ public class RectangleSection extends MapSection
   public RectangleSection( final int bottomx, final int bottomy,
       final int topx, final int topy, final String... values )
   {
-    setBottomx( bottomx );
-    setBottomy( bottomy );
-    setTopx( topx );
-    setTopy( topy );
+    this( new Point( bottomx, bottomy ), new Point( topx, topy ), values );
+  }
+
+  /**
+   * Designated constructor.  Create a new instance with the specified values.
+   *
+   * @param bottom The bottom corner of the rectangle.
+   * @param top The top corner of the rectangle.
+   * @param values Optionally the {@link #actionCommand} and {@link
+   *   #altText} values.  Note that unless {@link #actionCommand} is
+   *   specified the section will not be saved in the image map.
+   */
+  public RectangleSection( final Point bottom, final Point top,
+      final String... values )
+  {
+    setBottom( bottom );
+    setTop( top );
 
     if ( values.length > 0 ) setActionCommand( values[0] );
     if ( values.length > 1 ) setAltText( values[1] );
   }
 
-  /**
-   * Accessor for property 'bottomx'.
-   *
-   * @return Value for property 'bottomx'.
-   */
-  public int getBottomx()
+  /** @inheritDoc */
+  @Override
+  public boolean equals( final Object o )
   {
-    return bottomx;
+    if ( this == o ) return true;
+    if ( o == null || getClass() != o.getClass() ) return false;
+    if ( !super.equals( o ) ) return false;
+
+    RectangleSection that = (RectangleSection) o;
+
+    return super.equals( o ) &&
+        !( bottom != null ? !bottom.equals( that.bottom ) : that.bottom != null ) &&
+        !( top != null ? !top.equals( that.top ) : that.top != null );
+  }
+
+  public int hashCode()
+  {
+    int result = super.hashCode();
+    result = 31 * result + ( bottom != null ? bottom.hashCode() : 0 );
+    result = 31 * result + ( top != null ? top.hashCode() : 0 );
+    return result;
   }
 
   /**
-   * Mutator for property 'bottomx'.
+   * Accessor for property 'bottom'.
    *
-   * @param bottomx Value to set for property 'bottomx'.
+   * @return Value for property 'bottom'.
    */
-  public void setBottomx( final int bottomx )
+  public Point getBottom()
   {
-    this.bottomx = bottomx;
+    return bottom;
   }
 
   /**
-   * Accessor for property 'bottomy'.
+   * Mutator for property 'bottom'.
    *
-   * @return Value for property 'bottomy'.
+   * @param bottom Value to set for property 'bottom'.
    */
-  public int getBottomy()
+  public void setBottom( final Point bottom )
   {
-    return bottomy;
+    this.bottom = bottom;
   }
 
   /**
-   * Mutator for property 'bottomy'.
+   * Accessor for property 'top'.
    *
-   * @param bottomy Value to set for property 'bottomy'.
+   * @return Value for property 'top'.
    */
-  public void setBottomy( final int bottomy )
+  public Point getTop()
   {
-    this.bottomy = bottomy;
+    return top;
   }
 
   /**
-   * Accessor for property 'topx'.
+   * Mutator for property 'top'.
    *
-   * @return Value for property 'topx'.
+   * @param top Value to set for property 'top'.
    */
-  public int getTopx()
+  public void setTop( final Point top )
   {
-    return topx;
-  }
-
-  /**
-   * Mutator for property 'topx'.
-   *
-   * @param topx Value to set for property 'topx'.
-   */
-  public void setTopx( final int topx )
-  {
-    this.topx = topx;
-  }
-
-  /**
-   * Accessor for property 'topy'.
-   *
-   * @return Value for property 'topy'.
-   */
-  public int getTopy()
-  {
-    return topy;
-  }
-
-  /**
-   * Mutator for property 'topy'.
-   *
-   * @param topy Value to set for property 'topy'.
-   */
-  public void setTopy( final int topy )
-  {
-    this.topy = topy;
+    this.top = top;
   }
 }

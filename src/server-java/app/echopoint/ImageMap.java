@@ -56,6 +56,7 @@ import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
  * <p>The following shows sample usage of this component:</p>
  * <pre>
  *   import echopoint.ImageMap;
+ *   import echopoint.model.Point;
  *   import echopoint.model.MapSection;
  *   import echopoint.model.CircleSection;
  *   import echopoint.model.RectangleSection;
@@ -66,9 +67,10 @@ import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
  *     final ImageMap map = new ImageMap( url );
  *     map.addActionListener( ... );
  *
- *     final Collection<MapSection> sections = new ArrayList<MapSection>();
- *     sections.add( new CircleSection( 10, 10, 25, "circle" );
- *     sections.add( new RectangleSection( 10, 10, 25, 25, "rectangle", "Rectangular area" );
+ *     final Collection&lt;MapSection&gt; sections = new ArrayList&lt;MapSection&gt;();
+ *     sections.add( new CircleSection( new Point( 10, 10 ), 25, "circle" );
+ *     sections.add( new RectangleSection( new Point( 10, 10 ),
+ *        new Point( 25, 25 ), "rectangle", "Rectangular area" );
  *     map.addSections( sections );
  *
  *     column.add( map );
@@ -81,17 +83,8 @@ public class ImageMap extends AbstractContainer
 {
   private static final long serialVersionUID = 1l;
 
-  /** The constant used to track changes to the action listener list. */
-  public static final String ACTION_LISTENERS_CHANGED_PROPERTY = "actionListeners";
-
   /** The property name for the action command to be updated from client. */
   public static final String ACTION_COMMAND_PROPERTY = "actionCommand";
-
-  /**
-   * The name of the action event registered in the peer when action
-   * listeners are added or removed.
-   */
-  public static final String INPUT_ACTION = "action";
 
   /** The image that is to be used as the map region. */
   public static final String PROPERTY_IMAGE = "url";
@@ -110,7 +103,7 @@ public class ImageMap extends AbstractContainer
   private Map<String,MapSection> data = new LinkedHashMap<String,MapSection>();
 
   /** The action command that was triggered by user interaction with map. */
-  private String actionCommand;
+  protected String actionCommand;
 
   /** Default constructor. */
   public ImageMap() {}
@@ -169,8 +162,10 @@ public class ImageMap extends AbstractContainer
    * Return the value of the {@link #PROPERTY_SECTIONS} property.  Note that
    * this method returns a JSON representation of
    *
+   * @deprecated Should be treated as internal use only.
    * @return The image that is being used as the map region.
    */
+  @Deprecated
   public String getSections()
   {
     return (String) get( PROPERTY_SECTIONS );
@@ -181,8 +176,11 @@ public class ImageMap extends AbstractContainer
    * this method is to be treated as internal use only, since the string
    * value specified must be in JSON format.
    *
+   * @deprecated Should be treated as internal use only.  Use {@link
+   *   #addSection} or {@link #addSections}.
    * @param sections The image to use as the map region.
    */
+  @Deprecated
   public void setSections( final String sections )
   {
     set( PROPERTY_SECTIONS, sections );

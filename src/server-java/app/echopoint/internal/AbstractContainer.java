@@ -52,6 +52,15 @@ public class AbstractContainer extends Component
 {
   private static final long serialVersionUID = 1l;
 
+  /** The constant used to track changes to the action listener list. */
+  public static final String ACTION_LISTENERS_CHANGED_PROPERTY = "actionListeners";
+
+  /**
+   * The name of the action event registered in the peer when action
+   * listeners are added or removed.
+   */
+  public static final String INPUT_ACTION = "action";
+
   /** The alignment style for this component. */
   public static final String PROPERTY_ALIGNMENT = "alignment";
 

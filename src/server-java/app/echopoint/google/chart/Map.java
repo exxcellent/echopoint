@@ -87,9 +87,10 @@ public class Map extends AbstractChart<Integer>
    * Set the value of the {@link #PROPERTY_GEOGRAPHICAL_AREA} property.  This
    * method should be treated as <b>internal use only</b>.
    *
-   * @see #setGeographicalArea( Regions )
+   * @deprecated Internal use only. Use {@link #setGeographicalArea( Regions )} instead.
    * @param region The value to set.
    */
+  @Deprecated
   public void setGeographicalArea( final String region )
   {
     set( PROPERTY_GEOGRAPHICAL_AREA, region );

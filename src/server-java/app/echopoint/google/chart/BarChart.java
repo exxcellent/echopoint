@@ -96,8 +96,10 @@ public class BarChart<N extends Number> extends AdvancedChart<N>
    * method should be treated as <b>internal use only</b> since it requires
    * the string equivalent of {@link Orientation}.
    *
+   * @deprecated Use {@link #setOrientation(echopoint.google.chart.BarChart.Orientation)}.
    * @param orientation The value of the property to set.
    */
+  @Deprecated
   public void setOrientation( final String orientation )
   {
     set( PROPERTY_ORIENTATION, orientation );

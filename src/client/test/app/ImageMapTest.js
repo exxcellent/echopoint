@@ -36,15 +36,23 @@ echopoint.test.ImageMapTest = Core.extend(
 
   _createSections: function()
   {
-    var circle = new echopoint.model.CircleSection( 70, 84, 51,
+    var circle = new echopoint.model.CircleSection(
+        new echopoint.model.Point( 70, 84 ), 51,
         "circle", "Circular section" );
     this.imageMap.addSection( circle );
 
-    var rectangle = new echopoint.model.RectangleSection( 25, 180,
-        125, 280, "rectangle", "Rectangular section" );
+    var rectangle = new echopoint.model.RectangleSection(
+        new echopoint.model.Point( 25, 180 ),
+        new echopoint.model.Point( 125, 280 ),
+        "rectangle", "Rectangular section" );
     this.imageMap.addSection( rectangle );
 
-    var vertices = new Array( 153, 106, 186, 225, 340, 193, 315, 81, 304, 167 );
+    var vertices = new Array(
+        new echopoint.model.Point( 153, 106 ),
+        new echopoint.model.Point( 186, 225 ),
+        new echopoint.model.Point( 340, 193 ),
+        new echopoint.model.Point( 315, 81 ),
+        new echopoint.model.Point( 304, 167 ) );
     var polygon = new echopoint.model.PolygonSection( vertices,
         "polygon", "Polygon section" );
     this.imageMap.addSection( polygon );
