@@ -305,6 +305,18 @@ echopoint.test.TestApp.StyleSheet = new Echo.StyleSheet(
         bottomRight: "image/window/simple/BorderBottomRight.png"
       }
     },
+    "echopoint.Anchor":
+    {
+      foreground: "#2f2f4f",
+      font: {
+        bold: true,
+        size: "10"
+      },
+      target: "_blank",
+      text: "A HTML Anchor Tag",
+      toolTipText: "Click the link",
+      uri: "https://echopoint.dev.java.net/"
+    },
     "echopoint.DirectHtml":
     {
       background: "#cfdfff",
@@ -345,6 +357,18 @@ echopoint.test.TestApp.StyleSheet = new Echo.StyleSheet(
       url: "image/imagemap.gif",
       width: "500px",
       height: "300px"
+    },
+    "echopoint.InfoWindow":
+    {
+      border: "2px groove #cfdfff",
+      insets: 10,
+      textForeground: "#2f2f4f",
+      textBackground: "#cfdfff",
+      textFont: {
+        bold: true,
+        size: "10"
+      },
+      foreground: "#2f2f4f"
     }
   },
   "DefaultResizableLarge": {

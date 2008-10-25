@@ -37,6 +37,7 @@ public class ComponentList extends Column
    */
   protected static final String[] COMPONENTS =
       {
+          "Anchor",
           "DirectHtml",
           "HtmlLabel",
           "HttpPane",

@@ -72,6 +72,7 @@ import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
 public class TagCloud extends Component
 {
   private static final long serialVersionUID = 1l;
+  protected static XStream xstream;
 
   /** A flag indicating whether rollover is enabled for a tag. */
   public static final String PROPERTY_ROLLOVER_ENABLED = "rolloverEnabled";
@@ -219,8 +220,12 @@ public class TagCloud extends Component
    */
   protected XStream createSerialiser()
   {
-    final XStream xstream = new XStream( new JsonHierarchicalStreamDriver() );
-    xstream.processAnnotations( Tag.class );
+    if ( xstream == null )
+    {
+      xstream = new XStream( new JsonHierarchicalStreamDriver() );
+      xstream.processAnnotations( Tag.class );
+      xstream.setMode( XStream.NO_REFERENCES );
+    }
 
     return xstream;
   }

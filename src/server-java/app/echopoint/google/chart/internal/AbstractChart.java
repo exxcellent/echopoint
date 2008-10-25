@@ -39,6 +39,7 @@ import com.thoughtworks.xstream.XStream;
 public abstract class AbstractChart<N extends Number> extends AbstractContainer
 {
   private static final long serialVersionUID = 1l;
+  protected static XStream xstream;
 
   /**
    * The alternate text to display for the image and chart.  This property
@@ -94,7 +95,13 @@ public abstract class AbstractChart<N extends Number> extends AbstractContainer
    */
   protected XStream createSerialiser()
   {
-    return new XStream( new JsonHierarchicalStreamDriver() );
+    if ( xstream == null )
+    {
+      xstream = new XStream( new JsonHierarchicalStreamDriver() );
+      xstream.setMode( XStream.NO_REFERENCES );
+    }
+
+    return xstream;
   }
 
   /**

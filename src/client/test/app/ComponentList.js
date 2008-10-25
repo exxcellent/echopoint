@@ -12,11 +12,13 @@ echopoint.test.ComponentList = Core.extend( Echo.Column,
   $static:
   {
     COMPONENTS: new Array(
+        "Anchor",
         "DirectHtml",
         "HtmlLabel",
         "HttpPane",
         "ImageIcon",
         "ImageMap",
+        "InfoWindow",
         "Strut",
         "TagCloud",
         "BarChart",

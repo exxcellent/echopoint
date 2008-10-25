@@ -82,6 +82,7 @@ import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
 public class ImageMap extends AbstractContainer
 {
   private static final long serialVersionUID = 1l;
+  protected static XStream xstream;
 
   /** The property name for the action command to be updated from client. */
   public static final String ACTION_COMMAND_PROPERTY = "actionCommand";
@@ -326,12 +327,16 @@ public class ImageMap extends AbstractContainer
    */
   protected XStream createSerialiser()
   {
-    final XStream xstream = new XStream( new JsonHierarchicalStreamDriver() );
-    xstream.processAnnotations( MapSection.class );
-    xstream.processAnnotations( CircleSection.class );
-    xstream.processAnnotations( PolygonSection.class );
-    xstream.processAnnotations( RectangleSection.class );
-    xstream.alias( "list", LinkedHashMap.class );
+    if ( xstream == null )
+    {
+      xstream = new XStream( new JsonHierarchicalStreamDriver() );
+      xstream.processAnnotations( MapSection.class );
+      xstream.processAnnotations( CircleSection.class );
+      xstream.processAnnotations( PolygonSection.class );
+      xstream.processAnnotations( RectangleSection.class );
+      xstream.alias( "list", LinkedHashMap.class );
+      xstream.setMode( XStream.NO_REFERENCES );
+    }
 
     return xstream;
   }

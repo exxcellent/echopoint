@@ -75,7 +75,7 @@ echopoint.internal.AbstractContainerSync = Core.extend( Echo.Render.ComponentSyn
      * @param update The update object that will be queried for style updates.
      *   If this is not specified or is <code>null</code>, then the styles
      *   will be applied unconditionally.  This helps to use this optional
-     *   parameter to drive use from {@link #renderAdd} or {@link #renderUpaate}.
+     *   parameter to drive use from {@link #renderAdd} or {@link #renderUpdate}.
      */
     renderStyle: function( container, update )
     {
@@ -120,7 +120,7 @@ echopoint.internal.AbstractContainerSync = Core.extend( Echo.Render.ComponentSyn
 
     /**
      * Render the <code>backgroundImage</code> style property for the component.
-     * This may be used to render update of the alignment property alone from
+     * This may be used to render update of the background image property alone from
      * {@link #renderUpdate}.
      *
      * @param container The element to which the style will be applied.
@@ -147,7 +147,7 @@ echopoint.internal.AbstractContainerSync = Core.extend( Echo.Render.ComponentSyn
 
     /**
      * Render the <code>border</code> style property for the component.
-     * This may be used to render update of the alignment property alone from
+     * This may be used to render update of the border property alone from
      * {@link #renderUpdate}.
      *
      * @param container The element to which the style will be applied.
@@ -175,8 +175,8 @@ echopoint.internal.AbstractContainerSync = Core.extend( Echo.Render.ComponentSyn
     /**
      * Render the <code>foreground</code> and <code>background</code> style
      * properties the component.
-     * This may be used to render update of the alignment property alone from
-     * {@link #renderUpdate}.
+     * This may be used to render update of the fore/background properties
+     * alone from {@link #renderUpdate}.
      *
      * @param container The element to which the style will be applied.
      * @param update The update object that will be queried for style change.
@@ -202,7 +202,7 @@ echopoint.internal.AbstractContainerSync = Core.extend( Echo.Render.ComponentSyn
 
     /**
      * Render the <code>font</code> style property for the component.
-     * This may be used to render update of the alignment property alone from
+     * This may be used to render update of the font property alone from
      * {@link #renderUpdate}.
      *
      * @param container The element to which the style will be applied.
@@ -229,7 +229,7 @@ echopoint.internal.AbstractContainerSync = Core.extend( Echo.Render.ComponentSyn
 
     /**
      * Render the <code>insets</code> style property for the component.
-     * This may be used to render update of the alignment property alone from
+     * This may be used to render update of the insets property alone from
      * {@link #renderUpdate}.
      *
      * @param container The element to which the style will be applied.
@@ -256,7 +256,7 @@ echopoint.internal.AbstractContainerSync = Core.extend( Echo.Render.ComponentSyn
 
     /**
      * Render the <code>width</code> style property for the component.
-     * This may be used to render update of the alignment property alone from
+     * This may be used to render update of the width property alone from
      * {@link #renderUpdate}.
      *
      * @param container The element to which the style will be applied.
@@ -283,7 +283,7 @@ echopoint.internal.AbstractContainerSync = Core.extend( Echo.Render.ComponentSyn
 
     /**
      * Render the <code>height</code> style property for the component.
-     * This may be used to render update of the alignment property alone from
+     * This may be used to render update of the height property alone from
      * {@link #renderUpdate}.
      *
      * @param container The element to which the style will be applied.

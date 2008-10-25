@@ -53,8 +53,8 @@ echopoint.StrutSync = Core.extend( echopoint.internal.AbstractContainerSync,
   {
     this._image = document.createElement( "img" );
     this._image.id = this.component.renderId;
-    this._image.setAttribute( "src",
-        this.client.getResourceUrl( "echopoint", echopoint.StrutSync.IMAGE ) );
+    this._image.src = 
+        this.client.getResourceUrl( "echopoint", echopoint.StrutSync.IMAGE );
 
     this.renderStyle( this._image );
     return this._image;
