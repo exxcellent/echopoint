@@ -43,6 +43,7 @@ public class ComponentList extends Column
           "HttpPane",
           "ImageIcon",
           "ImageMap",
+          "InfoWindow",
           "Strut",
           "TagCloud",
           "BarChart",

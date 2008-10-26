@@ -360,15 +360,33 @@ echopoint.test.TestApp.StyleSheet = new Echo.StyleSheet(
     },
     "echopoint.InfoWindow":
     {
-      border: "2px groove #cfdfff",
-      insets: 10,
+      textAlignment: "center",
       textForeground: "#2f2f4f",
       textBackground: "#cfdfff",
       textFont: {
         bold: true,
-        size: "10"
+        size: "12"
       },
-      foreground: "#2f2f4f"
+      textInsets: "3px 8px",
+      otherTextForeground: "#000000",
+      otherTextFont: {
+        bold: false,
+        size: "11"
+      },
+      otherTextInsets: "2px 5px",
+      titleAlignment: "left",
+      titleBackground: "#9f9f9f",
+      titleForeground: "white",
+      titleFont: {
+        bold: true,
+        size: "12"
+      },
+      alignment: "center",
+      insets: 10,
+      font: { size: "11" },
+      background: "#f9f9f9",
+      foreground: "#a10202",
+      width: "250px"
     }
   },
   "DefaultResizableLarge": {

@@ -5,16 +5,6 @@ echopoint.constants.INFO_WINDOW = "echopoint.InfoWindow";
  * A component used display an informational floating window (similar to
  * Google GInfoWindow) when hovering over a parent component.
  *
- * <p>This component has two modes - default and custom.  In default mode a
- * default colour scheme is applied to the info window.  For full control over
- * the colours, background etc. specify two {@link echopoint.internal.AbstractHtmlComponent}
- * components appropriately styled.  Note that when you specify fully
- * configured {@link echopoint.internal.AbstractHtmlComponent} components,
- * you should ensure that the combined appearance is proper.  It is best to
- * not set the {@link echopoint.internal.AbstractHtmlComponent#WIDTH}
- * property, since that should be specified at this component level to ensure
- * uniformity.</p>
- *
  * @author Rakesh 2008-10-21
  * @version $Id$
  */
@@ -50,6 +40,21 @@ echopoint.InfoWindow = Core.extend( Echo.Component,
     /** The background for the driver text. */
     TEXT_BACKGROUND: "textBackground",
 
+    /** The insets for the driver text. */
+    TEXT_INSETS: "textInsets",
+
+    /** The font to use for the pre/postfix text. */
+    OTHER_TEXT_FONT: "otherTextFont",
+
+    /** The foreground for the pre/postfix text. */
+    OTHER_TEXT_FOREGROUND: "otherTextForeground",
+
+    /** The background for the pre/postfix text. */
+    OTHER_TEXT_BACKGROUND: "otherTextBackground",
+
+    /** The insets for the pre/postfix text. */
+    OTHER_TEXT_INSETS: "otherTextInsets",
+
     /**
      * The title to display for the info window.  Specify this only if
      * you want a default title bar component.  The text may contain HTML
@@ -57,13 +62,23 @@ echopoint.InfoWindow = Core.extend( Echo.Component,
      */
     TITLE: "title",
 
+    /** The alignment for the title of the info window. */
+    TITLE_ALIGNMENT: "titleAlignment",
+
+    /** The font to use for the title of the info window. */
+    TITLE_FONT: "titleFont",
+
+    /** The foreground for the title of the info window. */
+    TITLE_FOREGROUND: "titleForeground",
+
     /**
-     * The title bar to display for the info window.  This must be an instance
-     * of {@link echopoint.internal.AbstractHtmlComponent}.  Specify this if
-     * you want a custom title bar.  Note that the {@link #TITLE} property
-     * will be ignored in the presence of this property.
+     * The background for the title of the info window.  This is also used
+     * to render the rounded box that represents the info window.
      */
-    TITLE_BAR: "titleBar",
+    TITLE_BACKGROUND: "titleBackground",
+
+    /** The insets for the title of the info window. */
+    TITLE_INSETS: "titleInsets",
 
     /**
      * The content to display in the info window.  Specify this only
@@ -72,13 +87,8 @@ echopoint.InfoWindow = Core.extend( Echo.Component,
      */
     CONTENT: "content",
 
-    /**
-     * The content component to display in the info window.  This must be an
-     * instance of {@link echopoint.internal.AbstractHtmlComponent}.  Specify
-     * this is you want a custom content area.  Note that the {@link #TEXT}
-     * property will be ignored in the presence of this property.
-     */
-    CONTENT_AREA: "contentArea",
+    /** The alignment of the content text in the info window. */
+    ALIGNMENT: "alignment",
 
     /**
      * The font to use for the title and content areas.  This property will
@@ -93,10 +103,7 @@ echopoint.InfoWindow = Core.extend( Echo.Component,
     INSETS: "insets",
 
     /** The width of the info window.  This property is best styled. */
-    WIDTH: "width",
-
-    /** The default width for the info window. */
-    DEFAULT_WIDTH: "300px"
+    WIDTH: "width"
   },
 
   $load: function()

@@ -11,6 +11,15 @@ echopoint.InfoWindowSync = Core.extend( Echo.Render.ComponentSync,
     Echo.Render.registerPeer( echopoint.constants.INFO_WINDOW, this );
   },
 
+  $static:
+  {
+    /** The default width for the info window. */
+    DEFAULT_WIDTH: "300px",
+
+    /** The default background colour for the info window. */
+    DEFAULT_BACKGROUND: "#c50101"
+  },
+
   /** The container for the text and optional prefix/postfix content. */
   _span: null,
 
@@ -57,6 +66,10 @@ echopoint.InfoWindowSync = Core.extend( Echo.Render.ComponentSync,
   {
     this._span = document.createElement( "span" );
     this._span.id = this.component.renderId + "|Span";
+    this._renderFont( this._span, echopoint.InfoWindow.OTHER_TEXT_FONT );
+    this._renderForeground( this._span, echopoint.InfoWindow.OTHER_TEXT_FOREGROUND );
+    this._renderBackground( this._span, echopoint.InfoWindow.OTHER_TEXT_BACKGROUND );
+    this._renderInsets( this._span, echopoint.InfoWindow.OTHER_TEXT_INSETS );
 
     var prefix = this.component.render( echopoint.InfoWindow.PREFIX );
     if ( prefix )
@@ -64,12 +77,7 @@ echopoint.InfoWindowSync = Core.extend( Echo.Render.ComponentSync,
       this._span.appendChild( document.createTextNode( prefix ) );
     }
 
-    this._text = document.createElement( "span" );
-    this._text.id = this.component.renderId + "|Span|Text";
-    this._text.style.cssText = "color:#3CA3FF; font-weight:bold; text-decoration:none;";
-    this._text.appendChild( document.createTextNode(
-        this.component.render( echopoint.InfoWindow.TEXT ) ) );
-    this._span.appendChild( this._text );
+    this._span.appendChild( this._createText() );
 
     prefix = this.component.render( echopoint.InfoWindow.POSTFIX );
     if ( prefix )
@@ -82,6 +90,21 @@ echopoint.InfoWindowSync = Core.extend( Echo.Render.ComponentSync,
     Core.Web.Event.add( this._text, "mouseout",
         Core.method( this, this._processRolloverExit ), false );
     return this._span;
+  },
+
+  /** Create the driver text component. */
+  _createText: function()
+  {
+    this._text = document.createElement( "span" );
+    this._text.id = this.component.renderId + "|Span|Text";
+    this._renderFont( this._text, echopoint.InfoWindow.TEXT_FONT );
+    this._renderForeground( this._text, echopoint.InfoWindow.TEXT_FOREGROUND );
+    this._renderBackground( this._text, echopoint.InfoWindow.TEXT_BACKGROUND );
+    this._renderInsets( this._text, echopoint.InfoWindow.TEXT_INSETS );
+    this._text.appendChild( document.createTextNode(
+        this.component.render( echopoint.InfoWindow.TEXT ) ) );
+
+    return this._text;
   },
 
   /** Create the parent container that represents the info window. */
@@ -144,18 +167,10 @@ echopoint.InfoWindowSync = Core.extend( Echo.Render.ComponentSync,
   /** Create the title bar for the info window. */
   _createTitleBar: function()
   {
-    var tb = this.component.get( echopoint.InfoWindow.TITLE_BAR );
-    if ( tb )
-    {
-      this._titleBar = tb;
-    }
-    else
-    {
-      this._titleBar = document.createElement( "div" );
-      this._titleBar.id = this.component.renderId + "|TitleBar";
-      this._titleBar.innerHTML = this.component.render(
-          echopoint.InfoWindow.TITLE, "" );
-    }
+    this._titleBar = document.createElement( "div" );
+    this._titleBar.id = this.component.renderId + "|TitleBar";
+    this._titleBar.innerHTML = this.component.render(
+        echopoint.InfoWindow.TITLE, "" );
 
     return this._titleBar;
   },
@@ -170,36 +185,26 @@ echopoint.InfoWindowSync = Core.extend( Echo.Render.ComponentSync,
    */
   _renderTitleStyle: function( update )
   {
-    var tb = this.component.get( echopoint.InfoWindow.TITLE_BAR );
-    if ( ! tb )
-    {
-      this._titleBar.style.display = "block";
-      this._renderFont( this._titleBar, echopoint.InfoWindow.FONT, update );
-      this._renderInsets( this._titleBar, echopoint.InfoWindow.INSETS, update );
-      this._titleBar.style.background = "#c50101";
-      this._titleBar.style.borderLeft = "thin groove #c50101";
-      this._titleBar.style.borderRight = "thin groove #c50101";
-      this._titleBar.style.color = "white";
-      this._titleBar.style.fontWeight = "bold";
-      this._titleBar.style.textAlign = "center";
-    }
+    this._titleBar.style.display = "block";
+    this._renderFont( this._titleBar, echopoint.InfoWindow.TITLE_FONT, update );
+    this._renderInsets( this._titleBar, echopoint.InfoWindow.TITLE_INSETS, update );
+    var bg = this._getBackground();
+    this._titleBar.style.background = bg;
+    this._titleBar.style.borderLeft = "thin groove " + bg;
+    this._titleBar.style.borderRight = "thin groove " + bg;
+    this._titleBar.style.color = this.component.render(
+        echopoint.InfoWindow.TITLE_FOREGROUND, "white" );
+    this._renderFont( this._titleBar, echopoint.InfoWindow.TITLE_FONT, update );
+    this._renderAlignment( this._titleBar, echopoint.InfoWindow.TITLE_ALIGNMENT, "center" );
   },
 
   /** Create the content area for the info window. */
   _createContent: function()
   {
-    var c = this.component.get( echopoint.InfoWindow.CONTENT_AREA );
-    if ( c )
-    {
-      this._content = c;
-    }
-    else
-    {
-      this._content = document.createElement( "div" );
-      this._content.id = this.component.renderId + "|Content";
-      this._content.innerHTML = this.component.render(
-          echopoint.InfoWindow.CONTENT, "" );
-    }
+    this._content = document.createElement( "div" );
+    this._content.id = this.component.renderId + "|Content";
+    this._content.innerHTML = this.component.render(
+        echopoint.InfoWindow.CONTENT, "" );
 
     return this._content;
   },
@@ -214,17 +219,14 @@ echopoint.InfoWindowSync = Core.extend( Echo.Render.ComponentSync,
    */
   _renderContentStyle: function( update )
   {
-    var c = this.component.get( echopoint.InfoWindow.CONTENT_AREA );
-    if ( ! c )
-    {
-      this._content.style.display = "block";
-      this._renderFont( this._content, echopoint.InfoWindow.FONT, update );
-      this._renderInsets( this._content, echopoint.InfoWindow.INSETS, update );
-      this._content.style.background = "#f9f9f9";
-      this._content.style.borderLeft = "thin groove #c50101";
-      this._content.style.borderRight = "thin groove #c50101";
-      this._content.style.color = "#a10202";
-    }
+    this._content.style.display = "block";
+    this._renderFont( this._content, echopoint.InfoWindow.FONT, update );
+    Echo.Sync.Color.renderFB( this.component,  this._content );
+    this._renderInsets( this._content, echopoint.InfoWindow.INSETS, update );
+    var bg = this._getBackground();
+    this._content.style.borderLeft = "thin groove " + bg;
+    this._content.style.borderRight = "thin groove " + bg;
+    this._renderAlignment( this._content, echopoint.InfoWindow.ALIGNMENT, "left" );
   },
 
   /** Create the bottom ronded corners for the info window. */
@@ -255,7 +257,7 @@ echopoint.InfoWindowSync = Core.extend( Echo.Render.ComponentSync,
     r.style.display = "block";
     r.style.height = "1px";
     r.style.overflow = "hidden";
-    r.style.background = "#c50101";
+    r.style.background = this._getBackground();
     r.style.margin = "0 8px";
     //r.style.margin = "0 5px";
     return r;
@@ -268,7 +270,7 @@ echopoint.InfoWindowSync = Core.extend( Echo.Render.ComponentSync,
     r.style.display = "block";
     r.style.height = "1px";
     r.style.overflow = "hidden";
-    r.style.background = "#c50101";
+    r.style.background = this._getBackground();
     r.style.margin = "0 5px";
     //r.style.margin = "0 3px";
     return r;
@@ -281,7 +283,7 @@ echopoint.InfoWindowSync = Core.extend( Echo.Render.ComponentSync,
     r.style.display = "block";
     r.style.height = "1px";
     r.style.overflow = "hidden";
-    r.style.background = "#c50101";
+    r.style.background = this._getBackground();
     r.style.margin = "0 4.5px";
     //r.style.margin = "0 2px";
     return r;
@@ -294,7 +296,7 @@ echopoint.InfoWindowSync = Core.extend( Echo.Render.ComponentSync,
     r.style.display = "block";
     r.style.height = "1px";
     r.style.overflow = "hidden";
-    r.style.background = "#c50101";
+    r.style.background = this._getBackground();
     r.style.margin = "0 3.5px";
     //r.style.margin = "0 1px; height: 2px";
     return r;
@@ -307,7 +309,7 @@ echopoint.InfoWindowSync = Core.extend( Echo.Render.ComponentSync,
     r.style.display = "block";
     r.style.height = "1px";
     r.style.overflow = "hidden";
-    r.style.background = "#c50101";
+    r.style.background = this._getBackground();
     r.style.margin = "0 2px";
     return r;
   },
@@ -319,7 +321,7 @@ echopoint.InfoWindowSync = Core.extend( Echo.Render.ComponentSync,
     r.style.display = "block";
     r.style.height = "1px";
     r.style.overflow = "hidden";
-    r.style.background = "#c50101";
+    r.style.background = this._getBackground();
     r.style.margin = "0 1.5px";
     return r;
   },
@@ -331,7 +333,7 @@ echopoint.InfoWindowSync = Core.extend( Echo.Render.ComponentSync,
     r.style.display = "block";
     r.style.height = "1px";
     r.style.overflow = "hidden";
-    r.style.background = "#c50101";
+    r.style.background = this._getBackground();
     r.style.margin = "0 1px";
     return r;
   },
@@ -370,14 +372,52 @@ echopoint.InfoWindowSync = Core.extend( Echo.Render.ComponentSync,
       var value = update.getUpdatedProperty( property );
       if ( value )
       {
-        Echo.Sync.Font.render( this.component.render(
-            value.newValue ), container );
+        Echo.Sync.Font.render( value.newValue, container );
       }
     }
     else
     {
-      Echo.Sync.Font.render( this.component.render(
-          echopoint.InfoWindow.FONT ), container );
+      Echo.Sync.Font.render( this.component.render( property ), container );
+    }
+  },
+
+  /** Render the foreground property for the container element. */
+  _renderForeground: function( container, property, update )
+  {
+    var value = null;
+
+    if ( update )
+    {
+      value = update.getUpdatedProperty( property );
+      if ( value )
+      {
+        container.style.color = value.newValue;
+      }
+    }
+    else
+    {
+      value = this.component.render( property );
+      if ( value ) container.style.color = value;
+    }
+  },
+
+  /** Render the background property for the container element. */
+  _renderBackground: function( container, property, update )
+  {
+    var value = null;
+
+    if ( update )
+    {
+      value = update.getUpdatedProperty( property );
+      if ( value )
+      {
+        container.style.backgroundColor = value.newValue;
+      }
+    }
+    else
+    {
+      value = this.component.render( property );
+      if ( value ) container.style.backgroundColor = value;
     }
   },
 
@@ -397,8 +437,7 @@ echopoint.InfoWindowSync = Core.extend( Echo.Render.ComponentSync,
       var value = update.getUpdatedProperty( property );
       if ( value )
       {
-        Echo.Sync.Insets.render( this.component.render(
-            value.newValue ), container, "padding" );
+        Echo.Sync.Insets.render( value.newValue, container, "padding" );
       }
     }
     else
@@ -409,13 +448,48 @@ echopoint.InfoWindowSync = Core.extend( Echo.Render.ComponentSync,
   },
 
   /**
+   * Render the <code>alignment</code> style property for the component.
+   *
+   * @param container The element to which the style will be applied.
+   * @param property The name of the property that contains the insets.
+   * @param defaultValue The default value to apply if the property has not
+   *   been set/styled.
+   * @param update The update object that will be queried for style change.
+   */
+  _renderAlignment: function( container, property, defaultValue, update )
+  {
+    if ( update )
+    {
+      var value = update.getUpdatedProperty( property );
+      if ( value )
+      {
+        container.style.textAlign = value.newValue;
+      }
+    }
+    else
+    {
+      container.style.textAlign = this.component.render( property, defaultValue );
+    }
+  },
+
+  /**
+   * Return the background colour to use for the info window corners and
+   * title bar.
+   */
+  _getBackground: function()
+  {
+    return this.component.render(
+        echopoint.InfoWindow.TITLE_BACKGROUND, echopoint.InfoWindowSync.DEFAULT_BACKGROUND );
+  },
+
+  /**
    * Return the width to use for the component.  If no width property has
    * been specified, returns {@link #DEFAULT_WIDTH}.
    */
   _getWidth: function()
   {
     return this.component.render( echopoint.InfoWindow.WIDTH,
-        echopoint.InfoWindow.DEFAULT_WIDTH );
+        echopoint.InfoWindowSync.DEFAULT_WIDTH );
   },
 
   /**

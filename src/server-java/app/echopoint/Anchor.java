@@ -30,6 +30,22 @@ import nextapp.echo.app.Component;
  * styles, this component does not offer the ability to configure styles for
  * hover, active or visited.</p>
  *
+ * <p>The following shows sample usage of this component:</p>
+ * <pre>
+ *   import echopoint.Anchor;
+ *   import nextapp.echo.app.Color;
+ *   import nextapp.echo.app.Extent;
+ *   import nextapp.echo.app.Font;
+ *
+ *     ...
+ *     final Anchor anchor = new Anchor();
+ *     anchor.setUri( "https://echopoint.dev.java.net/" );
+ *     anchor.setColor( new Color( 0x2f2f4f );
+ *     anchor.setFont( new Font( Font.HELVETICA, Font.BOLD, new Extent( 10 ) ) );
+ *
+ *     container.add( anchor );
+ * </pre>
+ *
  * @author Rakesh 2008-10-23
  * @version $Id$
  */

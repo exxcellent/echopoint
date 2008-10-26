@@ -99,12 +99,6 @@ public class AnchorTest
     assertEquals( "Ensuring tool tip set", tooltip, component.getToolTipText() );
   }
 
-  /**
-   * Display an RTA and display button to let user interact with the
-   * {@link DirectHtml} component.
-   *
-   * <p>RTA disabled for the moment due to some issues with loading the RTA.</p>
-   */
   @AfterClass
   public static void finish()
   {
