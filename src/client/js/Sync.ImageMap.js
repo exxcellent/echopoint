@@ -27,6 +27,7 @@ echopoint.ImageMapSync = Core.extend( echopoint.internal.AbstractContainerSync,
      */
     handleClick: function( renderId, actionCommand )
     {
+      Core.Debug.consoleWrite( 'actionCommand: ' + actionCommand );
       echopoint.ImageMapSync.instances.map[renderId].doHandleClick( actionCommand );
     },
 
@@ -93,6 +94,7 @@ echopoint.ImageMapSync = Core.extend( echopoint.internal.AbstractContainerSync,
   _createMap: function()
   {
     this._map = document.createElement( "map" );
+    this._map.id = this._getName(); // For IE
     this._map.name = this._getName();
     return this._map;
   },
@@ -138,7 +140,7 @@ echopoint.ImageMapSync = Core.extend( echopoint.internal.AbstractContainerSync,
   /** Return the name of the map to use.  Name is based on the renderId. */
   _getName: function()
   {
-    return ( this.component.renderId + "Map" );
+    return ( this.component.renderId + "|Map" );
   },
 
   /** Return the name of the shape of the section specified. */
