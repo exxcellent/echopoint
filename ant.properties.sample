@@ -6,7 +6,7 @@
 #
 dir.appserver                     /usr/local/apache-tomcat-6.0.14
 
-version                           3.0.0a7
+version                           3.0.0a8
 debug                             true
 
 dir.src                           src

@@ -102,7 +102,7 @@ echopoint.tucana.FileUploadSelectorSync = Core.extend( echopoint.internal.Abstra
   /** Create the hidden container element that holds the iframe for submission. */
   _createHidden: function()
   {
-    this._hidden = document.createElement("div");
+    this._hidden = document.createElement( "div" );
     this._hidden.style.position = "absolute";
     this._hidden.style.top = "0";
     this._hidden.style.marginLeft = "-10000px";
@@ -113,9 +113,9 @@ echopoint.tucana.FileUploadSelectorSync = Core.extend( echopoint.internal.Abstra
   _createFrame: function()
   {
     var frame = new echopoint.tucana.FileUploadSelectorSync.Frame(
-        this, ++this._uploadId );
+        this, ++this._uploadIndex );
     frame._renderAdd( this._hidden );
-    this._frames[this._uploadId] = frame;
+    this._frames[this._uploadIndex] = frame;
   },
 
   /** Create the parent container that holds the upload select interface. */
@@ -151,7 +151,7 @@ echopoint.tucana.FileUploadSelectorSync = Core.extend( echopoint.internal.Abstra
     this._form.style.position = "relative";
     this._form.action = this._createUploadUrl();
 
-    var frame = this._frames[this._uploadId];
+    var frame = this._frames[this._uploadIndex];
     Core.Web.Event.add( this._form, "submit",
         Core.method( frame, frame._processSubmit ) );
 
@@ -170,7 +170,7 @@ echopoint.tucana.FileUploadSelectorSync = Core.extend( echopoint.internal.Abstra
   _createUploadUrl: function()
   {
     return echopoint.tucana.FileUploadSelectorSync._RECEIVER_SERVICE + "&i=" +
-           this.component.renderId + "&x=" + this._uploadId;
+           this.component.renderId + "&x=" + this._uploadIndex;
   },
 
   /**
@@ -200,7 +200,7 @@ echopoint.tucana.FileUploadSelectorSync = Core.extend( echopoint.internal.Abstra
    */
   _removeFrame: function( frame )
   {
-    delete this._frames[frame._uploadId];
+    delete this._frames[frame._uploadIndex];
     frame._dispose();
   },
 
@@ -223,7 +223,7 @@ echopoint.tucana.FileUploadSelectorSync.Frame = Core.extend(
   component: null,
 
   /** The upload index for which this frame is created. */
-  _uploadId: 0,
+  _uploadIndex: 0,
 
   /** A value that indicates the upload stage. */
   _loadStage: null,
@@ -239,7 +239,7 @@ echopoint.tucana.FileUploadSelectorSync.Frame = Core.extend(
   {
     this.peer = uploadSelectPeer
     this.component = uploadSelectPeer.component;
-    this._uploadId = uploadId;
+    this._uploadIndex = uploadId;
     this._submitListenerBound = false;
   },
 
@@ -247,7 +247,7 @@ echopoint.tucana.FileUploadSelectorSync.Frame = Core.extend(
   {
     this._frameElement = document.createElement( "iframe" );
     // id needed for Safari, otherwise multiple iframes do not load
-    this._frameElement.id = this.component.renderId + "|Frame|" + this._uploadId;
+    this._frameElement.id = this.component.renderId + "|Frame|" + this._uploadIndex;
     this._frameElement.name = this._frameElement.id;
     this._frameElement.src = this.peer.client.getResourceUrl(
         "Echo", "resource/Blank.html" );
@@ -274,7 +274,8 @@ echopoint.tucana.FileUploadSelectorSync.Frame = Core.extend(
   _startUpload: function()
   {
     this._loadStage = echopoint.tucana.FileUploadSelectorSync._STAGE_UPLOADING;
-    this.peer._frames[this._uploadId].submit();
+    //this.peer._frames[this._uploadIndex]._frameElement.submit();
+    this.peer._form.submit();
     this.peer._table._submit._renderButton( true, this.peer._table );
 
     if ( !Core.Web.Env.BROWSER_SAFARI )
@@ -347,10 +348,7 @@ echopoint.tucana.FileUploadSelectorSync.Frame = Core.extend(
       Core.Web.DOM.preventEventDefault( e );
     }
 
-    if ( !this._fileElement.value || this._fileElement.value == "" )
-    {
-      return;
-    }
+    if ( ! this.peer._table._input ) return;
 
     this._loadStage = echopoint.tucana.FileUploadSelectorSync._STAGE_QUEUED;
     // remove listener before document gets disposed
@@ -372,7 +370,7 @@ echopoint.tucana.FileUploadSelectorSync.Frame = Core.extend(
       }
     }
 
-    echopoint.tucana.FileUploadSelectorSync._startNextUpload();
+    this.peer._startNextUpload();
   },
 
   _processLoad: function()
@@ -389,7 +387,7 @@ echopoint.tucana.FileUploadSelectorSync.Frame = Core.extend(
   _createProgressUrl: function()
   {
     return echopoint.tucana.FileUploadSelectorSync._PROGRESS_SERVICE +
-           "&i=" + this.component.renderId + "&x=" + this._uploadId;
+           "&i=" + this.component.renderId + "&x=" + this._uploadIndex;
   },
 
   _dispose: function()
@@ -444,12 +442,9 @@ echopoint.tucana.FileUploadSelectorSync.Frame = Core.extend(
     }
 
     this.component = null;
-    this._uploadId = null;
+    this._uploadIndex = null;
     this._loadStage = null;
     this._frameElement = null;
-    this._formElement = null;
-    this._fileElement = null;
-    this._submitElement = null;
   }
 });
 
@@ -533,7 +528,7 @@ echopoint.tucana.FileUploadSelectorSync.Table = Core.extend(
   _createInput: function()
   {
     var divInput = document.createElement( "div" );
-    divInput.id = this.component.renderId + "|Input|Div|" + this.peer._uploadId;
+    divInput.id = this.component.renderId + "|Input|Div|" + this.peer._uploadIndex;
 
     var browseBackgroundImage =
         this.component.render( "browseButtonBackgroundImage" );
@@ -557,7 +552,7 @@ echopoint.tucana.FileUploadSelectorSync.Table = Core.extend(
     var fileSelectorPixelWidth = Echo.Sync.Extent.toPixels(fileSelectorWidth, true);
 
     this._input = document.createElement( "input" );
-    this._input.id = this.component.renderId + "|Input|" + this.peer._uploadId;
+    this._input.id = this.component.renderId + "|Input|" + this.peer._uploadIndex;
     this._input.type = "file";
     this._input.name = "$$file$$";
 
@@ -717,7 +712,7 @@ echopoint.tucana.FileUploadSelectorSync.Table = Core.extend(
       var instance = this.peer;
       this._input.onchange = function( e )
       {
-        instance._frames[instance._uploadId]._processSubmit( e );
+        instance._frames[instance._uploadIndex]._processSubmit( e );
       };
     }
 
@@ -803,7 +798,7 @@ echopoint.tucana.FileUploadSelectorSync.Button = Core.extend(
   _setUploadText: function()
   {
     this._uploadText = this.component.render(
-        echopoint.tucana.FileUploadSelector.BUTTON_TEXT_UPLOAD );
+        echopoint.tucana.FileUploadSelector.BUTTON_TEXT_UPLOAD, "Uplaod" );
   },
 
   _setCancelText: function()
@@ -906,34 +901,34 @@ echopoint.tucana.FileUploadSelectorSync.Button = Core.extend(
       {
         this._submit.setAttribute( "value", text );
       }
+    }
 
-      this._submit.disabled = disabled;
+    this._submit.disabled = disabled;
 
-      var displayType = this._display;
-      if ( displayType == 2 )
-      {
-        displayType = ( Core.Web.Env.BROWSER_SAFARI ) ? 1 : 0;
-      }
+    var displayType = this._display;
+    if ( displayType == 2 )
+    {
+      displayType = ( Core.Web.Env.BROWSER_SAFARI ) ? 1 : 0;
+    }
 
-      switch ( displayType )
-      {
-        case 0:
-          this._display = "right";
-          parentElement._tdSubmitRight.appendChild( this._submit );
-          parentElement._tdSubmitRight.style.display = "block";
-          parentElement._tdSubmitLeft.style.display = "none";
-          break;
-        case 1:
-          this._display = "left";
-          parentElement._tdSubmitLeft.appendChild( this._submit );
-          parentElement._tdSubmitLeft.style.display = "block";
-          parentElement._tdSubmitRight.style.display = "none";
-          break;
-        default:
-          parentElement._tdSubmitLeft.style.display = "none";
-          parentElement._tdSubmitRight.style.display = "none";
-          break;
-      }
+    switch ( displayType )
+    {
+      case 0:
+        this._display = "right";
+        parentElement._tdSubmitRight.appendChild( this._submit );
+        parentElement._tdSubmitRight.style.display = "block";
+        parentElement._tdSubmitLeft.style.display = "none";
+        break;
+      case 1:
+        this._display = "left";
+        parentElement._tdSubmitLeft.appendChild( this._submit );
+        parentElement._tdSubmitLeft.style.display = "block";
+        parentElement._tdSubmitRight.style.display = "none";
+        break;
+      default:
+        parentElement._tdSubmitLeft.style.display = "none";
+        parentElement._tdSubmitRight.style.display = "none";
+        break;
     }
   }
 });

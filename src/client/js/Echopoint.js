@@ -119,3 +119,14 @@ echopoint.google.chart.model =
    */
   uniqueId: 200808092
 };
+
+/** The namespace for tucana components ported to Echo3. */
+echopoint.tucana =
+{
+  /**
+   * Maintains a unique id for the echopoint.tucana namespace.
+   *
+   * @type Number
+   */
+  uniqueId: 20081030
+};

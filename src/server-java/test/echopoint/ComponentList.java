@@ -46,6 +46,7 @@ public class ComponentList extends Column
           "InfoWindow",
           "Strut",
           "TagCloud",
+          "FileUploadSelector",
           "BarChart",
           "LineChart",
           "Sparkline",

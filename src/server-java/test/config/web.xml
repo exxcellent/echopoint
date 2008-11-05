@@ -1,5 +1,5 @@
-<!DOCTYPE web-app 
-    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" 
+<!DOCTYPE web-app
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
     "http://java.sun.com/dtd/web-app_2_3.dtd">
 
 <web-app>
@@ -11,6 +11,10 @@
     <servlet>
       <servlet-name>Servlet</servlet-name>
       <servlet-class>echopoint.Servlet</servlet-class>
+      <init-param>
+        <param-name>echo.debug</param-name>
+        <param-value>true</param-value>
+      </init-param>
     </servlet>
 
     <servlet-mapping>

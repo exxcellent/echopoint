@@ -152,6 +152,7 @@
       <lib file='${dir.dist}/echopointtest.jar' />
       <lib dir='${dir.lib}' />
       <fileset dir='${dir.src.client.test}/' includes='image/' />
+      <fileset dir='${dir.src.client}/' includes='images/' />
     </war>
 
     <delete file='${dir.dist}/echopointtest.jar' />
@@ -227,6 +228,10 @@
         <file name='Sync.Strut.js'/>
         <file name='Application.TagCloud.js'/>
         <file name='Sync.TagCloud.js'/>
+      </filelist>
+      <filelist dir='${dir.src.client.app}/tucana'>
+        <file name='Application.FileUploadSelector.js'/>
+        <file name='Sync.FileUploadSelector.js'/>
       </filelist>
       <filelist dir='${dir.src.client.app}/google/chart'>
         <file name='Model.Google.js'/>
