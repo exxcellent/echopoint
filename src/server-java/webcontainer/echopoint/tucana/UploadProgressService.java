@@ -90,6 +90,10 @@ public class UploadProgressService extends BaseUploadService
       buff.append( "<tr>" ).append( progress.getTransferRate() ).append( "</tr>" );
       buff.append( "<tl>" ).append( progress.getEstimatedTimeLeft() ).append( "</tl>" );
     }
+    else
+    {
+      buff.append( "<r>0</r><cl>0</cl><pc>100</pc><tr>0</tr><tl>0</tl>" );
+    }
     buff.append( "</p>" );
 
     conn.setContentType( ContentType.TEXT_XML );

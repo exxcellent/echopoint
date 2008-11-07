@@ -158,7 +158,7 @@ echopoint.tucana.FileUploadSelectorSync = Core.extend( echopoint.internal.Abstra
   {
     if ( Core.Web.Env.BROWSER_INTERNET_EXPLORER )
     {
-      this._form = document.createElement(  "<form enctype='multipart/form-data'/>" );
+      this._form = document.createElement( "<form enctype='multipart/form-data'/>" );
     }
     else
     {
@@ -166,7 +166,7 @@ echopoint.tucana.FileUploadSelectorSync = Core.extend( echopoint.internal.Abstra
       this._form.enctype = "multipart/form-data";
     }
 
-    this._form.id = this.component.renderId + "|Form";
+    this._form.id = this.component.renderId + "|Form|" + this._uploadIndex;
     this._form.method = "POST";
     this._form.style.margin = "0px";
     this._form.style.padding = "0px";
@@ -246,15 +246,14 @@ echopoint.tucana.FileUploadSelectorSync = Core.extend( echopoint.internal.Abstra
     var progress = this.component.getComponent( 0 );
     if ( progress )
     {
+      var child = progress.peer._div;
+      this._div.removeChild( child );
+
       progress.set( echopoint.ProgressBar.PERCENTAGE, 0 );
       progress.set( echopoint.ProgressBar.TEXT, "" );
       progress.peer.renderUpdate();
-      
-      var child = document.getElementById( progress.renderId );
-      this._div.removeChild( child );
+
       this._div.appendChild( child );
-      //progress.peer.renderDispose();
-      //this.renderAddChild( null, progress );
     }
   },
 
@@ -302,27 +301,34 @@ echopoint.tucana.FileUploadSelectorSync.Frame = Core.extend(
 
   _renderAdd: function( parentElement )
   {
-    this._frameElement = document.createElement( "iframe" );
-    // id needed for Safari, otherwise multiple iframes do not load
-    this._frameElement.id = this.component.renderId + "|Frame|" + this._uploadIndex;
-    this._frameElement.name = this._frameElement.id;
-    this._frameElement.src = this.peer.client.getResourceUrl(
-        "Echo", "resource/Blank.html" );
-    this._frameElement.scrolling = "no";
-    this._frameElement.style.width = "0px";
-    this._frameElement.style.height = "0px";
-
     var processLoad = Core.method( this, this._processLoad );
+    var frameId = this.component.renderId + "|Frame|" + this._uploadIndex;
+    var srcUrl =
+        this.peer.client.getResourceUrl( "Echo", "resource/Blank.html" );
+
     if ( Core.Web.Env.BROWSER_INTERNET_EXPLORER )
     {
+      var iframeSrc = "<iframe id=\"" + frameId
+          + "\" name=\"" + frameId + "\" src=\"" + srcUrl + "\" "
+          + "scrolling=\"no\" width=\"0\" height=\"0\"></iframe>";
+      //Core.Debug.consoleWrite( "frame: " + iframeSrc );
+      parentElement.innerHTML = iframeSrc;
+      this._frameElement = parentElement.firstChild;
       Core.Web.Event.add( this._frameElement, "load", processLoad, false );
     }
     else
     {
+      this._frameElement = document.createElement( "iframe" );
+      // id needed for Safari, otherwise multiple iframes do not load
+      this._frameElement.id = frameId;
+      this._frameElement.name = frameId;
+      this._frameElement.src = srcUrl;
+      this._frameElement.scrolling = "no";
+      this._frameElement.style.width = "0px";
+      this._frameElement.style.height = "0px";
       this._frameElement.onload = processLoad;
+      parentElement.appendChild( this._frameElement );
     }
-
-    parentElement.appendChild( this._frameElement );
   },
 
   /**
@@ -843,7 +849,6 @@ echopoint.tucana.FileUploadSelectorSync.Button = Core.extend(
   _renderAdd: function( parentElement )
   {
     this._submit = document.createElement( "input" );
-    this._submit.type = "submit";
 
     this._renderStyle();
     this._renderButton( false, parentElement );
@@ -950,8 +955,8 @@ echopoint.tucana.FileUploadSelectorSync.Button = Core.extend(
         src = this._uploadImage;
       }
 
-      this._submit.type = "image";
-      this._submit.src = src;
+      this._submit.setAttribute( "type", "image" );
+      this._submit.setAttribute( "src", src );
     }
     else
     {
@@ -975,7 +980,7 @@ echopoint.tucana.FileUploadSelectorSync.Button = Core.extend(
         text = this._uploadText;
       }
 
-      this._submit.type = "submit";
+      this._submit.setAttribute( "type", "submit" );
       this._submit.style.height = this.peer._table._input.offsetHeight + "px";
 
       if ( text == null )

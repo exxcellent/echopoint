@@ -19,8 +19,8 @@ package echopoint.tucana;
 
 import nextapp.echo.webcontainer.RenderState;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * <code>RenderState</code> implementation for <code>UploadSelect</code>
@@ -36,15 +36,14 @@ public class UploadRenderState implements RenderState
   private int maxUploadIndex;
 
   private final Map<Integer, UploadProgress> progress;
-
-  private int[] ended;
+  private final Map<Integer,Integer> ended;
 
   /** Creates a new <code>UploadRenderState</code>. */
   public UploadRenderState()
   {
     this.maxUploadIndex = -1;
-    this.progress = new HashMap<Integer, UploadProgress>();
-    this.ended = new int[0];
+    this.progress = new ConcurrentHashMap<Integer, UploadProgress>();
+    this.ended = new ConcurrentHashMap<Integer,Integer>();
   }
 
   /**
@@ -76,18 +75,7 @@ public class UploadRenderState implements RenderState
    */
   public boolean isUploadEnded( int uploadIndex )
   {
-    synchronized ( ended )
-    {
-      for ( int anEnded : ended )
-      {
-        if ( anEnded == uploadIndex )
-        {
-          return true;
-        }
-      }
-    }
-
-    return false;
+    return ended.containsKey( uploadIndex );
   }
 
   /**
@@ -97,13 +85,7 @@ public class UploadRenderState implements RenderState
    */
   public void uploadEnded( int uploadIndex )
   {
-    synchronized ( ended )
-    {
-      int[] newEnded = new int[ended.length + 1];
-      System.arraycopy( ended, 0, newEnded, 0, ended.length );
-      newEnded[ended.length] = uploadIndex;
-      ended = newEnded;
-    }
+    ended.put(  uploadIndex, uploadIndex );
   }
 
   /**
@@ -125,13 +107,11 @@ public class UploadRenderState implements RenderState
    */
   public void setProgress( int uploadIndex, UploadProgress progress )
   {
-    synchronized ( this.progress )
+    if ( this.progress.containsKey( uploadIndex ) )
     {
-      if ( this.progress.containsKey( uploadIndex ) )
-      {
-        throw new IllegalStateException();
-      }
-      this.progress.put( uploadIndex, progress );
+      throw new IllegalStateException();
     }
+    
+    this.progress.put( uploadIndex, progress );
   }
 }
