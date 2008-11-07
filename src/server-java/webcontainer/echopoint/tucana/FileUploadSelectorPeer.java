@@ -18,6 +18,7 @@
 package echopoint.tucana;
 
 import echopoint.internal.AbstractContainerPeer;
+import echopoint.ProgressBar;
 import nextapp.echo.webcontainer.ServerMessage;
 import nextapp.echo.webcontainer.WebContainerServlet;
 import nextapp.echo.webcontainer.Service;
@@ -70,6 +71,7 @@ public class FileUploadSelectorPeer extends AbstractContainerPeer
   public FileUploadSelectorPeer()
   {
     addOutputProperty( PROPERTY_UPLOAD_INDEX );
+    addRequiredComponentClass( ProgressBar.class );
   }
 
   /** @inheritDoc */
@@ -109,7 +111,7 @@ public class FileUploadSelectorPeer extends AbstractContainerPeer
   public Object getOutputProperty( final Context context,
       final Component component, final String propertyName, final int propertyIndex )
   {
-    if ( FileUploadSelector.UPLOAD_CANCELED_PROPERTY.equals( propertyName ) )
+    if ( FileUploadSelector.UPLOAD_CANCELLED_PROPERTY.equals( propertyName ) )
     {
       int[] canceledUploads = ( (FileUploadSelector) component ).getCanceledUploads();
       final StringBuilder buffer = new StringBuilder();

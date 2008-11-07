@@ -92,7 +92,7 @@ public class UploadProgressService extends BaseUploadService
     }
     buff.append( "</p>" );
 
-    conn.setContentType( ContentType.TEXT_HTML );
+    conn.setContentType( ContentType.TEXT_XML );
     conn.getWriter().write( buff.toString() );
   }
 }

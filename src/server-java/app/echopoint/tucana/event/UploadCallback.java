@@ -18,6 +18,7 @@
 package echopoint.tucana.event;
 
 import java.util.EventListener;
+import java.io.Serializable;
 
 /**
  * An interface that represents a call back handler that will be notified when
@@ -30,7 +31,7 @@ import java.util.EventListener;
  * @author jvolkman (Echo2), Rakesh 2008-11-2
  * @version $Id$
  */
-public interface UploadCallback extends EventListener
+public interface UploadCallback extends EventListener, Serializable
 {
   /**
    * Indicates a file upload has been started.

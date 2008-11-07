@@ -25,9 +25,6 @@ echopoint.tucana.FileUploadSelector = Core.extend( echopoint.internal.AbstractCo
     BUTTON_IMAGE_WAIT: "buttonImageWait",
     BUTTON_MODE : "buttonMode",
     BUTTON_DISPLAY: "buttonDisplay",
-    WIDTH_SIZE  : "widthSize",
-    WIDTH_EXTENT: "widthExtent",
-    WIDTH_MODE  : "widthMode",
     CANCEL_ENABLED: "cancelEnabled",
 
     UPLOAD_INDEX: "uploadIndex",
@@ -38,4 +35,41 @@ echopoint.tucana.FileUploadSelector = Core.extend( echopoint.internal.AbstractCo
   },
 
   componentType: echopoint.constants.FILE_UPLOAD_SELECTOR
+});
+
+/**
+ * A value object that represents the response from polling the progress
+ * service.
+ */
+echopoint.tucana.UploadProgress = Core.extend(
+{
+  /** The total bytes that have been read so far. */
+  bytesRead: 0,
+
+  /** The content length of the uploading file.*/
+  contentLength: 0,
+
+  /** The percentage of the file that has been uploaded so far. */
+  percentComplete: 0,
+
+  /** The transfer rate that represents the speed of the upload. */
+  transferRate: 0,
+
+  /** The estimated time remaining for the transfer to end. */
+  estimatedTimeLeft: 0,
+
+  /**
+   * Create a new instance using the XML response from the service.
+   *
+   * @param xml The entire XML DOM structure.
+   */
+  $construct: function( xml )
+  {
+    var doc = xml.documentElement;
+    this.bytesRead = doc.getElementsByTagName( "r" )[0].childNodes[0].nodeValue;
+    this.contentLength = doc.getElementsByTagName( "cl" )[0].childNodes[0].nodeValue;
+    this.percentComplete = doc.getElementsByTagName( "pc" )[0].childNodes[0].nodeValue;
+    this.transferRate = doc.getElementsByTagName( "tr" )[0].childNodes[0].nodeValue;
+    this.estimatedTimeLeft = doc.getElementsByTagName( "tl" )[0].childNodes[0].nodeValue;
+  }
 });

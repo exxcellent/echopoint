@@ -32,6 +32,7 @@ import java.util.logging.Level;
  */
 public class UploadCallbackAdapter implements UploadCallback
 {
+  private static final long serialVersionUID = 1l;
   protected static final Logger logger = Logger.getAnonymousLogger();
 
   /**

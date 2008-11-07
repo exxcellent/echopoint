@@ -30,6 +30,7 @@ import echopoint.tucana.event.UploadProgressEvent;
 import echopoint.tucana.event.UploadStartEvent;
 import echopoint.tucana.event.UploadCallbackAdapter;
 import echopoint.internal.AbstractContainer;
+import echopoint.ProgressBar;
 
 /**
  * The file upload selector component.  This component is a re-implementation
@@ -66,13 +67,9 @@ public class FileUploadSelector extends AbstractContainer
 
   public static final String PROPERTY_WIDTH_EXTENT = "widthExtent";
 
-  public static final String PROPERTY_WIDTH_MODE = "widthMode";
-
   public static final String PROPERTY_CANCEL_ENABLED = "cancelEnabled";
 
-  public static final String UPLOAD_CANCELED_PROPERTY = "uploadCanceled";
-
-  public static final String ACTION_FILE_UPLOADED = "fileUploaded";
+  public static final String UPLOAD_CANCELLED_PROPERTY = "uploadCancelled";
 
   public static final int BUTTON_MODE_TEXT = 0;
 
@@ -85,10 +82,6 @@ public class FileUploadSelector extends AbstractContainer
   public static final int BUTTON_DISPLAY_AUTO = 2;
 
   public static final int BUTTON_DISPLAY_NONE = 3;
-
-  public static final int WIDTH_MODE_SIZE = 0;
-
-  public static final int WIDTH_MODE_EXTENT = 1;
 
 
   private static ImageReference DEFAULT_UPLOAD_IMAGE;
@@ -121,7 +114,6 @@ public class FileUploadSelector extends AbstractContainer
     setButtonCancelText( "Cancel" );
     setButtonWaitText( "Wait..." );
 
-    setWidthMode( WIDTH_MODE_EXTENT );
     setWidthExtent( new Extent( 300 ) );
     setCancelEnabled( true );
     setUploadCallback( new UploadCallbackAdapter() );
@@ -299,7 +291,7 @@ public class FileUploadSelector extends AbstractContainer
    */
   public void setWidthSize( final int size )
   {
-    set( PROPERTY_WIDTH_SIZE, size );
+    setWidth( new Extent( size ) );
   }
 
   /**
@@ -309,38 +301,18 @@ public class FileUploadSelector extends AbstractContainer
    */
   public int getWidthSize()
   {
-    Integer val = (Integer) get( PROPERTY_WIDTH_SIZE );
-    if ( val == null )
-    {
-      return -1;
-    }
-
-    return val;
+    final Extent extent = getWidth();
+    return ( extent != null ) ? extent.getValue() : -1;
   }
 
   public void setWidthExtent( final Extent width )
   {
-    set( PROPERTY_WIDTH_EXTENT, width );
+    setWidth( width );
   }
 
   public Extent getWidthExtent()
   {
-    return (Extent) get( PROPERTY_WIDTH_EXTENT );
-  }
-
-  public void setWidthMode( final int mode )
-  {
-    set( PROPERTY_WIDTH_MODE, mode );
-  }
-
-  public int getWidthMode()
-  {
-    Integer val = (Integer) get( PROPERTY_WIDTH_MODE );
-    if ( val == null )
-    {
-      return -1;
-    }
-    return val;
+    return getWidth();
   }
 
   public void setCancelEnabled( final boolean enabled )
@@ -402,11 +374,39 @@ public class FileUploadSelector extends AbstractContainer
     return callback;
   }
 
-  /** This component can have no children, so this always returns false. */
+  /**
+   * Return the progress bar component configured for this component.
+   *
+   * @return The progress bar if one was added or <code>null</code>.
+   */
+  public ProgressBar getProgressBar()
+  {
+    return ( getComponentCount() > 0 ) ? (ProgressBar) getComponent( 0 ) : null;
+  }
+
+  /**
+   * Add the specified progress bar to this component.
+   *
+   * @param progressBar The progress bar component to add.
+   */
+  public void setProgressBar( final ProgressBar progressBar )
+  {
+    add( progressBar, 0 );
+  }
+
+  /**
+   * The only allowed sub-component is a {@link echopoint.ProgressBar}.
+   *
+   * @param child The child component that is to be added if allowed.
+   * @return Return <code>true</code> if child is an instance of {@link
+   *   echopoint.ProgressBar} and a progress bar has not already been
+   *   assigned.
+   */
   @Override
   public boolean isValidChild( final Component child )
   {
-    return false;
+    boolean result = ( child instanceof ProgressBar );
+    return result && ( getComponentCount() < 2 );
   }
 
   /**

@@ -89,6 +89,7 @@ public class ImageMapPeer extends AbstractContainerPeer
    * @inheritDoc
    * @see nextapp.echo.webcontainer.AbstractComponentSynchronizePeer#getComponentClass
    */
+  @Override
   public Class getComponentClass()
   {
     return ImageMap.class;
@@ -98,6 +99,7 @@ public class ImageMapPeer extends AbstractContainerPeer
    * @inheritDoc
    * @see nextapp.echo.webcontainer.AbstractComponentSynchronizePeer#getClientComponentType
    */
+  @Override
   public String getClientComponentType( final boolean shortType )
   {
     return COMPONENT_NAME;

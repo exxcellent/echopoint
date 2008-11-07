@@ -17,31 +17,34 @@
  */
 package echopoint;
 
+import echopoint.internal.AbstractContainerPeer;
 import nextapp.echo.webcontainer.ServerMessage;
-import nextapp.echo.webcontainer.AbstractComponentSynchronizePeer;
 import nextapp.echo.webcontainer.WebContainerServlet;
 import nextapp.echo.webcontainer.Service;
 import nextapp.echo.webcontainer.service.JavaScriptService;
 import nextapp.echo.app.util.Context;
 import nextapp.echo.app.Component;
-import echopoint.internal.AbstractContainerPeer;
 
 /**
- * Component rendering peer for the {@link echopoint.ImageIcon} component.
+ * Component rendering peer for the {@link echopoint.ProgressBar} component.
  *
- * @author Rakesh Vidyadharan 2008-10-20
+ * <p><b>Note:</b> Development of this component was sponsored by <a
+ * href='http://tcnbroadcasting.com/index.jsp' target='_top'>TCN
+ * Broadcasting</a>.  We are grateful for their support and sponsorship.</p>
+ *
+ * @author Rakesh Vidyadharan 2008-11-6
  * @version $Id$
  */
-public class ImageIconPeer extends AbstractContainerPeer
+public class ProgressBarPeer extends AbstractContainerPeer
 {
   /** The component name for which this class is a peer. */
-  private static final String COMPONENT_NAME = ImageIcon.class.getName();
+  private static final String COMPONENT_NAME = ProgressBar.class.getName();
 
   /** The JS service files to load. */
   private static final String[] SERVICE_FILES =
       {
-          "resource/js/Application.ImageIcon.js",
-          "resource/js/Sync.ImageIcon.js"
+          "resource/js/Application.ProgressBar.js",
+          "resource/js/Sync.ProgressBar.js"
       };
 
   /** The service for the client side peer for this component. */
@@ -52,19 +55,6 @@ public class ImageIconPeer extends AbstractContainerPeer
   static
   {
     WebContainerServlet.getServiceRegistry().add( COMPONENT_SERVICE );
-  }
-
-  public ImageIconPeer()
-  {
-    addEvent( new AbstractComponentSynchronizePeer.EventPeer(
-        ImageIcon.INPUT_ACTION, ImageIcon.ACTION_LISTENERS_CHANGED_PROPERTY )
-    {
-      @Override
-      public boolean hasListeners( Context context, Component component )
-      {
-        return ( (ImageIcon) component ).hasActionListeners();
-      }
-    } );
   }
 
   /**
@@ -87,7 +77,7 @@ public class ImageIconPeer extends AbstractContainerPeer
   @Override
   public Class getComponentClass()
   {
-    return ImageIcon.class;
+    return ProgressBar.class;
   }
 
   /**

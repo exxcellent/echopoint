@@ -71,6 +71,7 @@ public class UploadReceiverService extends BaseUploadService
       final FileUploadSelector uploadSelect, final int uploadIndex )
     throws IOException
   {
+    System.out.format( "Processing upload index: %d%n", uploadIndex );
     final HttpServletRequest request = conn.getRequest();
     if ( !ServletFileUpload.isMultipartContent( request ) )
     {
@@ -99,12 +100,13 @@ public class UploadReceiverService extends BaseUploadService
     final UploadRenderState renderState =
         FileUploadSelectorPeer.getRenderState( uploadSelect,
             conn.getUserInstance() );
-    final UploadProgress progress = new UploadProgress( contentLength );
-    renderState.setProgress( uploadIndex, progress );
-    renderState.uploadStarted( uploadIndex );
 
     try
     {
+      final UploadProgress progress = new UploadProgress( contentLength );
+      renderState.setProgress( uploadIndex, progress );
+      renderState.uploadStarted( uploadIndex );
+
       UploadProviderFactory.getUploadProvider().handleUpload(
           conn, uploadSelect, uploadIndex, progress );
     }

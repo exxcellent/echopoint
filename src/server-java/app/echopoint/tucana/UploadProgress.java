@@ -153,7 +153,7 @@ public class UploadProgress implements Serializable
     {
       return 0;
     }
-    
+
     long transferRate = getTransferRate();
     if ( transferRate == -1 )
     {
@@ -194,8 +194,10 @@ public class UploadProgress implements Serializable
     }
   }
 
-  private static final class Milestone
+  private static final class Milestone implements Serializable
   {
+    private static final long serialVersionUID = 1l;
+
     private final long bytesRead;
 
     private final long timeStamp;
