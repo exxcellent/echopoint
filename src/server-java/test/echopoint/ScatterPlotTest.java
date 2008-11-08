@@ -93,7 +93,7 @@ public class ScatterPlotTest
     title.add( "Scatter Plot" );
     chart.setTitle( title );
 
-    assertEquals( "Ensuring title set", title, chart.title() );
+    assertEquals( "Ensuring title set", title, chart.getTitle() );
   }
 
   @Test

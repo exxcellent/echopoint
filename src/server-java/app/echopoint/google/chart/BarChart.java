@@ -86,34 +86,19 @@ public class BarChart<N extends Number> extends AdvancedChart<N>
    *
    * @return The property value.
    */
-  public String getOrientation()
+  public Orientation getOrientation()
   {
-    return (String) get( PROPERTY_ORIENTATION );
+    return (Orientation) get( PROPERTY_ORIENTATION );
   }
 
   /**
-   * Set the value of the {@link #PROPERTY_ORIENTATION} property.  This
-   * method should be treated as <b>internal use only</b> since it requires
-   * the string equivalent of {@link Orientation}.
-   *
-   * @deprecated Use {@link #setOrientation(echopoint.google.chart.BarChart.Orientation)}.
-   * @param orientation The value of the property to set.
-   */
-  @Deprecated
-  public void setOrientation( final String orientation )
-  {
-    set( PROPERTY_ORIENTATION, orientation );
-  }
-
-  /**
-   * Set the value of the {@link #PROPERTY_ORIENTATION} property using the
-   * specified enumeration value.
+   * Set the value of the {@link #PROPERTY_ORIENTATION} property.
    *
    * @param orientation The value of the property to set.
    */
   public void setOrientation( final Orientation orientation )
   {
-    setOrientation( orientation.toString() );
+    set( PROPERTY_ORIENTATION, orientation );
   }
 
   /**

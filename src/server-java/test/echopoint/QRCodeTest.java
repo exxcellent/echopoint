@@ -69,7 +69,7 @@ public class QRCodeTest
     title.add( "QR Codes" );
     chart.setTitle( title );
 
-    assertEquals( "Ensuring title set", title, chart.title() );
+    assertEquals( "Ensuring title set", title, chart.getTitle() );
   }
 
   @Test

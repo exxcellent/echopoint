@@ -77,4 +77,36 @@ public class AdvancedChartPeer extends SimpleChartPeer
   {
     return COMPONENT_NAME;
   }
+
+  /**
+   * Over-ridden to handle requests for the {@link
+   * echopoint.google.chart.internal.AdvancedChart#PROPERTY_AXIS_LABELS}, {@link
+   * echopoint.google.chart.internal.AdvancedChart#PROPERTY_LABEL_POSITIONS},
+   * {@link echopoint.google.chart.internal.AdvancedChart#PROPERTY_AXIS_RANGES},
+   * {@link echopoint.google.chart.internal.AdvancedChart#PROPERTY_LINE_STYLES},
+   * {@link echopoint.google.chart.internal.AdvancedChart#PROPERTY_RANGE_MARKERS},
+   * and {@link echopoint.google.chart.internal.AdvancedChart#PROPERTY_FILL_AREA}
+   * properties.
+   *
+   * @see nextapp.echo.webcontainer.ComponentSynchronizePeer#getOutputProperty(
+   *   Context, Component, String, int)
+   */
+  @Override
+  public Object getOutputProperty( final Context context,
+      final Component component, final String propertyName,
+      final int propertyIndex )
+  {
+    if ( AdvancedChart.PROPERTY_AXIS_LABELS.equals( propertyName ) ||
+        AdvancedChart.PROPERTY_LABEL_POSITIONS.equals( propertyName) ||
+        AdvancedChart.PROPERTY_AXIS_RANGES.equals( propertyName ) ||
+        AdvancedChart.PROPERTY_LINE_STYLES.equals( propertyName ) ||
+        AdvancedChart.PROPERTY_RANGE_MARKERS.equals( propertyName ) ||
+        AdvancedChart.PROPERTY_FILL_AREA.equals( propertyName ) )
+    {
+      return xstream.toXML( component.get( propertyName ) );
+    }
+
+    return super.getOutputProperty(
+        context, component, propertyName, propertyIndex );
+  }
 }

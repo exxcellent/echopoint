@@ -75,22 +75,9 @@ public class PieChart<N extends Number> extends SimpleChart<N>
    *
    * @return The value that indicates the chart dimensions.
    */
-  public String getDimensions()
+  public Dimensions getDimensions()
   {
-    return (String) get( PROPERTY_DIMENSIONS );
-  }
-
-  /**
-   * Set the value of the {@link #PROPERTY_DIMENSIONS} property.  This method
-   * should be treated as <b>internal use only</b>.
-   *
-   * @deprecated Internal use only.  Use {@link #setDimensions( Dimensions )}
-   * @param dimension The value to set.
-   */
-  @Deprecated
-  public void setDimensions( final String dimension )
-  {
-    set( PROPERTY_DIMENSIONS, dimension );
+    return (Dimensions) get( PROPERTY_DIMENSIONS );
   }
 
   /**
@@ -100,7 +87,7 @@ public class PieChart<N extends Number> extends SimpleChart<N>
    */
   public void setDimensions( final Dimensions dimension )
   {
-    setDimensions( dimension.toString() );
+    set( PROPERTY_DIMENSIONS, dimension );
   }
 
   /**
@@ -108,42 +95,19 @@ public class PieChart<N extends Number> extends SimpleChart<N>
    *
    * @return The labels value encoded as required by the chart api.
    */
-  public String getLabels()
+  @SuppressWarnings( {"unchecked"} )
+  public Collection<String> getLabels()
   {
-    return (String) get( PROPERTY_LABELS );
+    return (Collection<String>) get( PROPERTY_LABELS );
   }
 
   /**
-   * Set the value of the {@link #PROPERTY_LABELS} property.  This method
-   * should be treated as <b>internal use only</b>.
-   *
-   * @deprecated Internal use only.  Use {@link #setLabels(java.util.Collection)}
-   * @param labels The value to set.
-   */
-  @Deprecated
-  public void setLabels( final String labels )
-  {
-    set( PROPERTY_LABELS, labels );
-  }
-
-  /**
-   * Set the value of the {@link #PROPERTY_LABELS} property from the specified
-   * collection of label values.
+   * Set the value of the {@link #PROPERTY_LABELS} property.
    *
    * @param labels The value to set.
    */
   public void setLabels( final Collection<String> labels )
   {
-    final StringBuilder builder = new StringBuilder( 128 );
-
-    boolean first = true;
-    for ( String label : labels )
-    {
-      if ( ! first ) builder.append( "|" );
-      first = false;
-      builder.append( label );
-    }
-
-    setLabels( builder.toString() );
+    set( PROPERTY_LABELS, labels );
   }
 }

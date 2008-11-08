@@ -20,12 +20,12 @@ package echopoint;
 
 import echopoint.google.chart.LineChart;
 import echopoint.google.chart.model.ChartData;
+import echopoint.google.chart.model.FillArea;
+import echopoint.google.chart.model.LineStyle;
 import echopoint.google.chart.model.Range;
 import echopoint.google.chart.model.RangeMarker;
 import echopoint.google.chart.model.ShapeMarker;
 import echopoint.google.chart.model.Title;
-import echopoint.google.chart.model.LineStyle;
-import echopoint.google.chart.model.FillArea;
 import nextapp.echo.app.Component;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -102,7 +102,7 @@ public class LineChartTest
     title.add( "Simple Chart" );
     chart.setTitle( title );
 
-    assertEquals( "Ensuring title set", title, chart.title() );
+    assertEquals( "Ensuring title set", title, chart.getTitle() );
   }
 
   @Test

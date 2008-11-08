@@ -60,7 +60,7 @@ public class VennDiagramTest
     final VennDiagramModel model =
         new VennDiagramModel( 100, 80, 60, 30, 30, 30, 10 );
     chart.setData( model );
-    assertEquals( "Ensuring data size", chart.data().size(), 1 );
+    assertEquals( "Ensuring data size", chart.getData().size(), 1 );
   }
 
   @Test
@@ -70,7 +70,7 @@ public class VennDiagramTest
     title.add( "VennDiagram" );
     chart.setTitle( title );
 
-    assertEquals( "Ensuring title set", title, chart.title() );
+    assertEquals( "Ensuring title set", title, chart.getTitle() );
   }
 
   @Test

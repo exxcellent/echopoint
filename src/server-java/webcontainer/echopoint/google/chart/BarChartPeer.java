@@ -21,10 +21,10 @@ package echopoint.google.chart;
 import echopoint.google.chart.internal.AdvancedChartPeer;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.util.Context;
-import nextapp.echo.webcontainer.service.JavaScriptService;
-import nextapp.echo.webcontainer.WebContainerServlet;
 import nextapp.echo.webcontainer.ServerMessage;
 import nextapp.echo.webcontainer.Service;
+import nextapp.echo.webcontainer.WebContainerServlet;
+import nextapp.echo.webcontainer.service.JavaScriptService;
 
 /**
  * Rendering peer for the {@link echopoint.google.chart.BarChart} component.
@@ -76,5 +76,26 @@ public class BarChartPeer extends AdvancedChartPeer
   public String getClientComponentType( final boolean shortType )
   {
     return COMPONENT_NAME;
+  }
+
+  /**
+   * Over-ridden to handle requests for the {@link
+   * echopoint.google.chart.BarChart#PROPERTY_ORIENTATION} property.
+   *
+   * @see nextapp.echo.webcontainer.ComponentSynchronizePeer#getOutputProperty(
+   *   Context, Component, String, int)
+   */
+  @Override
+  public Object getOutputProperty( final Context context,
+      final Component component, final String propertyName,
+      final int propertyIndex )
+  {
+    if ( BarChart.PROPERTY_ORIENTATION.equals( propertyName ) )
+    {
+      return component.get( BarChart.PROPERTY_ORIENTATION ).toString();
+    }
+
+    return super.getOutputProperty(
+        context, component, propertyName, propertyIndex );
   }
 }

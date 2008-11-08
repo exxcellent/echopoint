@@ -45,6 +45,14 @@ public class FileUploadSelectorTest
   }
 
   @Test
+  public void inputSize()
+  {
+    final int size = 35;
+    component.setInputSize( size );
+    assertEquals( "Ensure input size set", size, component.getInputSize() );
+  }
+
+  @Test
   public void background()
   {
     final Color color = new Color( 0xa1a1a1 );
@@ -67,6 +75,23 @@ public class FileUploadSelectorTest
     component.setProgressBar( bar );
     assertEquals( "Ensure that progress bar is set",
         bar, component.getProgressBar() );
+  }
+
+  @Test
+  public void pollingInterval()
+  {
+    final int interval = 100;
+    component.setPollingInterval( interval );
+    assertEquals( "Ensuring polling interval set", interval,
+        component.getPollingInterval() );
+  }
+
+  @Test
+  public void repollCount()
+  {
+    final int count = 10;
+    component.setRepollCount( count );
+    assertEquals( "Ensuring repoll count set", count, component.getRepollCount() );
   }
 
   @AfterClass

@@ -65,7 +65,7 @@ public class MapTest
   {
     chart.setGeographicalArea( Map.Regions.africa );
     assertEquals( "Ensuring region set", chart.getGeographicalArea(),
-        Map.Regions.africa.toString() );
+        Map.Regions.africa );
   }
 
   @Test
@@ -105,8 +105,7 @@ public class MapTest
     final Title title = new Title();
     title.add( "Map" );
     chart.setTitle( title );
-
-    assertEquals( "Ensuring title set", title, chart.title() );
+    assertEquals( "Ensuring title set", title, chart.getTitle() );
   }
 
   @Test

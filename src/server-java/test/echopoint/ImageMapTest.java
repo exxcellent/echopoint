@@ -17,23 +17,23 @@
  */
 package echopoint;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.AfterClass;
-import static org.junit.Assert.assertEquals;
-import nextapp.echo.app.Extent;
-import nextapp.echo.app.Component;
-import nextapp.echo.app.Label;
-import nextapp.echo.app.event.ActionListener;
-import nextapp.echo.app.event.ActionEvent;
 import echopoint.model.CircleSection;
-import echopoint.model.RectangleSection;
-import echopoint.model.PolygonSection;
 import echopoint.model.MapSection;
 import echopoint.model.Point;
+import echopoint.model.PolygonSection;
+import echopoint.model.RectangleSection;
+import nextapp.echo.app.Component;
+import nextapp.echo.app.Extent;
+import nextapp.echo.app.Label;
+import nextapp.echo.app.event.ActionEvent;
+import nextapp.echo.app.event.ActionListener;
+import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
-import java.util.Collection;
 import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Unit test suite for the {@link echopoint.ImageMap} component.
@@ -95,7 +95,7 @@ public class ImageMapTest
     sections.add( rectangle );
     imageMap.addSections( sections );
     assertEquals( "Ensuring circle and rectangle added", sections.size(),
-        imageMap.getData().size() );
+        imageMap.getSections().size() );
 
     final int[] vertices = { 153, 106, 186, 225, 340, 193, 315, 81, 304, 167 };
     final PolygonSection polygon = new PolygonSection( vertices,
@@ -103,7 +103,7 @@ public class ImageMapTest
     sections.add( polygon );
     imageMap.addSection( polygon );
     assertEquals( "Ensuring polygon added", sections.size(),
-        imageMap.getData().size() );
+        imageMap.getSections().size() );
   }
 
   @AfterClass

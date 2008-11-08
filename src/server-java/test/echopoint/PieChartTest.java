@@ -56,7 +56,7 @@ public class PieChartTest
   {
     chart.setDimensions( PieChart.Dimensions.p3 );
     assertEquals( "Ensuring chart type set", chart.getDimensions(),
-        PieChart.Dimensions.p3.toString() );
+        PieChart.Dimensions.p3 );
   }
 
   @Test
@@ -89,8 +89,7 @@ public class PieChartTest
     final Title title = new Title();
     title.add( "PieChart" );
     chart.setTitle( title );
-
-    assertEquals( "Ensuring title set", title, chart.title() );
+    assertEquals( "Ensuring title set", title, chart.getTitle() );
   }
 
   @Test

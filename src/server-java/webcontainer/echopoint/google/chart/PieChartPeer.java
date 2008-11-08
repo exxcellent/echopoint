@@ -21,10 +21,12 @@ package echopoint.google.chart;
 import echopoint.google.chart.internal.SimpleChartPeer;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.util.Context;
-import nextapp.echo.webcontainer.service.JavaScriptService;
-import nextapp.echo.webcontainer.WebContainerServlet;
 import nextapp.echo.webcontainer.ServerMessage;
 import nextapp.echo.webcontainer.Service;
+import nextapp.echo.webcontainer.WebContainerServlet;
+import nextapp.echo.webcontainer.service.JavaScriptService;
+
+import java.util.Collection;
 
 /**
  * Rendering peer for the {@link echopoint.google.chart.PieChart} component.
@@ -76,5 +78,44 @@ public class PieChartPeer extends SimpleChartPeer
   public String getClientComponentType( final boolean shortType )
   {
     return COMPONENT_NAME;
+  }
+
+  /**
+   * Over-ridden to handle requests for the {@link
+   * echopoint.google.chart.PieChart#PROPERTY_DIMENSIONS} and {@link
+   * echopoint.google.chart.PieChart#PROPERTY_LABELS} properties.
+   *
+   * @see nextapp.echo.webcontainer.ComponentSynchronizePeer#getOutputProperty(
+   *   Context, Component, String, int)
+   */
+  @Override
+  @SuppressWarnings( {"unchecked"} )
+  public Object getOutputProperty( final Context context,
+      final Component component, final String propertyName,
+      final int propertyIndex )
+  {
+    if ( PieChart.PROPERTY_DIMENSIONS.equals( propertyName ) )
+    {
+      return component.get( propertyName ).toString();
+    }
+    else if ( PieChart.PROPERTY_LABELS.equals( propertyName ) )
+    {
+      final StringBuilder builder = new StringBuilder( 128 );
+      final Collection<String> labels =
+          (Collection<String>) component.get( propertyName );
+
+      boolean first = true;
+      for ( String label : labels )
+      {
+        if ( ! first ) builder.append( "|" );
+        first = false;
+        builder.append( label );
+      }
+
+      return builder.toString();
+    }
+
+    return super.getOutputProperty(
+        context, component, propertyName, propertyIndex );
   }
 }

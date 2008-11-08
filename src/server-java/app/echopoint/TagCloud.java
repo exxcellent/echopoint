@@ -22,12 +22,9 @@ import echopoint.model.Tag;
 import nextapp.echo.app.Color;
 import nextapp.echo.app.Component;
 
-import java.util.Collection;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
-
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
 
 /**
  * A <a href='http://en.wikipedia.org/wiki/Tag_cloud'>tag cloud</a> component
@@ -72,7 +69,6 @@ import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
 public class TagCloud extends Component
 {
   private static final long serialVersionUID = 1l;
-  protected static XStream xstream;
 
   /** A flag indicating whether rollover is enabled for a tag. */
   public static final String PROPERTY_ROLLOVER_ENABLED = "rolloverEnabled";
@@ -84,13 +80,10 @@ public class TagCloud extends Component
   public static final String PROPERTY_ROLLOVER_FOREGROUND = "rolloverForeground";
 
   /**
-   * The JSON representation of {@link echopoint.model.Tag} instances to be
+   * The collection of {@link echopoint.model.Tag} instances to be
    * represented in the component.
    */
   public static final String PROPERTY_TAGS = "tags";
-
-  /** The collection of tag instances that represents the data model. */
-  private Collection<Tag> data = new ArrayList<Tag>( 20 );
 
   /**
    * <b>TagCloud</b> is <i>NOT</i> allowed to have any children.
@@ -165,68 +158,39 @@ public class TagCloud extends Component
   }
 
   /**
-   * Return a ready only view of the {@link #data} model.
+   * Return the value of the {@link #PROPERTY_TAGS} property.
    *
-   * @return The array of tags represented in this component.
+   * @return A read-only view of the collection of tags instances.
    */
-  public Collection<Tag> getData()
+  @SuppressWarnings( {"unchecked"} )
+  public Collection<Tag> getTags()
   {
-    return Collections.unmodifiableCollection( data );
+    return Collections.unmodifiableCollection(
+        (Collection<Tag>) get( PROPERTY_TAGS ) );
   }
 
   /**
-   * Return the value of the {@link #PROPERTY_TAGS} property.  Note
-   * that this method will return the JSON representation of {@link #data}.
+   * Return the collection of tags that represent the model for this component.
    *
-   * @return The JSON data structure that represents {@link #data}.
+   * @return The collection of tag instances.
    */
-  public String getTags()
+  @SuppressWarnings( {"unchecked"} )
+  protected Collection<Tag> getData()
   {
-    return (String) get( PROPERTY_TAGS );
+    return (Collection<Tag>) get( PROPERTY_TAGS );
   }
 
   /**
-   * Set the value of the {@link #PROPERTY_TAGS} property.  This method is
-   * for <b>internal use only</b>.
-   *
-   * @deprecated Internal use only.  Use {@link #setTags( Collection )}.
-   * @param tags The JSON representation of the tags collection.
-   */
-  @Deprecated
-  public void setTags( final String tags )
-  {
-    set( PROPERTY_TAGS, tags );
-  }
-
-  /**
-   * Set the value of the {@link #data} property.  The {@link #data}
-   * collection will be converted to JSON to serialisation.
+   * Set the value of the {@link #PROPERTY_TAGS} property.  Note that there
+   * is not way to individually add/delete tag instances other than setting
+   * a new collection (or a modified version of the original collection you
+   * used to set the property).
    *
    * @param tags The collection of tag instances to be represented in this component.
    */
   public void setTags( final Collection<Tag> tags )
   {
-    data.clear();
-    data.addAll( tags );
-
-    final XStream xstream = createSerialiser();
-    setTags( xstream.toXML( data ) );
-  }
-
-  /**
-   * Configure the JSON serialiser.
-   *
-   * @return The configured serialiser to use to serialise {@link #data}.
-   */
-  protected XStream createSerialiser()
-  {
-    if ( xstream == null )
-    {
-      xstream = new XStream( new JsonHierarchicalStreamDriver() );
-      xstream.processAnnotations( Tag.class );
-      xstream.setMode( XStream.NO_REFERENCES );
-    }
-
-    return xstream;
+    final ArrayList<Tag> list = new ArrayList<Tag>( tags );
+    set( PROPERTY_TAGS, list );
   }
 }

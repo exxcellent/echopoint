@@ -19,13 +19,13 @@
 package echopoint;
 
 import echopoint.google.chart.BarChart;
+import echopoint.google.chart.model.BarChartSize;
 import echopoint.google.chart.model.ChartData;
+import echopoint.google.chart.model.LineStyle;
 import echopoint.google.chart.model.Range;
 import echopoint.google.chart.model.RangeMarker;
 import echopoint.google.chart.model.ShapeMarker;
 import echopoint.google.chart.model.Title;
-import echopoint.google.chart.model.LineStyle;
-import echopoint.google.chart.model.BarChartSize;
 import nextapp.echo.app.Component;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -63,7 +63,7 @@ public class BarChartTest
   {
     chart.setOrientation( BarChart.Orientation.bhg );
     assertEquals( "Ensuring orientation", chart.getOrientation(),
-        BarChart.Orientation.bhg.toString() );
+        BarChart.Orientation.bhg );
   }
 
   @Test
@@ -109,8 +109,7 @@ public class BarChartTest
     final Title title = new Title();
     title.add( "Bar Chart" );
     chart.setTitle( title );
-
-    assertEquals( "Ensuring title set", title, chart.title() );
+    assertEquals( "Ensuring title set", title, chart.getTitle() );
   }
 
   @Test

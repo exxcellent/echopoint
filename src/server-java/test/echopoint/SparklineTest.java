@@ -20,9 +20,9 @@ package echopoint;
 
 import echopoint.google.chart.Sparkline;
 import echopoint.google.chart.model.ChartData;
+import echopoint.google.chart.model.LineStyle;
 import echopoint.google.chart.model.ShapeMarker;
 import echopoint.google.chart.model.Title;
-import echopoint.google.chart.model.LineStyle;
 import nextapp.echo.app.Component;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -99,7 +99,7 @@ public class SparklineTest
     title.add( "Sparkline" );
     chart.setTitle( title );
 
-    assertEquals( "Ensuring title set", title, chart.title() );
+    assertEquals( "Ensuring title set", title, chart.getTitle() );
   }
 
   @Test

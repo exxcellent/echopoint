@@ -19,15 +19,18 @@
 package echopoint;
 
 import echopoint.model.Tag;
+import nextapp.echo.app.Button;
 import nextapp.echo.app.Color;
+import nextapp.echo.app.Column;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.Row;
-import nextapp.echo.app.Column;
-import nextapp.echo.app.Button;
 import nextapp.echo.app.event.ActionEvent;
 import nextapp.echo.app.event.ActionListener;
 import org.junit.AfterClass;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -80,10 +83,10 @@ public class TagCloudTest
   }
 
   @Test
-  public void tags()
+  public void data()
   {
     tagCloud.setTags( createTags() );
-    assertEquals( "Ensuring same size of tags", tagCloud.getData().size(), 10 );
+    assertEquals( "Ensuring same size of tags", tagCloud.getTags().size(), 10 );
   }
 
   @Test
@@ -109,7 +112,6 @@ public class TagCloudTest
     assertNotNull( tagCloud.getRolloverBackground() );
     assertNotNull( tagCloud.getRolloverForeground() );
     assertNotNull( tagCloud.getTags() );
-    //System.out.println( tagCloud.getTagsJson() );
 
     row.add( tagCloud );
 

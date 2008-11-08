@@ -17,13 +17,16 @@
  */
 package echopoint;
 
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
 import echopoint.internal.AbstractPeer;
-import nextapp.echo.webcontainer.service.JavaScriptService;
-import nextapp.echo.webcontainer.WebContainerServlet;
-import nextapp.echo.webcontainer.Service;
-import nextapp.echo.webcontainer.ServerMessage;
+import echopoint.model.Tag;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.util.Context;
+import nextapp.echo.webcontainer.ServerMessage;
+import nextapp.echo.webcontainer.Service;
+import nextapp.echo.webcontainer.WebContainerServlet;
+import nextapp.echo.webcontainer.service.JavaScriptService;
 
 /**
  * Component rendering peer for {@link echopoint.TagCloud}.
@@ -35,6 +38,9 @@ public class TagCloudPeer extends AbstractPeer
 {
   /** The component name for which this class is a peer. */
   private static final String COMPONENT_NAME = TagCloud.class.getName();
+
+  /** The serialiser used to serialise {@link echopoint.model.Tag} instances. */
+  protected static final XStream xstream;
 
   /** The JS service files to load. */
   private static final String[] SERVICE_FILES =
@@ -51,6 +57,10 @@ public class TagCloudPeer extends AbstractPeer
   static
   {
     WebContainerServlet.getServiceRegistry().add( COMPONENT_SERVICE );
+
+    xstream = new XStream( new JsonHierarchicalStreamDriver() );
+    xstream.processAnnotations( Tag.class );
+    xstream.setMode( XStream.NO_REFERENCES );
   }
 
   /**
@@ -64,6 +74,28 @@ public class TagCloudPeer extends AbstractPeer
     final ServerMessage serverMessage =
         (ServerMessage) context.get( ServerMessage.class );
     serverMessage.addLibrary( COMPONENT_NAME );
+  }
+
+  /**
+   * Over-ridden to handle requests for the {@link
+   * echopoint.TagCloud#PROPERTY_TAGS} property.  The collection of tag
+   * instances are serialised as a JSON stucture.
+   *
+   * @see nextapp.echo.webcontainer.ComponentSynchronizePeer#getOutputProperty(Context,
+   *      Component, String, int)
+   */
+  @Override
+  public Object getOutputProperty( final Context context,
+      final Component component, final String propertyName,
+      final int propertyIndex )
+  {
+    if ( TagCloud.PROPERTY_TAGS.equals( propertyName ) )
+    {
+      return xstream.toXML( component.get( TagCloud.PROPERTY_TAGS ) );
+    }
+
+    return super.getOutputProperty(
+        context, component, propertyName, propertyIndex );
   }
 
   /**

@@ -18,13 +18,16 @@
 
 package echopoint.google.chart.internal;
 
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
+import echopoint.google.chart.model.Title;
 import echopoint.internal.AbstractContainerPeer;
-import nextapp.echo.webcontainer.service.JavaScriptService;
-import nextapp.echo.webcontainer.ServerMessage;
-import nextapp.echo.webcontainer.WebContainerServlet;
-import nextapp.echo.webcontainer.Service;
-import nextapp.echo.app.util.Context;
 import nextapp.echo.app.Component;
+import nextapp.echo.app.util.Context;
+import nextapp.echo.webcontainer.ServerMessage;
+import nextapp.echo.webcontainer.Service;
+import nextapp.echo.webcontainer.WebContainerServlet;
+import nextapp.echo.webcontainer.service.JavaScriptService;
 
 /**
  * Rendering peer for the {@link echopoint.google.chart.internal.AbstractChart}
@@ -37,6 +40,9 @@ public class AbstractChartPeer extends AbstractContainerPeer
 {
   /** The name of the component for which this class is a peer. */
   private static final String COMPONENT_NAME = AbstractChart.class.getName();
+
+  /** The serialiser for converting custom model objects to JSON. */
+  protected static final XStream xstream;
 
   /** The JS service files to load. */
   private static final String[] SERVICE_FILES =
@@ -54,6 +60,10 @@ public class AbstractChartPeer extends AbstractContainerPeer
   static
   {
     WebContainerServlet.getServiceRegistry().add( COMPONENT_SERVICE );
+
+    xstream = new XStream( new JsonHierarchicalStreamDriver() );
+    xstream.processAnnotations( Title.class );
+    xstream.setMode( XStream.NO_REFERENCES );
   }
 
   /**
@@ -87,5 +97,28 @@ public class AbstractChartPeer extends AbstractContainerPeer
   public String getClientComponentType( final boolean shortType )
   {
     return COMPONENT_NAME;
+  }
+
+  /**
+   * Over-ridden to handle requests for the {@link
+   * echopoint.google.chart.internal.AbstractChart#PROPERTY_TITLE} and {@link
+   * echopoint.google.chart.internal.AbstractChart#PROPERTY_DATA} properties.
+   *
+   * @see nextapp.echo.webcontainer.ComponentSynchronizePeer#getOutputProperty(
+   *   Context, Component, String, int)
+   */
+  @Override
+  public Object getOutputProperty( final Context context,
+      final Component component, final String propertyName,
+      final int propertyIndex )
+  {
+    if ( AbstractChart.PROPERTY_DATA.equals( propertyName ) ||
+        AbstractChart.PROPERTY_TITLE.equals( propertyName ) )
+    {
+      return xstream.toXML( component.get( propertyName ) );
+    }
+
+    return super.getOutputProperty(
+        context, component, propertyName, propertyIndex );
   }
 }

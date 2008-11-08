@@ -17,17 +17,17 @@
  */
 package echopoint.tucana;
 
-import echopoint.internal.AbstractContainerPeer;
 import echopoint.ProgressBar;
-import nextapp.echo.webcontainer.ServerMessage;
-import nextapp.echo.webcontainer.WebContainerServlet;
-import nextapp.echo.webcontainer.Service;
-import nextapp.echo.webcontainer.ResourceRegistry;
-import nextapp.echo.webcontainer.ContentType;
-import nextapp.echo.webcontainer.UserInstance;
-import nextapp.echo.webcontainer.service.JavaScriptService;
+import echopoint.internal.AbstractContainerPeer;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.util.Context;
+import nextapp.echo.webcontainer.ContentType;
+import nextapp.echo.webcontainer.ResourceRegistry;
+import nextapp.echo.webcontainer.ServerMessage;
+import nextapp.echo.webcontainer.Service;
+import nextapp.echo.webcontainer.UserInstance;
+import nextapp.echo.webcontainer.WebContainerServlet;
+import nextapp.echo.webcontainer.service.JavaScriptService;
 
 /**
  * Rendering peer for the {@link echopoint.tucana.FileUploadSelector}
@@ -104,6 +104,8 @@ public class FileUploadSelectorPeer extends AbstractContainerPeer
   }
 
   /**
+   * Over-ridden to handle requests for the <code>uploadIndex</code> property.
+   *
    * @see nextapp.echo.webcontainer.ComponentSynchronizePeer#getOutputProperty(Context,
    *      Component, String, int)
    */
@@ -111,27 +113,11 @@ public class FileUploadSelectorPeer extends AbstractContainerPeer
   public Object getOutputProperty( final Context context,
       final Component component, final String propertyName, final int propertyIndex )
   {
-    if ( FileUploadSelector.UPLOAD_CANCELLED_PROPERTY.equals( propertyName ) )
+    if ( PROPERTY_UPLOAD_INDEX.equals( propertyName ) )
     {
-      int[] canceledUploads = ( (FileUploadSelector) component ).getCanceledUploads();
-      final StringBuilder buffer = new StringBuilder();
-
-      for ( int canceledUpload : canceledUploads )
-      {
-        if ( buffer.length() > 0 )
-        {
-          buffer.append( "," );
-        }
-        buffer.append( canceledUpload );
-      }
-
-      return buffer.toString();
-    }
-    else if ( PROPERTY_UPLOAD_INDEX.equals( propertyName ) )
-    {
-      FileUploadSelector uploadSelect = (FileUploadSelector) component;
-      UserInstance userInstance = (UserInstance) context.get( UserInstance.class );
-      UploadRenderState renderState = getRenderState( uploadSelect, userInstance );
+      final FileUploadSelector uploadSelect = (FileUploadSelector) component;
+      final UserInstance userInstance = (UserInstance) context.get( UserInstance.class );
+      final UploadRenderState renderState = getRenderState( uploadSelect, userInstance );
       return renderState.getMaxUploadIndex();
     }
 

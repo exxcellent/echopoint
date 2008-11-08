@@ -18,14 +18,12 @@
 
 package echopoint.google.chart.internal;
 
+import echopoint.google.chart.model.FillArea;
+import echopoint.google.chart.model.LineStyle;
 import echopoint.google.chart.model.Range;
 import echopoint.google.chart.model.RangeMarker;
-import echopoint.google.chart.model.LineStyle;
-import echopoint.google.chart.model.FillArea;
 
 import java.util.Collection;
-
-import com.thoughtworks.xstream.XStream;
 
 /**
  * An abstract base class for charts that support most of the configuration
@@ -138,34 +136,21 @@ public class AdvancedChart<N extends Number> extends SimpleChart<N>
    *
    * @return The property value.
    */
-  public String getAxisLabels()
+  @SuppressWarnings( {"unchecked"} )
+  public Collection<Collection<String>> getAxisLabels()
   {
-    return (String) get( PROPERTY_AXIS_LABELS );
-  }
-
-  /**
-   * Set the value of the {@link #PROPERTY_AXIS_LABELS} property.  This
-   * method is for <b>internal use only</b>, since it requires JSON data.
-   *
-   * @deprecated Internal use only.  Use {@link #setAxisLabels( Collection )}
-   * @param labels The value to set using JSON data structure.
-   */
-  @Deprecated
-  public void setAxisLabels( final String labels )
-  {
-    set( PROPERTY_AXIS_LABELS, labels );
+    return (Collection<Collection<String>>) get( PROPERTY_AXIS_LABELS );
   }
 
   /**
    * Set the value of the {@link #PROPERTY_AXIS_LABELS} property using the
    * specified collection of collection of strings.
    *
-   * @param labels The value to set after conversion to JSON.
+   * @param labels The value to set.
    */
   public void setAxisLabels( final Collection<Collection<String>> labels )
   {
-    final XStream xstream = createSerialiser();
-    setAxisLabels( xstream.toXML( labels ) );
+    set( PROPERTY_AXIS_LABELS, labels );
   }
 
   /**
@@ -173,23 +158,10 @@ public class AdvancedChart<N extends Number> extends SimpleChart<N>
    *
    * @return The property value.
    */
-  public String getLabelPositions()
+  @SuppressWarnings( {"unchecked"} )
+  public Collection<Collection<N>> getLabelPositions()
   {
-    return (String) get( PROPERTY_LABEL_POSITIONS );
-  }
-
-  /**
-   * Set the value of the {@link #PROPERTY_LABEL_POSITIONS} property.  This
-   * method should be treated as <b>internal use only</b>, since this method
-   * requires a JSON data structure.
-   *
-   * @deprecated Internal use only.  Use {@link #setLabelPositions( Collection )}
-   * @param positions The value to set in JSON format.
-   */
-  @Deprecated
-  public void setLabelPositions( final String positions )
-  {
-    set( PROPERTY_LABEL_POSITIONS, positions );
+    return (Collection<Collection<N>>) get( PROPERTY_LABEL_POSITIONS );
   }
 
   /**
@@ -200,8 +172,7 @@ public class AdvancedChart<N extends Number> extends SimpleChart<N>
    */
   public void setLabelPositions( final Collection<Collection<N>> positions )
   {
-    final XStream xstream = createSerialiser();
-    setLabelPositions( xstream.toXML( positions ) );
+    set( PROPERTY_LABEL_POSITIONS, positions );
   }
 
   /**
@@ -209,35 +180,21 @@ public class AdvancedChart<N extends Number> extends SimpleChart<N>
    *
    * @return The property value.
    */
-  public String getAxisRanges()
+  @SuppressWarnings( {"unchecked"} )
+  public Collection<Range> getAxisRanges()
   {
-    return (String) get( PROPERTY_AXIS_RANGES );
-  }
-
-  /**
-   * Set the value of the {@link #PROPERTY_AXIS_RANGES} property.  This
-   * method should be treated as <b>internal use only</b> since this requires
-   * a JSON data structure.
-   *
-   * @deprecated Internal use only.  Use {@link #setAxisRanges( Collection )}
-   * @param ranges The value to set in JSON format.
-   */
-  @Deprecated
-  public void setAxisRanges( final String ranges )
-  {
-    set( PROPERTY_AXIS_RANGES, ranges );
+    return (Collection<Range>) get( PROPERTY_AXIS_RANGES );
   }
 
   /**
    * Set the value of the {@link #PROPERTY_AXIS_RANGES} property using the
    * collection of range values.
    *
-   * @param ranges The value to set after converting to JSON.
+   * @param ranges The value to set.
    */
   public void setAxisRanges( final Collection<Range> ranges )
   {
-    final XStream xstream = createSerialiser();
-    setAxisRanges( xstream.toXML( ranges ) );
+    set( PROPERTY_AXIS_RANGES, ranges );
   }
 
   /**
@@ -265,34 +222,20 @@ public class AdvancedChart<N extends Number> extends SimpleChart<N>
    *
    * @return The property value.
    */
-  public String getLineStyles()
+  @SuppressWarnings( {"unchecked"} )
+  public Collection<LineStyle> getLineStyles()
   {
-    return (String) get( PROPERTY_LINE_STYLES );
-  }
-
-  /**
-   * Set the value of the {@link #PROPERTY_LINE_STYLES} property.  This
-   * method should be treated as <b>internal use only</b> since this requires
-   * a JSON data structure.
-   *
-   * @deprecated Internal use only.  Use {@link #setLineStyles( Collection )}
-   * @param styles The value of the property to in JSON format.
-   */
-  @Deprecated
-  public void setLineStyles( final String styles )
-  {
-    set( PROPERTY_LINE_STYLES, styles );
+    return (Collection<LineStyle>) get( PROPERTY_LINE_STYLES );
   }
 
   /**
    * Set the value of the {@link #PROPERTY_LINE_STYLES} property.
    *
-   * @param styles The value of the property to set after converting to JSON.
+   * @param styles The value of the property to set.
    */
   public void setLineStyles( final Collection<LineStyle> styles )
   {
-    final XStream xstream = createSerialiser();
-    setLineStyles( xstream.toXML( styles ) );
+    set( PROPERTY_LINE_STYLES, styles );
   }
 
   /**
@@ -320,34 +263,20 @@ public class AdvancedChart<N extends Number> extends SimpleChart<N>
    *
    * @return The property value.
    */
-  public String getRangeMarkers()
+  @SuppressWarnings( {"unchecked"} )
+  public Collection<RangeMarker> getRangeMarkers()
   {
-    return (String) get( PROPERTY_RANGE_MARKERS );
-  }
-
-  /**
-   * Set the value of the {@link #PROPERTY_RANGE_MARKERS} property.  This
-   * method should be treated as <b>internal use only</b> since this requires
-   * JSON data.
-   *
-   * @deprecated Internal use only.  Use {@link #setRangeMarkers( Collection )}
-   * @param markers The value of the property to set in JSON format.
-   */
-  @Deprecated
-  public void setRangeMarkers( final String markers )
-  {
-    set( PROPERTY_RANGE_MARKERS, markers );
+    return (Collection<RangeMarker>) get( PROPERTY_RANGE_MARKERS );
   }
 
   /**
    * Set the value of the {@link #PROPERTY_RANGE_MARKERS} property.
    *
-   * @param markers The value of the property to set after converting to JSON.
+   * @param markers The value of the property to set.
    */
   public void setRangeMarkers( final Collection<RangeMarker> markers )
   {
-    final XStream xstream = createSerialiser();
-    setRangeMarkers( xstream.toXML( markers ) );
+    set( PROPERTY_RANGE_MARKERS, markers );
   }
 
   /**
@@ -355,34 +284,20 @@ public class AdvancedChart<N extends Number> extends SimpleChart<N>
    *
    * @return The property value.
    */
-  public String getFillArea()
+  @SuppressWarnings( {"unchecked"} )
+  public Collection<FillArea> getFillArea()
   {
-    return (String) get( PROPERTY_FILL_AREA );
-  }
-
-  /**
-   * Set the value of the {@link #PROPERTY_FILL_AREA} property.  This method
-   * should be treated as <b>internal use only</b> since it requires JSON
-   * data structure.
-   *
-   * @deprecated Internal use only.  Use {@link #setFillArea( Collection )}
-   * @param area The value of the property to set in JSON format.
-   */
-  @Deprecated
-  public void setFillArea( final String area )
-  {
-    set( PROPERTY_FILL_AREA, area );
+    return (Collection<FillArea>) get( PROPERTY_FILL_AREA );
   }
 
   /**
    * Set the value of the {@link #PROPERTY_FILL_AREA} property using the
    * collection of area instances.
    *
-   * @param area The value of the property to set after converting to JSON.
+   * @param area The value of the property to set.
    */
   public void setFillArea( final Collection<FillArea> area )
   {
-    final XStream xstream = createSerialiser();
-    setFillArea( xstream.toXML( area ) );
+    set( PROPERTY_FILL_AREA, area );
   }
 }

@@ -63,13 +63,30 @@ public class FileUploadSelector extends AbstractContainer
 
   public static final String PROPERTY_BUTTON_DISPLAY = "buttonDisplay";
 
-  public static final String PROPERTY_WIDTH_SIZE = "widthSize";
-
-  public static final String PROPERTY_WIDTH_EXTENT = "widthExtent";
-
   public static final String PROPERTY_CANCEL_ENABLED = "cancelEnabled";
 
-  public static final String UPLOAD_CANCELLED_PROPERTY = "uploadCancelled";
+  /**
+   * The size (indicates number of characters) for the input field.
+   * This is the same as the old <code>PROPERTY_WIDTH_SIZE</code>.
+   * This property is best styled.
+   */
+  public static final String PROPERTY_INPUT_SIZE = "inputSize";
+
+  /**
+   * The interval (in milliseconds) at which the progress service is
+   * to be polled for updates.  Note that upload completion and cancellation
+   * are inferred through the response from the service.  This property
+   * is best styled.
+   */
+  public static final String PROPERTY_POLLING_INTERVAL = "pollingInterval";
+
+  /**
+   * The maximum number of times to repoll the progress service before the
+   * upload is considered dead when no data has been transferred.  Note that
+   * this is the easiest way to implement the cancel upload feature while
+   * maintaining the progress bar.  This property is best styled.
+   */
+  public static final String PROPERTY_REPOLL_COUNT = "repollCount";
 
   public static final int BUTTON_MODE_TEXT = 0;
 
@@ -101,8 +118,6 @@ public class FileUploadSelector extends AbstractContainer
 
   public FileUploadSelector()
   {
-    super();
-
     setButtonUploadImage( DEFAULT_UPLOAD_IMAGE );
     setButtonCancelImage( DEFAULT_CANCEL_IMAGE );
     setButtonWaitImage( DEFAULT_WAIT_IMAGE );
@@ -314,6 +329,66 @@ public class FileUploadSelector extends AbstractContainer
   public boolean isCancelEnabled()
   {
     return ( (Boolean) get( PROPERTY_CANCEL_ENABLED ) );
+  }
+
+  /**
+   * Return the value of the {@link #PROPERTY_INPUT_SIZE} property.
+   *
+   * @return The size of the input text field.
+   */
+  public int getInputSize()
+  {
+    return (Integer) get( PROPERTY_INPUT_SIZE );
+  }
+
+  /**
+   * Set the value of the {@link #PROPERTY_INPUT_SIZE} property.
+   *
+   * @param interval The size of the input text field.
+   */
+  public void setInputSize( final int interval )
+  {
+    set( PROPERTY_INPUT_SIZE, interval );
+  }
+
+  /**
+   * Return the value of the {@link #PROPERTY_POLLING_INTERVAL} property.
+   *
+   * @return The time interval at which the progress service will be polled
+   */
+  public int getPollingInterval()
+  {
+    return (Integer) get( PROPERTY_POLLING_INTERVAL );
+  }
+
+  /**
+   * Set the value of the {@link #PROPERTY_POLLING_INTERVAL} property.
+   *
+   * @param interval The time interval at which the progress service will be polled
+   */
+  public void setPollingInterval( final int interval )
+  {
+    set( PROPERTY_POLLING_INTERVAL, interval );
+  }
+
+  /**
+   * Return the value of the {@link #PROPERTY_REPOLL_COUNT} property.
+   *
+   * @return The total number of times the progress server will be polled.
+   */
+  public int getRepollCount()
+  {
+    return (Integer) get( PROPERTY_REPOLL_COUNT );
+  }
+
+  /**
+   * Set the value of the {@link #PROPERTY_REPOLL_COUNT} property.
+   *
+   * @param count The total number of times the progress server will be polled.
+   */
+  public void setRepollCount( final int count )
+  {
+    set( PROPERTY_REPOLL_COUNT, count );
   }
 
   /**

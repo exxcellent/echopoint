@@ -91,7 +91,7 @@ public class MeterTest
     title.add( "Google-o-meter" );
     chart.setTitle( title );
 
-    assertEquals( "Ensuring title set", title, chart.title() );
+    assertEquals( "Ensuring title set", title, chart.getTitle() );
   }
 
   @Test

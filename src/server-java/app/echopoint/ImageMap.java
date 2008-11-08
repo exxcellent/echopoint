@@ -18,12 +18,8 @@
 package echopoint;
 
 import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
 import echopoint.internal.AbstractContainer;
-import echopoint.model.CircleSection;
 import echopoint.model.MapSection;
-import echopoint.model.PolygonSection;
-import echopoint.model.RectangleSection;
 import nextapp.echo.app.HttpImageReference;
 import nextapp.echo.app.ImageReference;
 import nextapp.echo.app.event.ActionEvent;
@@ -96,12 +92,6 @@ public class ImageMap extends AbstractContainer
    */
   public static final String PROPERTY_SECTIONS = "sections";
 
-  /**
-   * The map of {@link echopoint.model.MapSection} instances keyed by the
-   * {@link echopoint.model.MapSection#actionCommand} for the section.
-   */
-  private Map<String,MapSection> data = new LinkedHashMap<String,MapSection>();
-
   /** The action command that was triggered by user interaction with map. */
   protected String actionCommand;
 
@@ -159,31 +149,29 @@ public class ImageMap extends AbstractContainer
   }
 
   /**
-   * Return the value of the {@link #PROPERTY_SECTIONS} property.  Note that
-   * this method returns a JSON representation of
+   * Return the value of the {@link #PROPERTY_SECTIONS} property.
    *
-   * @deprecated Should be treated as internal use only.
-   * @return The image that is being used as the map region.
+   * @return A read-only view of the  sections of the map configured for actions.
    */
-  @Deprecated
-  public String getSections()
+  @SuppressWarnings( {"unchecked"} )
+  public Map<String,MapSection> getSections()
   {
-    return (String) get( PROPERTY_SECTIONS );
+    return Collections.unmodifiableMap(
+        (Map<String,MapSection>) get( PROPERTY_SECTIONS ) );
   }
 
   /**
-   * Set the value of the {@link #PROPERTY_SECTIONS} property.  Note that
-   * this method is to be treated as internal use only, since the string
-   * value specified must be in JSON format.
+   * Set the value of the {@link #PROPERTY_SECTIONS} property.
    *
-   * @deprecated Should be treated as internal use only.  Use {@link
-   *   #addSection} or {@link #addSections}.
+   * @see #addSections
+   * @see #addSection
    * @param sections The image to use as the map region.
    */
-  @Deprecated
-  public void setSections( final String sections )
+  public void setSections( final Map<String,MapSection> sections )
   {
-    set( PROPERTY_SECTIONS, sections );
+    final LinkedHashMap<String,MapSection> map =
+        new LinkedHashMap<String,MapSection>( sections );
+    set( PROPERTY_SECTIONS, map );
   }
 
   /**
@@ -191,17 +179,22 @@ public class ImageMap extends AbstractContainer
    *
    * @param sections The collection of sections to be added.
    */
+  @SuppressWarnings( {"unchecked"} )
   public void addSections( final Collection<MapSection> sections )
   {
+    Map<String,MapSection> map =
+        (Map<String,MapSection>) get( PROPERTY_SECTIONS );
+    if ( map == null ) map = new LinkedHashMap<String,MapSection>();
+
     for ( MapSection section : sections )
     {
       if ( section.getActionCommand() != null )
       {
-        data.put( section.getActionCommand(), section );
+        map.put( section.getActionCommand(), section );
       }
     }
 
-    setSections( createSerialiser().toXML( data ) );
+    setSections( map );
   }
 
   /**
@@ -209,11 +202,17 @@ public class ImageMap extends AbstractContainer
    *
    * @param section The section that is to be added.
    */
+  @SuppressWarnings( {"unchecked"} )
   public void addSection( final MapSection section )
   {
     if ( section.getActionCommand() == null ) return;
-    data.put( section.getActionCommand(), section );
-    setSections( createSerialiser().toXML( data ) );
+
+    Map<String,MapSection> map =
+        (Map<String,MapSection>) get( PROPERTY_SECTIONS );
+    if ( map == null ) map = new LinkedHashMap<String,MapSection>();
+    map.put( section.getActionCommand(), section );
+
+    setSections( map );
   }
 
   /**
@@ -221,11 +220,16 @@ public class ImageMap extends AbstractContainer
    *
    * @param section The section that is to be deleted.
    */
+  @SuppressWarnings( {"unchecked"} )
   public void removeSection( final MapSection section )
   {
     if ( section.getActionCommand() == null ) return;
-    data.remove( section.getActionCommand() );
-    setSections( createSerialiser().toXML( data ) );
+
+    final Map<String,MapSection> map =
+        (Map<String,MapSection>) get( PROPERTY_SECTIONS );
+    if ( map != null ) map.remove( section.getActionCommand() );
+
+    setSections( map );
   }
 
   /**
@@ -233,8 +237,7 @@ public class ImageMap extends AbstractContainer
    */
   public void removeAllSections()
   {
-    data.clear();
-    setSections( createSerialiser().toXML( data ) );
+    setSections( new LinkedHashMap<String,MapSection>() );
   }
 
   /**
@@ -307,36 +310,5 @@ public class ImageMap extends AbstractContainer
 
     getEventListenerList().removeListener( ActionListener.class, listener );
     firePropertyChange( ACTION_LISTENERS_CHANGED_PROPERTY, listener, null );
-  }
-
-  /**
-   * Accessor for property 'data'.
-   *
-   * @return Value for property 'data'.
-   */
-  public Map<String, MapSection> getData()
-  {
-    return Collections.unmodifiableMap( data );
-  }
-
-  /**
-   * Configure the JSON serialiser.
-   *
-   * @return The configured serialiser to use to serialise {@link #data}.
-   */
-  protected XStream createSerialiser()
-  {
-    if ( xstream == null )
-    {
-      xstream = new XStream( new JsonHierarchicalStreamDriver() );
-      xstream.processAnnotations( MapSection.class );
-      xstream.processAnnotations( CircleSection.class );
-      xstream.processAnnotations( PolygonSection.class );
-      xstream.processAnnotations( RectangleSection.class );
-      xstream.alias( "list", LinkedHashMap.class );
-      xstream.setMode( XStream.NO_REFERENCES );
-    }
-
-    return xstream;
   }
 }

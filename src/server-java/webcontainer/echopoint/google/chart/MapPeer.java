@@ -18,13 +18,13 @@
 
 package echopoint.google.chart;
 
+import echopoint.google.chart.internal.AbstractChartPeer;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.util.Context;
 import nextapp.echo.webcontainer.ServerMessage;
 import nextapp.echo.webcontainer.Service;
 import nextapp.echo.webcontainer.WebContainerServlet;
 import nextapp.echo.webcontainer.service.JavaScriptService;
-import echopoint.google.chart.internal.AbstractChartPeer;
 
 /**
  * Rendering peer for the {@link echopoint.google.chart.Map} component.
@@ -76,5 +76,26 @@ public class MapPeer extends AbstractChartPeer
   public String getClientComponentType( final boolean shortType )
   {
     return COMPONENT_NAME;
+  }
+
+  /**
+   * Over-ridden to handle requests for the {@link
+   * echopoint.google.chart.Map#PROPERTY_GEOGRAPHICAL_AREA} property.
+   *
+   * @see nextapp.echo.webcontainer.ComponentSynchronizePeer#getOutputProperty(
+   *   Context, Component, String, int)
+   */
+  @Override
+  public Object getOutputProperty( final Context context,
+      final Component component, final String propertyName,
+      final int propertyIndex )
+  {
+    if ( Map.PROPERTY_GEOGRAPHICAL_AREA.equals( propertyName ) )
+    {
+      return component.get( Map.PROPERTY_GEOGRAPHICAL_AREA ).toString();
+    }
+
+    return super.getOutputProperty(
+        context, component, propertyName, propertyIndex );
   }
 }
