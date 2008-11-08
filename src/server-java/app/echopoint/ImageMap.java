@@ -17,24 +17,23 @@
  */
 package echopoint;
 
-import echopoint.internal.AbstractContainer;
-import echopoint.model.MapSection;
-import echopoint.model.CircleSection;
-import echopoint.model.PolygonSection;
-import echopoint.model.RectangleSection;
-import nextapp.echo.app.ImageReference;
-import nextapp.echo.app.HttpImageReference;
-import nextapp.echo.app.event.ActionListener;
-import nextapp.echo.app.event.ActionEvent;
-
-import java.util.Map;
-import java.util.LinkedHashMap;
-import java.util.Collections;
-import java.util.Collection;
-import java.util.EventListener;
-
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
+import echopoint.internal.AbstractContainer;
+import echopoint.model.CircleSection;
+import echopoint.model.MapSection;
+import echopoint.model.PolygonSection;
+import echopoint.model.RectangleSection;
+import nextapp.echo.app.HttpImageReference;
+import nextapp.echo.app.ImageReference;
+import nextapp.echo.app.event.ActionEvent;
+import nextapp.echo.app.event.ActionListener;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.EventListener;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * The <code>ImageMap</code> class provides a {@link nextapp.echo.app.Component}
@@ -267,7 +266,7 @@ public class ImageMap extends AbstractContainer
    *
    * @param event The {@link nextapp.echo.app.event.ActionEvent} to send
    */
-  public void fireActionPerformed( final ActionEvent event )
+  protected void fireActionPerformed( final ActionEvent event )
   {
     if ( !hasEventListenerList() ) return;
 

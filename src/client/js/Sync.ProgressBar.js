@@ -143,6 +143,6 @@ echopoint.ProgressBarSync = Core.extend( echopoint.internal.AbstractContainerSyn
 
   _setPercentage: function( value )
   {
-    this._bar.style.width = ( ! value ) ? "1px" : parseInt( value ) + "%";
+    this._bar.style.width = ( ! value ) ? "0px" : parseInt( value ) + "%";
   }
 });

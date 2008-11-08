@@ -131,6 +131,15 @@ Echo.Sync.Border = {
             
     _TEST_EXTENT_PX: /^(-?\d+px*)$/,
     
+    /**
+     * Creates a border property from a size, style, and color.
+     * 
+     * @param {#Extent} size the border size
+     * @param {String} the border style
+     * @param {#Color} the border color
+     * @return a border object
+     * @type #Border
+     */
     compose: function(size, style, color) {
         if (typeof size == "number") {
             size += "px";
@@ -148,6 +157,12 @@ Echo.Sync.Border = {
         return out.join(" ");
     },
     
+    /**
+     * Parses a border into size, style, and color components.
+     * 
+     * @param border the border to parse
+     * @return an object containing size, style, and color properties of the border
+     */
     parse: function(border) {
         if (!border) {
             return { };
@@ -161,14 +176,21 @@ Echo.Sync.Border = {
         }
     },
 
-    render: function(border, element, styleName) {
+    /**
+     * Renders a border to a DOM element.
+     * 
+     * @param {#Border} border the border to render
+     * @param {Element} the target DOM element
+     * @param {String} styleAttribute the CSS style attribute name (defaults to "border" if omitted)
+     */
+    render: function(border, element, styleAttribute) {
         if (!border) {
             return;
         }
-        styleName = styleName ? styleName : "border";
+        styleAttribute = styleAttribute ? styleAttribute : "border";
         if (typeof(border) == "string") {
             if (this._PARSER_PX.test(border)) {
-                element.style[styleName] = border;
+                element.style[styleAttribute] = border;
             } else {
                 var elements = this._PARSER.exec(border);
                 if (elements == null) {
@@ -176,20 +198,27 @@ Echo.Sync.Border = {
                 }
             }
         } else {
-            this.render(border.top, element, styleName + "Top");
+            this.render(border.top, element, styleAttribute + "Top");
             if (border.right !== null) {
-                this.render(border.right || border.top, element, styleName + "Right");
+                this.render(border.right || border.top, element, styleAttribute + "Right");
             }
             if (border.bottom !== null) {
-                this.render(border.bottom || border.top, element, styleName + "Bottom");
+                this.render(border.bottom || border.top, element, styleAttribute + "Bottom");
             }
             if (border.left !== null) {
-                this.render(border.left || border.right || border.top, element, styleName + "Left");
+                this.render(border.left || border.right || border.top, element, styleAttribute + "Left");
             }
             
         }
     },
     
+    /**
+     * Renders a border to a DOM element, clearing an existing border if the border value is null.
+     * 
+     * @param {#Border} border the border to render
+     * @param {Element} the target DOM element
+     * @param {String} styleAttribute the CSS style attribute name (defaults to "border" if omitted)
+     */
     renderClear: function(border, element) {
         if (border) {
             this.render(border, element);
@@ -198,6 +227,14 @@ Echo.Sync.Border = {
         }
     },
 
+    /**
+     * Determines the size of a particular side of the border in pixels.
+     * 
+     * @param {#Border} border the border
+     * @param {String} sideName, the border side name, "left", "right", "bottom", or "top" (defaults to "top" if omitted)
+     * @return the border size in pixels
+     * @type {Number}
+     */
     getPixelSize: function(border, sideName) {
         if (!border) {
             return 0;
@@ -256,26 +293,20 @@ Echo.Sync.Color = {
     adjust: function(value, r, g, b) {
         var colorInt = parseInt(value.substring(1), 16);
         var red = Math.floor(colorInt / 0x10000) + r;
-        if (red < 0) {
-            red = 0;
-        } else if (red > 255) {
-            red = 255;
-        }
         var green = Math.floor(colorInt / 0x100) % 0x100 + g;
-        if (green < 0) {
-            green = 0;
-        } else if (green > 255) {
-            green = 255;
-        }
         var blue = colorInt % 0x100 + b;
-        if (blue < 0) {
-            blue = 0;
-        } else if (blue > 255) {
-            blue = 255;
-        }
-        return "#" + (red < 16 ? "0" : "") + red.toString(16) +
-                (green < 16 ? "0" : "") + green.toString(16) +
-                (blue < 16 ? "0" : "") + blue.toString(16); 
+        return this._toHex(red, green, blue);
+    },
+    
+    blend: function(value1, value2, ratio) {
+        ratio = ratio < 0 ? 0 : (ratio > 1 ? 1 : ratio);
+        var colorInt1 = parseInt(value1.substring(1), 16);
+        var colorInt2 = parseInt(value2.substring(1), 16);
+        var red = Math.round(Math.floor(colorInt1 / 0x10000) * (1 - ratio) + Math.floor(colorInt2 / 0x10000) * ratio);
+        var green = Math.round(Math.floor(colorInt1 / 0x100) % 0x100 * (1 - ratio) + 
+                Math.floor(colorInt2 / 0x100) % 0x100 * ratio);
+        var blue = Math.round((colorInt1 % 0x100) * (1 - ratio) + (colorInt2 % 0x100) * ratio);
+        return this._toHex(red, green, blue);
     },
 
     render: function(color, element, styleProperty) {
@@ -296,6 +327,28 @@ Echo.Sync.Color = {
         if ((color = component.render("background"))) {
             element.style.backgroundColor = color;
         }
+    },
+    
+    _toHex: function(red, green, blue) {
+        if (red < 0) {
+            red = 0;
+        } else if (red > 255) {
+            red = 255;
+        }
+        if (green < 0) {
+            green = 0;
+        } else if (green > 255) {
+            green = 255;
+        }
+        if (blue < 0) {
+            blue = 0;
+        } else if (blue > 255) {
+            blue = 255;
+        }
+
+        return "#" + (red < 16 ? "0" : "") + red.toString(16) +
+                (green < 16 ? "0" : "") + green.toString(16) +
+                (blue < 16 ? "0" : "") + blue.toString(16); 
     }
 };
 
@@ -321,6 +374,13 @@ Echo.Sync.Extent = {
                 throw new Error("Invalid Extent: " + arguments[0]);
             }
             return parts[2] == "%";
+        }
+    },
+    
+    render: function(extent, element, styleAttribute, horizontal, allowPercent) {
+        var cssValue = Echo.Sync.Extent.toCssValue(extent, horizontal, allowPercent);
+        if (cssValue !== "") {
+            element.style[styleAttribute] = cssValue;
         }
     },
 

@@ -17,15 +17,14 @@
  */
 package echopoint.tucana;
 
-import nextapp.echo.webcontainer.WebContainerServlet;
+import echopoint.tucana.event.UploadFailEvent;
 import nextapp.echo.webcontainer.Connection;
 import nextapp.echo.webcontainer.Service;
+import nextapp.echo.webcontainer.WebContainerServlet;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import echopoint.tucana.event.UploadFailEvent;
 
 /**
  * Processes a file upload HTTP request from the client.
@@ -71,7 +70,6 @@ public class UploadReceiverService extends BaseUploadService
       final FileUploadSelector uploadSelect, final int uploadIndex )
     throws IOException
   {
-    System.out.format( "Processing upload index: %d%n", uploadIndex );
     final HttpServletRequest request = conn.getRequest();
     if ( !ServletFileUpload.isMultipartContent( request ) )
     {
@@ -112,12 +110,6 @@ public class UploadReceiverService extends BaseUploadService
     }
     catch ( Exception e )
     {
-      if ( uploadSelect.isUploadCanceled( uploadIndex ) )
-      {
-        // we don't care
-        return;
-      }
-
       uploadSelect.notifyListener(
           new UploadFailEvent( uploadSelect, uploadIndex, e ) );
     }

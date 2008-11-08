@@ -17,20 +17,20 @@
  */
 package echopoint.tucana;
 
-import nextapp.echo.app.Component;
-import nextapp.echo.app.Extent;
-import nextapp.echo.app.ImageReference;
-import nextapp.echo.app.ResourceImageReference;
+import echopoint.ProgressBar;
+import echopoint.internal.AbstractContainer;
 import echopoint.tucana.event.UploadCallback;
+import echopoint.tucana.event.UploadCallbackAdapter;
 import echopoint.tucana.event.UploadCancelEvent;
 import echopoint.tucana.event.UploadEvent;
 import echopoint.tucana.event.UploadFailEvent;
 import echopoint.tucana.event.UploadFinishEvent;
 import echopoint.tucana.event.UploadProgressEvent;
 import echopoint.tucana.event.UploadStartEvent;
-import echopoint.tucana.event.UploadCallbackAdapter;
-import echopoint.internal.AbstractContainer;
-import echopoint.ProgressBar;
+import nextapp.echo.app.Component;
+import nextapp.echo.app.Extent;
+import nextapp.echo.app.ImageReference;
+import nextapp.echo.app.ResourceImageReference;
 
 /**
  * The file upload selector component.  This component is a re-implementation
@@ -90,8 +90,6 @@ public class FileUploadSelector extends AbstractContainer
 
   private static ImageReference DEFAULT_WAIT_IMAGE;
 
-  private int[] canceledUploads;
-
   static
   {
     DEFAULT_UPLOAD_IMAGE = new ResourceImageReference( "resource/images/upload.png" );
@@ -104,18 +102,11 @@ public class FileUploadSelector extends AbstractContainer
   public FileUploadSelector()
   {
     super();
-    this.canceledUploads = new int[0];
-    setButtonMode( BUTTON_MODE_IMAGE );
+
     setButtonUploadImage( DEFAULT_UPLOAD_IMAGE );
     setButtonCancelImage( DEFAULT_CANCEL_IMAGE );
     setButtonWaitImage( DEFAULT_WAIT_IMAGE );
 
-    setButtonUploadText( "Upload" );
-    setButtonCancelText( "Cancel" );
-    setButtonWaitText( "Wait..." );
-
-    setWidthExtent( new Extent( 300 ) );
-    setCancelEnabled( true );
     setUploadCallback( new UploadCallbackAdapter() );
   }
 
@@ -323,35 +314,6 @@ public class FileUploadSelector extends AbstractContainer
   public boolean isCancelEnabled()
   {
     return ( (Boolean) get( PROPERTY_CANCEL_ENABLED ) );
-  }
-
-  /**
-   * Returns the indices of all canceled uploads.
-   *
-   * @return an array containing the indices, if no uploads are canceled, an
-   *         empty array is returned.
-   */
-  public int[] getCanceledUploads()
-  {
-    return canceledUploads;
-  }
-
-  /**
-   * Determines if the upload with given index is canceled.
-   *
-   * @param uploadIndex the index of the upload
-   * @return <code>true</code> if canceled.
-   */
-  public boolean isUploadCanceled( int uploadIndex )
-  {
-    for ( int canceledUpload : canceledUploads )
-    {
-      if ( canceledUpload == uploadIndex )
-      {
-        return true;
-      }
-    }
-    return false;
   }
 
   /**

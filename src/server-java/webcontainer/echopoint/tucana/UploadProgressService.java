@@ -17,14 +17,13 @@
  */
 package echopoint.tucana;
 
-import nextapp.echo.webcontainer.WebContainerServlet;
+import echopoint.tucana.event.UploadProgressEvent;
 import nextapp.echo.webcontainer.Connection;
 import nextapp.echo.webcontainer.ContentType;
 import nextapp.echo.webcontainer.Service;
+import nextapp.echo.webcontainer.WebContainerServlet;
 
 import java.io.IOException;
-
-import echopoint.tucana.event.UploadProgressEvent;
 
 /**
  * Provides information about file upload progress.
@@ -92,7 +91,7 @@ public class UploadProgressService extends BaseUploadService
     }
     else
     {
-      buff.append( "<r>0</r><cl>0</cl><pc>100</pc><tr>0</tr><tl>0</tl>" );
+      buff.append( "<r>0</r><cl>0</cl><pc>0</pc><tr>0</tr><tl>0</tl>" );
     }
     buff.append( "</p>" );
 

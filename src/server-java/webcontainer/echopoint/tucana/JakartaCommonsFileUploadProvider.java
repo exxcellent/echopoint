@@ -17,20 +17,19 @@
  */
 package echopoint.tucana;
 
-import org.apache.commons.fileupload.FileItemIterator;
-import org.apache.commons.fileupload.FileUploadBase;
-import org.apache.commons.fileupload.FileItemStream;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.ProgressListener;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.FilenameUtils;
-import nextapp.echo.webcontainer.Connection;
 import echopoint.tucana.event.UploadFailEvent;
 import echopoint.tucana.event.UploadFinishEvent;
 import echopoint.tucana.event.UploadStartEvent;
-import echopoint.tucana.event.UploadCancelEvent;
+import nextapp.echo.webcontainer.Connection;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileItemIterator;
+import org.apache.commons.fileupload.FileItemStream;
+import org.apache.commons.fileupload.FileUploadBase;
+import org.apache.commons.fileupload.ProgressListener;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 
 /**
  * {@link UploadSPI} implementation that uses the
@@ -74,6 +73,7 @@ public class JakartaCommonsFileUploadProvider extends AbstractFileUploadProvider
       if ( iter.hasNext() )
       {
         FileItemStream stream = iter.next();
+
         if ( !stream.isFormField() )
         {
           String fileName = FilenameUtils.getName( stream.getName() );
@@ -82,18 +82,10 @@ public class JakartaCommonsFileUploadProvider extends AbstractFileUploadProvider
           FileItem item = itemFactory.createItem( stream.getFieldName(),
               stream.getContentType(), false, stream.getName() );
           IOUtils.copy( stream.openStream(), item.getOutputStream() );
-          if ( !uploadSelect.isUploadCanceled( uploadIndex ) )
-          {
-            uploadSelect.notifyListener( new UploadFinishEvent( uploadSelect,
-                uploadIndex, fileName, item.getInputStream(), item.getSize(),
-                item.getContentType() ) );
-          }
-          else
-          {
-            uploadSelect.notifyListener( new UploadCancelEvent( uploadSelect,
-                uploadIndex, fileName, item.getInputStream(), item.getSize(),
-                item.getContentType() ) );
-          }
+
+          uploadSelect.notifyListener( new UploadFinishEvent( uploadSelect,
+              uploadIndex, fileName, item.getInputStream(), item.getSize(),
+              item.getContentType() ) );
           return;
         }
       }

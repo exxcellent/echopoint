@@ -28,7 +28,10 @@ echopoint.tucana.FileUploadSelectorSync = Core.extend( echopoint.internal.Abstra
     _DEFAULT_PROGRESS_INTERVAL: 250,
 
     /** The default width for the file selection dialogue. */
-    _DEFAULT_WIDTH: "275px"
+    DEFAULT_WIDTH: "275px",
+
+    /** the default height for the component. */
+    DEFAULT_HEIGHT: "40px"
   },
 
   /** The container element in which the iframe is hidden. */
@@ -118,6 +121,18 @@ echopoint.tucana.FileUploadSelectorSync = Core.extend( echopoint.internal.Abstra
     containerElement.removeChild( element );
     this.renderAdd( update, containerElement );
     return false;
+  },
+
+  /** Over-ridden to return the custom default height. */
+  getDefaultHeight: function()
+  {
+    return echopoint.tucana.FileUploadSelectorSync.DEFAULT_HEIGHT;
+  },
+
+  /** Over-ridden to return the custom default width. */
+  getDefaultWidth: function()
+  {
+    return echopoint.tucana.FileUploadSelectorSync.DEFAULT_WIDTH;
   },
 
   /** Create the hidden container element that holds the iframe for submission. */
@@ -230,8 +245,9 @@ echopoint.tucana.FileUploadSelectorSync = Core.extend( echopoint.internal.Abstra
    * Removes the specified frame and creates a new one.
    *
    * @param frame {echopoint.tucana.FileUploadSelectorSync}
+   * @param cancel A flag indicating that the upload was cancelled.
    */
-  _refreshFrame: function( frame )
+  _refreshFrame: function( frame, cancel )
   {
     this._removeFrame( frame );
     this._table._renderDispose();
@@ -249,7 +265,7 @@ echopoint.tucana.FileUploadSelectorSync = Core.extend( echopoint.internal.Abstra
       var child = progress.peer._div;
       this._div.removeChild( child );
 
-      progress.set( echopoint.ProgressBar.PERCENTAGE, 0 );
+      progress.set( echopoint.ProgressBar.PERCENTAGE, 100 );
       progress.set( echopoint.ProgressBar.TEXT, "" );
       progress.peer.renderUpdate();
 
@@ -308,18 +324,16 @@ echopoint.tucana.FileUploadSelectorSync.Frame = Core.extend(
 
     if ( Core.Web.Env.BROWSER_INTERNET_EXPLORER )
     {
-      var iframeSrc = "<iframe id=\"" + frameId
+      parentElement.innerHTML = "<iframe id=\"" + frameId
           + "\" name=\"" + frameId + "\" src=\"" + srcUrl + "\" "
           + "scrolling=\"no\" width=\"0\" height=\"0\"></iframe>";
       //Core.Debug.consoleWrite( "frame: " + iframeSrc );
-      parentElement.innerHTML = iframeSrc;
       this._frameElement = parentElement.firstChild;
       Core.Web.Event.add( this._frameElement, "load", processLoad, false );
     }
     else
     {
       this._frameElement = document.createElement( "iframe" );
-      // id needed for Safari, otherwise multiple iframes do not load
       this._frameElement.id = frameId;
       this._frameElement.name = frameId;
       this._frameElement.src = srcUrl;
@@ -386,7 +400,7 @@ echopoint.tucana.FileUploadSelectorSync.Frame = Core.extend(
     var text = parseInt( uploadProgress.bytesRead / 1000 ) +
                " of " + parseInt( uploadProgress.contentLength / 1000 ) + "Kb";
 
-    if ( this.component.getComponentCount() > 0 )
+    if ( this.component && this.component.getComponentCount() > 0 )
     {
       var progressBar = this.component.getComponent( 0 );
       progressBar.set( echopoint.ProgressBar.PERCENTAGE, uploadProgress.percentComplete );
@@ -420,6 +434,7 @@ echopoint.tucana.FileUploadSelectorSync.Frame = Core.extend(
 
   _processCancel: function()
   {
+    Core.Debug.consoleWrite( "File upload cancelled!" );
     this._uploadEnded();
   },
 
@@ -631,7 +646,7 @@ echopoint.tucana.FileUploadSelectorSync.Table = Core.extend(
     if ( !fileSelectorWidth )
     {
       fileSelectorWidth = this.component.render(
-          "width", echopoint.tucana.FileUploadSelectorSync._DEFAULT_WIDTH );
+          "width", echopoint.tucana.FileUploadSelectorSync.DEFAULT_WIDTH );
     }
     var fileSelectorPixelWidth = Echo.Sync.Extent.toPixels(fileSelectorWidth, true);
 
@@ -890,19 +905,22 @@ echopoint.tucana.FileUploadSelectorSync.Button = Core.extend(
   _setUploadText: function()
   {
     this._uploadText = this.component.render(
-        echopoint.tucana.FileUploadSelector.BUTTON_TEXT_UPLOAD, "Uplaod" );
+        echopoint.tucana.FileUploadSelector.BUTTON_TEXT_UPLOAD,
+        echopoint.tucana.FileUploadSelector.DEFAULT_UPLOAD_TEXT );
   },
 
   _setCancelText: function()
   {
     this._cancelText = this.component.render(
-        echopoint.tucana.FileUploadSelector.BUTTON_TEXT_CANCEL );
+        echopoint.tucana.FileUploadSelector.BUTTON_TEXT_CANCEL,
+        echopoint.tucana.FileUploadSelector.DEFAULT_CANCEL_TEXT );
   },
 
   _setWaitText: function()
   {
     this._waitText = this.component.render(
-        echopoint.tucana.FileUploadSelector.BUTTON_TEXT_WAIT );
+        echopoint.tucana.FileUploadSelector.BUTTON_TEXT_WAIT,
+        echopoint.tucana.FileUploadSelector.DEFAULT_WAIT_TEXT );
   },
 
   _setUploadImage: function()
@@ -933,7 +951,8 @@ echopoint.tucana.FileUploadSelectorSync.Button = Core.extend(
   _setCancel: function()
   {
     this._cancel = this.component.render(
-        echopoint.tucana.FileUploadSelector.CANCEL_ENABLED );
+        echopoint.tucana.FileUploadSelector.CANCEL_ENABLED,
+        echopoint.tucana.FileUploadSelector.DEFAULT_CANCEL_ENABLED );
   },
 
   /**
@@ -942,7 +961,15 @@ echopoint.tucana.FileUploadSelectorSync.Button = Core.extend(
    */
   _renderButton: function( uploading, parentElement )
   {
-    if ( this._mode == 1 )
+    var mode = this._mode;
+    // Safari does not seem to work with submit images
+    if ( Core.Web.Env.BROWSER_SAFARI )
+    {
+      mode = 0;
+      Core.Debug.consoleWrite( "Using text buttons for Safari as image does not seem to work!" );
+    }
+
+    if ( mode == 1 )
     {
       var src = null;
 
@@ -981,7 +1008,6 @@ echopoint.tucana.FileUploadSelectorSync.Button = Core.extend(
       }
 
       this._submit.setAttribute( "type", "submit" );
-      this._submit.style.height = this.peer._table._input.offsetHeight + "px";
 
       if ( text == null )
       {
@@ -1021,10 +1047,17 @@ echopoint.tucana.FileUploadSelectorSync.Button = Core.extend(
         break;
     }
 
-    if ( this._cancel )
+    if ( this._cancel && uploading )
     {
+      /*
       Core.Web.Event.add( this._submit, "onclick",
           Core.method( this, this._cancelAction ), false );
+          */
+      var frame = this.peer._frames[this.peer._uploadIndex];
+      if ( frame )
+      {
+        frame.src
+      }
     }
   },
 

@@ -2,10 +2,10 @@ package echopoint;
 
 import echopoint.tucana.FileUploadSelector;
 import echopoint.tucana.ProgressBar;
+import nextapp.echo.app.Border;
+import nextapp.echo.app.Color;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.Extent;
-import nextapp.echo.app.Color;
-import nextapp.echo.app.Border;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
 import org.junit.BeforeClass;
@@ -26,6 +26,14 @@ public class FileUploadSelectorTest
   public static void init()
   {
     component = new FileUploadSelector();
+  }
+
+  @Test
+  public void buttonMode()
+  {
+    component.setButtonMode( FileUploadSelector.BUTTON_MODE_TEXT );
+    assertEquals( "Ensure button mode set", component.getButtonMode(),
+        FileUploadSelector.BUTTON_MODE_TEXT );
   }
 
   @Test

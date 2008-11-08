@@ -31,7 +31,17 @@ echopoint.tucana.FileUploadSelector = Core.extend( echopoint.internal.AbstractCo
     UPLOAD_CANCELLED: "uploadCancelled",
 
     DEFAULT_BUTTON_MODE: 0,
-    DEFAULT_BUTTON_DISPLAY: 2
+    DEFAULT_BUTTON_DISPLAY: 2,
+    DEFAULT_CANCEL_ENABLED: true,
+
+    /** The default upload button text */
+    DEFAULT_UPLOAD_TEXT: "Upload",
+
+    /** The default cancel button text. */
+    DEFAULT_CANCEL_TEXT: "Cancel",
+
+    /** The default wait button text. */
+    DEFAULT_WAIT_TEXT: "Wait..."
   },
 
   componentType: echopoint.constants.FILE_UPLOAD_SELECTOR

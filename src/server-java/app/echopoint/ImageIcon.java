@@ -18,8 +18,8 @@
 package echopoint;
 
 import echopoint.internal.AbstractContainer;
-import nextapp.echo.app.ImageReference;
 import nextapp.echo.app.HttpImageReference;
+import nextapp.echo.app.ImageReference;
 import nextapp.echo.app.event.ActionEvent;
 import nextapp.echo.app.event.ActionListener;
 
@@ -154,7 +154,7 @@ public class ImageIcon extends AbstractContainer
   }
 
   /** Notifies all listeners that have registered for this event type. */
-  public void fireActionPerformed()
+  protected void fireActionPerformed()
   {
     final ActionEvent event = new ActionEvent( this, getActionCommand() );
     final EventListener[] listeners =
