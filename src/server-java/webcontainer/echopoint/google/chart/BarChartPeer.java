@@ -92,7 +92,7 @@ public class BarChartPeer extends AdvancedChartPeer
   {
     if ( BarChart.PROPERTY_ORIENTATION.equals( propertyName ) )
     {
-      return component.get( BarChart.PROPERTY_ORIENTATION ).toString();
+      return component.get( propertyName ).toString();
     }
 
     return super.getOutputProperty(

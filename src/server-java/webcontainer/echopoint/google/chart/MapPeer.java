@@ -92,7 +92,7 @@ public class MapPeer extends AbstractChartPeer
   {
     if ( Map.PROPERTY_GEOGRAPHICAL_AREA.equals( propertyName ) )
     {
-      return component.get( Map.PROPERTY_GEOGRAPHICAL_AREA ).toString();
+      return component.get( propertyName ).toString();
     }
 
     return super.getOutputProperty(

@@ -24,14 +24,11 @@ echopoint.tucana.FileUploadSelectorSync = Core.extend( echopoint.internal.Abstra
     _PROGRESS_SERVICE: "?sid=echopoint.tucana.UploadProgressService",
     _RECEIVER_SERVICE: "?sid=echopoint.tucana.UploadReceiverService",
 
-    /** The default polling interval for the progress bar. */
-    _DEFAULT_PROGRESS_INTERVAL: 250,
-
     /** The default width for the file selection dialogue. */
-    DEFAULT_WIDTH: "275px",
+    DEFAULT_WIDTH: "300px",
 
     /** the default height for the component. */
-    DEFAULT_HEIGHT: "40px"
+    DEFAULT_HEIGHT: "55px"
   },
 
   /** The container element in which the iframe is hidden. */
@@ -265,7 +262,7 @@ echopoint.tucana.FileUploadSelectorSync = Core.extend( echopoint.internal.Abstra
       var child = progress.peer._div;
       this._div.removeChild( child );
 
-      progress.set( echopoint.ProgressBar.PERCENTAGE, 100 );
+      //progress.set( echopoint.ProgressBar.PERCENTAGE, 100 );
       progress.set( echopoint.ProgressBar.TEXT, "" );
       progress.peer.renderUpdate();
 
@@ -303,6 +300,18 @@ echopoint.tucana.FileUploadSelectorSync.Frame = Core.extend(
   /** The Http connection used to poll the upload progress. */
   _connection: null,
 
+  /** The total bytes read from previous progress polling. */
+  _bytesRead: 0,
+
+  /** The number of times progress has not changed. */
+  _unchanged: 0,
+
+  /** The configured maximum repoll count. */
+  _repollCount: 0,
+
+  /** The progress interval to use to poll the progress service. */
+  _pollingInterval: 0,
+
   /**
    * @param uploadSelectPeer {Echo.Render.ComponentSync}
    * @param uploadId {Number} the upload index
@@ -313,6 +322,16 @@ echopoint.tucana.FileUploadSelectorSync.Frame = Core.extend(
     this.component = uploadSelectPeer.component;
     this._uploadIndex = uploadId;
     this._submitListenerBound = false;
+
+    this._repollCount = this.component.render(
+        echopoint.tucana.FileUploadSelector.REPOLL_COUNT,
+        echopoint.tucana.FileUploadSelector.DEFAULT_REPOLL_COUNT );
+    this._pollingInterval = this.component.render(
+        echopoint.tucana.FileUploadSelector.POLLING_INTERVAL,
+        echopoint.tucana.FileUploadSelector.DEFAULT_POLLING_INTERVAL );
+
+    Core.Debug.consoleWrite( "Repoll count: " + this._repollCount +
+        ", Polling interval: " + this._pollingInterval );
   },
 
   _renderAdd: function( parentElement )
@@ -329,7 +348,7 @@ echopoint.tucana.FileUploadSelectorSync.Frame = Core.extend(
           + "scrolling=\"no\" width=\"0\" height=\"0\"></iframe>";
       //Core.Debug.consoleWrite( "frame: " + iframeSrc );
       this._frameElement = parentElement.firstChild;
-      Core.Web.Event.add( this._frameElement, "load", processLoad, false );
+      //Core.Web.Event.add( this._frameElement, "load", processLoad, false );
     }
     else
     {
@@ -340,7 +359,7 @@ echopoint.tucana.FileUploadSelectorSync.Frame = Core.extend(
       this._frameElement.scrolling = "no";
       this._frameElement.style.width = "0px";
       this._frameElement.style.height = "0px";
-      this._frameElement.onload = processLoad;
+      //this._frameElement.onload = processLoad;
       parentElement.appendChild( this._frameElement );
     }
   },
@@ -412,6 +431,18 @@ echopoint.tucana.FileUploadSelectorSync.Frame = Core.extend(
       Core.Debug.consoleWrite( text );
     }
 
+    if ( uploadProgress.bytesRead == this._bytesRead ) ++this._unchanged;
+
+    if ( ( uploadProgress.bytesRead == uploadProgress.contentLength ) ||
+         ( ( uploadProgress.bytesRead == this._bytesRead ) &&
+             this._unchanged > this._repollCount ) )
+    {
+      this._stopProgressPoller();
+      this._uploadEnded();
+    }
+
+    this._bytesRead = uploadProgress.bytesRead;
+
     if ( this._enableProgressPoll )
     {
       this._startProgressPoller();
@@ -421,10 +452,8 @@ echopoint.tucana.FileUploadSelectorSync.Frame = Core.extend(
   _startProgressPoller: function()
   {
     this._enableProgressPoll = true;
-    var interval = this.component.render( "progressInterval",
-        echopoint.tucana.FileUploadSelectorSync._DEFAULT_PROGRESS_INTERVAL );
     Core.Web.Scheduler.run(
-        Core.method( this, this._pollProgress ), interval, false );
+        Core.method( this, this._pollProgress ), this._pollingInterval, false );
   },
 
   _stopProgressPoller: function()
@@ -489,16 +518,6 @@ echopoint.tucana.FileUploadSelectorSync.Frame = Core.extend(
       this._submitListenerBound = false;
     }
 
-    if ( Core.Web.Env.BROWSER_INTERNET_EXPLORER )
-    {
-      Core.Web.Event.remove( this._frameElement, "load",
-          Core.method( this, this._processLoad ), false );
-    }
-    else
-    {
-      this._frameElement.onload = null;
-    }
-
     if ( this._loadStage == echopoint.tucana.FileUploadSelectorSync._STAGE_UPLOADING )
     {
       // gracefully stop upload
@@ -533,6 +552,8 @@ echopoint.tucana.FileUploadSelectorSync.Frame = Core.extend(
     this._uploadIndex = null;
     this._loadStage = null;
     this._frameElement = null;
+    this._bytesRead = 0;
+    this._unchanged = 0;
   }
 });
 
@@ -610,13 +631,14 @@ echopoint.tucana.FileUploadSelectorSync.Table = Core.extend(
     tr.appendChild( this._tdSubmitLeft );
 
     var tdInput = document.createElement( "td" );
-    tdInput.style.padding = "0px";
+    tdInput.style.padding = "0px 2px 0px 2px";
     tdInput.appendChild( this._createInput() );
     tr.appendChild( tdInput );
 
     this._tdSubmitRight = document.createElement( "td" );
     this._tdSubmitRight.style.display = "none";
     this._tdSubmitRight.style.padding = "0px 0px 0px 2px";
+    this._tdSubmitRight.style.padding = "1px";
     tr.appendChild( this._tdSubmitRight );
 
     this._createSubmit();
@@ -626,173 +648,20 @@ echopoint.tucana.FileUploadSelectorSync.Table = Core.extend(
 
   _createInput: function()
   {
-    var divInput = document.createElement( "div" );
-    divInput.id = this.component.renderId + "|Input|Div|" + this.peer._uploadIndex;
-
-    var browseBackgroundImage =
-        this.component.render( "browseButtonBackgroundImage" );
-    var browseRolloverBackgroundImage =
-        this.component.render( "browseButtonRolloverBackgroundImage" );
-    var browseText = this.component.render( "browseButtonText" );
-    var browseWidth = this.component.render( "browseButtonWidth" );
-    var browsePixelWidth;
-    if ( browseWidth )
-    {
-      browsePixelWidth = Echo.Sync.Extent.toPixels( browseWidth, true );
-    }
-    var browseHeight = this.component.render( "browseButtonHeight" );
-
-    var fileSelectorWidth = this.component.render( "fileSelectorWidth" );
-    if ( !fileSelectorWidth )
-    {
-      fileSelectorWidth = this.component.render(
-          "width", echopoint.tucana.FileUploadSelectorSync.DEFAULT_WIDTH );
-    }
-    var fileSelectorPixelWidth = Echo.Sync.Extent.toPixels(fileSelectorWidth, true);
-
     this._input = document.createElement( "input" );
     this._input.id = this.component.renderId + "|Input|" + this.peer._uploadIndex;
     this._input.type = "file";
     this._input.name = "$$file$$";
 
-    if ( browseBackgroundImage || browseRolloverBackgroundImage ||
-         browseText || browseWidth || browseHeight )
-    {
-      // use styling hack (http://www.quirksmode.org/dom/inputfile.html)
-      this._input.onchange = function() { overlayInput.value = this.value; };
-      this._input.onkeydown = function() { overlayInput.value = this.value; };
-      this._input.onkeyup = function() { overlayInput.value = this.value; };
+    var size = Echo.Sync.Extent.toPixels( this.component.render(
+        echopoint.tucana.FileUploadSelector.INPUT_SIZE,
+        echopoint.tucana.FileUploadSelector.DEFAULT_INPUT_SIZE ) );
+    this._input.setAttribute( "size", parseInt( size ) );
 
-      if ( Core.Web.Env.BROWSER_MOZILLA )
-      {
-        var body = this.peer._getBody();
-
-        body.appendChild( this._input );
-        var newSize = 1;
-        this._input.size = newSize;
-        while ( newSize < 1000 && this._input.offsetWidth < fileSelectorPixelWidth )
-        {
-          newSize++;
-          this._input.size = newSize;
-        }
-
-        body.removeChild( this._input );
-      }
-      else
-      {
-        this._input.style.width = fileSelectorPixelWidth + "px";
-      }
-
-      if ( Core.Web.Env.PROPRIETARY_IE_OPACITY_FILTER_REQUIRED )
-      {
-        this._input.style.filter = "alpha(opacity: 0)";
-      }
-      else
-      {
-        this._input.style.opacity = "0";
-      }
-
-      divInput.style.position = "relative";
-
-      var hiddenFileDiv = document.createElement( "div" );
-      hiddenFileDiv.style.position = "relative";
-      hiddenFileDiv.style.zIndex = "2";
-      hiddenFileDiv.appendChild( this._input );
-      divInput.appendChild( hiddenFileDiv );
-
-      var overlayFileDiv = document.createElement( "div" );
-      overlayFileDiv.style.position = "absolute";
-      overlayFileDiv.style.top = "0px";
-      overlayFileDiv.style.left = "0px";
-      overlayFileDiv.style.zIndex = "1";
-
-      var overlayInput = document.createElement( "input" );
-      overlayInput.type = "text";
-      overlayInput.style[Core.Web.Env.CSS_FLOAT] = "left";
-      Echo.Sync.Color.render(
-          this.component.render( "foreground" ), overlayInput, "color" );
-      Echo.Sync.Font.render( this.component.render( "font" ), overlayInput );
-      overlayFileDiv.appendChild( overlayInput );
-
-      var overlayBrowse;
-      if ( browseBackgroundImage || browseRolloverBackgroundImage )
-      {
-        overlayBrowse = document.createElement( "div" );
-        overlayBrowse.style.textAlign = "center";
-        if ( browseBackgroundImage )
-        {
-          Echo.Sync.FillImage.render( browseBackgroundImage, overlayBrowse );
-        }
-        if ( browseRolloverBackgroundImage )
-        {
-          this._input.onmouseover = function()
-          {
-            Echo.Sync.FillImage.renderClear(
-                browseRolloverBackgroundImage, overlayBrowse );
-          };
-          this._input.onmouseout = function()
-          {
-            Echo.Sync.FillImage.renderClear(
-                browseBackgroundImage, overlayBrowse );
-          };
-        }
-      }
-      else
-      {
-        overlayBrowse = document.createElement( "button" );
-      }
-
-      overlayBrowse.style[Core.Web.Env.CSS_FLOAT] = "right";
-      overlayBrowse.appendChild(
-          document.createTextNode( browseText ? browseText : ">>" ) );
-      var overlayInputWidth;
-      if ( browseWidth )
-      {
-        overlayBrowse.style.width = browsePixelWidth + "px";
-        overlayInputWidth = fileSelectorPixelWidth - browsePixelWidth;
-      }
-      else
-      {
-        overlayInputWidth = fileSelectorPixelWidth - 75;
-      }
-
-      // compensate for input/button spacing
-      overlayInputWidth = overlayInputWidth - 2;
-      if ( overlayInputWidth > 0 )
-      {
-        overlayInput.style.width = overlayInputWidth + "px";
-      }
-      else
-      {
-        overlayInput.style.width = "0px";
-        overlayInput.style.display = "none";
-        if ( Core.Web.Env.BROWSER_MOZILLA )
-        {
-          this._input.style.marginLeft = "-32px";
-        }
-      }
-
-      if ( browseHeight )
-      {
-        overlayBrowse.style.height =
-            Echo.Sync.Extent.toPixels( browseHeight, false ) + "px";
-      }
-
-      Echo.Sync.Color.render(
-          this.component.render( "foreground" ), overlayBrowse, "color" );
-      Echo.Sync.Font.render( this.component.render( "font" ), overlayBrowse );
-      overlayFileDiv.appendChild( overlayBrowse );
-      divInput.appendChild( overlayFileDiv );
-    }
-    else
-    {
-      Echo.Sync.Color.render(
-          this.component.render( "foreground" ), this._input, "color" );
-      Echo.Sync.Font.render( this.component.render( "font" ), this._input );
-      divInput.appendChild( this._input );
-    }
-
-    return divInput;
+    Echo.Sync.Color.render(
+        this.component.render( "foreground" ), this._input, "color" );
+    Echo.Sync.Font.render( this.component.render( "font" ), this._input );
+    return this._input
   },
 
   _createSubmit: function()
@@ -1046,28 +915,6 @@ echopoint.tucana.FileUploadSelectorSync.Button = Core.extend(
         parentElement._tdSubmitRight.style.display = "none";
         break;
     }
-
-    if ( this._cancel && uploading )
-    {
-      /*
-      Core.Web.Event.add( this._submit, "onclick",
-          Core.method( this, this._cancelAction ), false );
-          */
-      var frame = this.peer._frames[this.peer._uploadIndex];
-      if ( frame )
-      {
-        frame.src
-      }
-    }
-  },
-
-  _cancelAction: function()
-  {
-    Core.Debug.consoleWrite( "Cancelling upload with index: " + this.peer._uploadIndex );
-    var frame = this.peer._frames[this.peer._uploadIndex];
-    if ( frame ) frame._processCancel();
-    Core.Web.Event.remove( this._submit, "onclick",
-        Core.method( this, this._cancelAction ), false );
   },
 
   _removeChildren: function( parentElement )

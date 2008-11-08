@@ -16,7 +16,10 @@ echopoint.test.FileUploadTest = Core.extend(
     return new echopoint.tucana.FileUploadSelector(
     {
       renderId: "echopointUnitTestFileUpload",
-      buttonTextUpload: "Upload"
+      buttonTextUpload: "Upload",
+      width: "200px",
+      background: "#a1a1a1",
+      inputSize: "8"
     } );
   }
 } );
