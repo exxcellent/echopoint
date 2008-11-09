@@ -80,7 +80,7 @@ echopoint.tucana.FileUploadSelectorSync = Core.extend( echopoint.internal.Abstra
     var progress = this.component.getComponent( 0 );
     if ( progress )
     {
-      this._div.removeChild( progress.renderId );
+      this._div.removeChild( document.getElementById( progress.renderId ) );
     }
 
     this._getBody().removeChild( this._hidden );
@@ -541,11 +541,28 @@ echopoint.tucana.FileUploadSelectorSync.Frame = Core.extend(
     {
       // bypass waiting forever bug
       var frame = this._frameElement;
-      setTimeout( function() { frame.parentNode.removeChild( frame ); }, 0 );
+      setTimeout( function()
+      {
+        if ( frame.parentNode )
+        {
+          frame.parentNode.removeChild( frame );
+        }
+        else
+        {
+          Core.Debug.consoleWrite( "No parent node for frame" );
+        }
+      }, 0 );
     }
     else
     {
-      this._frameElement.parentNode.removeChild( this._frameElement );
+      if ( this._frameElement.parentNode )
+      {
+        this._frameElement.parentNode.removeChild( this._frameElement );
+      }
+      else
+      {
+        Core.Debug.consoleWrite( "No parent node for frame" );
+      }
     }
 
     this.component = null;
@@ -795,19 +812,25 @@ echopoint.tucana.FileUploadSelectorSync.Button = Core.extend(
   _setUploadImage: function()
   {
     this._uploadImage = this.component.render(
-        echopoint.tucana.FileUploadSelector.BUTTON_IMAGE_UPLOAD );
+        echopoint.tucana.FileUploadSelector.BUTTON_IMAGE_UPLOAD,
+        this.peer.client.getResourceUrl( "echopoint",
+            echopoint.tucana.FileUploadSelector.DEFAULT_IMAGE_UPLOAD ) );
   },
 
   _setCancelImage: function()
   {
     this._cancelImage = this.component.render(
-        echopoint.tucana.FileUploadSelector.BUTTON_IMAGE_CANCEL );
+        echopoint.tucana.FileUploadSelector.BUTTON_IMAGE_CANCEL,
+        this.peer.client.getResourceUrl( "echopoint",
+        echopoint.tucana.FileUploadSelector.DEFAULT_IMAGE_CANCEL ) );
   },
 
   _setWaitImage: function()
   {
     this._waitImage = this.component.render(
-        echopoint.tucana.FileUploadSelector.BUTTON_IMAGE_WAIT );
+        echopoint.tucana.FileUploadSelector.BUTTON_IMAGE_WAIT,
+        this.peer.client.getResourceUrl( "echopoint",
+        echopoint.tucana.FileUploadSelector.DEFAULT_IMAGE_WAIT ) );
   },
 
   _setDisplay: function()

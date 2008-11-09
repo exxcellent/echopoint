@@ -76,13 +76,6 @@ public class UploadReceiverService extends BaseUploadService
       serviceBadRequest( conn, "Request must contain multipart content." );
       return;
     }
-    /*
-    if ( uploadSelect.getUploadCallback() == null )
-    {
-      serviceBadRequest( conn, "FileUploadSelector does not have a callback." );
-      return;
-    }
-    */
 
     final String contentLengthHeader = request.getHeader( "Content-Length" );
     long contentLength;

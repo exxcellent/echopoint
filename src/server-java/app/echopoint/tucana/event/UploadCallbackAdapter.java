@@ -17,8 +17,8 @@
  */
 package echopoint.tucana.event;
 
-import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * An adapter class for the {@link UploadCallback} interface.
@@ -34,6 +34,26 @@ public class UploadCallbackAdapter implements UploadCallback
 {
   private static final long serialVersionUID = 1l;
   protected static final Logger logger = Logger.getAnonymousLogger();
+  private Level level;
+
+  /**
+   * Default constructor. Sets logging level to {@link
+   * java.util.logging.Level#FINE}.
+   */
+  public UploadCallbackAdapter()
+  {
+    this.level = Level.FINE;
+  }
+
+  /**
+   * Create a new instance with the specified logging level.
+   *
+   * @param level The logging level to set.
+   */
+  public UploadCallbackAdapter( final Level level )
+  {
+    this.level = level;
+  }
 
   /**
    * Indicates a file upload has been started.
@@ -42,7 +62,7 @@ public class UploadCallbackAdapter implements UploadCallback
    */
   public void uploadStarted( final UploadStartEvent event )
   {
-    logger.info( "Upload started for event: " + event.getIndex() +
+    logger.log( level, "Upload started for event: " + event.getIndex() +
         " fileName: " + event.getFileName() + " size: " + event.getFileSize() +
         " contentType: " + event.getContentType() );
   }
@@ -54,7 +74,7 @@ public class UploadCallbackAdapter implements UploadCallback
    */
   public void uploadCancelled( final UploadCancelEvent event )
   {
-    logger.info( "Upload cancelled for event: " + event.getIndex() +
+    logger.log( level, "Upload cancelled for event: " + event.getIndex() +
         " fileName: " + event.getFileName() + " size: " + event.getFileSize() +
         " contentType: " + event.getContentType() );
   }
@@ -66,7 +86,7 @@ public class UploadCallbackAdapter implements UploadCallback
    */
   public void uploadProgressed( final UploadProgressEvent event )
   {
-    logger.info( "Upload progress read bytes : "
+    logger.log( level, "Upload progress read bytes : "
         + event.getProgress().getBytesRead() );
   }
 
@@ -77,7 +97,7 @@ public class UploadCallbackAdapter implements UploadCallback
    */
   public void uploadSucceeded( final UploadFinishEvent event )
   {
-    logger.info( "Upload completed for event: " + event.getIndex() +
+    logger.log( level, "Upload completed for event: " + event.getIndex() +
         " fileName: " + event.getFileName() + " size: " + event.getFileSize() +
         " contentType: " + event.getContentType() );
   }
@@ -89,7 +109,27 @@ public class UploadCallbackAdapter implements UploadCallback
    */
   public void uploadFailed( final UploadFailEvent event )
   {
-    logger.log( Level.INFO, "Upload failed for event: " + event.getIndex(),
+    logger.log( level, "Upload failed for event: " + event.getIndex(),
         event.getException() );
+  }
+
+  /**
+   * Accessor for property 'level'.
+   *
+   * @return Value for property 'level'.
+   */
+  public Level getLevel()
+  {
+    return level;
+  }
+
+  /**
+   * Mutator for property 'level'.
+   *
+   * @param level Value to set for property 'level'.
+   */
+  public void setLevel( final Level level )
+  {
+    this.level = level;
   }
 }

@@ -33,9 +33,12 @@ echopoint.tucana.FileUploadSelector = Core.extend( echopoint.internal.AbstractCo
     UPLOAD_INDEX: "uploadIndex",
     UPLOAD_CANCELLED: "uploadCancelled",
 
-    DEFAULT_BUTTON_MODE: 0,
+    DEFAULT_BUTTON_MODE: 1,
     DEFAULT_BUTTON_DISPLAY: 2,
     DEFAULT_CANCEL_ENABLED: true,
+    DEFAULT_IMAGE_UPLOAD: "images/upload.png",
+    DEFAULT_IMAGE_CANCEL: "images/cancel.png",
+    DEFAULT_IMAGE_WAIT: "images/wait.png",
 
     /** The default upload button text */
     DEFAULT_UPLOAD_TEXT: "Upload",
@@ -92,11 +95,14 @@ echopoint.tucana.UploadProgress = Core.extend(
    */
   $construct: function( xml )
   {
-    var doc = xml.documentElement;
-    this.bytesRead = doc.getElementsByTagName( "r" )[0].childNodes[0].nodeValue;
-    this.contentLength = doc.getElementsByTagName( "cl" )[0].childNodes[0].nodeValue;
-    this.percentComplete = doc.getElementsByTagName( "pc" )[0].childNodes[0].nodeValue;
-    this.transferRate = doc.getElementsByTagName( "tr" )[0].childNodes[0].nodeValue;
-    this.estimatedTimeLeft = doc.getElementsByTagName( "tl" )[0].childNodes[0].nodeValue;
+    if ( xml )
+    {
+      var doc = xml.documentElement;
+      this.bytesRead = doc.getElementsByTagName( "r" )[0].childNodes[0].nodeValue;
+      this.contentLength = doc.getElementsByTagName( "cl" )[0].childNodes[0].nodeValue;
+      this.percentComplete = doc.getElementsByTagName( "pc" )[0].childNodes[0].nodeValue;
+      this.transferRate = doc.getElementsByTagName( "tr" )[0].childNodes[0].nodeValue;
+      this.estimatedTimeLeft = doc.getElementsByTagName( "tl" )[0].childNodes[0].nodeValue;
+    }
   }
 });

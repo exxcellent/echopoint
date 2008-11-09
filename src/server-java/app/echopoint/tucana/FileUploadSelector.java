@@ -20,7 +20,6 @@ package echopoint.tucana;
 import echopoint.ProgressBar;
 import echopoint.internal.AbstractContainer;
 import echopoint.tucana.event.UploadCallback;
-import echopoint.tucana.event.UploadCallbackAdapter;
 import echopoint.tucana.event.UploadCancelEvent;
 import echopoint.tucana.event.UploadEvent;
 import echopoint.tucana.event.UploadFailEvent;
@@ -30,7 +29,6 @@ import echopoint.tucana.event.UploadStartEvent;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.Extent;
 import nextapp.echo.app.ImageReference;
-import nextapp.echo.app.ResourceImageReference;
 
 /**
  * The file upload selector component.  This component is a re-implementation
@@ -100,30 +98,7 @@ public class FileUploadSelector extends AbstractContainer
 
   public static final int BUTTON_DISPLAY_NONE = 3;
 
-
-  private static ImageReference DEFAULT_UPLOAD_IMAGE;
-
-  private static ImageReference DEFAULT_CANCEL_IMAGE;
-
-  private static ImageReference DEFAULT_WAIT_IMAGE;
-
-  static
-  {
-    DEFAULT_UPLOAD_IMAGE = new ResourceImageReference( "resource/images/upload.png" );
-    DEFAULT_CANCEL_IMAGE = new ResourceImageReference( "resource/images/cancel.png" );
-    DEFAULT_WAIT_IMAGE = new ResourceImageReference( "resource/images/wait.png" );
-  }
-
   private UploadCallback callback = null;
-
-  public FileUploadSelector()
-  {
-    setButtonUploadImage( DEFAULT_UPLOAD_IMAGE );
-    setButtonCancelImage( DEFAULT_CANCEL_IMAGE );
-    setButtonWaitImage( DEFAULT_WAIT_IMAGE );
-
-    setUploadCallback( new UploadCallbackAdapter() );
-  }
 
   /**
    * Sets the upload button image.
