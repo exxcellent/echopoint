@@ -17,14 +17,14 @@
  */
 package echopoint;
 
-import nextapp.echo.webcontainer.ServerMessage;
-import nextapp.echo.webcontainer.AbstractComponentSynchronizePeer;
-import nextapp.echo.webcontainer.WebContainerServlet;
-import nextapp.echo.webcontainer.Service;
-import nextapp.echo.webcontainer.service.JavaScriptService;
-import nextapp.echo.app.util.Context;
-import nextapp.echo.app.Component;
 import echopoint.internal.AbstractContainerPeer;
+import nextapp.echo.app.Component;
+import nextapp.echo.app.util.Context;
+import nextapp.echo.webcontainer.AbstractComponentSynchronizePeer;
+import nextapp.echo.webcontainer.ServerMessage;
+import nextapp.echo.webcontainer.Service;
+import nextapp.echo.webcontainer.WebContainerServlet;
+import nextapp.echo.webcontainer.service.JavaScriptService;
 
 /**
  * Component rendering peer for the {@link echopoint.ImageIcon} component.
@@ -68,7 +68,7 @@ public class ImageIconPeer extends AbstractContainerPeer
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    * @see nextapp.echo.webcontainer.AbstractComponentSynchronizePeer#init
    */
   @Override
@@ -81,7 +81,7 @@ public class ImageIconPeer extends AbstractContainerPeer
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    * @see nextapp.echo.webcontainer.AbstractComponentSynchronizePeer#getComponentClass
    */
   @Override
@@ -91,7 +91,7 @@ public class ImageIconPeer extends AbstractContainerPeer
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    * @see nextapp.echo.webcontainer.AbstractComponentSynchronizePeer#getClientComponentType
    */
   @Override

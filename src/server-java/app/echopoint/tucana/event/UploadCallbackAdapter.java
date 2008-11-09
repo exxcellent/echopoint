@@ -35,6 +35,7 @@ public class UploadCallbackAdapter implements UploadCallback
   private static final long serialVersionUID = 1l;
   protected static final Logger logger = Logger.getAnonymousLogger();
   private Level level;
+  private UploadEvent event;
 
   /**
    * Default constructor. Sets logging level to {@link
@@ -62,6 +63,7 @@ public class UploadCallbackAdapter implements UploadCallback
    */
   public void uploadStarted( final UploadStartEvent event )
   {
+    this.event = event;
     logger.log( level, "Upload started for event: " + event.getIndex() +
         " fileName: " + event.getFileName() + " size: " + event.getFileSize() +
         " contentType: " + event.getContentType() );
@@ -74,6 +76,7 @@ public class UploadCallbackAdapter implements UploadCallback
    */
   public void uploadCancelled( final UploadCancelEvent event )
   {
+    this.event = event;
     logger.log( level, "Upload cancelled for event: " + event.getIndex() +
         " fileName: " + event.getFileName() + " size: " + event.getFileSize() +
         " contentType: " + event.getContentType() );
@@ -86,6 +89,7 @@ public class UploadCallbackAdapter implements UploadCallback
    */
   public void uploadProgressed( final UploadProgressEvent event )
   {
+    this.event = event;
     logger.log( level, "Upload progress read bytes : "
         + event.getProgress().getBytesRead() );
   }
@@ -97,6 +101,7 @@ public class UploadCallbackAdapter implements UploadCallback
    */
   public void uploadSucceeded( final UploadFinishEvent event )
   {
+    this.event = event;
     logger.log( level, "Upload completed for event: " + event.getIndex() +
         " fileName: " + event.getFileName() + " size: " + event.getFileSize() +
         " contentType: " + event.getContentType() );
@@ -109,8 +114,21 @@ public class UploadCallbackAdapter implements UploadCallback
    */
   public void uploadFailed( final UploadFailEvent event )
   {
+    this.event = event;
     logger.log( level, "Upload failed for event: " + event.getIndex(),
         event.getException() );
+  }
+
+  /**
+   * A convenience method to return the last event received by the callback
+   * handler.  Can be used to gain access to the input stream (provided it has
+   * not been closed).
+   *
+   * @return The upload event that was last processed by the handler.
+   */
+  public UploadEvent getEvent()
+  {
+    return this.event;
   }
 
   /**

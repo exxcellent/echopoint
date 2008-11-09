@@ -19,9 +19,9 @@ package echopoint.model;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.ArrayList;
 
 /**
  * A model object that represents a clickable polygon section in an {@link
@@ -90,7 +90,7 @@ public class PolygonSection extends MapSection
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    */
   @Override
   public boolean equals( final Object o )
@@ -106,7 +106,7 @@ public class PolygonSection extends MapSection
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    */
   @Override
   public int hashCode()

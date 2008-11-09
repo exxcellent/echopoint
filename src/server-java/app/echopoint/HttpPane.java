@@ -92,7 +92,7 @@ public class HttpPane extends AbstractContainer
    * Over-ridden to unconditionally return <code>false</code> as no children
    * are allowed.
    *
-   * @inheritDoc
+   * {@inheritDoc}
    */
   @Override
   public boolean isValidChild( final Component child )

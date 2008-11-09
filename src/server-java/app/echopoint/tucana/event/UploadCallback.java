@@ -17,8 +17,8 @@
  */
 package echopoint.tucana.event;
 
-import java.util.EventListener;
 import java.io.Serializable;
+import java.util.EventListener;
 
 /**
  * An interface that represents a call back handler that will be notified when
@@ -67,4 +67,13 @@ public interface UploadCallback extends EventListener, Serializable
    * @param event The event that has failed.
    */
   public void uploadFailed( final UploadFailEvent event );
+
+  /**
+   * A convenience method to return the last event received by the
+   * callback handler.  Can be used to gain access to the input stream
+   * (provided it has not been closed).
+   *
+   * @return The upload event that was last processed by the handler.
+   */
+  public UploadEvent getEvent();
 }

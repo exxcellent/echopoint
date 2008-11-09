@@ -77,30 +77,30 @@ public class JakartaCommonsFileUploadProvider extends AbstractFileUploadProvider
         if ( !stream.isFormField() )
         {
           String fileName = FilenameUtils.getName( stream.getName() );
-          uploadSelect.notifyListener( new UploadStartEvent( uploadSelect,
+          uploadSelect.notifyCallback( new UploadStartEvent( uploadSelect,
               uploadIndex, fileName, stream.openStream(), 0, stream.getContentType() ) );
           FileItem item = itemFactory.createItem( stream.getFieldName(),
               stream.getContentType(), false, stream.getName() );
           IOUtils.copy( stream.openStream(), item.getOutputStream() );
 
-          uploadSelect.notifyListener( new UploadFinishEvent( uploadSelect,
+          uploadSelect.notifyCallback( new UploadFinishEvent( uploadSelect,
               uploadIndex, fileName, item.getInputStream(), item.getSize(),
               item.getContentType() ) );
           return;
         }
       }
 
-      uploadSelect.notifyListener( new UploadFailEvent( uploadSelect,
+      uploadSelect.notifyCallback( new UploadFailEvent( uploadSelect,
           uploadIndex, new RuntimeException( "No multi-part content!" ) ) );
     }
     catch ( FileUploadBase.SizeLimitExceededException e )
     {
-      uploadSelect.notifyListener( new UploadFailEvent( uploadSelect,
+      uploadSelect.notifyCallback( new UploadFailEvent( uploadSelect,
           uploadIndex, new UploadSizeLimitExceededException( e ) ) );
     }
     catch ( FileUploadBase.FileSizeLimitExceededException e )
     {
-      uploadSelect.notifyListener( new UploadFailEvent( uploadSelect,
+      uploadSelect.notifyCallback( new UploadFailEvent( uploadSelect,
           uploadIndex, new UploadSizeLimitExceededException( e ) ) );
     }
   }

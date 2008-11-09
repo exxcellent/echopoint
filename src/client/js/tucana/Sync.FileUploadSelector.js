@@ -262,7 +262,6 @@ echopoint.tucana.FileUploadSelectorSync = Core.extend( echopoint.internal.Abstra
       var child = progress.peer._div;
       this._div.removeChild( child );
 
-      //progress.set( echopoint.ProgressBar.PERCENTAGE, 100 );
       progress.set( echopoint.ProgressBar.TEXT, "" );
       progress.peer.renderUpdate();
 
@@ -438,6 +437,7 @@ echopoint.tucana.FileUploadSelectorSync.Frame = Core.extend(
              this._unchanged > this._repollCount ) )
     {
       this._stopProgressPoller();
+      this.component.notifyComplete( this._uploadIndex );
       this._uploadEnded();
     }
 
@@ -857,11 +857,11 @@ echopoint.tucana.FileUploadSelectorSync.Button = Core.extend(
     // Safari does not seem to work with submit images
     if ( Core.Web.Env.BROWSER_SAFARI )
     {
-      mode = 0;
+      mode = "text";
       Core.Debug.consoleWrite( "Using text buttons for Safari as image does not seem to work!" );
     }
 
-    if ( mode == 1 )
+    if ( mode == "image" )
     {
       var src = null;
 
@@ -914,21 +914,21 @@ echopoint.tucana.FileUploadSelectorSync.Button = Core.extend(
     this._submit.disabled = disabled;
 
     var displayType = this._display;
-    if ( displayType == 2 )
+    if ( displayType == "auto" )
     {
-      displayType = ( Core.Web.Env.BROWSER_SAFARI ) ? 1 : 0;
+      displayType = ( Core.Web.Env.BROWSER_SAFARI ) ? "left" : "right";
     }
 
     this._removeChildren( parentElement );
 
     switch ( displayType )
     {
-      case 0:
+      case "right":
         parentElement._tdSubmitRight.appendChild( this._submit );
         parentElement._tdSubmitRight.style.display = "block";
         parentElement._tdSubmitLeft.style.display = "none";
         break;
-      case 1:
+      case "left":
         parentElement._tdSubmitLeft.appendChild( this._submit );
         parentElement._tdSubmitLeft.style.display = "block";
         parentElement._tdSubmitRight.style.display = "none";

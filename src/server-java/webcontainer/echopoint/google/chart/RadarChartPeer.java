@@ -21,10 +21,10 @@ package echopoint.google.chart;
 import echopoint.google.chart.internal.AdvancedChartPeer;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.util.Context;
-import nextapp.echo.webcontainer.service.JavaScriptService;
-import nextapp.echo.webcontainer.WebContainerServlet;
 import nextapp.echo.webcontainer.ServerMessage;
 import nextapp.echo.webcontainer.Service;
+import nextapp.echo.webcontainer.WebContainerServlet;
+import nextapp.echo.webcontainer.service.JavaScriptService;
 
 /**
  * Rendering peer for the {@link echopoint.google.chart.RadarChart} component.
@@ -49,7 +49,7 @@ public class RadarChartPeer extends AdvancedChartPeer
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    */
   @Override
   public void init( final Context context, final Component component )
@@ -61,7 +61,7 @@ public class RadarChartPeer extends AdvancedChartPeer
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    */
   @Override
   public Class getComponentClass()
@@ -70,7 +70,7 @@ public class RadarChartPeer extends AdvancedChartPeer
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    */
   @Override
   public String getClientComponentType( final boolean shortType )

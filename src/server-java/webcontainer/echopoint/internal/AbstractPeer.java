@@ -18,10 +18,10 @@
 
 package echopoint.internal;
 
+import nextapp.echo.app.Component;
+import nextapp.echo.app.util.Context;
 import nextapp.echo.webcontainer.AbstractComponentSynchronizePeer;
 import nextapp.echo.webcontainer.ServerMessage;
-import nextapp.echo.app.util.Context;
-import nextapp.echo.app.Component;
 
 /**
  * An abstract peer that may be used as the base class for all peers.  Ensures
@@ -41,7 +41,7 @@ public abstract class AbstractPeer extends AbstractComponentSynchronizePeer
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    * @see nextapp.echo.webcontainer.AbstractComponentSynchronizePeer#init
    */
   @Override

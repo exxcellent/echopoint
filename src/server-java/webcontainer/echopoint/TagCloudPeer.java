@@ -64,7 +64,7 @@ public class TagCloudPeer extends AbstractPeer
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    * @see nextapp.echo.webcontainer.AbstractComponentSynchronizePeer#init
    */
   @Override
@@ -99,7 +99,7 @@ public class TagCloudPeer extends AbstractPeer
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    * @see nextapp.echo.webcontainer.AbstractComponentSynchronizePeer#getComponentClass
    */
   public Class getComponentClass()
@@ -108,7 +108,7 @@ public class TagCloudPeer extends AbstractPeer
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    * @see nextapp.echo.webcontainer.AbstractComponentSynchronizePeer#getClientComponentType
    */
   public String getClientComponentType( final boolean shortType )

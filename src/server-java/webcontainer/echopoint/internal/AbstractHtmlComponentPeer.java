@@ -54,7 +54,7 @@ public class AbstractHtmlComponentPeer extends AbstractContainerPeer
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    * @see nextapp.echo.webcontainer.AbstractComponentSynchronizePeer#init
    */
   @Override
@@ -67,7 +67,7 @@ public class AbstractHtmlComponentPeer extends AbstractContainerPeer
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    * @see nextapp.echo.webcontainer.AbstractComponentSynchronizePeer#getComponentClass
    */
   @Override
@@ -77,7 +77,7 @@ public class AbstractHtmlComponentPeer extends AbstractContainerPeer
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    * @see nextapp.echo.webcontainer.AbstractComponentSynchronizePeer#getClientComponentType
    */
   public String getClientComponentType( final boolean shortType )

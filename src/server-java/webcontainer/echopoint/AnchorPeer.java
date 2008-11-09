@@ -18,12 +18,12 @@
 package echopoint;
 
 import echopoint.internal.AbstractPeer;
-import nextapp.echo.webcontainer.service.JavaScriptService;
-import nextapp.echo.webcontainer.WebContainerServlet;
-import nextapp.echo.webcontainer.Service;
-import nextapp.echo.webcontainer.ServerMessage;
-import nextapp.echo.app.util.Context;
 import nextapp.echo.app.Component;
+import nextapp.echo.app.util.Context;
+import nextapp.echo.webcontainer.ServerMessage;
+import nextapp.echo.webcontainer.Service;
+import nextapp.echo.webcontainer.WebContainerServlet;
+import nextapp.echo.webcontainer.service.JavaScriptService;
 
 /**
  * Rendering peer for the {@link echopoint.Anchor} component.
@@ -54,7 +54,7 @@ public class AnchorPeer extends AbstractPeer
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    */
   @Override
   public void init( final Context context, final Component component )
@@ -66,7 +66,7 @@ public class AnchorPeer extends AbstractPeer
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    * @see nextapp.echo.webcontainer.AbstractComponentSynchronizePeer#getComponentClass
    */
   @Override
@@ -76,7 +76,7 @@ public class AnchorPeer extends AbstractPeer
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    * @see nextapp.echo.webcontainer.AbstractComponentSynchronizePeer#getClientComponentType
    */
   public String getClientComponentType( final boolean shortType )

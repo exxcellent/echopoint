@@ -321,6 +321,15 @@
 
 
 
+  <path id='javadoc.classpath'>
+    <fileset  dir='${dir.lib}'>
+      <include name='*.jar' />
+      <exclude name='yuicompressor-2.3.5.jar' />
+    </fileset>
+    <pathelement path='${servlet.lib.jar}' />
+    <pathelement path='${dir.build}' />
+  </path>
+
 <!-- ************************************************************************************************** -->
   <!-- Create full API documentation -->
   <target name='doc'
@@ -351,7 +360,7 @@
 
     <javadoc sourcepath='${dir.src.server.webcontainer}' packagenames='echopoint.*'
       destdir='${dir.docs.api.webcontainer}' additionalparam='-breakiterator'
-      classpathref='compile.classpath' version='yes'
+      classpathref='javadoc.classpath' version='yes'
       author='yes' use='yes' splitindex='yes'
       Overview='${dir.src.server.webcontainer}/overview.html'
       Header='${javadoc.header}' DocTitle='${javadoc.doctitle.webcontainer}'

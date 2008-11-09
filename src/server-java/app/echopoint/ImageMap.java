@@ -79,9 +79,6 @@ public class ImageMap extends AbstractContainer
   private static final long serialVersionUID = 1l;
   protected static XStream xstream;
 
-  /** The property name for the action command to be updated from client. */
-  public static final String ACTION_COMMAND_PROPERTY = "actionCommand";
-
   /** The image that is to be used as the map region. */
   public static final String PROPERTY_IMAGE = "url";
 
@@ -261,7 +258,7 @@ public class ImageMap extends AbstractContainer
   public boolean hasActionListeners()
   {
     return ( hasEventListenerList() &&
-        getEventListenerList().getListenerCount(ActionListener.class) != 0 );
+        getEventListenerList().getListenerCount( ActionListener.class ) != 0 );
   }
 
   /**
@@ -282,7 +279,7 @@ public class ImageMap extends AbstractContainer
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    */
   @Override
   public void processInput( String name, Object value )

@@ -19,14 +19,14 @@
 package echopoint;
 
 import echopoint.internal.AbstractContainerPeer;
-import nextapp.echo.webcontainer.WebContainerServlet;
-import nextapp.echo.webcontainer.ServerMessage;
-import nextapp.echo.webcontainer.Service;
+import nextapp.echo.app.Component;
+import nextapp.echo.app.util.Context;
 import nextapp.echo.webcontainer.ContentType;
 import nextapp.echo.webcontainer.ResourceRegistry;
+import nextapp.echo.webcontainer.ServerMessage;
+import nextapp.echo.webcontainer.Service;
+import nextapp.echo.webcontainer.WebContainerServlet;
 import nextapp.echo.webcontainer.service.JavaScriptService;
-import nextapp.echo.app.util.Context;
-import nextapp.echo.app.Component;
 
 /**
  * Rendering peer for the {@link echopoint.Strut} component.
@@ -59,7 +59,7 @@ public class StrutPeer extends AbstractContainerPeer
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    * @see nextapp.echo.webcontainer.AbstractComponentSynchronizePeer#init
    */
   @Override
@@ -72,7 +72,7 @@ public class StrutPeer extends AbstractContainerPeer
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    * @see nextapp.echo.webcontainer.AbstractComponentSynchronizePeer#getComponentClass
    */
   @Override
@@ -82,7 +82,7 @@ public class StrutPeer extends AbstractContainerPeer
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    * @see nextapp.echo.webcontainer.AbstractComponentSynchronizePeer#getClientComponentType
    */
   @Override

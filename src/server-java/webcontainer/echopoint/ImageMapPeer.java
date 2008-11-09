@@ -95,7 +95,7 @@ public class ImageMapPeer extends AbstractContainerPeer
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    * @see nextapp.echo.webcontainer.AbstractComponentSynchronizePeer#init
    */
   @Override
@@ -108,7 +108,7 @@ public class ImageMapPeer extends AbstractContainerPeer
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    * @see nextapp.echo.webcontainer.AbstractComponentSynchronizePeer#getComponentClass
    */
   @Override
@@ -118,7 +118,7 @@ public class ImageMapPeer extends AbstractContainerPeer
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    * @see nextapp.echo.webcontainer.AbstractComponentSynchronizePeer#getClientComponentType
    */
   @Override
@@ -127,7 +127,7 @@ public class ImageMapPeer extends AbstractContainerPeer
     return COMPONENT_NAME;
   }
 
-  /** @inheritDoc */
+  /** {@inheritDoc} */
   @Override
   public Class getInputPropertyClass( final String propertyName )
   {
@@ -163,7 +163,7 @@ public class ImageMapPeer extends AbstractContainerPeer
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    */
   @Override
   public void storeInputProperty( final Context context,

@@ -80,7 +80,7 @@ public class RectangleSection extends MapSection
     if ( values.length > 1 ) setAltText( values[1] );
   }
 
-  /** @inheritDoc */
+  /** {@inheritDoc} */
   @Override
   public boolean equals( final Object o )
   {

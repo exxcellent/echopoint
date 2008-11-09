@@ -103,7 +103,7 @@ public class UploadReceiverService extends BaseUploadService
     }
     catch ( Exception e )
     {
-      uploadSelect.notifyListener(
+      uploadSelect.notifyCallback(
           new UploadFailEvent( uploadSelect, uploadIndex, e ) );
     }
     finally

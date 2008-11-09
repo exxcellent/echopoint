@@ -79,7 +79,7 @@ public class UploadProgressService extends BaseUploadService
     {
       if ( !renderState.isUploadEnded( uploadIndex ) )
       {
-        uploadSelect.notifyListener(
+        uploadSelect.notifyCallback(
             new UploadProgressEvent( uploadSelect, uploadIndex, progress ) );
       }
 

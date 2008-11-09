@@ -144,7 +144,7 @@ public abstract class AbstractChart<N extends Number> extends AbstractContainer
    * Set the value of the {@link #PROPERTY_DATA} property using the specified
    * single data model object instance.
    *
-   * @see #setData( Collection<ChartData<N>> )
+   * @see #setData( Collection )
    * @param data The value to set for the property.
    */
   public void setData( final ChartData<N> data )

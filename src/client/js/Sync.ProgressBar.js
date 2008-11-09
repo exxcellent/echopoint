@@ -120,9 +120,17 @@ echopoint.ProgressBarSync = Core.extend( echopoint.internal.AbstractContainerSyn
   {
     if ( update )
     {
-      this._setText( update.getUpdatedProperty( echopoint.ProgressBar.TEXT ) );
-      this._setPercentage(
-          update.getUpdatedProperty( echopoint.ProgressBar.PERCENTAGE ) );
+      var property = update.getUpdatedProperty( echopoint.ProgressBar.TEXT );
+      if ( property )
+      {
+        this._setText( property.newValue );
+      }
+
+      property = update.getUpdatedProperty( echopoint.ProgressBar.PERCENTAGE );
+      if ( property )
+      {
+        this._setPercentage( property.newValue );
+      }
     }
     else
     {

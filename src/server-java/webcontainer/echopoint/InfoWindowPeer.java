@@ -1,12 +1,12 @@
 package echopoint;
 
-import nextapp.echo.webcontainer.ServerMessage;
-import nextapp.echo.webcontainer.WebContainerServlet;
-import nextapp.echo.webcontainer.Service;
-import nextapp.echo.webcontainer.service.JavaScriptService;
+import echopoint.internal.AbstractPeer;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.util.Context;
-import echopoint.internal.AbstractPeer;
+import nextapp.echo.webcontainer.ServerMessage;
+import nextapp.echo.webcontainer.Service;
+import nextapp.echo.webcontainer.WebContainerServlet;
+import nextapp.echo.webcontainer.service.JavaScriptService;
 
 /**
  * Component rendering peer for the {@link echopoint.InfoWindow} component.
@@ -36,7 +36,7 @@ public class InfoWindowPeer extends AbstractPeer
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    */
   @Override
   public void init( final Context context, final Component component )
@@ -48,7 +48,7 @@ public class InfoWindowPeer extends AbstractPeer
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    * @see nextapp.echo.webcontainer.AbstractComponentSynchronizePeer#getComponentClass
    */
   @Override
@@ -58,7 +58,7 @@ public class InfoWindowPeer extends AbstractPeer
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    * @see nextapp.echo.webcontainer.AbstractComponentSynchronizePeer#getClientComponentType
    */
   public String getClientComponentType( final boolean shortType )

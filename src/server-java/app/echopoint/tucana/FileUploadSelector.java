@@ -27,13 +27,180 @@ import echopoint.tucana.event.UploadFinishEvent;
 import echopoint.tucana.event.UploadProgressEvent;
 import echopoint.tucana.event.UploadStartEvent;
 import nextapp.echo.app.Component;
-import nextapp.echo.app.Extent;
 import nextapp.echo.app.ImageReference;
+import nextapp.echo.app.event.ActionEvent;
+import nextapp.echo.app.event.ActionListener;
+
+import java.util.EventListener;
 
 /**
  * The file upload selector component.  This component is a re-implementation
  * of the original <i>tucana file upload selector</i> component for Echo2.
-
+ *
+ * <p>The following code shows sample usage of this component:</p>
+ * <pre>
+ *  import nextapp.echo.app.Border;
+ *  import nextapp.echo.app.Color;
+ *  import echopoint.tucana.FileUploadSelector;
+ *  import echopoint.tucana.ProgressBar;
+ *
+ *    ...
+ *    final FileUploadSelector selector = new FileUploadSelector();
+ *    selector.setButtonMode( FileUploadSelector.ButtonMode.image );
+ *    selector.setButtonDisplayMode( FileUploadSelector.ButtonDisplay.right );
+ *    selector.setInputSize( 20 );
+ *    selector.setBackground( new Color( 0xa1a1a1 ) );
+ *    selector.setBorder( new Border( 1 ) );
+ *    selector.setProgressBar( new ProgressBar() );
+ *    selector.setUploadCallback( ... );
+ *    selector.addActionListener( ... );
+ *    parent.add( selector );
+ * </pre>
+ *
+ * <p>There are two different ways to process a completed upload:
+ * <ol>
+ *   <li>{@link echopoint.tucana.event.UploadCallback} based.  This technique
+ *     suffers from the limitation that UI updates require setting up a
+ *     {@link nextapp.echo.app.TaskQueueHandle}.</li>
+ *   <li>{@link nextapp.echo.app.event.ActionListener} based.  This
+ *     technique works in combination with a {@link
+ *     echopoint.tucana.event.UploadCallback} and allows UI updates directly.</li>
+ * </ol>
+ *
+ * <p>The following callback class and associated runnable may be used to
+ * update the UI after an upload.</p>
+ * <pre>
+ *  import nextapp.echo.app.ApplicationInstance;
+ *  import nextapp.echo.app.Component;
+ *  import nextapp.echo.app.TaskQueueHandle;
+ *  import echopoint.DirectHtml;
+ *  import echopoint.tucana.event.UploadCallbackAdapter;
+ *
+ *  public class UploadCallbackImpl extends UploadCallbackAdapter
+ *  {
+ *    private static final long serialVersionUID = 1l;
+ *    private final ApplicationInstance app;
+ *    private final TaskQueueHandle queue;
+ *    private final Component parent;
+ *
+ *    private UploadCallbackImpl( final Component parent )
+ *    {
+ *      this.app = Application.getApplication();
+ *      this.queue = app.createTaskQueue();
+ *      this.parent = parent;
+ *    }
+ *
+ *    &#64;Override
+ *    public void uploadSucceeded( final UploadFinishEvent event )
+ *    {
+ *      final StringBuilder builder = new StringBuilder( 128 );
+ *      builder.append( "Upload of file: &lt;b&gt;" );
+ *      builder.append( event.getFileName() );
+ *      builder.append( "&lt;/b&gt; succeeded.  File size is: &lt;i&gt;");
+ *      builder.append( event.getFileSize() / 1000 );
+ *      builder.append( "&lt;/i&gt; kilobytes." );
+ *      final DirectHtml html = new DirectHtml( builder.toString() );
+ *      update( html );
+ *    }
+ *
+ *    &#64;Override
+ *    public void uploadFailed( final UploadFailEvent event )
+ *    {
+ *      final StringBuilder builder = new StringBuilder( 128 );
+ *      builder.append( "File upload failed." );
+ *      if ( event.getFileName() != null )
+ *      {
+ *        builder.append( "  Failed file: &lt;i&gt;" );
+ *        builder.append( event.getFileName() );
+ *        builder.append( "&lt;/i&gt;." );
+ *      }
+ *
+ *      if ( event.getException() != null )
+ *      {
+ *        builder.append( "Exception: &lt;p&gt;&lt;pre&gt;" );
+ *        builder.append( event.getException().toString() );
+ *        builder.append( "&lt;/pre&gt;&lt;/p&gt;" );
+ *      }
+ *
+ *      final DirectHtml html = new DirectHtml( builder.toString() );
+ *      update( html );
+ *    }
+ *
+ *    private void update( final Component component )
+ *    {
+ *      app.enqueueTask( queue, new Update( component, parent ) );
+ *    }
+ *
+ *    //
+ *    // It is important that clients invoke this method prior to discarding
+ *    // this instance to perform proper cleanup and stop client-side polling.
+ *    // This action cannot be performed in a &lt;finalize&gt; method due
+ *    // to Java garbage collector behaviour.
+ *    //
+ *    public void closeQueue()
+ *    {
+ *      app.removeTaskQueue( queue );
+ *    }
+ *  }
+ *
+ *  import nextapp.echo.app.Component;
+ *  public class Update implements Runnable, Serializable
+ *  {
+ *    private static final long serialVersionUID = 1l;
+ *
+ *    private final Component parent;
+ *    private final Component child;
+ *
+ *    private Update( final Component child, final Component parent )
+ *    {
+ *      this.child = child;
+ *      this.parent = parent;
+ *    }
+ *
+ *    public void run()
+ *    {
+ *      parent.add( child );
+ *    }
+ *  }
+ * </pre>
+ *
+ * <p>Processing UI updates after upload completion is much simpler (and
+ * more network friendly) when using an action listener.  A simple action
+ * listener may be configured as follows:</p>
+ * <pre>
+ *  import nextapp.echo.app.Component;
+ *  import echopoint.tucana.FileUploadSelector;
+ *  import echopoint.tucana.event.UploadCallback;
+ *  import echopoint.DirectHtml;
+ *
+ *  public class FinishListener implements ActionListener
+ *  {
+ *    private static final long serialVersionUID = 1l;
+ *    private final Component parent;
+ *
+ *    public FinishListener( final Component parent )
+ *    {
+ *      this.parent = parent;
+ *    }
+ *
+ *    public void actionPerformed( final ActionEvent event )
+ *    {
+ *      final FileUploadSelector upload = ( FileUploadSelector) event.getSource();
+ *      final UploadCallback callback = upload.getUploadCallback();
+ *      if ( callback != null )
+ *      {
+ *        StringBuilder builder = new StringBuilder( 128 );
+ *        builder.append( "Upload of file: &lt;b&gt;" );
+ *        builder.append( callback.getEvent().getFileName() );
+ *        builder.append( "&lt;/b&gt; succeeded.  File size is: &lt;i&gt;");
+ *        builder.append( callback.getEvent().getFileSize() / 1000 );
+ *        builder.append( "&lt;/i&gt; kilobytes." );
+ *        parent.add( new DirectHtml( builder.toString() ) );
+ *      }
+ *    }
+ *  }
+ * </pre>
+ *
  * <p><b>Note:</b> Development of this component was sponsored by <a
  * href='http://tcnbroadcasting.com/index.jsp' target='_top'>TCN
  * Broadcasting</a>.  We are grateful for their support and sponsorship.</p>
@@ -86,19 +253,18 @@ public class FileUploadSelector extends AbstractContainer
    */
   public static final String PROPERTY_REPOLL_COUNT = "repollCount";
 
-  public static final int BUTTON_MODE_TEXT = 0;
+  /** Enumeration of values for setting {@link FileUploadSelector#PROPERTY_BUTTON_MODE} */
+   public enum ButtonMode { text, image }
 
-  public static final int BUTTON_MODE_IMAGE = 1;
+  /** Enumeration of values for setting {@link FileUploadSelector#PROPERTY_BUTTON_DISPLAY} */
+  public enum ButtonDisplay { right, left, auto, none }
 
-  public static final int BUTTON_DISPLAY_RIGHT = 0;
-
-  public static final int BUTTON_DISPLAY_LEFT = 1;
-
-  public static final int BUTTON_DISPLAY_AUTO = 2;
-
-  public static final int BUTTON_DISPLAY_NONE = 3;
+  protected static final String COMPLETE_ACTION = "complete";
 
   private UploadCallback callback = null;
+
+  /** The action command that was triggered by upload completion. */
+  private String actionCommand;
 
   /**
    * Sets the upload button image.
@@ -224,10 +390,8 @@ public class FileUploadSelector extends AbstractContainer
    * Sets the upload button display mode
    *
    * @param mode The new upload button display mode
-   * @see #BUTTON_MODE_IMAGE
-   * @see #BUTTON_MODE_TEXT
    */
-  public void setButtonMode( final int mode )
+  public void setButtonMode( final ButtonMode mode )
   {
     set( PROPERTY_BUTTON_MODE, mode );
   }
@@ -235,65 +399,33 @@ public class FileUploadSelector extends AbstractContainer
   /**
    * Get the current upload button display mode.
    *
-   * @return The current display mode, or <code>-1</code> if no mode is
-   *         set.
+   * @return The current display mode, or {@link ButtonMode#text} if not set.
    */
-  public int getButtonMode()
+  public ButtonMode getButtonMode()
   {
-    Integer val = (Integer) get( PROPERTY_BUTTON_MODE );
-    if ( val == null )
-    {
-      return -1;
-    }
-    return val;
+    final ButtonMode mode = (ButtonMode) get( PROPERTY_BUTTON_MODE );
+    return ( mode == null ) ? ButtonMode.text : mode;
   }
 
-  public void setButtonDisplayMode( final int mode )
+  /**
+   * Set the button display mode for the input submit button.
+   *
+   * @param mode Set to configure the location of the submit button.
+   */
+  public void setButtonDisplayMode( final ButtonDisplay mode )
   {
     set( PROPERTY_BUTTON_DISPLAY, mode );
   }
 
-  public int getButtonDisplayMode()
-  {
-    Integer val = (Integer) get( PROPERTY_BUTTON_DISPLAY );
-    if ( val == null )
-    {
-      return -1;
-    }
-    return val;
-  }
-
   /**
-   * Sets the input form size.  The size is supposedly the numebr of
-   * characters that can fit in the input box.  A size of "20" will fit 20
-   * characters.
+   * Get the configuration for display of the submit button.
    *
-   * @param size The new size
+   * @return The current mode, or {@link ButtonDisplay#auto} if not set.
    */
-  public void setWidthSize( final int size )
+  public ButtonDisplay getButtonDisplayMode()
   {
-    setWidth( new Extent( size ) );
-  }
-
-  /**
-   * Get the current size.
-   *
-   * @return The current size, or <code>-1</code> if no size is set.
-   */
-  public int getWidthSize()
-  {
-    final Extent extent = getWidth();
-    return ( extent != null ) ? extent.getValue() : -1;
-  }
-
-  public void setWidthExtent( final Extent width )
-  {
-    setWidth( width );
-  }
-
-  public Extent getWidthExtent()
-  {
-    return getWidth();
+    final ButtonDisplay display = (ButtonDisplay) get( PROPERTY_BUTTON_DISPLAY );
+    return ( display == null ) ? ButtonDisplay.auto : display;
   }
 
   public void setCancelEnabled( final boolean enabled )
@@ -319,11 +451,11 @@ public class FileUploadSelector extends AbstractContainer
   /**
    * Set the value of the {@link #PROPERTY_INPUT_SIZE} property.
    *
-   * @param interval The size of the input text field.
+   * @param size The size of the input text field.
    */
-  public void setInputSize( final int interval )
+  public void setInputSize( final int size )
   {
-    set( PROPERTY_INPUT_SIZE, interval );
+    set( PROPERTY_INPUT_SIZE, size );
   }
 
   /**
@@ -426,7 +558,7 @@ public class FileUploadSelector extends AbstractContainer
    *
    * @param e the event
    */
-  protected void notifyListener( final UploadEvent e )
+  protected void notifyCallback( final UploadEvent e )
   {
     if ( callback == null )
     {
@@ -453,5 +585,77 @@ public class FileUploadSelector extends AbstractContainer
     {
       callback.uploadStarted( (UploadStartEvent) e );
     }
+  }
+
+  /**
+   * Add the specified action listener to this component.
+   *
+   * @see nextapp.echo.app.Component#firePropertyChange(String, Object, Object)
+   * @param listener The action listener to add.
+   */
+  public void addActionListener( final ActionListener listener )
+  {
+    getEventListenerList().addListener( ActionListener.class, listener );
+    firePropertyChange( ACTION_LISTENERS_CHANGED_PROPERTY, null, listener );
+  }
+
+  /**
+   * Determines if the button has any <code>ActionListener</code>s
+   * registered.
+   *
+   * @return true if any action listeners are registered
+   */
+  protected boolean hasActionListeners()
+  {
+    return ( hasEventListenerList() &&
+        getEventListenerList().getListenerCount( ActionListener.class ) != 0 );
+  }
+
+  /**
+   * Notifies all listeners that have registered for this event type.
+   *
+   * @param event The {@link nextapp.echo.app.event.ActionEvent} to send
+   */
+  protected void fireActionPerformed( final ActionEvent event )
+  {
+    if ( !hasEventListenerList() ) return;
+
+    EventListener[] listeners =
+        getEventListenerList().getListeners( ActionListener.class );
+    for ( EventListener listener : listeners )
+    {
+      ( (ActionListener) listener ).actionPerformed( event );
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void processInput( String name, Object value )
+  {
+    super.processInput( name, value );
+    if ( ACTION_COMMAND_PROPERTY.equals( name ) )
+    {
+      this.actionCommand = (String) value;
+    }
+    if ( COMPLETE_ACTION.equals( name ) )
+    {
+      fireActionPerformed( new ActionEvent( this, actionCommand ) );
+    }
+  }
+
+  /**
+   * Remove the specified action listener from the component.
+   *
+   * @see nextapp.echo.app.Component#firePropertyChange(String, Object, Object)
+   * @param listener The listener that is to be removed.
+   */
+  public void removeActionListener( final ActionListener listener )
+  {
+    if ( ! hasEventListenerList() ) return;
+
+    getEventListenerList().removeListener( ActionListener.class, listener );
+    firePropertyChange( ACTION_LISTENERS_CHANGED_PROPERTY, listener, null );
   }
 }

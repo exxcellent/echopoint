@@ -2,20 +2,17 @@ package echopoint;
 
 import echopoint.tucana.FileUploadSelector;
 import echopoint.tucana.ProgressBar;
+import echopoint.tucana.event.UploadCallback;
 import echopoint.tucana.event.UploadCallbackAdapter;
-import echopoint.tucana.event.UploadFailEvent;
-import echopoint.tucana.event.UploadFinishEvent;
 import nextapp.echo.app.Border;
 import nextapp.echo.app.Color;
 import nextapp.echo.app.Component;
-import nextapp.echo.app.Extent;
-import nextapp.echo.app.TaskQueueHandle;
+import nextapp.echo.app.event.ActionEvent;
+import nextapp.echo.app.event.ActionListener;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import java.io.Serializable;
 
 /**
  * Unit test suite for the {@link echopoint.tucana.FileUploadSelector}
@@ -37,19 +34,9 @@ public class FileUploadSelectorTest
   @Test
   public void buttonMode()
   {
-    /*
-    component.setButtonMode( FileUploadSelector.BUTTON_MODE_TEXT );
-    assertEquals( "Ensure button mode set", component.getButtonMode(),
-        FileUploadSelector.BUTTON_MODE_TEXT );
-        */
-  }
-
-  @Test
-  public void width()
-  {
-    final Extent width = new Extent( 400 );
-    component.setWidthExtent( width );
-    assertEquals( "Ensure width set", width, component.getWidthExtent() );
+    final FileUploadSelector.ButtonMode mode = FileUploadSelector.ButtonMode.image;
+    component.setButtonMode( mode );
+    assertEquals( "Ensure button mode set", mode, component.getButtonMode() );
   }
 
   @Test
@@ -97,7 +84,7 @@ public class FileUploadSelectorTest
   @Test
   public void repollCount()
   {
-    final int count = 10;
+    final int count = 5;
     component.setRepollCount( count );
     assertEquals( "Ensuring repoll count set", count, component.getRepollCount() );
   }
@@ -105,12 +92,16 @@ public class FileUploadSelectorTest
   @Test
   public void callback()
   {
-    final Application app = Application.getApplication();
-    final TaskQueueHandle queue = app.createTaskQueue();
-    final UploadCallback callback = new UploadCallback(
-        app, queue, Application.getContent().getTestArea() );
+    final UploadCallback callback = new UploadCallbackAdapter();
     component.setUploadCallback( callback );
     assertEquals( "Ensuring callback set", callback, component.getUploadCallback() );
+  }
+
+  @Test
+  public void actionListener()
+  {
+    final FinishListener listener = new FinishListener();
+    component.addActionListener( listener );
   }
 
   @AfterClass
@@ -121,87 +112,29 @@ public class FileUploadSelectorTest
     content.add( component );
   }
 
-  private static class UploadCallback extends UploadCallbackAdapter
-  {
-    private static final long serialVersionUID = 1l;
-    private final Application app;
-    private final TaskQueueHandle queue;
-    private final Component parent;
-
-    private UploadCallback( final Application app,
-        final TaskQueueHandle queue, final Component parent )
-    {
-      this.app = app;
-      this.queue = queue;
-      this.parent = parent;
-    }
-
-    @Override
-    public void uploadSucceeded( final UploadFinishEvent event )
-    {
-      final StringBuilder builder = new StringBuilder( 128 );
-      builder.append( "Upload of file: <b>" );
-      builder.append( event.getFileName() );
-      builder.append( "</b> succeeded.  File size is: <i>");
-      builder.append( event.getFileSize() / 1000 );
-      builder.append( "</i> kilobytes." );
-      final DirectHtml html = new DirectHtml( builder.toString() );
-      update( html );
-      //super.uploadSucceeded( event );
-    }
-
-    @Override
-    public void uploadFailed( final UploadFailEvent event )
-    {
-      final StringBuilder builder = new StringBuilder( 128 );
-      builder.append( "File upload failed." );
-      if ( event.getFileName() != null )
-      {
-        builder.append( "  Failed file: <i>" );
-        builder.append( event.getFileName() );
-        builder.append( "</i>." );
-      }
-
-      if ( event.getException() != null )
-      {
-        builder.append( "Exception: <p><pre>" );
-        builder.append( event.getException().toString() );
-        builder.append( "</pre></p>" );
-      }
-
-      final DirectHtml html = new DirectHtml( builder.toString() );
-      update( html );
-      //super.uploadFailed( event );
-    }
-
-    private void update( final Component component )
-    {
-      app.enqueueTask( queue, new Update( queue, component, parent, app ) );
-    }
-  }
-
-  private static class Update implements Runnable, Serializable
+  private static class FinishListener implements ActionListener
   {
     private static final long serialVersionUID = 1l;
 
-    private final TaskQueueHandle queue;
-    private final Component parent;
-    private final Component child;
-    private final Application app;
-
-    private Update( final TaskQueueHandle queue, final Component component,
-        final Component parent, final Application app )
+    public void actionPerformed( final ActionEvent event )
     {
-      this.queue = queue;
-      this.child = component;
-      this.parent = parent;
-      this.app = app;
-    }
+      final FileUploadSelector upload = ( FileUploadSelector) event.getSource();
+      final UploadCallback callback = upload.getUploadCallback();
+      if ( callback != null )
+      {
+        StringBuilder builder = new StringBuilder( 128 );
+        builder.append( "Upload of file: <b>" );
+        builder.append( callback.getEvent().getFileName() );
+        builder.append( "</b> succeeded.  File size is: <i>");
+        builder.append( callback.getEvent().getFileSize() / 1000 );
+        builder.append( "</i> kilobytes." );
+        component.getParent().add( new DirectHtml( builder.toString() ) );
 
-    public void run()
-    {
-      parent.add( child );
-      app.removeTaskQueue( queue );
+        if ( component.getProgressBar() != null )
+        {
+          component.getProgressBar().setText( "" );
+        }
+      }
     }
   }
 }

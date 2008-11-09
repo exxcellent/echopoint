@@ -17,12 +17,12 @@
  */
 package echopoint.internal;
 
-import nextapp.echo.app.Component;
 import nextapp.echo.app.Alignment;
-import nextapp.echo.app.ImageReference;
 import nextapp.echo.app.Border;
-import nextapp.echo.app.Insets;
+import nextapp.echo.app.Component;
 import nextapp.echo.app.Extent;
+import nextapp.echo.app.ImageReference;
+import nextapp.echo.app.Insets;
 
 /**
  * An abstract super class for container components.  Defines the standard
@@ -51,6 +51,9 @@ import nextapp.echo.app.Extent;
 public class AbstractContainer extends Component
 {
   private static final long serialVersionUID = 1l;
+
+  /** The property name for the action command to be updated from client. */
+  public static final String ACTION_COMMAND_PROPERTY = "actionCommand";
 
   /** The constant used to track changes to the action listener list. */
   public static final String ACTION_LISTENERS_CHANGED_PROPERTY = "actionListeners";

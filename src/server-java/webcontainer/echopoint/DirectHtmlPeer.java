@@ -49,7 +49,7 @@ public class DirectHtmlPeer extends AbstractHtmlComponentPeer
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    */
   @Override
   public void init( final Context context, final Component component )
@@ -61,7 +61,7 @@ public class DirectHtmlPeer extends AbstractHtmlComponentPeer
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    */
   @Override
   public Class getComponentClass()
@@ -70,7 +70,7 @@ public class DirectHtmlPeer extends AbstractHtmlComponentPeer
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    */
   @Override
   public String getClientComponentType( final boolean shortType )

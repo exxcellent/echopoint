@@ -133,7 +133,7 @@ public class ImageIcon extends AbstractContainer
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    * @see #fireActionPerformed()
    */
   @Override

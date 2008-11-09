@@ -17,6 +17,7 @@ echopoint.tucana.FileUploadSelector = Core.extend( echopoint.internal.AbstractCo
   /** Properties defined for the component. */
   $static:
   {
+    ACTION_TYPE: "complete",
     BUTTON_TEXT_UPLOAD: "buttonTextUpload",
     BUTTON_TEXT_CANCEL : "buttonTextCancel",
     BUTTON_TEXT_WAIT : "buttonTextWait",
@@ -33,8 +34,8 @@ echopoint.tucana.FileUploadSelector = Core.extend( echopoint.internal.AbstractCo
     UPLOAD_INDEX: "uploadIndex",
     UPLOAD_CANCELLED: "uploadCancelled",
 
-    DEFAULT_BUTTON_MODE: 1,
-    DEFAULT_BUTTON_DISPLAY: 2,
+    DEFAULT_BUTTON_MODE: "text",
+    DEFAULT_BUTTON_DISPLAY: "auto",
     DEFAULT_CANCEL_ENABLED: true,
     DEFAULT_IMAGE_UPLOAD: "images/upload.png",
     DEFAULT_IMAGE_CANCEL: "images/cancel.png",
@@ -62,6 +63,23 @@ echopoint.tucana.FileUploadSelector = Core.extend( echopoint.internal.AbstractCo
      */
     POLLING_INTERVAL: "pollingInterval",
     DEFAULT_POLLING_INTERVAL: 250
+  },
+
+  /**
+   * Fire an action event that indicates that the file upload has finished.
+   * This is useful to perform UI updates without having to recourse to
+   * task queues.
+   *
+   * @param uploadId
+   */
+  notifyComplete: function( uploadId )
+  {
+    this.fireEvent(
+    {
+      source: this,
+      type: echopoint.tucana.FileUploadSelector.ACTION_TYPE,
+      actionCommand: uploadId
+    });
   },
 
   componentType: echopoint.constants.FILE_UPLOAD_SELECTOR

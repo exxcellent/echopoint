@@ -21,6 +21,7 @@ import echopoint.ProgressBar;
 import echopoint.internal.AbstractContainerPeer;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.util.Context;
+import nextapp.echo.webcontainer.AbstractComponentSynchronizePeer;
 import nextapp.echo.webcontainer.ContentType;
 import nextapp.echo.webcontainer.ResourceRegistry;
 import nextapp.echo.webcontainer.ServerMessage;
@@ -72,9 +73,20 @@ public class FileUploadSelectorPeer extends AbstractContainerPeer
   {
     addOutputProperty( PROPERTY_UPLOAD_INDEX );
     addRequiredComponentClass( ProgressBar.class );
+
+    addEvent( new AbstractComponentSynchronizePeer.EventPeer(
+        FileUploadSelector.COMPLETE_ACTION,
+        FileUploadSelector.ACTION_LISTENERS_CHANGED_PROPERTY )
+    {
+      @Override
+      public boolean hasListeners( Context context, Component component )
+      {
+        return ( (FileUploadSelector) component ).hasActionListeners();
+      }
+    });
   }
 
-  /** @inheritDoc */
+  /** {@inheritDoc} */
   @Override
   public void init( final Context context, final Component component )
   {
@@ -85,7 +97,7 @@ public class FileUploadSelectorPeer extends AbstractContainerPeer
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    * @see nextapp.echo.webcontainer.AbstractComponentSynchronizePeer#getComponentClass
    */
   @Override
@@ -95,7 +107,7 @@ public class FileUploadSelectorPeer extends AbstractContainerPeer
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    * @see nextapp.echo.webcontainer.AbstractComponentSynchronizePeer#getClientComponentType
    */
   public String getClientComponentType( final boolean shortType )
@@ -119,6 +131,12 @@ public class FileUploadSelectorPeer extends AbstractContainerPeer
       final UserInstance userInstance = (UserInstance) context.get( UserInstance.class );
       final UploadRenderState renderState = getRenderState( uploadSelect, userInstance );
       return renderState.getMaxUploadIndex();
+    }
+
+    if ( FileUploadSelector.PROPERTY_BUTTON_DISPLAY.equals( propertyName ) ||
+        FileUploadSelector.PROPERTY_BUTTON_MODE.equals( propertyName ) )
+    {
+      return component.get( propertyName ).toString();
     }
 
     return super.getOutputProperty( context, component, propertyName, propertyIndex );
