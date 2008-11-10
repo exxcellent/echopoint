@@ -13,7 +13,8 @@ echopoint.ProgressBarSync = Core.extend( echopoint.internal.AbstractContainerSyn
 
   $static:
   {
-    DEFAULT_HEIGHT: "15px"
+    DEFAULT_HEIGHT: "15px",
+    DEFAULT_WIDTH: "300px"
   },
 
   /** The parent container in which the child bar is rendered. */
@@ -59,6 +60,12 @@ echopoint.ProgressBarSync = Core.extend( echopoint.internal.AbstractContainerSyn
     return echopoint.ProgressBarSync.DEFAULT_HEIGHT;
   },
 
+  /** The default width to use for the progress bar element. */
+  getDefaultWidth: function()
+  {
+    return echopoint.ProgressBarSync.DEFAULT_WIDTH;
+  },
+
   /** Create the parent div element that holds the child progress element. */
   _createParent: function( parentElement )
   {
@@ -73,12 +80,26 @@ echopoint.ProgressBarSync = Core.extend( echopoint.internal.AbstractContainerSyn
   /** Create the variable width element that represents the progress bar. */
   _createBar: function()
   {
+    var wrapper = document.createElement( "div" );
+    wrapper.id = this.component.renderId + "|wrapper";
+    wrapper.style.position = "absolute";
+    wrapper.style.height = this._div.style.height;
+    wrapper.style.width = this._div.style.width;
+    wrapper.style.offsetLeft = this._div.style.offsetLeft;
+    wrapper.style.offsetTop = this._div.style.offsetTop;
+    wrapper.style.zIndex = 1;
+
     this._bar = document.createElement( "div" );
     this._bar.id = this.component.renderId + "|bar";
-    this._bar.style.height = "100%";
+    this._bar.style.position = "absolute";
+    this._bar.style.height = wrapper.style.height;
+    this._bar.style.offsetLeft = wrapper.style.offsetLeft;
+    this._bar.style.offsetTop = wrapper.style.offsetTop;
+    this._bar.style.zIndex = 2;
 
     this._renderStyle();
-    return this._bar;
+    wrapper.appendChild( this._bar );
+    return wrapper;
   },
 
   /** Create the optional text element to display in the progress bar. */
@@ -86,8 +107,14 @@ echopoint.ProgressBarSync = Core.extend( echopoint.internal.AbstractContainerSyn
   {
     this._text = document.createElement( "div" );
     this._text.id = this.component.renderId + "|text";
+    this._text.position = "absolute";
     this._text.style.textAlign = "center";
-    this._text.style.color = "black";
+    this._text.style.color = this._div.style.color;
+    this._text.style.height = this._div.style.height;
+    this._text.style.width = this._div.style.width;
+    this._text.style.offsetLeft = this._div.style.offsetLeft;
+    this._text.style.offsetTop = this._div.style.offsetTop;
+    this._text.style.zIndex = 3;
 
     this._text.appendChild( document.createTextNode( text ) );
     this._div.appendChild( this._text );
