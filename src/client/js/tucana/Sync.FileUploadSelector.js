@@ -28,7 +28,7 @@ echopoint.tucana.FileUploadSelectorSync = Core.extend( echopoint.internal.Abstra
     DEFAULT_WIDTH: "300px",
 
     /** the default height for the component. */
-    DEFAULT_HEIGHT: "55px"
+    DEFAULT_HEIGHT: "42px"
   },
 
   /** The container element in which the iframe is hidden. */
@@ -262,7 +262,7 @@ echopoint.tucana.FileUploadSelectorSync = Core.extend( echopoint.internal.Abstra
       var child = progress.peer._div;
       this._div.removeChild( child );
 
-      progress.set( echopoint.ProgressBar.TEXT, "" );
+      //progress.set( echopoint.ProgressBar.TEXT, "" );
       progress.peer.renderUpdate();
 
       this._div.appendChild( child );
@@ -335,7 +335,7 @@ echopoint.tucana.FileUploadSelectorSync.Frame = Core.extend(
 
   _renderAdd: function( parentElement )
   {
-    var processLoad = Core.method( this, this._processLoad );
+    //var processLoad = Core.method( this, this._processLoad );
     var frameId = this.component.renderId + "|Frame|" + this._uploadIndex;
     var srcUrl =
         this.peer.client.getResourceUrl( "Echo", "resource/Blank.html" );
@@ -857,10 +857,11 @@ echopoint.tucana.FileUploadSelectorSync.Button = Core.extend(
     // Safari does not seem to work with submit images
     if ( Core.Web.Env.BROWSER_SAFARI )
     {
-      mode = "text";
+      mode = "submit";
       Core.Debug.consoleWrite( "Using text buttons for Safari as image does not seem to work!" );
     }
 
+    this._submit.setAttribute( "type", mode );
     if ( mode == "image" )
     {
       var src = null;
@@ -874,7 +875,6 @@ echopoint.tucana.FileUploadSelectorSync.Button = Core.extend(
         src = this._uploadImage;
       }
 
-      this._submit.setAttribute( "type", "image" );
       this._submit.setAttribute( "src", src );
     }
     else
@@ -899,8 +899,6 @@ echopoint.tucana.FileUploadSelectorSync.Button = Core.extend(
         text = this._uploadText;
       }
 
-      this._submit.setAttribute( "type", "submit" );
-
       if ( text == null )
       {
         this._submit.removeAttribute( "value" );
@@ -919,7 +917,7 @@ echopoint.tucana.FileUploadSelectorSync.Button = Core.extend(
       displayType = ( Core.Web.Env.BROWSER_SAFARI ) ? "left" : "right";
     }
 
-    this._removeChildren( parentElement );
+    Core.Web.DOM.removeAllChildren( parentElement );
 
     switch ( displayType )
     {
@@ -937,18 +935,6 @@ echopoint.tucana.FileUploadSelectorSync.Button = Core.extend(
         parentElement._tdSubmitLeft.style.display = "none";
         parentElement._tdSubmitRight.style.display = "none";
         break;
-    }
-  },
-
-  _removeChildren: function( parentElement )
-  {
-    var element = parentElement._tdSubmitLeft;
-    while ( element.hasChildNodes() )
-    {
-      while ( element.childNodes.length > 0 )
-      {
-        element.removeChild( element.firstChild );
-      }
     }
   }
 });

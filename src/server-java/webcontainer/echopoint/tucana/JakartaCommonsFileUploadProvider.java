@@ -17,6 +17,7 @@
  */
 package echopoint.tucana;
 
+import echopoint.tucana.event.UploadCancelEvent;
 import echopoint.tucana.event.UploadFailEvent;
 import echopoint.tucana.event.UploadFinishEvent;
 import echopoint.tucana.event.UploadStartEvent;
@@ -25,11 +26,14 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.FileUploadBase;
+import org.apache.commons.fileupload.MultipartStream;
 import org.apache.commons.fileupload.ProgressListener;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
+
+import java.io.InputStream;
 
 /**
  * {@link UploadSPI} implementation that uses the
@@ -67,6 +71,11 @@ public class JakartaCommonsFileUploadProvider extends AbstractFileUploadProvider
       upload.setSizeMax( getFileUploadSizeLimit() );
     }
 
+    String fileName = null;
+    InputStream inputStream = null;
+    String contentType = null;
+    long size = -1;
+
     try
     {
       FileItemIterator iter = upload.getItemIterator( conn.getRequest() );
@@ -76,22 +85,28 @@ public class JakartaCommonsFileUploadProvider extends AbstractFileUploadProvider
 
         if ( !stream.isFormField() )
         {
-          String fileName = FilenameUtils.getName( stream.getName() );
+          fileName = FilenameUtils.getName( stream.getName() );
+          inputStream = stream.openStream();
+          contentType = stream.getContentType();
+
           uploadSelect.notifyCallback( new UploadStartEvent( uploadSelect,
-              uploadIndex, fileName, stream.openStream(), 0, stream.getContentType() ) );
-          FileItem item = itemFactory.createItem( stream.getFieldName(),
-              stream.getContentType(), false, stream.getName() );
+              uploadIndex, fileName, inputStream, 0, contentType ) );
+          FileItem item = itemFactory.createItem( fileName,
+              contentType, false, stream.getName() );
           IOUtils.copy( stream.openStream(), item.getOutputStream() );
 
+          inputStream = item.getInputStream();
+          size = item.getSize();
           uploadSelect.notifyCallback( new UploadFinishEvent( uploadSelect,
-              uploadIndex, fileName, item.getInputStream(), item.getSize(),
+              uploadIndex, fileName, inputStream, size,
               item.getContentType() ) );
           return;
         }
       }
 
       uploadSelect.notifyCallback( new UploadFailEvent( uploadSelect,
-          uploadIndex, new RuntimeException( "No multi-part content!" ) ) );
+          uploadIndex, fileName, inputStream, size, contentType,
+          new RuntimeException( "No multi-part content!" ) ) );
     }
     catch ( FileUploadBase.SizeLimitExceededException e )
     {
@@ -102,6 +117,11 @@ public class JakartaCommonsFileUploadProvider extends AbstractFileUploadProvider
     {
       uploadSelect.notifyCallback( new UploadFailEvent( uploadSelect,
           uploadIndex, new UploadSizeLimitExceededException( e ) ) );
+    }
+    catch ( MultipartStream.MalformedStreamException e )
+    {
+      uploadSelect.notifyCallback( new UploadCancelEvent( uploadSelect,
+          uploadIndex, fileName, inputStream, size, contentType  ) );
     }
   }
 

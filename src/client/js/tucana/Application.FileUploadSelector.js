@@ -55,7 +55,7 @@ echopoint.tucana.FileUploadSelector = Core.extend( echopoint.internal.AbstractCo
      * assume the user cancelled the upload.
      */
     REPOLL_COUNT: "repollCount",
-    DEFAULT_REPOLL_COUNT: 2,
+    DEFAULT_REPOLL_COUNT: 4,
 
     /**
      * The interval (in milliseconds) at which the progress server will

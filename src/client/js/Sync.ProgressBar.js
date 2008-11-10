@@ -32,7 +32,7 @@ echopoint.ProgressBarSync = Core.extend( echopoint.internal.AbstractContainerSyn
     this._div.appendChild( this._createBar() );
 
     var text = this.component.render( echopoint.ProgressBar.TEXT );
-    if ( text ) this._createText( text );
+    this._createText( ( text ) ? text : "" );
 
     this._renderStyle( update );
     this._renderBar( update );
@@ -107,7 +107,7 @@ echopoint.ProgressBarSync = Core.extend( echopoint.internal.AbstractContainerSyn
   {
     this._text = document.createElement( "div" );
     this._text.id = this.component.renderId + "|text";
-    this._text.position = "absolute";
+    this._text.style.position = "absolute";
     this._text.style.textAlign = "center";
     this._text.style.color = this._div.style.color;
     this._text.style.height = this._div.style.height;
@@ -172,8 +172,8 @@ echopoint.ProgressBarSync = Core.extend( echopoint.internal.AbstractContainerSyn
     if ( ! value && ! this._text ) return;
     if ( ! value ) value = "";
 
-    if ( this._text ) this._div.removeChild( this._text );
-    this._createText( value );
+    Core.Web.DOM.removeAllChildren( this._text );
+    this._text.appendChild( document.createTextNode( value ) );
   },
 
   _setPercentage: function( value )

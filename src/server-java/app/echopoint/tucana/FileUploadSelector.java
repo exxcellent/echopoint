@@ -41,18 +41,21 @@ import java.util.EventListener;
  * <pre>
  *  import nextapp.echo.app.Border;
  *  import nextapp.echo.app.Color;
+ *  import echopoint.tucana.ButtonMode;
+ *  import echopoint.tucana.ButtonDisplay;
  *  import echopoint.tucana.FileUploadSelector;
  *  import echopoint.tucana.ProgressBar;
+ *  import echopoint.tucana.event.DefaultUploadCallback;
  *
  *    ...
  *    final FileUploadSelector selector = new FileUploadSelector();
- *    selector.setButtonMode( FileUploadSelector.ButtonMode.image );
- *    selector.setButtonDisplayMode( FileUploadSelector.ButtonDisplay.right );
+ *    selector.setButtonMode( ButtonMode.image );
+ *    selector.setButtonDisplayMode( ButtonDisplay.right );
  *    selector.setInputSize( 20 );
  *    selector.setBackground( new Color( 0xa1a1a1 ) );
  *    selector.setBorder( new Border( 1 ) );
  *    selector.setProgressBar( new ProgressBar() );
- *    selector.setUploadCallback( ... );
+ *    selector.setUploadCallback( new DefaultUploadCallback( new File( "/tmp" ) ) );
  *    selector.addActionListener( ... );
  *    parent.add( selector );
  * </pre>
@@ -169,19 +172,16 @@ import java.util.EventListener;
  * listener may be configured as follows:</p>
  * <pre>
  *  import nextapp.echo.app.Component;
+ *  import nextapp.echo.app.event.ActionEvent;
+ *  import nextapp.echo.app.event.ActionListener;
  *  import echopoint.tucana.FileUploadSelector;
  *  import echopoint.tucana.event.UploadCallback;
+ *  import echopoint.tucana.event.UploadFinishEvent;
  *  import echopoint.DirectHtml;
  *
  *  public class FinishListener implements ActionListener
  *  {
  *    private static final long serialVersionUID = 1l;
- *    private final Component parent;
- *
- *    public FinishListener( final Component parent )
- *    {
- *      this.parent = parent;
- *    }
  *
  *    public void actionPerformed( final ActionEvent event )
  *    {
@@ -189,13 +189,37 @@ import java.util.EventListener;
  *      final UploadCallback callback = upload.getUploadCallback();
  *      if ( callback != null )
  *      {
- *        StringBuilder builder = new StringBuilder( 128 );
- *        builder.append( "Upload of file: &lt;b&gt;" );
- *        builder.append( callback.getEvent().getFileName() );
- *        builder.append( "&lt;/b&gt; succeeded.  File size is: &lt;i&gt;");
- *        builder.append( callback.getEvent().getFileSize() / 1000 );
- *        builder.append( "&lt;/i&gt; kilobytes." );
- *        parent.add( new DirectHtml( builder.toString() ) );
+ *        final StringBuilder builder = new StringBuilder( 128 );
+ *        final boolean success = ( callback.getEvent() instanceof UploadFinishEvent );
+ *
+ *        if ( success )
+ *        {
+ *          builder.append( "Upload of file: &lt;b&gt;" );
+ *          builder.append( callback.getEvent().getFileName() );
+ *          builder.append( "&lt;/b&gt; succeeded.  File size is: &lt;i&gt;");
+ *          builder.append( callback.getEvent().getFileSize() / 1000 );
+ *          builder.append( "&lt;/i&gt; kilobytes." );
+ *        }
+ *        else
+ *        {
+ *          builder.append( "Upload " );
+ *          if ( callback.getEvent() != null )
+ *          {
+ *            builder.append( " of file: &lt;b&gt;" );
+ *            builder.append( callback.getEvent().getFileName() );
+ *            builder.append( "&lt;/b&gt;" );
+ *          }
+ *
+ *          builder.append( " failed/cancelled." );
+ *        }
+ *
+ *        component.getParent().add( new DirectHtml( builder.toString() ) );
+ *
+ *        if ( component.getProgressBar() != null )
+ *        {
+ *          component.getProgressBar().setText( ( success ) ?
+ *              "Finished upload!" : "Cancelled upload!" );
+ *        }
  *      }
  *    }
  *  }
@@ -252,12 +276,6 @@ public class FileUploadSelector extends AbstractContainer
    * maintaining the progress bar.  This property is best styled.
    */
   public static final String PROPERTY_REPOLL_COUNT = "repollCount";
-
-  /** Enumeration of values for setting {@link FileUploadSelector#PROPERTY_BUTTON_MODE} */
-   public enum ButtonMode { text, image }
-
-  /** Enumeration of values for setting {@link FileUploadSelector#PROPERTY_BUTTON_DISPLAY} */
-  public enum ButtonDisplay { right, left, auto, none }
 
   protected static final String COMPLETE_ACTION = "complete";
 
@@ -399,12 +417,12 @@ public class FileUploadSelector extends AbstractContainer
   /**
    * Get the current upload button display mode.
    *
-   * @return The current display mode, or {@link ButtonMode#text} if not set.
+   * @return The current display mode, or {@link ButtonMode#submit} if not set.
    */
   public ButtonMode getButtonMode()
   {
     final ButtonMode mode = (ButtonMode) get( PROPERTY_BUTTON_MODE );
-    return ( mode == null ) ? ButtonMode.text : mode;
+    return ( mode == null ) ? ButtonMode.submit : mode;
   }
 
   /**

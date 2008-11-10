@@ -33,9 +33,18 @@ import java.util.logging.Logger;
 public class UploadCallbackAdapter implements UploadCallback
 {
   private static final long serialVersionUID = 1l;
+
+  /** The logger used to log events. */
   protected static final Logger logger = Logger.getAnonymousLogger();
-  private Level level;
+
+  /** The logging level to use. */
+  protected Level level;
+
+  /** The last upload event that was received. */
   private UploadEvent event;
+
+  /** The current upload index being processed. */
+  private int uploadIndex;
 
   /**
    * Default constructor. Sets logging level to {@link
@@ -63,6 +72,7 @@ public class UploadCallbackAdapter implements UploadCallback
    */
   public void uploadStarted( final UploadStartEvent event )
   {
+    this.uploadIndex = event.getIndex();
     this.event = event;
     logger.log( level, "Upload started for event: " + event.getIndex() +
         " fileName: " + event.getFileName() + " size: " + event.getFileSize() +
@@ -89,9 +99,17 @@ public class UploadCallbackAdapter implements UploadCallback
    */
   public void uploadProgressed( final UploadProgressEvent event )
   {
-    this.event = event;
-    logger.log( level, "Upload progress read bytes : "
-        + event.getProgress().getBytesRead() );
+    if ( ( uploadIndex == event.getIndex() ) &&
+      ( this.event instanceof UploadFinishEvent ) )
+    {
+      // We are done
+    }
+    else
+    {
+      this.event = event;
+      logger.log( level, "Upload progress read bytes : "
+          + event.getProgress().getBytesRead() );
+    }
   }
 
   /**

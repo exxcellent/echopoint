@@ -1,9 +1,11 @@
 package echopoint;
 
+import echopoint.tucana.ButtonMode;
 import echopoint.tucana.FileUploadSelector;
 import echopoint.tucana.ProgressBar;
+import echopoint.tucana.event.DefaultUploadCallback;
 import echopoint.tucana.event.UploadCallback;
-import echopoint.tucana.event.UploadCallbackAdapter;
+import echopoint.tucana.event.UploadFinishEvent;
 import nextapp.echo.app.Border;
 import nextapp.echo.app.Color;
 import nextapp.echo.app.Component;
@@ -13,6 +15,9 @@ import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import java.io.File;
+import java.util.logging.Level;
 
 /**
  * Unit test suite for the {@link echopoint.tucana.FileUploadSelector}
@@ -34,7 +39,7 @@ public class FileUploadSelectorTest
   @Test
   public void buttonMode()
   {
-    final FileUploadSelector.ButtonMode mode = FileUploadSelector.ButtonMode.image;
+    final ButtonMode mode = ButtonMode.image;
     component.setButtonMode( mode );
     assertEquals( "Ensure button mode set", mode, component.getButtonMode() );
   }
@@ -42,7 +47,7 @@ public class FileUploadSelectorTest
   @Test
   public void inputSize()
   {
-    final int size = 35;
+    final int size = 16;
     component.setInputSize( size );
     assertEquals( "Ensure input size set", size, component.getInputSize() );
   }
@@ -92,7 +97,9 @@ public class FileUploadSelectorTest
   @Test
   public void callback()
   {
-    final UploadCallback callback = new UploadCallbackAdapter();
+    final DefaultUploadCallback callback =
+        new DefaultUploadCallback( new File( "/tmp" ) );
+    callback.setLevel( Level.INFO );
     component.setUploadCallback( callback );
     assertEquals( "Ensuring callback set", callback, component.getUploadCallback() );
   }
@@ -122,17 +129,36 @@ public class FileUploadSelectorTest
       final UploadCallback callback = upload.getUploadCallback();
       if ( callback != null )
       {
-        StringBuilder builder = new StringBuilder( 128 );
-        builder.append( "Upload of file: <b>" );
-        builder.append( callback.getEvent().getFileName() );
-        builder.append( "</b> succeeded.  File size is: <i>");
-        builder.append( callback.getEvent().getFileSize() / 1000 );
-        builder.append( "</i> kilobytes." );
+        final StringBuilder builder = new StringBuilder( 128 );
+        final boolean success = ( callback.getEvent() instanceof UploadFinishEvent );
+
+        if ( success )
+        {
+          builder.append( "Upload of file: <b>" );
+          builder.append( callback.getEvent().getFileName() );
+          builder.append( "</b> succeeded.  File size is: <i>");
+          builder.append( callback.getEvent().getFileSize() / 1000 );
+          builder.append( "</i> kilobytes." );
+        }
+        else
+        {
+          builder.append( "Upload " );
+          if ( callback.getEvent() != null )
+          {
+            builder.append( " of file: <b>" );
+            builder.append( callback.getEvent().getFileName() );
+            builder.append( "</b>" );
+          }
+
+          builder.append( " failed/cancelled." );
+        }
+
         component.getParent().add( new DirectHtml( builder.toString() ) );
 
         if ( component.getProgressBar() != null )
         {
-          component.getProgressBar().setText( "" );
+          component.getProgressBar().setText( ( success ) ?
+              "Finished upload!" : "Cancelled upload!" );
         }
       }
     }
