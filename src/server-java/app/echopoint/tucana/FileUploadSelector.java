@@ -269,14 +269,6 @@ public class FileUploadSelector extends AbstractContainer
    */
   public static final String PROPERTY_POLLING_INTERVAL = "pollingInterval";
 
-  /**
-   * The maximum number of times to repoll the progress service before the
-   * upload is considered dead when no data has been transferred.  Note that
-   * this is the easiest way to implement the cancel upload feature while
-   * maintaining the progress bar.  This property is best styled.
-   */
-  public static final String PROPERTY_REPOLL_COUNT = "repollCount";
-
   protected static final String COMPLETE_ACTION = "complete";
 
   private UploadCallback callback = null;
@@ -494,26 +486,6 @@ public class FileUploadSelector extends AbstractContainer
   public void setPollingInterval( final int interval )
   {
     set( PROPERTY_POLLING_INTERVAL, interval );
-  }
-
-  /**
-   * Return the value of the {@link #PROPERTY_REPOLL_COUNT} property.
-   *
-   * @return The total number of times the progress server will be polled.
-   */
-  public int getRepollCount()
-  {
-    return (Integer) get( PROPERTY_REPOLL_COUNT );
-  }
-
-  /**
-   * Set the value of the {@link #PROPERTY_REPOLL_COUNT} property.
-   *
-   * @param count The total number of times the progress server will be polled.
-   */
-  public void setRepollCount( final int count )
-  {
-    set( PROPERTY_REPOLL_COUNT, count );
   }
 
   /**

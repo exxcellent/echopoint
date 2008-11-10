@@ -116,6 +116,9 @@ echopoint.ProgressBarSync = Core.extend( echopoint.internal.AbstractContainerSyn
     this._text.style.offsetTop = this._div.style.offsetTop;
     this._text.style.zIndex = 3;
 
+    var font = this.component.render( echopoint.internal.AbstractContainer.FONT );
+    if ( font ) this._text.style.font = font;
+
     this._text.appendChild( document.createTextNode( text ) );
     this._div.appendChild( this._text );
   },

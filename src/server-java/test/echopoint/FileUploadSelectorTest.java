@@ -9,6 +9,8 @@ import echopoint.tucana.event.UploadFinishEvent;
 import nextapp.echo.app.Border;
 import nextapp.echo.app.Color;
 import nextapp.echo.app.Component;
+import nextapp.echo.app.Extent;
+import nextapp.echo.app.Font;
 import nextapp.echo.app.event.ActionEvent;
 import nextapp.echo.app.event.ActionListener;
 import org.junit.AfterClass;
@@ -47,7 +49,7 @@ public class FileUploadSelectorTest
   @Test
   public void inputSize()
   {
-    final int size = 16;
+    final int size = 17;
     component.setInputSize( size );
     assertEquals( "Ensure input size set", size, component.getInputSize() );
   }
@@ -69,6 +71,14 @@ public class FileUploadSelectorTest
   }
 
   @Test
+  public void font()
+  {
+    final Font font = new Font( Font.HELVETICA, Font.PLAIN, new Extent( 12 ) );
+    component.setFont( font );
+    assertEquals( "Ensure font set", font, component.getFont() );
+  }
+
+  @Test
   public void progressBar()
   {
     final ProgressBar bar = new ProgressBar();
@@ -84,14 +94,6 @@ public class FileUploadSelectorTest
     component.setPollingInterval( interval );
     assertEquals( "Ensuring polling interval set", interval,
         component.getPollingInterval() );
-  }
-
-  @Test
-  public void repollCount()
-  {
-    final int count = 5;
-    component.setRepollCount( count );
-    assertEquals( "Ensuring repoll count set", count, component.getRepollCount() );
   }
 
   @Test
@@ -157,6 +159,7 @@ public class FileUploadSelectorTest
 
         if ( component.getProgressBar() != null )
         {
+          if ( success ) component.getProgressBar().setPercentage( 100 );
           component.getProgressBar().setText( ( success ) ?
               "Finished upload!" : "Cancelled upload!" );
         }

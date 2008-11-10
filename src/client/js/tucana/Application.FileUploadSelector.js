@@ -29,7 +29,7 @@ echopoint.tucana.FileUploadSelector = Core.extend( echopoint.internal.AbstractCo
     CANCEL_ENABLED: "cancelEnabled",
 
     INPUT_SIZE: "inputSize",
-    DEFAULT_INPUT_SIZE: "20",
+    DEFAULT_INPUT_SIZE: "19",
 
     UPLOAD_INDEX: "uploadIndex",
     UPLOAD_CANCELLED: "uploadCancelled",
@@ -49,13 +49,6 @@ echopoint.tucana.FileUploadSelector = Core.extend( echopoint.internal.AbstractCo
 
     /** The default wait button text. */
     DEFAULT_WAIT_TEXT: "Wait...",
-
-    /**
-     * The maximum number to times to poll the progress server till we
-     * assume the user cancelled the upload.
-     */
-    REPOLL_COUNT: "repollCount",
-    DEFAULT_REPOLL_COUNT: 4,
 
     /**
      * The interval (in milliseconds) at which the progress server will
