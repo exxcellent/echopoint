@@ -677,7 +677,9 @@ echopoint.tucana.FileUploadSelectorSync.Table = Core.extend(
         echopoint.tucana.FileUploadSelector.DEFAULT_INPUT_SIZE ) );
     this._input.setAttribute( "size", parseInt( size ) );
 
-    this.peer.renderFB( this._input );
+    Echo.Sync.Color.render( this.component.render(
+        echopoint.internal.AbstractContainer.FOREGROUND ),
+        this._input, "color");
     this.peer.renderInsets( this._input );
     this.peer.renderFont( this._input );
 
@@ -911,7 +913,9 @@ echopoint.tucana.FileUploadSelectorSync.Button = Core.extend(
         this._submit.setAttribute( "value", text );
       }
 
-      this.peer.renderFB( this._submit );
+      Echo.Sync.Color.render( this.component.render(
+          echopoint.internal.AbstractContainer.FOREGROUND ),
+          this._submit, "color");
       this.peer.renderFont( this._submit );
     }
 
