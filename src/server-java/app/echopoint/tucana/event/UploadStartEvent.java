@@ -19,8 +19,6 @@ package echopoint.tucana.event;
 
 import echopoint.tucana.FileUploadSelector;
 
-import java.io.InputStream;
-
 /**
  * An event indicating that a file upload has been started.
  *
@@ -31,7 +29,7 @@ import java.io.InputStream;
  * @author Echo File Transfer Library
  * @version $Id$
  */
-public class UploadStartEvent extends UploadEventAdapter
+public class UploadStartEvent extends UploadEvent
 {
   private static final long serialVersionUID = 1l;
 
@@ -41,14 +39,11 @@ public class UploadStartEvent extends UploadEventAdapter
    * @param source the source of the event
    * @param index the index of the upload
    * @param fileName the name of the file, may not contain path information
-   * @param inputStream an input stream containing the uploaded file
-   * @param size the size of the uploaded file, in bytes
    * @param contentType the content type of the uploaded file
    */
-  public UploadStartEvent( final FileUploadSelector source, final int index,
-      final String fileName, final InputStream inputStream, final long size,
-      final String contentType )
+  public UploadStartEvent( final FileUploadSelector source, final String index,
+      final String fileName, final String contentType )
   {
-    super( source, index, fileName, inputStream, size, contentType );
+    super( source, index, fileName, contentType );
   }
 }

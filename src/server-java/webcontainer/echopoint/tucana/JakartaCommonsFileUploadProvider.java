@@ -33,8 +33,6 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 
-import java.io.InputStream;
-
 /**
  * {@link UploadSPI} implementation that uses the
  * <a href='http://jakarta.apache.org/commons/fileupload' target='_blank'>Jakarta
@@ -47,10 +45,10 @@ public class JakartaCommonsFileUploadProvider extends AbstractFileUploadProvider
 {
   /**
    * @see UploadSPI#handleUpload(nextapp.echo.webcontainer.Connection ,
-   *      FileUploadSelector, int, UploadProgress)
+   *      FileUploadSelector, String, UploadProgress)
    */
   public void handleUpload( final Connection conn,
-      final FileUploadSelector uploadSelect, final int uploadIndex,
+      final FileUploadSelector uploadSelect, final String uploadIndex,
       final UploadProgress progress ) throws Exception
   {
     DiskFileItemFactory itemFactory = new DiskFileItemFactory();
@@ -72,9 +70,7 @@ public class JakartaCommonsFileUploadProvider extends AbstractFileUploadProvider
     }
 
     String fileName = null;
-    InputStream inputStream = null;
     String contentType = null;
-    long size = -1;
 
     try
     {
@@ -86,42 +82,46 @@ public class JakartaCommonsFileUploadProvider extends AbstractFileUploadProvider
         if ( !stream.isFormField() )
         {
           fileName = FilenameUtils.getName( stream.getName() );
-          inputStream = stream.openStream();
           contentType = stream.getContentType();
 
+          progress.setStatus( UploadProgress.Status.inprogress );
           uploadSelect.notifyCallback( new UploadStartEvent( uploadSelect,
-              uploadIndex, fileName, inputStream, 0, contentType ) );
+              uploadIndex, fileName, contentType ) );
           FileItem item = itemFactory.createItem( fileName,
               contentType, false, stream.getName() );
           IOUtils.copy( stream.openStream(), item.getOutputStream() );
 
-          inputStream = item.getInputStream();
-          size = item.getSize();
           uploadSelect.notifyCallback( new UploadFinishEvent( uploadSelect,
-              uploadIndex, fileName, inputStream, size,
-              item.getContentType() ) );
+              uploadIndex, fileName, item.getContentType(), item ) );
+          progress.setStatus( UploadProgress.Status.completed );
           return;
         }
       }
 
+      progress.setStatus( UploadProgress.Status.failed );
       uploadSelect.notifyCallback( new UploadFailEvent( uploadSelect,
-          uploadIndex, fileName, inputStream, size, contentType,
+          uploadIndex, fileName, contentType,
           new RuntimeException( "No multi-part content!" ) ) );
     }
     catch ( FileUploadBase.SizeLimitExceededException e )
     {
+      progress.setStatus( UploadProgress.Status.failed );
       uploadSelect.notifyCallback( new UploadFailEvent( uploadSelect,
-          uploadIndex, new UploadSizeLimitExceededException( e ) ) );
+          uploadIndex, fileName, contentType,
+          new UploadSizeLimitExceededException( e ) ) );
     }
     catch ( FileUploadBase.FileSizeLimitExceededException e )
     {
+      progress.setStatus( UploadProgress.Status.failed );
       uploadSelect.notifyCallback( new UploadFailEvent( uploadSelect,
-          uploadIndex, new UploadSizeLimitExceededException( e ) ) );
+          uploadIndex, fileName, contentType,
+          new UploadSizeLimitExceededException( e ) ) );
     }
     catch ( MultipartStream.MalformedStreamException e )
     {
+      progress.setStatus( UploadProgress.Status.cancelled );
       uploadSelect.notifyCallback( new UploadCancelEvent( uploadSelect,
-          uploadIndex, fileName, inputStream, size, contentType  ) );
+          uploadIndex, fileName, contentType, e  ) );
     }
   }
 

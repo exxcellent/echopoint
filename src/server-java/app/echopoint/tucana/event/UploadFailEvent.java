@@ -19,8 +19,6 @@ package echopoint.tucana.event;
 
 import echopoint.tucana.FileUploadSelector;
 
-import java.io.InputStream;
-
 /**
  * An event that represents a failed file transfer.
 
@@ -31,7 +29,7 @@ import java.io.InputStream;
  * @author Echo File Transfer Library
  * @version $Id$
  */
-public class UploadFailEvent extends UploadEventAdapter
+public class UploadFailEvent extends UploadEvent
 {
   private static final long serialVersionUID = 1l;
 
@@ -39,34 +37,19 @@ public class UploadFailEvent extends UploadEventAdapter
   private final Exception exception;
 
   /**
-   * Short form of the constructor that populates only the mandatory fields.
-   *
-   * @param source the source of the event
-   * @param index the index of the upload
-   * @param exception The exception that caused the failure.
-   */
-  public UploadFailEvent( final FileUploadSelector source, final int index,
-      final Exception exception )
-  {
-    this( source, index, null, null, -1, null, exception );
-  }
-
-  /**
    * Creates a new {@link UploadEvent}.  This is the designated constructor.
    *
    * @param source the source of the event
    * @param index the index of the upload
    * @param fileName the name of the file, may not contain path information
-   * @param inputStream an input stream containing the uploaded file
-   * @param size the size of the uploaded file, in bytes
    * @param contentType the content type of the uploaded file
    * @param exception The exception that caused the failure.
    */
-  public UploadFailEvent( final FileUploadSelector source, final int index,
-      final String fileName, final InputStream inputStream, final long size,
-      final String contentType, final Exception exception )
+  public UploadFailEvent( final FileUploadSelector source, final String index,
+      final String fileName, final String contentType,
+      final Exception exception )
   {
-    super( source, index, fileName, inputStream, size, contentType );
+    super( source, index, fileName, contentType );
     this.exception = exception;
   }
 

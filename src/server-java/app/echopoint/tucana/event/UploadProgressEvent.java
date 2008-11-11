@@ -17,10 +17,8 @@
  */
 package echopoint.tucana.event;
 
-import echopoint.tucana.UploadProgress;
 import echopoint.tucana.FileUploadSelector;
-
-import java.io.InputStream;
+import echopoint.tucana.UploadProgress;
 
 /**
  * An event indicating that a file upload has progressed.
@@ -32,7 +30,7 @@ import java.io.InputStream;
  * @author Rakesh Vidyadharan 2008-11-4
  * @version $Id$
  */
-public class UploadProgressEvent extends UploadEventAdapter
+public class UploadProgressEvent extends UploadEvent
 {
   private static final long serialVersionUID = 1l;
 
@@ -46,10 +44,10 @@ public class UploadProgressEvent extends UploadEventAdapter
    * @param index the index of the upload
    * @param progress The progress of the file upload.
    */
-  public UploadProgressEvent( final FileUploadSelector source, final int index,
-      final UploadProgress progress )
+  public UploadProgressEvent( final FileUploadSelector source,
+      final String index, final UploadProgress progress )
   {
-    this( source, index, null, null, -1, null, progress );
+    this( source, index, null, null, progress );
   }
 
   /**
@@ -58,16 +56,14 @@ public class UploadProgressEvent extends UploadEventAdapter
    * @param source the source of the event
    * @param index the index of the upload
    * @param fileName the name of the file, may not contain path information
-   * @param inputStream an input stream containing the uploaded file
-   * @param size the size of the uploaded file, in bytes
    * @param contentType the content type of the uploaded file
    * @param progress The progress of the file upload.
    */
-  public UploadProgressEvent( final FileUploadSelector source, final int index,
-      final String fileName, final InputStream inputStream, final long size,
+  public UploadProgressEvent( final FileUploadSelector source,
+      final String index, final String fileName,
       final String contentType, final UploadProgress progress )
   {
-    super( source, index, fileName, inputStream, size, contentType );
+    super( source, index, fileName, contentType );
     this.progress = progress;
   }
 

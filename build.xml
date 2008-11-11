@@ -372,7 +372,6 @@
       <link href='${echo.app.doc.link}' />
       <link href='${echo.webcontainer.doc.link}' />
       <link href='${extras.app.doc.link}' />
-      <link href='${junit.doc.link}' />
       <link href='../app/' />
     </javadoc>
 

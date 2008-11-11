@@ -53,9 +53,6 @@ public class FileUploadSelectorPeer extends AbstractContainerPeer
   private static final Service COMPONENT_SERVICE =
       JavaScriptService.forResources( COMPONENT_NAME, SERVICE_FILES );
 
-  /** The property used to keep track of repetitive uploads. */
-  private static final String PROPERTY_UPLOAD_INDEX = "uploadIndex";
-
   /** Register the services */
   static
   {
@@ -71,7 +68,6 @@ public class FileUploadSelectorPeer extends AbstractContainerPeer
   /** Default constructor.  Add output properties. */
   public FileUploadSelectorPeer()
   {
-    addOutputProperty( PROPERTY_UPLOAD_INDEX );
     addRequiredComponentClass( ProgressBar.class );
 
     addEvent( new AbstractComponentSynchronizePeer.EventPeer(
@@ -125,14 +121,6 @@ public class FileUploadSelectorPeer extends AbstractContainerPeer
   public Object getOutputProperty( final Context context,
       final Component component, final String propertyName, final int propertyIndex )
   {
-    if ( PROPERTY_UPLOAD_INDEX.equals( propertyName ) )
-    {
-      final FileUploadSelector uploadSelect = (FileUploadSelector) component;
-      final UserInstance userInstance = (UserInstance) context.get( UserInstance.class );
-      final UploadRenderState renderState = getRenderState( uploadSelect, userInstance );
-      return renderState.getMaxUploadIndex();
-    }
-
     if ( FileUploadSelector.PROPERTY_BUTTON_DISPLAY.equals( propertyName ) ||
         FileUploadSelector.PROPERTY_BUTTON_MODE.equals( propertyName ) )
     {
@@ -150,7 +138,7 @@ public class FileUploadSelectorPeer extends AbstractContainerPeer
    * @param userInstance The user instance for the session.
    * @return the render state, never <code>null</code>.
    */
-  public static UploadRenderState getRenderState(
+  protected static UploadRenderState getRenderState(
       final FileUploadSelector uploadSelect, final UserInstance userInstance )
   {
     UploadRenderState renderState;

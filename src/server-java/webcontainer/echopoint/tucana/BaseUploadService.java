@@ -17,13 +17,13 @@
  */
 package echopoint.tucana;
 
-import nextapp.echo.webcontainer.Service;
 import nextapp.echo.webcontainer.Connection;
-import nextapp.echo.webcontainer.UserInstance;
 import nextapp.echo.webcontainer.ContentType;
+import nextapp.echo.webcontainer.Service;
+import nextapp.echo.webcontainer.UserInstance;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
@@ -55,19 +55,22 @@ public abstract class BaseUploadService implements Service
       serviceBadRequest( conn, "FileUploadSelector id not specified." );
       return;
     }
-    FileUploadSelector uploadSelect = (FileUploadSelector) userInstance.getComponentByClientRenderId( renderId );
+    FileUploadSelector uploadSelect = (FileUploadSelector)
+        userInstance.getComponentByClientRenderId( renderId );
     if ( uploadSelect == null )
     {
-      serviceBadRequest( conn, "FileUploadSelector id is not valid: " + renderId );
+      serviceBadRequest( conn,
+          "FileUploadSelector id is not valid: " + renderId );
       return;
     }
     String uploadIndexParam = request.getParameter( "x" );
     if ( uploadIndexParam == null )
     {
-      serviceBadRequest( conn, "FileUploadSelector upload index not specified." );
+      serviceBadRequest( conn,
+          "FileUploadSelector upload index not specified." );
       return;
     }
-    service( conn, uploadSelect, Integer.parseInt( uploadIndexParam ) );
+    service( conn, uploadSelect, uploadIndexParam );
   }
 
   /**
@@ -75,11 +78,11 @@ public abstract class BaseUploadService implements Service
    *
    * @param conn The connection to the application.
    * @param uploadSelect The file upload selector instance.
-   * @param uploadIndex The index of the current upload for the instance.
+   * @param uploadIndex The unique index of the current upload for the instance.
    * @throws java.io.IOException If errors are encountered.
    */
   public abstract void service( final Connection conn,
-      final FileUploadSelector uploadSelect, final int uploadIndex )
+      final FileUploadSelector uploadSelect, final String uploadIndex )
     throws IOException;
 
   /**

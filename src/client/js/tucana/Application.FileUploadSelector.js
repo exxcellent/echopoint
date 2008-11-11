@@ -55,7 +55,10 @@ echopoint.tucana.FileUploadSelector = Core.extend( echopoint.internal.AbstractCo
      * be polled for updates (completion, cancel etc.).
      */
     POLLING_INTERVAL: "pollingInterval",
-    DEFAULT_POLLING_INTERVAL: 250
+    DEFAULT_POLLING_INTERVAL: 250,
+
+    /** The property in the embedded progress bar used to specify the text pattern. */
+    PATTERN: "pattern"
   },
 
   /**
@@ -99,6 +102,9 @@ echopoint.tucana.UploadProgress = Core.extend(
   /** The estimated time remaining for the transfer to end. */
   estimatedTimeLeft: 0,
 
+  /** The status of the current upload process. */
+  status: null,
+
   /**
    * Create a new instance using the XML response from the service.
    *
@@ -114,6 +120,7 @@ echopoint.tucana.UploadProgress = Core.extend(
       this.percentComplete = doc.getElementsByTagName( "pc" )[0].childNodes[0].nodeValue;
       this.transferRate = doc.getElementsByTagName( "tr" )[0].childNodes[0].nodeValue;
       this.estimatedTimeLeft = doc.getElementsByTagName( "tl" )[0].childNodes[0].nodeValue;
+      this.status = doc.getElementsByTagName( "s" )[0].childNodes[0].nodeValue;
     }
   }
 });

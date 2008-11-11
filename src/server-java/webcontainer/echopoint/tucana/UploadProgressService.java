@@ -65,7 +65,7 @@ public class UploadProgressService extends BaseUploadService
 
   /** {@inheritDoc} */
   public void service( final Connection conn,
-      final FileUploadSelector uploadSelect, final int uploadIndex )
+      final FileUploadSelector uploadSelect, final String uploadIndex )
     throws IOException
   {
     final UploadRenderState renderState = FileUploadSelectorPeer.getRenderState(
@@ -88,10 +88,11 @@ public class UploadProgressService extends BaseUploadService
       buff.append( "<pc>" ).append( progress.getPercentCompleted() ).append( "</pc>" );
       buff.append( "<tr>" ).append( progress.getTransferRate() ).append( "</tr>" );
       buff.append( "<tl>" ).append( progress.getEstimatedTimeLeft() ).append( "</tl>" );
+      buff.append( "<s>" ).append( progress.getStatus() ).append( "</s>" );
     }
     else
     {
-      buff.append( "<r>0</r><cl>0</cl><pc>0</pc><tr>0</tr><tl>0</tl>" );
+      buff.append( "<r>0</r><cl>0</cl><pc>0</pc><tr>0</tr><tl>0</tl><s></s>" );
     }
     buff.append( "</p>" );
 

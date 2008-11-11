@@ -37,6 +37,10 @@ import java.util.EventListener;
  * The file upload selector component.  This component is a re-implementation
  * of the original <i>tucana file upload selector</i> component for Echo2.
  *
+ * <p><b>Note:</b> It is critical that this component be set absolute height
+ * and width properties.  Percentage based values can cause problems if using
+ * a progress bar.</p>
+ *
  * <p>The following code shows sample usage of this component:</p>
  * <pre>
  *  import nextapp.echo.app.Border;
@@ -213,11 +217,11 @@ import java.util.EventListener;
  *          builder.append( " failed/cancelled." );
  *        }
  *
- *        component.getParent().add( new DirectHtml( builder.toString() ) );
+ *        upload.getParent().add( new DirectHtml( builder.toString() ) );
  *
- *        if ( component.getProgressBar() != null )
+ *        if ( upload.getProgressBar() != null )
  *        {
- *          component.getProgressBar().setText( ( success ) ?
+ *          upload.getProgressBar().setText( ( success ) ?
  *              "Finished upload!" : "Cancelled upload!" );
  *        }
  *      }

@@ -19,8 +19,6 @@ package echopoint.tucana.event;
 
 import echopoint.tucana.FileUploadSelector;
 
-import java.io.InputStream;
-
 /**
  * An upload event representing an upload that was cancelled.
 
@@ -31,9 +29,12 @@ import java.io.InputStream;
  * @author Echo File Transfer Library
  * @version $Id$
  */
-public class UploadCancelEvent extends UploadEventAdapter
+public class UploadCancelEvent extends UploadEvent
 {
   private static final long serialVersionUID = 1l;
+
+  /** The exception that was trapped as a result of the cancel. */
+  private final Exception exception;
 
   /**
    * Creates a new {@link UploadEvent}.
@@ -41,14 +42,24 @@ public class UploadCancelEvent extends UploadEventAdapter
    * @param source the source of the event
    * @param index the index of the upload
    * @param fileName the name of the file, may not contain path information
-   * @param inputStream an input stream containing the uploaded file
-   * @param size the size of the uploaded file, in bytes
    * @param contentType the content type of the uploaded file
+   * @param exception The exception that was triggered by the cancel.
    */
-  public UploadCancelEvent( final FileUploadSelector source, final int index,
-      final String fileName, final InputStream inputStream, final long size,
-      final String contentType )
+  public UploadCancelEvent( final FileUploadSelector source,
+      final String index, final String fileName, final String contentType,
+      final Exception exception )
   {
-    super( source, index, fileName, inputStream, size, contentType );
+    super( source, index, fileName, contentType );
+    this.exception = exception;
+  }
+
+  /**
+   * Accessor for property 'exception'.
+   *
+   * @return Value for property 'exception'.
+   */
+  public Exception getException()
+  {
+    return exception;
   }
 }

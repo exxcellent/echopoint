@@ -19,10 +19,11 @@ package echopoint.tucana.event;
 
 import org.apache.commons.io.IOUtils;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 
 /**
  * A default implementation of an {@link UploadCallback} that saves the
@@ -63,8 +64,12 @@ public class DefaultUploadCallback extends UploadCallbackAdapter
 
   /**
    * Over-ridden to save the contents of the uploaded file to {@link #directory}.
+   * Client-code should ideally wrap this method in a try-catch clause to
+   * handle file copying errors and update the UI as appropriate.
    *
    * {@inheritDoc}
+   * @throws RuntimeException If errors are encountered while copying the
+   *   uploaded file to the specified directory.
    */
   @Override
   public void uploadSucceeded( final UploadFinishEvent event )
@@ -76,25 +81,28 @@ public class DefaultUploadCallback extends UploadCallbackAdapter
 
     try
     {
-      BufferedOutputStream bos =
-          new BufferedOutputStream( new FileOutputStream( temp ) );
-      IOUtils.copy( event.getInputStream(), bos );
-      bos.close();
+      event.getFileItem().write( temp );
 
       if ( ! temp.renameTo( file ) )
       {
-        temp.delete();
-        bos = new BufferedOutputStream( new FileOutputStream( file ) );
-        IOUtils.copy( event.getInputStream(), bos );
+        BufferedOutputStream bos =
+            new BufferedOutputStream( new FileOutputStream( file ) );
+        BufferedInputStream bis =
+            new BufferedInputStream( new FileInputStream( temp ) );
+        IOUtils.copy( bis, bos );
+        bis.close();
         bos.close();
+        temp.delete();
         logger.log( level, "Rename of temp file to " + file.getAbsolutePath() +
             " failed.  Recopied from source." );
       }
 
+      event.getFileItem().delete();
+
       logger.log( level, "Copied upload file contents to: " +
           file.getAbsolutePath() );
     }
-    catch ( IOException e )
+    catch ( Exception e )
     {
       throw new RuntimeException( "Error copying uploaded file!", e );
     }

@@ -41,7 +41,7 @@ echopoint.tucana.FileUploadSelectorSync = Core.extend( echopoint.internal.Abstra
   _table: null,
 
   /** The upload id that represents the serial number for upload requests. */
-  _uploadIndex: 0,
+  _uploadIndex: null,
 
   /** The array of iframes created to manage file upload requests. */
   _frames: new Array(),
@@ -51,8 +51,7 @@ echopoint.tucana.FileUploadSelectorSync = Core.extend( echopoint.internal.Abstra
 
   renderAdd: function( update, parentElement )
   {
-    this._uploadIndex = this.component.get(
-        echopoint.tucana.FileUploadSelector.UPLOAD_INDEX );
+    this._uploadIndex = this._createUploadIndex();
     this._createHidden();
     this._createFrame();
     parentElement.appendChild( this._createParent( update ) );
@@ -132,6 +131,13 @@ echopoint.tucana.FileUploadSelectorSync = Core.extend( echopoint.internal.Abstra
     return echopoint.tucana.FileUploadSelectorSync.DEFAULT_WIDTH;
   },
 
+  /** Create a unique upload index value. */
+  _createUploadIndex: function()
+  {
+    return Math.floor( Math.random() * 1073741824 ).toString( 36 )
+        + new Date().getTime().toString( 36 );
+  },
+
   /** Create the hidden container element that holds the iframe for submission. */
   _createHidden: function()
   {
@@ -146,7 +152,7 @@ echopoint.tucana.FileUploadSelectorSync = Core.extend( echopoint.internal.Abstra
   _createFrame: function()
   {
     var frame = new echopoint.tucana.FileUploadSelectorSync.Frame(
-        this, ++this._uploadIndex );
+        this, this._uploadIndex );
     frame._renderAdd( this._hidden );
     this._frames[this._uploadIndex] = frame;
     return frame;
@@ -250,11 +256,11 @@ echopoint.tucana.FileUploadSelectorSync = Core.extend( echopoint.internal.Abstra
     this._table._renderDispose();
     this._div.removeChild( this._form );
 
+    this._uploadIndex = this._createUploadIndex();
     this._createFrame();
     var form = this._createForm();
     this._createTable( form );
     this._div.appendChild( form );
-
 
     var progress = this.component.getComponent( 0 );
     if ( progress )
@@ -262,8 +268,6 @@ echopoint.tucana.FileUploadSelectorSync = Core.extend( echopoint.internal.Abstra
       var child = progress.peer._div;
       this._div.removeChild( child );
 
-      var percent = progress.get( echopoint.ProgressBar.PERCENTAGE );
-      if ( percent > 90 ) progress.set( echopoint.ProgressBar.PERCENTAGE, 100 );
       progress.peer.renderUpdate();
 
       this._div.appendChild( child );
@@ -289,7 +293,7 @@ echopoint.tucana.FileUploadSelectorSync.Frame = Core.extend(
   component: null,
 
   /** The upload index for which this frame is created. */
-  _uploadIndex: 0,
+  _uploadIndex: null,
 
   /** A value that indicates the upload stage. */
   _loadStage: null,
@@ -321,7 +325,7 @@ echopoint.tucana.FileUploadSelectorSync.Frame = Core.extend(
 
   _renderAdd: function( parentElement )
   {
-    var processLoad = Core.method( this, this._processLoad );
+    //var processLoad = Core.method( this, this._processLoad );
     var frameId = this.component.renderId + "|Frame|" + this._uploadIndex;
     var srcUrl =
         this.peer.client.getResourceUrl( "Echo", "resource/Blank.html" );
@@ -333,7 +337,7 @@ echopoint.tucana.FileUploadSelectorSync.Frame = Core.extend(
           + "scrolling=\"no\" width=\"0\" height=\"0\"></iframe>";
       //Core.Debug.consoleWrite( "frame: " + iframeSrc );
       this._frameElement = parentElement.firstChild;
-      Core.Web.Event.add( this._frameElement, "load", processLoad, false );
+      //Core.Web.Event.add( this._frameElement, "load", processLoad, false );
     }
     else
     {
@@ -344,7 +348,7 @@ echopoint.tucana.FileUploadSelectorSync.Frame = Core.extend(
       this._frameElement.scrolling = "no";
       this._frameElement.style.width = "0px";
       this._frameElement.style.height = "0px";
-      this._frameElement.onload = processLoad;
+      //this._frameElement.onload = processLoad;
       parentElement.appendChild( this._frameElement );
     }
   },
@@ -408,13 +412,39 @@ echopoint.tucana.FileUploadSelectorSync.Frame = Core.extend(
     if ( this.component && this.component.getComponentCount() > 0 )
     {
       var progressBar = this.component.getComponent( 0 );
+
+      var pattern = progressBar.render(
+          echopoint.tucana.FileUploadSelector.PATTERN );
+      if ( pattern )
+      {
+        pattern = pattern.replace( "#bytes#",
+            parseInt(uploadProgress.bytesRead / 1000 ) );
+        pattern = pattern.replace( "#length#",
+            parseInt( uploadProgress.contentLength / 1000 ) );
+        pattern = pattern.replace( "#rate#",
+            parseInt( uploadProgress.transferRate / 1000 ) );
+        pattern = pattern.replace( "#percent#", uploadProgress.percentComplete );
+        pattern = pattern.replace( "#time#", uploadProgress.estimatedTimeLeft );
+        progressBar.set( echopoint.ProgressBar.TEXT, pattern );
+      }
+      else
+      {
+        progressBar.set( echopoint.ProgressBar.TEXT, text );
+      }
+
       progressBar.set( echopoint.ProgressBar.PERCENTAGE, uploadProgress.percentComplete );
-      progressBar.set( echopoint.ProgressBar.TEXT, text );
       progressBar.peer.renderUpdate();
     }
     else
     {
       Core.Debug.consoleWrite( text );
+    }
+
+    var status = uploadProgress.status;
+    if ( ( status == "completed" ) || ( status == "failed") ||
+        ( status == "cancelled" ) )
+    {
+      this._uploadEnded();
     }
 
     if ( this._enableProgressPoll )
@@ -517,7 +547,7 @@ echopoint.tucana.FileUploadSelectorSync.Frame = Core.extend(
       var frame = this._frameElement;
       setTimeout( function()
       {
-        if ( frame.parentNode )
+        if ( frame && frame.parentNode )
         {
           frame.parentNode.removeChild( frame );
         }
@@ -647,10 +677,10 @@ echopoint.tucana.FileUploadSelectorSync.Table = Core.extend(
         echopoint.tucana.FileUploadSelector.DEFAULT_INPUT_SIZE ) );
     this._input.setAttribute( "size", parseInt( size ) );
 
-    Echo.Sync.Color.render( this.component.render(
-        echopoint.internal.AbstractContainer.FOREGROUND ), this._input, "color" );
-    Echo.Sync.Font.render( this.component.render(
-        echopoint.internal.AbstractContainer.FONT ), this._input );
+    this.peer.renderFB( this._input );
+    this.peer.renderInsets( this._input );
+    this.peer.renderFont( this._input );
+
     return this._input
   },
 
@@ -881,13 +911,12 @@ echopoint.tucana.FileUploadSelectorSync.Button = Core.extend(
         this._submit.setAttribute( "value", text );
       }
 
-      Echo.Sync.Color.render( this.component.render(
-          echopoint.internal.AbstractContainer.FOREGROUND ), this._submit, "color" );
-      Echo.Sync.Font.render( this.component.render(
-          echopoint.internal.AbstractContainer.FONT ), this._submit );
+      this.peer.renderFB( this._submit );
+      this.peer.renderFont( this._submit );
     }
 
     this._submit.disabled = disabled;
+    this.peer.renderInsets( this._submit );
 
     var displayType = this._display;
     if ( displayType == "auto" )

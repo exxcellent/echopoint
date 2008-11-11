@@ -18,8 +18,7 @@
 package echopoint.tucana.event;
 
 import echopoint.tucana.FileUploadSelector;
-
-import java.io.InputStream;
+import org.apache.commons.fileupload.FileItem;
 
 /**
  * An event indicating that a file upload has finished.
@@ -31,9 +30,12 @@ import java.io.InputStream;
  * @author Echo File Transfer Library
  * @version $Id$
  */
-public class UploadFinishEvent extends UploadEventAdapter
+public class UploadFinishEvent extends UploadEvent
 {
   private static final long serialVersionUID = 1l;
+
+  /** The file item that represents the file that was uploaded. */
+  private final FileItem fileItem;
 
   /**
    * Creates a new {@link UploadEvent}.
@@ -41,14 +43,34 @@ public class UploadFinishEvent extends UploadEventAdapter
    * @param source the source of the event
    * @param index the index of the upload
    * @param fileName the name of the file, may not contain path information
-   * @param inputStream an input stream containing the uploaded file
-   * @param size the size of the uploaded file, in bytes
    * @param contentType the content type of the uploaded file
+   * @param item The file item that represents the uploaded file.
    */
-  public UploadFinishEvent( final FileUploadSelector source, final int index,
-      final String fileName, final InputStream inputStream, final long size,
-      final String contentType )
+  public UploadFinishEvent( final FileUploadSelector source,
+      final String index, final String fileName, final String contentType,
+      final FileItem item )
   {
-    super( source, index, fileName, inputStream, size, contentType );
+    super( source, index, fileName, contentType );
+    this.fileItem = item;
+  }
+
+  /**
+   * Accessor for property 'fileItem'.
+   *
+   * @return Value for property 'fileItem'.
+   */
+  public FileItem getFileItem()
+  {
+    return fileItem;
+  }
+
+  /**
+   * Return the size (in bytes) of the file that was uploaded.
+   *
+   * @return The file size in bytes.
+   */
+  public long getFileSize()
+  {
+    return fileItem.getSize();
   }
 }

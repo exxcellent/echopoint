@@ -17,12 +17,12 @@
  */
 package echopoint.tucana.event;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Serializable;
+import echopoint.tucana.FileUploadSelector;
+
+import java.util.EventObject;
 
 /**
- * An interface that represents an upload event.
+ * A base class that represents an upload event.
 
  * <p><b>Note:</b> Development of this component was sponsored by <a
  * href='http://tcnbroadcasting.com/index.jsp' target='_top'>TCN
@@ -31,34 +31,63 @@ import java.io.Serializable;
  * @author jvolkman (Echo2), Rakesh 2008-11-2
  * @version $Id$
  */
-public interface UploadEvent extends Serializable
+public abstract class UploadEvent extends EventObject
 {
+  private static final long serialVersionUID = 1l;
+
+  /** The unique upload index for the upload event. */
+  private final String index;
+
+  /** The content type for the file that was uploaded. */
+  private final String contentType;
+
+  /** The name of the file that was uploaded. */
+  private final String fileName;
+
   /**
-   * Return the input stream associated with the upload.
+   * Creates a new {@link UploadEvent}.
    *
-   * @return The input stream from which the data may be retrieved.
-   * @throws IOException If errors are encountered.
+   * @param source the source of the event
+   * @param index the index of the upload
+   * @param fileName the name of the file, may not contain path information
+   * @param contentType the content type of the uploaded file
    */
-  public InputStream getInputStream() throws IOException;
+  public UploadEvent( final FileUploadSelector source, final String index,
+      final String fileName,  final String contentType )
+  {
+    super( source );
+    this.index = index;
+    this.fileName = fileName;
+    this.contentType = contentType;
+  }
+
+  /**
+   * Returns the index of the file.
+   *
+   * @return the index of the file.
+   */
+  public String getIndex()
+  {
+    return index;
+  }
 
   /**
    * Return the content type of the uploaded file.
    *
    * @return The content type property of the uploaded file.
    */
-  public String getContentType();
+  public String getContentType()
+  {
+    return contentType;
+  }
 
   /**
    * The name of the file that was uploaded.
    *
    * @return The file name.
    */
-  public String getFileName();
-
-  /**
-   * The size in bytes of the file that was uploaded.
-   *
-   * @return The file size in bytes.
-   */
-  public long getFileSize();
+  public String getFileName()
+  {
+    return fileName;
+  }
 }

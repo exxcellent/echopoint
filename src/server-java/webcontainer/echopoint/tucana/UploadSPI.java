@@ -20,8 +20,8 @@ package echopoint.tucana;
 import nextapp.echo.webcontainer.Connection;
 import nextapp.echo.webcontainer.WebContainerServlet;
 
-import java.io.IOException;
 import java.io.File;
+import java.io.IOException;
 
 /**
  * Service provider interface (SPI) which allows pluggable selection of the
@@ -83,6 +83,6 @@ public interface UploadSPI extends WebContainerServlet.MultipartRequestWrapper
    * @throws Exception If errors are encountered.
    */
   public void handleUpload( final Connection conn,
-      final FileUploadSelector uploadSelect, final int uploadIndex,
+      final FileUploadSelector uploadSelect, final String uploadIndex,
       final UploadProgress progress ) throws Exception;
 }

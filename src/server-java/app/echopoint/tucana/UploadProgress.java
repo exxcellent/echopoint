@@ -17,8 +17,8 @@
  */
 package echopoint.tucana;
 
-import java.util.LinkedList;
 import java.io.Serializable;
+import java.util.LinkedList;
 
 /**
  * Contains information about the progress of a file upload. This class is
@@ -56,6 +56,9 @@ public class UploadProgress implements Serializable
    */
   private static final int MILESTONE_BYTE_INTERVAL = 10240 / 4;
 
+  /** Enumeration of status values for the state of the upload progress. */
+  protected enum Status { completed, cancelled, failed, inprogress }
+
   private final long contentLength;
 
   private long bytesRead;
@@ -63,6 +66,8 @@ public class UploadProgress implements Serializable
   private final LinkedList<Milestone> milestones;
 
   private long lastMilestoneBytesRead;
+
+  private Status status;
 
   /** @param contentLength the total number of bytes, <code>-1</code> if unknown */
   public UploadProgress( long contentLength )
@@ -192,6 +197,26 @@ public class UploadProgress implements Serializable
         }
       }
     }
+  }
+
+  /**
+   * Return the status of the current file upload process.
+   *
+   * @return The status value.
+   */
+  public Status getStatus()
+  {
+    return status;
+  }
+
+  /**
+   * Set the status of the current file upload process.
+   *
+   * @param status The status value to set.
+   */
+  public void setStatus( final Status status )
+  {
+    this.status = status;
   }
 
   private static final class Milestone implements Serializable

@@ -17,6 +17,8 @@
  */
 package echopoint.tucana;
 
+import echopoint.tucana.event.UploadCallback;
+import echopoint.tucana.event.UploadCancelEvent;
 import echopoint.tucana.event.UploadFailEvent;
 import nextapp.echo.webcontainer.Connection;
 import nextapp.echo.webcontainer.Service;
@@ -64,10 +66,10 @@ public class UploadReceiverService extends BaseUploadService
 
   /**
    * @see BaseUploadService#service(nextapp.echo.webcontainer.Connection ,
-   *      FileUploadSelector, int)
+   *      FileUploadSelector, String )
    */
   public void service( final Connection conn,
-      final FileUploadSelector uploadSelect, final int uploadIndex )
+      final FileUploadSelector uploadSelect, final String uploadIndex )
     throws IOException
   {
     final HttpServletRequest request = conn.getRequest();
@@ -92,6 +94,9 @@ public class UploadReceiverService extends BaseUploadService
         FileUploadSelectorPeer.getRenderState( uploadSelect,
             conn.getUserInstance() );
 
+    final UploadCallback callback = uploadSelect.getUploadCallback();
+    final String fileName = ( ( callback != null ) && ( callback.getEvent() != null ) ) ?
+        callback.getEvent().getFileName() : null;
     try
     {
       final UploadProgress progress = new UploadProgress( contentLength );
@@ -101,10 +106,15 @@ public class UploadReceiverService extends BaseUploadService
       UploadProviderFactory.getUploadProvider().handleUpload(
           conn, uploadSelect, uploadIndex, progress );
     }
+    catch ( IllegalStateException e )
+    {
+      uploadSelect.notifyCallback( new UploadCancelEvent( uploadSelect,
+          uploadIndex, fileName, null, e ) );
+    }
     catch ( Exception e )
     {
       uploadSelect.notifyCallback(
-          new UploadFailEvent( uploadSelect, uploadIndex, e ) );
+          new UploadFailEvent( uploadSelect, uploadIndex, null, null, e ) );
     }
     finally
     {

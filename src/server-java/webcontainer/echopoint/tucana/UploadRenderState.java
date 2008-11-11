@@ -33,17 +33,16 @@ public class UploadRenderState implements RenderState
 {
   private static final long serialVersionUID = 1l;
 
-  private int maxUploadIndex;
-
-  private final Map<Integer, UploadProgress> progress;
-  private final Map<Integer,Integer> ended;
+  private String uploadIndex;
+  private final Map<String, UploadProgress> progress;
+  private final Map<String,String> ended;
 
   /** Creates a new <code>UploadRenderState</code>. */
   public UploadRenderState()
   {
-    this.maxUploadIndex = -1;
-    this.progress = new ConcurrentHashMap<Integer, UploadProgress>();
-    this.ended = new ConcurrentHashMap<Integer,Integer>();
+    this.uploadIndex = String.valueOf( System.currentTimeMillis() );
+    this.progress = new ConcurrentHashMap<String, UploadProgress>();
+    this.ended = new ConcurrentHashMap<String,String>();
   }
 
   /**
@@ -52,9 +51,9 @@ public class UploadRenderState implements RenderState
    *
    * @return the index or <code>-1</code> if no uploads indices are present.
    */
-  public int getMaxUploadIndex()
+  public String getUploadIndex()
   {
-    return maxUploadIndex;
+    return uploadIndex;
   }
 
   /**
@@ -62,9 +61,9 @@ public class UploadRenderState implements RenderState
    *
    * @param uploadIndex the upload index
    */
-  public void uploadStarted( int uploadIndex )
+  public void uploadStarted( String uploadIndex )
   {
-    maxUploadIndex = uploadIndex;
+    this.uploadIndex = uploadIndex;
   }
 
   /**
@@ -73,7 +72,7 @@ public class UploadRenderState implements RenderState
    * @param uploadIndex the upload index
    * @return <code>true</code> if the upload has ended.
    */
-  public boolean isUploadEnded( int uploadIndex )
+  public boolean isUploadEnded( String uploadIndex )
   {
     return ended.containsKey( uploadIndex );
   }
@@ -83,9 +82,9 @@ public class UploadRenderState implements RenderState
    *
    * @param uploadIndex The upload index for the current upload.
    */
-  public void uploadEnded( int uploadIndex )
+  public void uploadEnded( String uploadIndex )
   {
-    ended.put(  uploadIndex, uploadIndex );
+    ended.put( uploadIndex, uploadIndex );
   }
 
   /**
@@ -94,7 +93,7 @@ public class UploadRenderState implements RenderState
    * @param uploadIndex the upload index
    * @return the progress if available, <code>null</code> otherwise.
    */
-  public UploadProgress getProgress( int uploadIndex )
+  public UploadProgress getProgress( String uploadIndex )
   {
     return progress.get( uploadIndex );
   }
@@ -105,13 +104,14 @@ public class UploadRenderState implements RenderState
    * @param uploadIndex the upload index
    * @param progress the progress
    */
-  public void setProgress( int uploadIndex, UploadProgress progress )
+  public void setProgress( String uploadIndex, UploadProgress progress )
   {
     if ( this.progress.containsKey( uploadIndex ) )
     {
-      throw new IllegalStateException();
+      throw new IllegalStateException( "UploadIndex: " + uploadIndex +
+          " has already been used." );
     }
-    
+
     this.progress.put( uploadIndex, progress );
   }
 }

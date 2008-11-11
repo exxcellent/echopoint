@@ -17,12 +17,18 @@
  */
 package echopoint.tucana;
 
-import nextapp.echo.app.Color;
 import nextapp.echo.app.Border;
+import nextapp.echo.app.Color;
+import nextapp.echo.app.Extent;
+import nextapp.echo.app.Insets;
 
 /**
  * A custom progress bar component with default styles to use with the file
  * upload component.
+ *
+ * <p><b>Note:</b> Similar to the {@link echopoint.ProgressBar} super-class,
+ * this component requires fixed size width and height.  Percentage based
+ * values will lead to display issues with the progress bar.</p>
  *
  * <p><b>Note:</b> Development of this component was sponsored by <a
  * href='http://tcnbroadcasting.com/index.jsp' target='_top'>TCN
@@ -35,6 +41,31 @@ public class ProgressBar extends echopoint.ProgressBar
 {
   private static final long serialVersionUID = 1l;
 
+  /**
+   * The pattern to use to display the text message in the bar.  The following
+   * encoded fields may be embedded within the specified text to be replaced
+   * by the corresponding values:
+   *
+   * <ul>
+   *   <li><code>#bytes#</code> - This encoded value will be replaced by
+   *     the actual kilo bytes that have been transferred so far.</li>
+   *   <li><code>#length#</code> - This encoded value will be replaced
+   *     by actual size of the file being uploaded.</li>
+   *   <li><code>#percent#</code> - This encoded value will be replaced
+   *     by the upload completion ratio.</li>
+   *   <li><code>#rate#</code> - This encoded value will be replaced
+   *     by the rate at which kilo bytes are being uploaded per second.</li>
+   *   <li><code>#time#</code> - This encoded value will be replaced
+   *     by the estimated time (in seconds) for completion of the upload.</li>
+   * </ul>
+   *
+   * The following is a sample pattern expressed using the encoded fields:
+   * <code>Uploaded #bytes# of #length#Kb at #rate#...</code>
+   *
+   * This property may be styled.
+   */
+  public static final String PROPERTY_PATTERN = "pattern";
+
   /** Create a default styled progress bar. */
   public ProgressBar()
   {
@@ -42,5 +73,28 @@ public class ProgressBar extends echopoint.ProgressBar
     setForeground( new Color( 0xffffff ) );
     setBarBackground( new Color( 0x1a428a ) );
     setBorder( new Border( 1, Color.BLACK, Border.STYLE_INSET ) );
+    setInsets( new Insets( new Extent( 1 ) ) );
+  }
+
+  /**
+   * Return the value of the {@link #PROPERTY_PATTERN} property.
+   *
+   * @return The pattern used to display the text.
+   */
+  public String getPattern()
+  {
+    return (String) get( PROPERTY_PATTERN );
+  }
+
+  /**
+   * Set the value of the {@link #PROPERTY_PATTERN} property.  See the
+   * property notes for list of encoded values that may be specified in the
+   * pattern.
+   *
+   * @param pattern The pattern to use to display the text.
+   */
+  public void setPattern( final String pattern )
+  {
+    set( PROPERTY_PATTERN, pattern );
   }
 }

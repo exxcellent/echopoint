@@ -44,7 +44,7 @@ public class UploadCallbackAdapter implements UploadCallback
   private UploadEvent event;
 
   /** The current upload index being processed. */
-  private int uploadIndex;
+  private String uploadIndex;
 
   /**
    * Default constructor. Sets logging level to {@link
@@ -75,7 +75,7 @@ public class UploadCallbackAdapter implements UploadCallback
     this.uploadIndex = event.getIndex();
     this.event = event;
     logger.log( level, "Upload started for event: " + event.getIndex() +
-        " fileName: " + event.getFileName() + " size: " + event.getFileSize() +
+        " fileName: " + event.getFileName() +
         " contentType: " + event.getContentType() );
   }
 
@@ -88,8 +88,8 @@ public class UploadCallbackAdapter implements UploadCallback
   {
     this.event = event;
     logger.log( level, "Upload cancelled for event: " + event.getIndex() +
-        " fileName: " + event.getFileName() + " size: " + event.getFileSize() +
-        " contentType: " + event.getContentType() );
+        " fileName: " + event.getFileName() +
+        " contentType: " + event.getContentType(), event.getException() );
   }
 
   /**
@@ -99,7 +99,7 @@ public class UploadCallbackAdapter implements UploadCallback
    */
   public void uploadProgressed( final UploadProgressEvent event )
   {
-    if ( ( uploadIndex == event.getIndex() ) &&
+    if ( ( uploadIndex.equals( event.getIndex() ) ) &&
       ( this.event instanceof UploadFinishEvent ) )
     {
       // We are done
