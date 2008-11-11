@@ -41,10 +41,10 @@ public class UploadCallbackAdapter implements UploadCallback
   protected Level level;
 
   /** The last upload event that was received. */
-  private UploadEvent event;
+  protected UploadEvent event;
 
   /** The current upload index being processed. */
-  private String uploadIndex;
+  protected String uploadIndex;
 
   /**
    * Default constructor. Sets logging level to {@link

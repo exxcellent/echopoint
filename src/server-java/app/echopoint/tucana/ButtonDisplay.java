@@ -27,4 +27,30 @@ package echopoint.tucana;
  * @author Rakesh 2008-11-9
  * @version $Id$
  */
-public enum ButtonDisplay { right, left, auto, none }
+public enum ButtonDisplay
+{
+  /**
+   * Indicates that the submit button should be displayed
+   * to the right side of the file selection input.
+   */
+  right,
+
+  /**
+   * Indicates that the submit button should be displayed
+   * to the left side of the file selection input.
+   */
+  left,
+
+  /**
+   * Indicates that the submit button position relative to the file selection
+   * input should be treated using browser/platform defaults.  All browsers
+   * exception Safari will use {@link #right}.
+   */
+  auto,
+
+  /**
+   * Indicates that no submit button is to be displayed.  The file upload
+   * should start as soon as it is selected in the file selection dialogue.
+   */
+  none
+}

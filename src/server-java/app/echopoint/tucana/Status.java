@@ -18,26 +18,28 @@
 package echopoint.tucana;
 
 /**
- * Enumeration of values for setting {@link FileUploadSelector#PROPERTY_BUTTON_MODE}
+ * Enumeration of status values for the state of the upload progress.
  *
  * <p><b>Note:</b> Development of this component was sponsored by <a
  * href='http://tcnbroadcasting.com/index.jsp' target='_top'>TCN
  * Broadcasting</a>.  We are grateful for their support and sponsorship.</p>
  *
- * @author Rakesh 2008-11-9
+ * @author Rakesh 2008-11-09
  * @version $Id$
  */
-public enum ButtonMode
+public enum Status
 {
-  /**
-   * Indicates that a regular &lt;input type='submit'&gt; type control is
-   * to be displayed to submit the form.
-   */
-  submit,
+  /** Indicator that a file upload/download has finished successfully. */
+  completed,
 
+  /** Indicator that file upload/download was cancelled. */
+  cancelled,
   /**
-   * Indicates that a custom image is to be displayed instead of a text submit
-   * button.
+   * Indicator that a file upload/download failed due to reasons other than
+   * user cancellation.
    */
-  image
+  failed,
+
+  /** Indicator that a file upload/download is in progress. */
+  inprogress
 }

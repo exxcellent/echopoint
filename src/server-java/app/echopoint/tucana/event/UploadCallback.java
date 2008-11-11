@@ -38,35 +38,35 @@ public interface UploadCallback extends EventListener, Serializable
    *
    * @param event the event
    */
-  public void uploadStarted( final UploadStartEvent event );
+  void uploadStarted( final UploadStartEvent event );
 
   /**
    * Indicates a file upload has been canceled.
    *
    * @param event the event
    */
-  public void uploadCancelled( final UploadCancelEvent event );
+  void uploadCancelled( final UploadCancelEvent event );
 
   /**
    * Indicates a file upload has progressed.
    *
    * @param event the event
    */
-  public void uploadProgressed( final UploadProgressEvent event );
+  void uploadProgressed( final UploadProgressEvent event );
 
   /**
    * Call back method invoked once an upload event completes.
    *
    * @param event The event that has completed.
    */
-  public void uploadSucceeded( final UploadFinishEvent event );
+  void uploadSucceeded( final UploadFinishEvent event );
 
   /**
    * Call back method when an upload event fails.
    *
    * @param event The event that has failed.
    */
-  public void uploadFailed( final UploadFailEvent event );
+  void uploadFailed( final UploadFailEvent event );
 
   /**
    * A convenience method to return the last event received by the
@@ -75,5 +75,5 @@ public interface UploadCallback extends EventListener, Serializable
    *
    * @return The upload event that was last processed by the handler.
    */
-  public UploadEvent getEvent();
+  UploadEvent getEvent();
 }

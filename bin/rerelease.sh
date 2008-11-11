@@ -16,3 +16,10 @@ svn delete https://echopoint.dev.java.net/svn/echopoint/tags/$1 \
 svn copy https://echopoint.dev.java.net/svn/echopoint/trunk \
   https://echopoint.dev.java.net/svn/echopoint/tags/$1 \
   -m "Created re-release: $1 of library"
+
+svn delete https://echopoint.dev.java.net/svn/echopoint/tags/current \
+  -m "Removing old current directory to create release: $1 of library"
+
+svn copy https://echopoint.dev.java.net/svn/echopoint/trunk \
+  https://echopoint.dev.java.net/svn/echopoint/tags/current \
+  -m "Created release: $1 of library"

@@ -57,7 +57,7 @@ import java.util.EventListener;
  *    selector.setButtonDisplayMode( ButtonDisplay.right );
  *    selector.setInputSize( 20 );
  *    selector.setBackground( new Color( 0xa1a1a1 ) );
- *    selector.setBorder( new Border( 1 ) );
+ *    selector.setBorder( new Border( 1, Color.BLUE, Border.STYLE_GROOVE ) );
  *    selector.setProgressBar( new ProgressBar() );
  *    selector.setUploadCallback( new DefaultUploadCallback( new File( "/tmp" ) ) );
  *    selector.addActionListener( ... );
@@ -273,8 +273,16 @@ public class FileUploadSelector extends AbstractContainer
    */
   public static final String PROPERTY_POLLING_INTERVAL = "pollingInterval";
 
+  /**
+   * The name of the action that is fired by the client upon completion
+   * (regardless of complete or cancel) of the upload process.
+   */
   protected static final String COMPLETE_ACTION = "complete";
 
+  /**
+   * The callback handler that will be notified of the progress of the file
+   * upload process.
+   */
   private UploadCallback callback = null;
 
   /** The action command that was triggered by upload completion. */
@@ -554,10 +562,7 @@ public class FileUploadSelector extends AbstractContainer
    */
   protected void notifyCallback( final UploadEvent e )
   {
-    if ( callback == null )
-    {
-      return;
-    }
+    if ( callback == null ) return;
 
     if ( e instanceof UploadCancelEvent )
     {

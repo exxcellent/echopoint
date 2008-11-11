@@ -33,7 +33,7 @@ import java.util.LinkedList;
  */
 public class UploadProgress implements Serializable
 {
-  private static final long serialVersionUID = 3190335998109288444L;
+  private static final long serialVersionUID = 1l;
 
   /**
    * The minimum number of milestones required for calculation of the tranfer
@@ -55,9 +55,6 @@ public class UploadProgress implements Serializable
    * milestones.
    */
   private static final int MILESTONE_BYTE_INTERVAL = 10240 / 4;
-
-  /** Enumeration of status values for the state of the upload progress. */
-  protected enum Status { completed, cancelled, failed, inprogress }
 
   private final long contentLength;
 

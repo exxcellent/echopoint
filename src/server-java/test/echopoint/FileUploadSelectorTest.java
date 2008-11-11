@@ -3,15 +3,19 @@ package echopoint;
 import echopoint.tucana.ButtonMode;
 import echopoint.tucana.FileUploadSelector;
 import echopoint.tucana.ProgressBar;
+import echopoint.tucana.DownloadButton;
+import echopoint.tucana.FileDownloadProvider;
 import echopoint.tucana.event.DefaultUploadCallback;
 import echopoint.tucana.event.UploadCallback;
 import echopoint.tucana.event.UploadFinishEvent;
+import echopoint.tucana.event.DownloadCallbackAdapter;
 import nextapp.echo.app.Border;
 import nextapp.echo.app.Color;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.Extent;
 import nextapp.echo.app.Font;
 import nextapp.echo.app.Insets;
+import nextapp.echo.app.Row;
 import nextapp.echo.app.event.ActionEvent;
 import nextapp.echo.app.event.ActionListener;
 import org.junit.AfterClass;
@@ -131,7 +135,7 @@ public class FileUploadSelectorTest implements Serializable
   @Test
   public void actionListener()
   {
-    final FinishListener listener = new FinishListener( getComponent() );
+    final FinishListener listener = new FinishListener();
     getComponent().addActionListener( listener );
   }
 
@@ -151,12 +155,6 @@ public class FileUploadSelectorTest implements Serializable
   private static class FinishListener implements ActionListener
   {
     private static final long serialVersionUID = 1l;
-    private FileUploadSelector selector;
-
-    private FinishListener( final FileUploadSelector selector )
-    {
-      this.selector = selector;
-    }
 
     public void actionPerformed( final ActionEvent event )
     {
@@ -164,39 +162,61 @@ public class FileUploadSelectorTest implements Serializable
       final UploadCallback callback = upload.getUploadCallback();
       if ( callback != null )
       {
-        final StringBuilder builder = new StringBuilder( 128 );
         final boolean success = ( callback.getEvent() instanceof UploadFinishEvent );
 
         if ( success )
         {
-          builder.append( "Upload of file: <b>" );
-          builder.append( callback.getEvent().getFileName() );
-          builder.append( "</b> succeeded.  File size is: <i>");
-          builder.append( ( (UploadFinishEvent) callback.getEvent() ).getFileSize() / 1000 );
-          builder.append( "</i> kilobytes." );
+          upload.getParent().add( displayDownload( callback ) );
         }
         else
         {
-          builder.append( "Upload " );
-          if ( callback.getEvent() != null )
-          {
-            builder.append( " of file: <b>" );
-            builder.append( callback.getEvent().getFileName() );
-            builder.append( "</b>" );
-          }
-
-          builder.append( " failed/cancelled." );
+          displayError( upload, callback );
         }
 
-        selector.getParent().add( new DirectHtml( builder.toString() ) );
-
-        if ( selector.getProgressBar() != null )
+        if ( upload.getProgressBar() != null )
         {
-          if ( success ) selector.getProgressBar().setPercentage( 100 );
-          selector.getProgressBar().setText( ( success ) ?
+          if ( success ) upload.getProgressBar().setPercentage( 100 );
+          upload.getProgressBar().setText( ( success ) ?
               "Finished upload!" : "Cancelled upload!" );
         }
       }
+    }
+
+    private Component displayDownload( final UploadCallback callback )
+    {
+      final StringBuilder builder = new StringBuilder( 128 );
+      builder.append( "Upload of file: <b>" );
+      builder.append( callback.getEvent().getFileName() );
+      builder.append( "</b> succeeded.  File size is: <i>");
+      builder.append( ( (UploadFinishEvent)
+          callback.getEvent() ).getFileSize() / 1000 );
+      builder.append( "</i> kilobytes." );
+
+      final Row row = new Row();
+      final File file = new File ( "/tmp/" + callback.getEvent().getFileName() );
+      final DownloadButton button = new DownloadButton( file );
+      ( (DownloadCallbackAdapter) button.getDownloadCallback() ).setLevel( Level.INFO );
+      row.add( button );
+      row.add( new Strut() );
+      row.add( new DirectHtml( builder.toString() ) );
+
+      return row;
+    }
+
+    private void displayError( final FileUploadSelector upload,
+        final UploadCallback callback )
+    {
+      final StringBuilder builder = new StringBuilder( 128 );
+      builder.append( "Upload " );
+      if ( callback.getEvent() != null )
+      {
+        builder.append( " of file: <b>" );
+        builder.append( callback.getEvent().getFileName() );
+        builder.append( "</b>" );
+      }
+
+      builder.append( " failed/cancelled." );
+      upload.getParent().add( new DirectHtml( builder.toString() ) );
     }
   }
 }

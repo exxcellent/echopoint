@@ -84,7 +84,7 @@ public class JakartaCommonsFileUploadProvider extends AbstractFileUploadProvider
           fileName = FilenameUtils.getName( stream.getName() );
           contentType = stream.getContentType();
 
-          progress.setStatus( UploadProgress.Status.inprogress );
+          progress.setStatus( Status.inprogress );
           uploadSelect.notifyCallback( new UploadStartEvent( uploadSelect,
               uploadIndex, fileName, contentType ) );
           FileItem item = itemFactory.createItem( fileName,
@@ -93,33 +93,33 @@ public class JakartaCommonsFileUploadProvider extends AbstractFileUploadProvider
 
           uploadSelect.notifyCallback( new UploadFinishEvent( uploadSelect,
               uploadIndex, fileName, item.getContentType(), item ) );
-          progress.setStatus( UploadProgress.Status.completed );
+          progress.setStatus( Status.completed );
           return;
         }
       }
 
-      progress.setStatus( UploadProgress.Status.failed );
+      progress.setStatus( Status.failed );
       uploadSelect.notifyCallback( new UploadFailEvent( uploadSelect,
           uploadIndex, fileName, contentType,
           new RuntimeException( "No multi-part content!" ) ) );
     }
     catch ( FileUploadBase.SizeLimitExceededException e )
     {
-      progress.setStatus( UploadProgress.Status.failed );
+      progress.setStatus( Status.failed );
       uploadSelect.notifyCallback( new UploadFailEvent( uploadSelect,
           uploadIndex, fileName, contentType,
           new UploadSizeLimitExceededException( e ) ) );
     }
     catch ( FileUploadBase.FileSizeLimitExceededException e )
     {
-      progress.setStatus( UploadProgress.Status.failed );
+      progress.setStatus( Status.failed );
       uploadSelect.notifyCallback( new UploadFailEvent( uploadSelect,
           uploadIndex, fileName, contentType,
           new UploadSizeLimitExceededException( e ) ) );
     }
     catch ( MultipartStream.MalformedStreamException e )
     {
-      progress.setStatus( UploadProgress.Status.cancelled );
+      progress.setStatus( Status.cancelled );
       uploadSelect.notifyCallback( new UploadCancelEvent( uploadSelect,
           uploadIndex, fileName, contentType, e  ) );
     }
