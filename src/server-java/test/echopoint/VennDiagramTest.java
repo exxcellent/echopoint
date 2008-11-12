@@ -36,22 +36,20 @@ import org.junit.Test;
  * @author Rakesh Vidyadharan 2008-08-20
  * @version $Id$
  */
-public class VennDiagramTest
+public class VennDiagramTest extends GoogleChartTest<VennDiagram>
 {
-  static VennDiagram chart;
-
   @BeforeClass
   public static void init()
   {
-    chart = new VennDiagram();
+    set( new VennDiagram() );
   }
 
   @Test
   public void renderId()
   {
     final String id = "echopointUnitTestSimpleVennDiagram";
-    chart.setRenderId( id );
-    assertEquals( "Ensuring render id is same", id, chart.getRenderId() );
+    getComponent().setRenderId( id );
+    assertEquals( "Ensuring render id is same", id, getComponent().getRenderId() );
   }
 
   @Test
@@ -59,8 +57,8 @@ public class VennDiagramTest
   {
     final VennDiagramModel model =
         new VennDiagramModel( 100, 80, 60, 30, 30, 30, 10 );
-    chart.setData( model );
-    assertEquals( "Ensuring data size", chart.getData().size(), 1 );
+    getComponent().setData( model );
+    assertEquals( "Ensuring data size", getComponent().getData().size(), 1 );
   }
 
   @Test
@@ -68,23 +66,23 @@ public class VennDiagramTest
   {
     final Title title = new Title();
     title.add( "VennDiagram" );
-    chart.setTitle( title );
+    getComponent().setTitle( title );
 
-    assertEquals( "Ensuring title set", title, chart.getTitle() );
+    assertEquals( "Ensuring title set", title, getComponent().getTitle() );
   }
 
   @Test
   public void height()
   {
-    chart.setHeight( new Extent( 400 ) );
-    assertNotNull( "Ensuring height set", chart.getHeight() );
+    getComponent().setHeight( new Extent( 400 ) );
+    assertNotNull( "Ensuring height set", getComponent().getHeight() );
   }
 
   @Test
   public void width()
   {
-    chart.setWidth( new Extent( 600 ) );
-    assertNotNull( "Ensuring width set", chart.getWidth() );
+    getComponent().setWidth( new Extent( 600 ) );
+    assertNotNull( "Ensuring width set", getComponent().getWidth() );
   }
 
   @AfterClass
@@ -92,6 +90,6 @@ public class VennDiagramTest
   {
     final Component content = Application.getContent().getTestArea();
     content.removeAll();
-    content.add( chart );
+    content.add( get() );
   }
 }

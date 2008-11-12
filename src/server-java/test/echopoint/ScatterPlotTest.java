@@ -42,24 +42,21 @@ import java.util.List;
  * @author Rakesh Vidyadharan 2008-08-23
  * @version $Id$
  */
-public class ScatterPlotTest
+public class ScatterPlotTest extends GoogleChartTest<ScatterPlot<Integer>>
 {
-  static ScatterPlot<Integer> chart;
-  static ScatterPlotData<Integer> data;
-
   @BeforeClass
   public static void init()
   {
-    chart = new ScatterPlot<Integer>();
-    data = new ScatterPlotData<Integer>();
+    set( new ScatterPlot<Integer>() );
+    setData( new ScatterPlotData<Integer>() );
   }
 
   @Test
   public void renderId()
   {
     final String id = "echopointUnitTestSimpleScatterPlot";
-    chart.setRenderId( id );
-    assertEquals( "Ensuring render id is same", id, chart.getRenderId() );
+    getComponent().setRenderId( id );
+    assertEquals( "Ensuring render id is same", id, getComponent().getRenderId() );
   }
 
   @Test
@@ -72,18 +69,18 @@ public class ScatterPlotTest
     final Integer[] ydata = { 20, 30, 40, 50, 60, 70, 80 };
     final Integer[] size = { 1, 2, 3, 4, 5, 6, 7 };
 
-    data.setXdata( xdata );
-    data.setXmax( xmax );
-    data.setYdata( Arrays.asList( ydata ) );
-    data.setSize( Arrays.asList( size ) );
+    getData().setXdata( xdata );
+    getData().setXmax( xmax );
+    getData().setYdata( Arrays.asList( ydata ) );
+    ( (ScatterPlotData<Integer>) getData() ).setSize( Arrays.asList( size ) );
   }
 
   @Test
   public void color()
   {
     final String color = "00ff00";
-    data.setColor( color );
-    assertEquals( "Ensuring color set", color, data.getColor() );
+    getData().setColor( color );
+    assertEquals( "Ensuring color set", color, getData().getColor() );
   }
 
   @Test
@@ -91,9 +88,9 @@ public class ScatterPlotTest
   {
     final Title title = new Title();
     title.add( "Scatter Plot" );
-    chart.setTitle( title );
+    getComponent().setTitle( title );
 
-    assertEquals( "Ensuring title set", title, chart.getTitle() );
+    assertEquals( "Ensuring title set", title, getComponent().getTitle() );
   }
 
   @Test
@@ -109,8 +106,8 @@ public class ScatterPlotTest
     String[] two = new String[] { "Min", "Third", "Three Quarter", "Max" };
     labels.add( Arrays.asList( two ) );
 
-    chart.setAxisLabels( labels );
-    assertNotNull( "Ensuring labels set", chart.getAxisLabels() );
+    getComponent().setAxisLabels( labels );
+    assertNotNull( "Ensuring labels set", getComponent().getAxisLabels() );
   }
 
   @Test
@@ -124,8 +121,8 @@ public class ScatterPlotTest
     final Integer[] two = new Integer[] { 0, 3, 7, 10 };
     positions.add( Arrays.asList( two ) );
 
-    chart.setLabelPositions( positions );
-    assertNotNull( "Ensuring positions set", chart.getAxisLabels() );
+    getComponent().setLabelPositions( positions );
+    assertNotNull( "Ensuring positions set", getComponent().getAxisLabels() );
   }
 
   @Test
@@ -135,18 +132,20 @@ public class ScatterPlotTest
     ranges.add( new Range( 20, 125 ) );
     ranges.add( new Range( 25, 150 ) );
 
-    chart.setAxisRanges( ranges );
-    assertNotNull( "Ensuring axis ranges set", chart.getAxisRanges() );
+    getComponent().setAxisRanges( ranges );
+    assertNotNull( "Ensuring axis ranges set", getComponent().getAxisRanges() );
   }
 
   @AfterClass
+  @SuppressWarnings( {"unchecked"} )
   public static void finish()
   {
     final Component content = Application.getContent().getTestArea();
     content.removeAll();
 
+    final ScatterPlot<Integer> chart = (ScatterPlot<Integer>) get();
     final ArrayList<ChartData<Integer>> collection = new ArrayList<ChartData<Integer>>();
-    collection.add( data );
+    collection.add( getData() );
     chart.setData( collection );
     assertNotNull( "Ensuring that data is set", chart.getData() );
 

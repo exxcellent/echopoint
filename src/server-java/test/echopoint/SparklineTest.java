@@ -43,24 +43,21 @@ import java.util.List;
  * @author Rakesh Vidyadharan 2008-08-20
  * @version $Id$
  */
-public class SparklineTest
+public class SparklineTest extends GoogleChartTest<Sparkline<Integer>>
 {
-  static Sparkline<Integer> chart;
-  static ChartData<Integer> data;
-
   @BeforeClass
   public static void init()
   {
-    chart = new Sparkline<Integer>();
-    data = new ChartData<Integer>();
+    set( new Sparkline<Integer>() );
+    setData( new ChartData<Integer>() );
   }
 
   @Test
   public void renderId()
   {
     final String id = "echopointUnitTestSimpleSparkline";
-    chart.setRenderId( id );
-    assertEquals( "Ensuring render id is same", id, chart.getRenderId() );
+    getComponent().setRenderId( id );
+    assertEquals( "Ensuring render id is same", id, getComponent().getRenderId() );
   }
 
   @Test
@@ -70,8 +67,8 @@ public class SparklineTest
     final List<Integer> xdata = Arrays.asList( array );
     final int xmax = 120;
 
-    data.setXdata( xdata );
-    data.setXmax( xmax );
+    getData().setXdata( xdata );
+    getData().setXmax( xmax );
   }
 
   @Test
@@ -79,17 +76,17 @@ public class SparklineTest
   {
     final ArrayList<ShapeMarker> markers = new ArrayList<ShapeMarker>();
     markers.add( new ShapeMarker( "o", "ff3333", 5 ) );
-    data.setMarkers( markers );
+    getData().setMarkers( markers );
 
-    assertFalse( "Ensuring markers set", data.getMarkers().isEmpty() );
+    assertFalse( "Ensuring markers set", getData().getMarkers().isEmpty() );
   }
 
   @Test
   public void color()
   {
     final String color = "00ff00";
-    data.setColor( color );
-    assertEquals( "Ensuring color set", color, data.getColor() );
+    getData().setColor( color );
+    assertEquals( "Ensuring color set", color, getData().getColor() );
   }
 
   @Test
@@ -97,9 +94,9 @@ public class SparklineTest
   {
     final Title title = new Title();
     title.add( "Sparkline" );
-    chart.setTitle( title );
+    getComponent().setTitle( title );
 
-    assertEquals( "Ensuring title set", title, chart.getTitle() );
+    assertEquals( "Ensuring title set", title, getComponent().getTitle() );
   }
 
   @Test
@@ -108,18 +105,20 @@ public class SparklineTest
     final Collection<LineStyle> styles = new ArrayList<LineStyle>();
     styles.add( new LineStyle( 3, 6, 3 ) );
 
-    chart.setLineStyles( styles );
-    assertNotNull( "Ensuring line styles set", chart.getLineStyles() );
+    getComponent().setLineStyles( styles );
+    assertNotNull( "Ensuring line styles set", getComponent().getLineStyles() );
   }
 
   @AfterClass
+  @SuppressWarnings( {"unchecked"} )
   public static void finish()
   {
     final Component content = Application.getContent().getTestArea();
     content.removeAll();
 
+    final Sparkline<Integer> chart = (Sparkline<Integer>) get();
     final ArrayList<ChartData<Integer>> collection = new ArrayList<ChartData<Integer>>();
-    collection.add( data );
+    collection.add( getData() );
     chart.setData( collection );
     assertNotNull( "Ensuring that data is set", chart.getData() );
 

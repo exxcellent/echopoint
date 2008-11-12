@@ -18,13 +18,15 @@
 
 package echopoint;
 
-import static org.junit.Assert.*;
+import nextapp.echo.app.Border;
+import nextapp.echo.app.Color;
+import nextapp.echo.app.Extent;
+import nextapp.echo.app.Label;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import nextapp.echo.app.Label;
-import nextapp.echo.app.Color;
-import nextapp.echo.app.Border;
-import nextapp.echo.app.Extent;
 
 /**
  * Test case for the {@link HtmlLabel} component.  Exercises getting and
@@ -33,11 +35,8 @@ import nextapp.echo.app.Extent;
  * @author Rakesh 2008-06-25
  * @version $Id$
  */
-public class HtmlLabelTest
+public class HtmlLabelTest extends AbstractTest<HtmlLabel>
 {
-  /** The component that will be tested. */
-  private static HtmlLabel component;
-
   /** The simple text to display in the test component. */
   private static final String SIMPLE_TEXT =
       "<br/><br/><b>HtmlLabel</b> simple test content.<br/><br/>";
@@ -49,23 +48,24 @@ public class HtmlLabelTest
         new Color( 0xcfdfff ), Border.STYLE_GROOVE );
 
     final MainContent content = Application.getContent();
-    component = new HtmlLabel();
-    component.setRenderId( "echoPointUnitTestHtmlLabel" );
-    component.setBorder( border );
+    final HtmlLabel comp = new HtmlLabel();
+    comp.setRenderId( "echoPointUnitTestHtmlLabel" );
+    comp.setBorder( border );
     content.getTestArea().removeAll();
-    content.getTestArea().add( component );
+    content.getTestArea().add( comp );
 
     assertEquals( "Ensuring test component added to container",
         content.getTestArea().getComponentCount(), 1 );
+    set( comp );
   }
 
   @Test
   public void simple()
   {
-    component.setText( SIMPLE_TEXT );
+    getComponent().setText( SIMPLE_TEXT );
 
     assertEquals( "Ensuring getText returns simple",
-        component.getText(), SIMPLE_TEXT );
+        getComponent().getText(), SIMPLE_TEXT );
   }
 
   @Test
@@ -73,7 +73,7 @@ public class HtmlLabelTest
   {
     try
     {
-      component.add( new Label( "Test label" ) );
+      getComponent().add( new Label( "Test label" ) );
       fail( "Label added to DirectHtml" );
     }
     catch ( Throwable t ) {}
@@ -82,14 +82,14 @@ public class HtmlLabelTest
   @Test
   public void append()
   {
-    component.setText( null );
-    assertNull( "Ensuring getText returns null", component.getText() );
+    getComponent().setText( null );
+    assertNull( "Ensuring getText returns null", getComponent().getText() );
 
     final String modification = "modified";
-    component.append( SIMPLE_TEXT );
-    component.append( modification );
+    getComponent().append( SIMPLE_TEXT );
+    getComponent().append( modification );
 
     assertEquals( "Ensuring getText returns simple + modification",
-        component.getText(), SIMPLE_TEXT + modification );
+        getComponent().getText(), SIMPLE_TEXT + modification );
   }
 }

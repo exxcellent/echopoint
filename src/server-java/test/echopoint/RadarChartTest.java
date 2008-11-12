@@ -46,31 +46,28 @@ import java.util.List;
  * @author Rakesh Vidyadharan 2008-08-24
  * @version $Id$
  */
-public class RadarChartTest
+public class RadarChartTest extends GoogleChartTest<RadarChart<Integer>>
 {
-  static RadarChart<Integer> chart;
-  static ChartData<Integer> data;
-
   @BeforeClass
   public static void init()
   {
-    chart = new RadarChart<Integer>();
-    data = new ChartData<Integer>();
+    set( new RadarChart<Integer>() );
+    setData( new ChartData<Integer>() );
   }
 
   @Test
   public void renderId()
   {
     final String id = "echopointUnitTestSimpleRadarChart";
-    chart.setRenderId( id );
-    assertEquals( "Ensuring render id is same", id, chart.getRenderId() );
+    getComponent().setRenderId( id );
+    assertEquals( "Ensuring render id is same", id, getComponent().getRenderId() );
   }
 
   @Test
   public void lineStyle()
   {
-    chart.setLineStyle( RadarChart.LineStyle.rs );
-    assertEquals( "Ensuring line style set", chart.getLineStyle(),
+    getComponent().setLineStyle( RadarChart.LineStyle.rs );
+    assertEquals( "Ensuring line style set", getComponent().getLineStyle(),
         RadarChart.LineStyle.rs.toString() );
   }
 
@@ -81,8 +78,8 @@ public class RadarChartTest
     final List<Integer> xdata = Arrays.asList( array );
     final int xmax = 120;
 
-    data.setXdata( xdata );
-    data.setXmax( xmax );
+    getData().setXdata( xdata );
+    getData().setXmax( xmax );
   }
 
   @Test
@@ -90,17 +87,17 @@ public class RadarChartTest
   {
     final ArrayList<ShapeMarker> markers = new ArrayList<ShapeMarker>();
     markers.add( new ShapeMarker( "o", "ff3333", 5 ) );
-    data.setMarkers( markers );
+    getData().setMarkers( markers );
 
-    assertFalse( "Ensuring markers set", data.getMarkers().isEmpty() );
+    assertFalse( "Ensuring markers set", getData().getMarkers().isEmpty() );
   }
 
   @Test
   public void color()
   {
     final String color = "00ff00";
-    data.setColor( color );
-    assertEquals( "Ensuring color set", color, data.getColor() );
+    getData().setColor( color );
+    assertEquals( "Ensuring color set", color, getData().getColor() );
   }
 
   @Test
@@ -108,16 +105,16 @@ public class RadarChartTest
   {
     final Title title = new Title();
     title.add( "Radar Chart" );
-    chart.setTitle( title );
+    getComponent().setTitle( title );
 
-    assertEquals( "Ensuring title set", title, chart.getTitle() );
+    assertEquals( "Ensuring title set", title, getComponent().getTitle() );
   }
 
   @Test
   public void axisType()
   {
-    chart.setAxisType( "x" );
-    assertNotNull( "Ensuring axis type set", chart.getAxisType() );
+    getComponent().setAxisType( "x" );
+    assertNotNull( "Ensuring axis type set", getComponent().getAxisType() );
   }
 
   @Test
@@ -133,8 +130,8 @@ public class RadarChartTest
     String[] two = new String[] { "Min", "Third", "Three Quarter", "Max" };
     labels.add( Arrays.asList( two ) );
 
-    chart.setAxisLabels( labels );
-    assertNotNull( "Ensuring labels set", chart.getAxisLabels() );
+    getComponent().setAxisLabels( labels );
+    assertNotNull( "Ensuring labels set", getComponent().getAxisLabels() );
   }
 
   @Test
@@ -148,8 +145,8 @@ public class RadarChartTest
     final Integer[] two = new Integer[] { 0, 33, 75, 100 };
     positions.add( Arrays.asList( two ) );
 
-    chart.setLabelPositions( positions );
-    assertNotNull( "Ensuring positions set", chart.getAxisLabels() );
+    getComponent().setLabelPositions( positions );
+    assertNotNull( "Ensuring positions set", getComponent().getAxisLabels() );
   }
 
   @Test
@@ -159,8 +156,8 @@ public class RadarChartTest
     ranges.add( new Range( 20, 125 ) );
     ranges.add( new Range( 25, 150 ) );
 
-    chart.setAxisRanges( ranges );
-    assertNotNull( "Ensuring axis ranges set", chart.getAxisRanges() );
+    getComponent().setAxisRanges( ranges );
+    assertNotNull( "Ensuring axis ranges set", getComponent().getAxisRanges() );
   }
 
   @Test
@@ -170,8 +167,8 @@ public class RadarChartTest
     markers.add( new RangeMarker( "r", "ff0000", 0.1, 0.11 ) );
     markers.add( new RangeMarker( "R", "0000ff", 0.1, 0.11 ) );
 
-    chart.setRangeMarkers( markers );
-    assertNotNull( "Ensuring range markers set", chart.getRangeMarkers() );
+    getComponent().setRangeMarkers( markers );
+    assertNotNull( "Ensuring range markers set", getComponent().getRangeMarkers() );
   }
 
   @Test
@@ -180,8 +177,8 @@ public class RadarChartTest
     final Collection<LineStyle> styles = new ArrayList<LineStyle>();
     styles.add( new LineStyle( 3, 6, 3 ) );
 
-    chart.setLineStyles( styles );
-    assertNotNull( "Ensuring line styles set", chart.getLineStyles() );
+    getComponent().setLineStyles( styles );
+    assertNotNull( "Ensuring line styles set", getComponent().getLineStyles() );
   }
 
   @Test
@@ -190,18 +187,20 @@ public class RadarChartTest
     final Collection<FillArea> areas = new ArrayList<FillArea>();
     areas.add( new FillArea( "B", "224499", 0, 0 ) );
 
-    chart.setFillArea( areas );
-    assertNotNull( "Ensuring fill area set", chart.getFillArea() );
+    getComponent().setFillArea( areas );
+    assertNotNull( "Ensuring fill area set", getComponent().getFillArea() );
   }
 
   @AfterClass
+  @SuppressWarnings( {"unchecked"} )
   public static void finish()
   {
     final Component content = Application.getContent().getTestArea();
     content.removeAll();
 
+    final RadarChart<Integer> chart = (RadarChart<Integer>) get();
     final ArrayList<ChartData<Integer>> collection = new ArrayList<ChartData<Integer>>();
-    collection.add( data );
+    collection.add( getData() );
     chart.setData( collection );
     assertNotNull( "Ensuring that data is set", chart.getData() );
 

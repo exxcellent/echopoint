@@ -40,48 +40,45 @@ import java.util.Arrays;
  * @author Rakesh Vidyadharan 2008-08-27
  * @version $Id$
  */
-public class MeterTest
+public class MeterTest extends GoogleChartTest<Meter>
 {
-  static Meter chart;
-  static ChartData<Integer> data;
-
   @BeforeClass
   public static void init()
   {
-    chart = new Meter();
-    data = new ChartData<Integer>();
+    set( new Meter() );
+    setData( new ChartData<Integer>() );
   }
 
   @Test
   public void renderId()
   {
     final String id = "echopointUnitTestSimpleMeter";
-    chart.setRenderId( id );
-    assertEquals( "Ensuring render id is same", id, chart.getRenderId() );
+    getComponent().setRenderId( id );
+    assertEquals( "Ensuring render id is same", id, getComponent().getRenderId() );
   }
 
   @Test
   public void data()
   {
     final Integer[] array = new Integer[] { 70 };
-    data.setXdata( Arrays.asList( array ) );
-    data.setXmax( 100 );
+    getData().setXdata( Arrays.asList( array ) );
+    getData().setXmax( 100 );
   }
 
   @Test
   public void color()
   {
     final String color = "00ff00";
-    data.setColor( color );
-    assertEquals( "Ensuring color set", color, data.getColor() );
+    getData().setColor( color );
+    assertEquals( "Ensuring color set", color, getData().getColor() );
   }
 
   @Test
   public void fill()
   {
     final String fill = "bg,s,efefef|c,lg,45,ffffff,0,76a4fb,0.75";
-    chart.setFill( fill );
-    assertEquals( "Ensuring fill set", fill, chart.getFill() );
+    getComponent().setFill( fill );
+    assertEquals( "Ensuring fill set", fill, getComponent().getFill() );
   }
 
   @Test
@@ -89,38 +86,38 @@ public class MeterTest
   {
     final Title title = new Title();
     title.add( "Google-o-meter" );
-    chart.setTitle( title );
+    getComponent().setTitle( title );
 
-    assertEquals( "Ensuring title set", title, chart.getTitle() );
+    assertEquals( "Ensuring title set", title, getComponent().getTitle() );
   }
 
   @Test
   public void height()
   {
-    chart.setHeight( new Extent( 300 ) );
-    assertNotNull( "Ensuring height set", chart.getHeight() );
+    getComponent().setHeight( new Extent( 300 ) );
+    assertNotNull( "Ensuring height set", getComponent().getHeight() );
   }
 
   @Test
   public void width()
   {
-    chart.setWidth( new Extent( 400 ) );
-    assertNotNull( "Ensuring width set", chart.getWidth() );
+    getComponent().setWidth( new Extent( 400 ) );
+    assertNotNull( "Ensuring width set", getComponent().getWidth() );
   }
 
   @Test
   public void insets()
   {
-    chart.setInsets( new Insets( 10 ) );
-    assertNotNull( "Ensuring insets set", chart.getInsets() );
+    getComponent().setInsets( new Insets( 10 ) );
+    assertNotNull( "Ensuring insets set", getComponent().getInsets() );
   }
 
   @Test
   public void label()
   {
     final String label = "70 %";
-    chart.setLabel( label );
-    assertEquals( "Ensuring label set", label, chart.getLabel() );
+    getComponent().setLabel( label );
+    assertEquals( "Ensuring label set", label, getComponent().getLabel() );
   }
 
   @AfterClass
@@ -129,11 +126,12 @@ public class MeterTest
     final Component content = Application.getContent().getTestArea();
     content.removeAll();
 
+    final Meter meter = (Meter) get();
     final ArrayList<ChartData<Integer>> collection = new ArrayList<ChartData<Integer>>();
-    collection.add( data );
-    chart.setData( collection );
-    assertNotNull( "Ensuring that data is set", chart.getData() );
+    collection.add( getData() );
+    meter.setData( collection );
+    assertNotNull( "Ensuring that data is set", meter.getData() );
 
-    content.add( chart );
+    content.add( meter );
   }
 }

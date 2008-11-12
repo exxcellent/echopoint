@@ -39,23 +39,20 @@ import java.util.Arrays;
  * @author Rakesh Vidyadharan 2008-08-20
  * @version $Id$
  */
-public class PieChartTest
+public class PieChartTest extends GoogleChartTest<PieChart<Integer>>
 {
-  static PieChart<Integer> chart;
-  static ChartData<Integer> data;
-
   @BeforeClass
   public static void init()
   {
-    chart = new PieChart<Integer>();
-    data = new ChartData<Integer>();
+    set( new PieChart<Integer>() );
+    setData( new ChartData<Integer>() );
   }
 
   @Test
   public void dimensions()
   {
-    chart.setDimensions( PieChart.Dimensions.p3 );
-    assertEquals( "Ensuring chart type set", chart.getDimensions(),
+    getComponent().setDimensions( PieChart.Dimensions.p3 );
+    assertEquals( "Ensuring chart type set", getComponent().getDimensions(),
         PieChart.Dimensions.p3 );
   }
 
@@ -63,8 +60,8 @@ public class PieChartTest
   public void renderId()
   {
     final String id = "echopointUnitTestSimplePieChart";
-    chart.setRenderId( id );
-    assertEquals( "Ensuring render id is same", id, chart.getRenderId() );
+    getComponent().setRenderId( id );
+    assertEquals( "Ensuring render id is same", id, getComponent().getRenderId() );
   }
 
   @Test
@@ -72,15 +69,15 @@ public class PieChartTest
   {
     final Integer[] array = new Integer[]
         { 31, 28, 31, 30, 31, 31, 31, 31, 30, 31, 30, 31 };
-    data.setXdata( Arrays.asList( array ) );
+    getData().setXdata( Arrays.asList( array ) );
   }
 
   @Test
   public void color()
   {
     final String color = "00ff00";
-    data.setColor( color );
-    assertEquals( "Ensuring color set", color, data.getColor() );
+    getData().setColor( color );
+    assertEquals( "Ensuring color set", color, getData().getColor() );
   }
 
   @Test
@@ -88,8 +85,8 @@ public class PieChartTest
   {
     final Title title = new Title();
     title.add( "PieChart" );
-    chart.setTitle( title );
-    assertEquals( "Ensuring title set", title, chart.getTitle() );
+    getComponent().setTitle( title );
+    assertEquals( "Ensuring title set", title, getComponent().getTitle() );
   }
 
   @Test
@@ -97,32 +94,34 @@ public class PieChartTest
   {
     final String[] labels = { "Jan", "Feb", "Mar", "Apr", "May", "Jun",
       "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
-    chart.setLabels( Arrays.asList( labels ) );
-    assertNotNull( "Ensuring labels set", chart.getLabels() );
+    getComponent().setLabels( Arrays.asList( labels ) );
+    assertNotNull( "Ensuring labels set", getComponent().getLabels() );
   }
 
   @Test
   public void height()
   {
-    chart.setHeight( new Extent( 400 ) );
-    assertNotNull( "Ensuring height set", chart.getHeight() );
+    getComponent().setHeight( new Extent( 400 ) );
+    assertNotNull( "Ensuring height set", getComponent().getHeight() );
   }
 
   @Test
   public void width()
   {
-    chart.setWidth( new Extent( 650 ) );
-    assertNotNull( "Ensuring width set", chart.getWidth() );
+    getComponent().setWidth( new Extent( 650 ) );
+    assertNotNull( "Ensuring width set", getComponent().getWidth() );
   }
 
   @AfterClass
+  @SuppressWarnings( {"unchecked"} )
   public static void finish()
   {
     final Component content = Application.getContent().getTestArea();
     content.removeAll();
 
+    final PieChart<Integer> chart = (PieChart<Integer>) get();
     final ArrayList<ChartData<Integer>> collection = new ArrayList<ChartData<Integer>>();
-    collection.add( data );
+    collection.add( getData() );
     chart.setData( collection );
     assertNotNull( "Ensuring that data is set", chart.getData() );
 

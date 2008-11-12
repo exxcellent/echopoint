@@ -18,21 +18,22 @@
 
 package echopoint;
 
-import static org.junit.Assert.*;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
 import nextapp.echo.app.Border;
 import nextapp.echo.app.Button;
 import nextapp.echo.app.Color;
 import nextapp.echo.app.Component;
-import nextapp.echo.app.Label;
 import nextapp.echo.app.Extent;
+import nextapp.echo.app.Label;
 import nextapp.echo.app.Row;
 import nextapp.echo.app.event.ActionEvent;
 import nextapp.echo.app.event.ActionListener;
 import nextapp.echo.extras.app.RichTextArea;
+import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 /**
  * Test case for the {@link DirectHtml} component.  Exercises getting and
@@ -41,11 +42,8 @@ import nextapp.echo.extras.app.RichTextArea;
  * @author Rakesh 2008-06-25
  * @version $Id$
  */
-public class DirectHtmlTest
+public class DirectHtmlTest extends AbstractTest<DirectHtml>
 {
-  /** The component that will be tested. */
-  private static DirectHtml component;
-
   /** The simple text to display in the test component. */
   private static final String SIMPLE_TEXT =
       "<br/><br/><b>DirectHtml</b> simple test content.<br/><br/>";
@@ -73,31 +71,32 @@ public class DirectHtmlTest
   public static void init()
   {
     final Component content = Application.getContent().getTestArea();
-    component = new DirectHtml();
-    component.setRenderId( "echopointUnitTestDirectHtml" );
+    final DirectHtml comp = new DirectHtml();
+    comp.setRenderId( "echopointUnitTestDirectHtml" );
     content.removeAll();
-    content.add( component );
+    content.add( comp );
 
     assertEquals( "Ensuring test component added to container",
         content.getComponentCount(), 1 );
+    set( comp );
   }
 
   @Test
   public void simple()
   {
-    component.setText( SIMPLE_TEXT );
+    getComponent().setText( SIMPLE_TEXT );
 
     assertEquals( "Ensuring getText returns simple",
-        component.getText(), SIMPLE_TEXT );
+        getComponent().getText(), SIMPLE_TEXT );
   }
 
   @Test
   public void complex()
   {
-    component.setText( COMPLEX_TEXT );
+    getComponent().setText( COMPLEX_TEXT );
 
     assertEquals( "Ensuring getText returns complex",
-        component.getText(), COMPLEX_TEXT );
+        getComponent().getText(), COMPLEX_TEXT );
   }
 
   @Test
@@ -105,7 +104,7 @@ public class DirectHtmlTest
   {
     try
     {
-      component.add( new Label( "Test label" ) );
+      getComponent().add( new Label( "Test label" ) );
       fail( "Label added to DirectHtml" );
     }
     catch ( Throwable t ) {}
@@ -114,22 +113,22 @@ public class DirectHtmlTest
   @Test
   public void append()
   {
-    component.setText( null );
-    assertNull( "Ensuring getText returns null", component.getText() );
+    getComponent().setText( null );
+    assertNull( "Ensuring getText returns null", getComponent().getText() );
 
-    component.append( SIMPLE_TEXT );
-    component.append( COMPLEX_TEXT );
+    getComponent().append( SIMPLE_TEXT );
+    getComponent().append( COMPLEX_TEXT );
     assertEquals( "Ensuring append returns simple + complex",
-        component.getText(), SIMPLE_TEXT + COMPLEX_TEXT );
+        getComponent().getText(), SIMPLE_TEXT + COMPLEX_TEXT );
   }
 
   @Test
   public void target()
   {
     final String target = "_new";
-    component.setTarget( target );
+    getComponent().setTarget( target );
     assertEquals( "Ensuring target returned is same",
-        component.getTarget(), target );
+        getComponent().getTarget(), target );
   }
 
   /**
@@ -144,7 +143,6 @@ public class DirectHtmlTest
     final Component content = Application.getContent().getTestArea();
     content.removeAll();
 
-    /*
     final RichTextArea rta = new RichTextArea();
     rta.setRenderId( "echopointUnitTestDirectHtmlRTA" );
     rta.setText( COMPLEX_TEXT );
@@ -153,7 +151,6 @@ public class DirectHtmlTest
     final Row row = new Row();
     row.add( createButton( rta ) );
     content.add( row );
-    */
 
     final Border border = new Border( new Extent( 2 ),
         new Color( 0xcfdfff ), Border.STYLE_GROOVE );
@@ -193,7 +190,7 @@ public class DirectHtmlTest
     final Border pressed = new Border( 1, color, Border.STYLE_INSET );
     button.setPressedBorder( pressed );
 
-    button.addActionListener( new Listener( rta, component ) );
+    button.addActionListener( new Listener( rta, (DirectHtml) get() ) );
     return button;
   }
 

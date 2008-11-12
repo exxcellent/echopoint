@@ -46,23 +46,20 @@ import java.util.List;
  * @author Rakesh Vidyadharan 2008-08-19
  * @version $Id$
  */
-public class BarChartTest
+public class BarChartTest extends GoogleChartTest<BarChart<Integer>>
 {
-  static BarChart<Integer> chart;
-  static ChartData<Integer> data;
-
   @BeforeClass
   public static void init()
   {
-    chart = new BarChart<Integer>();
-    data = new ChartData<Integer>();
+    set( new BarChart<Integer>() );
+    setData( new ChartData<Integer>() );
   }
 
   @Test
   public void orientation()
   {
-    chart.setOrientation( BarChart.Orientation.bhg );
-    assertEquals( "Ensuring orientation", chart.getOrientation(),
+    getComponent().setOrientation( BarChart.Orientation.bhg );
+    assertEquals( "Ensuring orientation", getComponent().getOrientation(),
         BarChart.Orientation.bhg );
   }
 
@@ -70,8 +67,8 @@ public class BarChartTest
   public void renderId()
   {
     final String id = "echopointUnitTestSimpleBarChart";
-    chart.setRenderId( id );
-    assertEquals( "Ensuring render id is same", id, chart.getRenderId() );
+    getComponent().setRenderId( id );
+    assertEquals( "Ensuring render id is same", id, getComponent().getRenderId() );
   }
 
   @Test
@@ -81,8 +78,8 @@ public class BarChartTest
     final List<Integer> xdata = Arrays.asList( array );
     final int xmax = 120;
 
-    data.setXdata( xdata );
-    data.setXmax( xmax );
+    getData().setXdata( xdata );
+    getData().setXmax( xmax );
   }
 
   @Test
@@ -90,17 +87,17 @@ public class BarChartTest
   {
     final ArrayList<ShapeMarker> markers = new ArrayList<ShapeMarker>();
     markers.add( new ShapeMarker( "o", "ff3333", 5 ) );
-    data.setMarkers( markers );
+    getData().setMarkers( markers );
 
-    assertFalse( "Ensuring markers set", data.getMarkers().isEmpty() );
+    assertFalse( "Ensuring markers set", getData().getMarkers().isEmpty() );
   }
 
   @Test
   public void color()
   {
     final String color = "00ff00";
-    data.setColor( color );
-    assertEquals( "Ensuring color set", color, data.getColor() );
+    getData().setColor( color );
+    assertEquals( "Ensuring color set", color, getData().getColor() );
   }
 
   @Test
@@ -108,8 +105,8 @@ public class BarChartTest
   {
     final Title title = new Title();
     title.add( "Bar Chart" );
-    chart.setTitle( title );
-    assertEquals( "Ensuring title set", title, chart.getTitle() );
+    getComponent().setTitle( title );
+    assertEquals( "Ensuring title set", title, getComponent().getTitle() );
   }
 
   @Test
@@ -125,8 +122,8 @@ public class BarChartTest
     String[] two = new String[] { "Min", "Third", "Three Quarter", "Max" };
     labels.add( Arrays.asList( two ) );
 
-    chart.setAxisLabels( labels );
-    assertNotNull( "Ensuring labels set", chart.getAxisLabels() );
+    getComponent().setAxisLabels( labels );
+    assertNotNull( "Ensuring labels set", getComponent().getAxisLabels() );
   }
 
   @Test
@@ -140,8 +137,8 @@ public class BarChartTest
     final Integer[] two = new Integer[] { 0, 3, 7, 10 };
     positions.add( Arrays.asList( two ) );
 
-    chart.setLabelPositions( positions );
-    assertNotNull( "Ensuring positions set", chart.getAxisLabels() );
+    getComponent().setLabelPositions( positions );
+    assertNotNull( "Ensuring positions set", getComponent().getAxisLabels() );
   }
 
   @Test
@@ -151,8 +148,8 @@ public class BarChartTest
     ranges.add( new Range( 20, 125 ) );
     ranges.add( new Range( 25, 150 ) );
 
-    chart.setAxisRanges( ranges );
-    assertNotNull( "Ensuring axis ranges set", chart.getAxisRanges() );
+    getComponent().setAxisRanges( ranges );
+    assertNotNull( "Ensuring axis ranges set", getComponent().getAxisRanges() );
   }
 
   @Test
@@ -162,8 +159,8 @@ public class BarChartTest
     markers.add( new RangeMarker( "r", "ff0000", 0.1, 0.11 ) );
     markers.add( new RangeMarker( "R", "0000ff", 0.1, 0.11 ) );
 
-    chart.setRangeMarkers( markers );
-    assertNotNull( "Ensuring range markers set", chart.getRangeMarkers() );
+    getComponent().setRangeMarkers( markers );
+    assertNotNull( "Ensuring range markers set", getComponent().getRangeMarkers() );
   }
 
   @Test
@@ -172,33 +169,35 @@ public class BarChartTest
     final Collection<LineStyle> styles = new ArrayList<LineStyle>();
     styles.add( new LineStyle( 3, 6, 3 ) );
 
-    chart.setLineStyles( styles );
-    assertNotNull( "Ensuring line styles set", chart.getLineStyles() );
+    getComponent().setLineStyles( styles );
+    assertNotNull( "Ensuring line styles set", getComponent().getLineStyles() );
   }
 
   @Test
   public void size()
   {
     final BarChartSize size = new BarChartSize( 20, 5, 15 );
-    chart.setSize( size );
-    assertNotNull( "Ensuring size set", chart.getSize() );
+    getComponent().setSize( size );
+    assertNotNull( "Ensuring size set", getComponent().getSize() );
   }
 
   @Test
   public void zeroLine()
   {
-    chart.setZeroLine( 0.5 );
-    assertNotNull( "Ensuring zero-line set", chart.getZeroLine() );
+    getComponent().setZeroLine( 0.5 );
+    assertNotNull( "Ensuring zero-line set", getComponent().getZeroLine() );
   }
 
   @AfterClass
+  @SuppressWarnings( {"unchecked"} )
   public static void finish()
   {
+    final BarChart<Integer> chart = (BarChart<Integer>) get();
     final Component content = Application.getContent().getTestArea();
     content.removeAll();
 
     final ArrayList<ChartData<Integer>> collection = new ArrayList<ChartData<Integer>>();
-    collection.add( data );
+    collection.add( getData() );
     chart.setData( collection );
     assertNotNull( "Ensuring that data is set", chart.getData() );
 

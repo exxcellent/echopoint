@@ -44,49 +44,49 @@ import java.util.Random;
  * @author Rakesh 2008-07-20
  * @version $Id$
  */
-public class TagCloudTest
+public class TagCloudTest extends AbstractTest<TagCloud>
 {
-  static TagCloud tagCloud;
   static Color background;
   static Color foreground;
 
   @BeforeClass
   public static void init()
   {
-    tagCloud = new TagCloud();
+    final TagCloud tagCloud = new TagCloud();
     tagCloud.setRenderId( "echopointUnitTestTagCloud" );
     background = new Color( 0xa1a1a1 );
     foreground = new Color( 0xc1c1c1 );
+    set( tagCloud );
   }
 
   @Test
   public void enabled()
   {
-    tagCloud.setRolloverEnabled( true );
-    assertTrue( "Ensuring enabled set", tagCloud.getRolloverEnabled() );
+    getComponent().setRolloverEnabled( true );
+    assertTrue( "Ensuring enabled set", getComponent().getRolloverEnabled() );
   }
 
   @Test
   public void background()
   {
-    tagCloud.setRolloverBackground( background );
+    getComponent().setRolloverBackground( background );
     assertEquals( "Ensuring background set",
-        tagCloud.getRolloverBackground(), background );
+        getComponent().getRolloverBackground(), background );
   }
 
   @Test
   public void foreground()
   {
-    tagCloud.setRolloverForeground( foreground );
+    getComponent().setRolloverForeground( foreground );
     assertEquals( "Ensuring foreground set",
-        tagCloud.getRolloverForeground(), foreground );
+        getComponent().getRolloverForeground(), foreground );
   }
 
   @Test
   public void data()
   {
-    tagCloud.setTags( createTags() );
-    assertEquals( "Ensuring same size of tags", tagCloud.getTags().size(), 10 );
+    getComponent().setTags( createTags() );
+    assertEquals( "Ensuring same size of tags", getComponent().getTags().size(), 10 );
   }
 
   @Test
@@ -94,7 +94,7 @@ public class TagCloudTest
   {
     try
     {
-      tagCloud.add( new TagCloud() );
+      getComponent().add( new TagCloud() );
       fail( "TagCloud cannot contain children" );
     }
     catch ( Throwable t ) {}
@@ -107,6 +107,7 @@ public class TagCloudTest
     content.removeAll();
 
     final Row row = new Row();
+    final TagCloud tagCloud = (TagCloud) get();
 
     assertTrue( tagCloud.getRolloverEnabled() );
     assertNotNull( tagCloud.getRolloverBackground() );
@@ -147,7 +148,7 @@ public class TagCloudTest
 
       public void actionPerformed( final ActionEvent event )
       {
-        tagCloud.setTags( createTags() );
+        ( (TagCloud) get() ).setTags( createTags() );
       }
     });
 

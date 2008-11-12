@@ -18,22 +18,22 @@
 
 package echopoint;
 
-import nextapp.echo.app.Extent;
+import nextapp.echo.app.Border;
+import nextapp.echo.app.Button;
+import nextapp.echo.app.Color;
+import nextapp.echo.app.Column;
 import nextapp.echo.app.Component;
+import nextapp.echo.app.Extent;
 import nextapp.echo.app.Label;
 import nextapp.echo.app.Row;
-import nextapp.echo.app.Column;
-import nextapp.echo.app.Border;
-import nextapp.echo.app.Color;
-import nextapp.echo.app.Button;
 import nextapp.echo.app.TextField;
-import nextapp.echo.app.event.ActionListener;
 import nextapp.echo.app.event.ActionEvent;
+import nextapp.echo.app.event.ActionListener;
+import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.AfterClass;
 
 /**
  * Unit test suite for the Strut component.
@@ -41,30 +41,28 @@ import org.junit.AfterClass;
  * @author Rakesh 2008-07-20
  * @version $Id$
  */
-public class StrutTest
+public class StrutTest extends AbstractTest<Strut>
 {
-  static Strut strut;
-
   @BeforeClass
   public static void init()
   {
-    strut = new Strut();
+    set( new Strut() );
   }
 
   @Test
   public void width()
   {
     final int width = 50;
-    strut.setWidth( new Extent( width ) );
-    assertEquals( strut.getWidth().getValue(), width );
+    getComponent().setWidth( new Extent( width ) );
+    assertEquals( getComponent().getWidth().getValue(), width );
   }
 
   @Test
   public void height()
   {
     final int height = 25;
-    strut.setHeight( new Extent( height ) );
-    assertEquals( strut.getHeight().getValue(), height );
+    getComponent().setHeight( new Extent( height ) );
+    assertEquals( getComponent().getHeight().getValue(), height );
   }
 
   @Test
@@ -72,7 +70,7 @@ public class StrutTest
   {
     try
     {
-      strut.add( new Strut() );
+      getComponent().add( new Strut() );
       fail( "Strut cannot hold children" );
     }
     catch ( Throwable t ) {}

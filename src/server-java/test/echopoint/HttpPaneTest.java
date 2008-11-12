@@ -17,33 +17,29 @@
  */
 package echopoint;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import nextapp.echo.app.Border;
+import nextapp.echo.app.Button;
+import nextapp.echo.app.Color;
+import nextapp.echo.app.Component;
+import nextapp.echo.app.Extent;
+import nextapp.echo.app.TextField;
+import nextapp.echo.app.event.ActionEvent;
+import nextapp.echo.app.event.ActionListener;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-
-import nextapp.echo.app.Button;
-import nextapp.echo.app.Component;
-import nextapp.echo.app.TextField;
-import nextapp.echo.app.Border;
-import nextapp.echo.app.Extent;
-import nextapp.echo.app.Color;
-import nextapp.echo.app.event.ActionListener;
-import nextapp.echo.app.event.ActionEvent;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 /**
  * @author Rakesh 2008-07-13
  * @version $Id$
  */
-public class HttpPaneTest
+public class HttpPaneTest extends AbstractTest<HttpPane>
 {
   /** The default URI to load in the test component. */
   private static final String DEFAULT_URI =
       "https://echopoint.dev.java.net/";
-
-  /** The component that will be tested. */
-  private static HttpPane component;
 
   @BeforeClass
   public static void init()
@@ -54,31 +50,32 @@ public class HttpPaneTest
     final Extent width = new Extent( 600 );
 
     final Component content = Application.getContent().getTestArea();
-    component = new HttpPane();
-    component.setRenderId( "echopointUnitTestHttpPane" );
-    component.setBorder( border );
-    component.setHeight( height );
-    component.setWidth( width );
+    final HttpPane comp = new HttpPane();
+    comp.setRenderId( "echopointUnitTestHttpPane" );
+    comp.setBorder( border );
+    comp.setHeight( height );
+    comp.setWidth( width );
 
     content.removeAll();
-    content.add( component );
+    content.add( comp );
 
     assertEquals( "Ensuring test component added to container",
         content.getComponentCount(), 1 );
+    set( comp );
   }
 
   @Test
-  public void get()
+  public void getUri()
   {
-    assertNotNull( "Ensuring that uri is not null", component.getUri() );
+    assertNotNull( "Ensuring that uri is not null", getComponent().getUri() );
   }
 
   @Test
   public void set()
   {
-    component.setUri( DEFAULT_URI );
+    getComponent().setUri( DEFAULT_URI );
     assertEquals( "Ensuring setting URI succeeded",
-        component.getUri(), DEFAULT_URI );
+        getComponent().getUri(), DEFAULT_URI );
   }
 
   @AfterClass
@@ -90,7 +87,7 @@ public class HttpPaneTest
     final TextField textField = createTextField();
     content.add( textField );
     content.add( createButton( textField ) );
-    content.add( component );
+    content.add( get() );
   }
 
   private static TextField createTextField()
@@ -112,7 +109,7 @@ public class HttpPaneTest
 
       public void actionPerformed( final ActionEvent event )
       {
-        component.setUri( field.getText() );
+        ( (HttpPane) get() ).setUri( field.getText() );
       }
     });
 

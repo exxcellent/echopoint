@@ -17,16 +17,15 @@
  */
 package echopoint;
 
+import nextapp.echo.app.Component;
+import nextapp.echo.app.Extent;
+import nextapp.echo.app.Label;
+import nextapp.echo.app.event.ActionEvent;
+import nextapp.echo.app.event.ActionListener;
+import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.AfterClass;
-
-import nextapp.echo.app.Label;
-import nextapp.echo.app.Extent;
-import nextapp.echo.app.Component;
-import nextapp.echo.app.event.ActionListener;
-import nextapp.echo.app.event.ActionEvent;
 
 /**
  * Unit test case for the {@link echopoint.ImageIcon} component.
@@ -34,10 +33,8 @@ import nextapp.echo.app.event.ActionEvent;
  * @author Rakesh Vidyadharan 2008-10-20
  * @version $Id$
  */
-public class ImageIconTest
+public class ImageIconTest extends AbstractTest<ImageIcon>
 {
-  static ImageIcon icon;
-  static Label label;
   static int count;
   static final String command = "actionCommand";
 
@@ -45,43 +42,42 @@ public class ImageIconTest
   public static void init()
   {
     count = 0;
-    icon = new ImageIcon( "image/imagemap.gif" );
-    label = new Label( "Action command area" );
+    set( new ImageIcon( "image/imagemap.gif" ) );
   }
 
   @Test
   public void renderId()
   {
     final String renderId = "echopointUnitTestImageIcon";
-    icon.setRenderId( renderId );
+    getComponent().setRenderId( renderId );
     assertEquals( "Ensuring renderId set", renderId,
-        icon.getRenderId() );
+        getComponent().getRenderId() );
   }
 
   @Test
   public void actionCommand()
   {
-    icon.setActionCommand( command );
+    getComponent().setActionCommand( command );
     assertEquals( "Ensuring action command set", command,
-        icon.getActionCommand() );
+        getComponent().getActionCommand() );
   }
 
   @Test
   public void width()
   {
     final int width = 500;
-    icon.setWidth( new Extent( width ) );
+    getComponent().setWidth( new Extent( width ) );
     assertEquals( "Ensuring that width is set", width,
-        icon.getWidth().getValue() );
+        getComponent().getWidth().getValue() );
   }
 
   @Test
   public void height()
   {
     final int height = 300;
-    icon.setHeight( new Extent( height ) );
+    getComponent().setHeight( new Extent( height ) );
     assertEquals( "Ensuring that height is set", height,
-        icon.getHeight().getValue() );
+        getComponent().getHeight().getValue() );
   }
 
   @AfterClass
@@ -89,8 +85,9 @@ public class ImageIconTest
   {
     final Component content = Application.getContent().getTestArea();
     content.removeAll();
+    final Label label = new Label( "Action command area" );
 
-    icon.addActionListener( new ActionListener() {
+    ( (ImageIcon) get() ).addActionListener( new ActionListener() {
       private static final long serialVersionUID = 1l;
 
       public void actionPerformed( final ActionEvent event )
@@ -101,7 +98,7 @@ public class ImageIconTest
       }
     });
 
-    content.add( icon );
+    content.add( get() );
     content.add( label );
   }
 }

@@ -1,14 +1,13 @@
 package echopoint;
 
 import echopoint.tucana.ButtonMode;
+import echopoint.tucana.DownloadButton;
 import echopoint.tucana.FileUploadSelector;
 import echopoint.tucana.ProgressBar;
-import echopoint.tucana.DownloadButton;
-import echopoint.tucana.FileDownloadProvider;
 import echopoint.tucana.event.DefaultUploadCallback;
+import echopoint.tucana.event.DownloadCallbackAdapter;
 import echopoint.tucana.event.UploadCallback;
 import echopoint.tucana.event.UploadFinishEvent;
-import echopoint.tucana.event.DownloadCallbackAdapter;
 import nextapp.echo.app.Border;
 import nextapp.echo.app.Color;
 import nextapp.echo.app.Component;
@@ -24,7 +23,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.File;
-import java.io.Serializable;
 import java.util.logging.Level;
 
 /**
@@ -34,16 +32,12 @@ import java.util.logging.Level;
  * @author Rakesh Vidyadharan 2008-11-4
  * @version $Id$
  */
-public class FileUploadSelectorTest implements Serializable
+public class FileUploadSelectorTest extends AbstractTest<FileUploadSelector>
 {
-  private static final long serialVersionUID = 1l;
-  private static ThreadLocal<FileUploadSelector> component =
-      new ThreadLocal<FileUploadSelector>();
-
   @BeforeClass
   public static void init()
   {
-    component.set( new FileUploadSelector() );
+    set( new FileUploadSelector() );
   }
 
   @Test
@@ -144,12 +138,7 @@ public class FileUploadSelectorTest implements Serializable
   {
     final Component content = Application.getContent().getTestArea();
     content.removeAll();
-    content.add( getComponent() );
-  }
-
-  private static FileUploadSelector getComponent()
-  {
-    return component.get();
+    content.add( get() );
   }
 
   private static class FinishListener implements ActionListener

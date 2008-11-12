@@ -17,86 +17,84 @@
  */
 package echopoint;
 
+import nextapp.echo.app.Color;
+import nextapp.echo.app.Component;
+import nextapp.echo.app.Extent;
+import nextapp.echo.app.Font;
+import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.AfterClass;
-import nextapp.echo.app.Component;
-import nextapp.echo.app.Color;
-import nextapp.echo.app.Font;
-import nextapp.echo.app.Extent;
 
 /**
- * Unit test suite for the {@link echopoint.Anchor} component.
+ * Unit test suite for the {@link echopoint.Anchor} getComponent().
  *
  * @author Rakesh Vidyadharan 2008-10-24
  * @version $Id$
  */
-public class AnchorTest
+public class AnchorTest extends AbstractTest<Anchor>
 {
-  static Anchor component;
-
   @BeforeClass
   public static void init()
   {
-    component = new Anchor();
+    set( new Anchor() );
   }
 
   @Test
   public void renderId()
   {
     final String renderId = "echopointUnitTestAnchor";
-    component.setRenderId( renderId );
-    assertEquals( "Ensuring renderId set", renderId, component.getRenderId() );
+    getComponent().setRenderId( renderId );
+    assertEquals( "Ensuring renderId set", renderId, getComponent().getRenderId() );
   }
 
   @Test
   public void uri()
   {
     final String uri = "https://echopoint.dev.java.net/";
-    component.setUri( uri );
-    assertEquals( "Ensuring uri set", uri, component.getUri() );
+    getComponent().setUri( uri );
+    assertEquals( "Ensuring uri set", uri, getComponent().getUri() );
   }
 
   @Test
   public void foreground()
   {
     final Color color = new Color( 0x2f2f4f );
-    component.setForeground( color );
-    assertEquals( "Ensuring colour set", color, component.getForeground() );
+    getComponent().setForeground( color );
+    assertEquals( "Ensuring colour set", color, getComponent().getForeground() );
   }
 
   @Test
   public void font()
   {
     final Font font = new Font( Font.HELVETICA, Font.BOLD, new Extent( 10 ) );
-    component.setFont( font );
-    assertEquals( "Ensuring font set", font, component.getFont() );
+    getComponent().setFont( font );
+    assertEquals( "Ensuring font set", font, getComponent().getFont() );
   }
 
   @Test
   public void target()
   {
     final Anchor.Target target = Anchor.Target._blank;
-    component.setTarget( target );
+    getComponent().setTarget( target );
     assertEquals( "Ensuring target set", target.toString(),
-        component.getTarget() );
+        getComponent().getTarget() );
   }
 
   @Test
   public void text()
   {
     final String text = "A HTML Anchor tag";
-    component.setText( text );
-    assertEquals( "Ensuring text set", text, component.getText() );
+    getComponent().setText( text );
+    assertEquals( "Ensuring text set", text, getComponent().getText() );
   }
 
   @Test
   public void toolTip()
   {
     final String tooltip = "Click the link";
-    component.setToolTipText( tooltip );
-    assertEquals( "Ensuring tool tip set", tooltip, component.getToolTipText() );
+    getComponent().setToolTipText( tooltip );
+    assertEquals( "Ensuring tool tip set", tooltip, getComponent().getToolTipText() );
   }
 
   @AfterClass
@@ -104,6 +102,6 @@ public class AnchorTest
   {
     final Component content = Application.getContent().getTestArea();
     content.removeAll();
-    content.add( component );
+    content.add( get() );
   }
 }

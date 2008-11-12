@@ -41,43 +41,40 @@ import java.util.Collection;
  * @author Rakesh 2008-10-19
  * @version $Id$
  */
-public class ImageMapTest
+public class ImageMapTest extends AbstractTest<ImageMap>
 {
-  private static ImageMap imageMap;
-  private static Label label;
 
   @BeforeClass
   public static void init()
   {
-    imageMap = new ImageMap( "image/imagemap.gif" );
-    label = new Label( "Action command area" );
+    set( new ImageMap( "image/imagemap.gif" ) );
   }
 
   @Test
   public void renderId()
   {
     final String renderId = "echopointUnitTestImageMap";
-    imageMap.setRenderId( renderId );
+    getComponent().setRenderId( renderId );
     assertEquals( "Ensuring renderId set", renderId,
-        imageMap.getRenderId() );
+        getComponent().getRenderId() );
   }
 
   @Test
   public void width()
   {
     final int width = 500;
-    imageMap.setWidth( new Extent( width ) );
+    getComponent().setWidth( new Extent( width ) );
     assertEquals( "Ensuring that width is set", width,
-        imageMap.getWidth().getValue() );
+        getComponent().getWidth().getValue() );
   }
 
   @Test
   public void height()
   {
     final int height = 300;
-    imageMap.setHeight( new Extent( height ) );
+    getComponent().setHeight( new Extent( height ) );
     assertEquals( "Ensuring that height is set", height,
-        imageMap.getHeight().getValue() );
+        getComponent().getHeight().getValue() );
   }
 
   @Test
@@ -93,17 +90,17 @@ public class ImageMapTest
         new Point( 25, 180 ), new Point( 125, 280 ),
         "rectangle", "Rectangular section" );
     sections.add( rectangle );
-    imageMap.addSections( sections );
+    getComponent().addSections( sections );
     assertEquals( "Ensuring circle and rectangle added", sections.size(),
-        imageMap.getSections().size() );
+        getComponent().getSections().size() );
 
     final int[] vertices = { 153, 106, 186, 225, 340, 193, 315, 81, 304, 167 };
     final PolygonSection polygon = new PolygonSection( vertices,
         "polygon", "Polygon section" );
     sections.add( polygon );
-    imageMap.addSection( polygon );
+    getComponent().addSection( polygon );
     assertEquals( "Ensuring polygon added", sections.size(),
-        imageMap.getSections().size() );
+        getComponent().getSections().size() );
   }
 
   @AfterClass
@@ -112,7 +109,8 @@ public class ImageMapTest
     final Component content = Application.getContent().getTestArea();
     content.removeAll();
 
-    imageMap.addActionListener( new ActionListener() {
+    final Label label = new Label( "Action command area" );
+    ( (ImageMap) get() ).addActionListener( new ActionListener() {
       public void actionPerformed( final ActionEvent event )
       {
         if ( "circle".equals( event.getActionCommand() ) )
@@ -130,7 +128,7 @@ public class ImageMapTest
       }
     });
 
-    content.add( imageMap );
+    content.add( get() );
     content.add( label );
   }
 }

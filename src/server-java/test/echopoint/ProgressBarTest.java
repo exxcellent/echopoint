@@ -1,19 +1,18 @@
 package echopoint;
 
-import org.junit.BeforeClass;
-import org.junit.AfterClass;
-import org.junit.Test;
-import org.junit.runner.Runner;
-import static org.junit.Assert.assertEquals;
-import nextapp.echo.app.Component;
 import nextapp.echo.app.Border;
+import nextapp.echo.app.Button;
 import nextapp.echo.app.Color;
+import nextapp.echo.app.Component;
 import nextapp.echo.app.Extent;
 import nextapp.echo.app.Insets;
 import nextapp.echo.app.TaskQueueHandle;
-import nextapp.echo.app.Button;
-import nextapp.echo.app.event.ActionListener;
 import nextapp.echo.app.event.ActionEvent;
+import nextapp.echo.app.event.ActionListener;
+import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 /**
  * Unit test suite for the {@link echopoint.ProgressBar} component.
@@ -21,78 +20,76 @@ import nextapp.echo.app.event.ActionEvent;
  * @author Rakesh Vidyadharan 2008-11-12
  * @version $Id$
  */
-public class ProgressBarTest
+public class ProgressBarTest extends AbstractTest<ProgressBar>
 {
-  static ProgressBar component;
-
   @BeforeClass
   public static void init()
   {
-    component = new ProgressBar();
+    set( new ProgressBar() );
   }
 
   @Test
   public void renderId()
   {
     final String renderId = "echopointUnitTestProgressBar";
-    component.setRenderId( renderId );
-    assertEquals( "Ensuring renderId set", renderId, component.getRenderId() );
+    getComponent().setRenderId( renderId );
+    assertEquals( "Ensuring renderId set", renderId, getComponent().getRenderId() );
   }
 
   @Test
   public void background()
   {
     final Color background = new Color( 0xcfcfcf );
-    component.setBackground( background );
-    assertEquals( "Ensuring background set", background, component.getBackground() );
+    getComponent().setBackground( background );
+    assertEquals( "Ensuring background set", background, getComponent().getBackground() );
   }
 
   @Test
   public void foreground()
   {
     final Color foreground = new Color( 0xffffff );
-    component.setForeground( foreground );
-    assertEquals( "Ensuring foreground set", foreground, component.getForeground() );
+    getComponent().setForeground( foreground );
+    assertEquals( "Ensuring foreground set", foreground, getComponent().getForeground() );
   }
 
   @Test
   public void barBackground()
   {
     final Color barBackground = new Color( 0x1a428a);
-    component.setBarBackground( barBackground );
-    assertEquals( "Ensuring barBackground set", barBackground, component.getBarBackground() );
+    getComponent().setBarBackground( barBackground );
+    assertEquals( "Ensuring barBackground set", barBackground, getComponent().getBarBackground() );
   }
 
   @Test
   public void border()
   {
     final Border border = new Border( 1, Color.BLACK, Border.STYLE_INSET );
-    component.setBorder( border );
-    assertEquals( "Ensuring border set", border, component.getBorder() );
+    getComponent().setBorder( border );
+    assertEquals( "Ensuring border set", border, getComponent().getBorder() );
   }
 
   @Test
   public void insets()
   {
     final Insets insets = new Insets( 1 );
-    component.setInsets( insets );
-    assertEquals( "Ensuring insets set", insets, component.getInsets() );
+    getComponent().setInsets( insets );
+    assertEquals( "Ensuring insets set", insets, getComponent().getInsets() );
   }
 
   @Test
   public void width()
   {
     final Extent width = new Extent( 500 );
-    component.setWidth( width );
-    assertEquals( "Ensuring width set", width, component.getWidth() );
+    getComponent().setWidth( width );
+    assertEquals( "Ensuring width set", width, getComponent().getWidth() );
   }
 
   @Test
   public void height()
   {
     final Extent height = new Extent( 25 );
-    component.setHeight( height );
-    assertEquals( "Ensuring height set", height, component.getHeight() );
+    getComponent().setHeight( height );
+    assertEquals( "Ensuring height set", height, getComponent().getHeight() );
   }
 
   @AfterClass
@@ -100,7 +97,7 @@ public class ProgressBarTest
   {
     final Component content = Application.getContent().getTestArea();
     content.removeAll();
-    content.add( component );
+    content.add( get() );
 
     final Button button = new Button( "Start" );
     button.addActionListener( new Listener() );
@@ -165,8 +162,9 @@ public class ProgressBarTest
 
     public void run()
     {
-      component.setPercentage( percent );
-      component.setText( "Completed " + percent + " of 100" );
+      final ProgressBar bar = (ProgressBar) get();
+      bar.setPercentage( percent );
+      bar.setText( "Completed " + percent + " of 100" );
 
       if ( percent >= 100 ) app.removeTaskQueue( handle );
     }
