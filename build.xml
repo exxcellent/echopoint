@@ -384,6 +384,24 @@
 
     <delete file='${dir.dist}/echopoint-${version}.jar' />
     <delete file='${dir.dist}/echopoint-${version}.zip' />
+    <copy todir='${dir.build.api}'>
+      <fileset dir='${dir.build.api}'>
+        <patternset refid='fileset.resources' />
+      </fileset>
+    </copy>
+
+    <copy todir='${dir.build.resource}'>
+      <fileset dir='${dir.src.client.app}'>
+        <patternset refid='fileset.resources' />
+      </fileset>
+    </copy>
+
+    <copy todir='${dir.build.images}'>
+      <fileset dir='${dir.src.client.images}'>
+        <patternset refid='fileset.resources' />
+      </fileset>
+    </copy>
+
     <jar jarfile='${dir.dist}/echopoint-${version}.jar'
       basedir='${dir.build.api}'>
       <metainf dir='${dir.src.server.webcontainer}/META-INF'>
