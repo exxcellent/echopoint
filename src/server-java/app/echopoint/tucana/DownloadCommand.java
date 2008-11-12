@@ -33,6 +33,19 @@ import echopoint.tucana.event.DownloadFinishEvent;
  * A command used to enqueue a file (or similar) to the client for downlaoding
  * from the server.
  *
+ * <p>The following code shows the simplest form of using this command:</p>
+ * <pre>
+ *   import java.io.File;
+ *   import echopoint.tucana.DownloadButton
+ *
+ *     ...
+ *     final File file = new File( "/tmp/test.txt" );
+ *     final DownloadButton button = new DownloadButton( file );
+ *     button.setText( "Download file" );
+ *     button.setStyleName( "mystyle" );
+ *     parent.add( button );
+ * </pre>
+ *
  * @author Echo File Transfer Library
  * @version $Id$
  */

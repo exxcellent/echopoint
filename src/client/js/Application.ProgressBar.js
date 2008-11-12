@@ -19,6 +19,7 @@ echopoint.ProgressBar = Core.extend( echopoint.internal.AbstractContainer,
   {
     /** The colour for the variable width bar element. */
     BAR_BACKGROUND: "barBackground",
+    DEFAULT_BAR_BACKGROUND: "#68b8ff",
 
     /** The percentage complete to display in the progress bar. */
     PERCENTAGE: "percentage",
