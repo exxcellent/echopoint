@@ -109,6 +109,7 @@ echopoint.ProgressBarSync = Core.extend( echopoint.internal.AbstractContainerSyn
     this._text.id = this.component.renderId + "|text";
     this._text.style.position = "absolute";
     this._text.style.textAlign = "center";
+    this._text.style.verticalAlign = "middle";
     this._text.style.color = this._div.style.color;
     this._text.style.height = this._div.style.height;
     this._text.style.width = this._div.style.width;
@@ -136,7 +137,8 @@ echopoint.ProgressBarSync = Core.extend( echopoint.internal.AbstractContainerSyn
     }
     else
     {
-      value = this.component.render( property );
+      value = this.component.render( property,
+          echopoint.ProgressBar.DEFAULT_BAR_BACKGROUND );
     }
 
     if ( value )

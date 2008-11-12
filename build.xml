@@ -223,6 +223,8 @@
         <file name='Sync.ImageMap.js'/>
         <file name='Application.InfoWindow.js'/>
         <file name='Sync.InfoWindow.js'/>
+        <file name='Application.ProgressBar.js'/>
+        <file name='Sync.ProgressBar.js'/>
         <file name='Application.Strut.js'/>
         <file name='Sync.Strut.js'/>
         <file name='Application.TagCloud.js'/>
@@ -262,6 +264,7 @@
         <file name='ImageIconTest.js'/>
         <file name='ImageMapTest.js'/>
         <file name='InfoWindowTest.js'/>
+        <file name='ProgressBarTest.js'/>
         <file name='StrutTest.js'/>
         <file name='TagCloudTest.js'/>
         <file name='BarChartTest.js'/>
@@ -379,7 +382,7 @@
 
 
 <!-- ************************************************************************************************** -->
-  <target name='release' depends='compile'
+  <target name='release' depends='clean, compile'
     description='Prepares the versioned EchoPoint jar and zip files'>
 
     <delete file='${dir.dist}/echopoint-${version}.jar' />

@@ -46,7 +46,8 @@ import echopoint.tucana.event.DownloadFinishEvent;
  *     parent.add( button );
  * </pre>
  *
- * @author Echo File Transfer Library
+ * @see DownloadButton
+ * @author Echo File Transfer Library, Rakesh 2008-11-10
  * @version $Id$
  */
 public class DownloadCommand implements Command, RenderIdSupport, Serializable

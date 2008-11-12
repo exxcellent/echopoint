@@ -387,6 +387,16 @@ echopoint.test.TestApp.StyleSheet = new Echo.StyleSheet(
       background: "#f9f9f9",
       foreground: "#a10202",
       width: "250px"
+    },
+    "echopoint.ProgressBar":
+    {
+      background: "#a1a1a1",
+      foreground: "#ffffff",
+      border: "2px inset #3d3d3d",
+      barBackground: "#1a428a",
+      insets: 1,
+      height: "25px",
+      width: "500px"
     }
   },
   "DefaultResizableLarge": {
