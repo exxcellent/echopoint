@@ -73,8 +73,6 @@ public class UploadProgressService extends BaseUploadService
     final UploadProgress progress = renderState.getProgress( uploadIndex );
 
     final StringBuilder buff = new StringBuilder( 128 );
-    buff.append( "<?xml version=\"1.0\"?>" );
-    buff.append( "<p>" );
     if ( progress != null && progress.getBytesRead() > 0 )
     {
       if ( !renderState.isUploadEnded( uploadIndex ) )
@@ -83,20 +81,22 @@ public class UploadProgressService extends BaseUploadService
             new UploadProgressEvent( uploadSelect, uploadIndex, progress ) );
       }
 
-      buff.append( "<r>" ).append( progress.getBytesRead() ).append( "</r>" );
-      buff.append( "<cl>" ).append( progress.getContentLength() ).append( "</cl>" );
-      buff.append( "<pc>" ).append( progress.getPercentCompleted() ).append( "</pc>" );
-      buff.append( "<tr>" ).append( progress.getTransferRate() ).append( "</tr>" );
-      buff.append( "<tl>" ).append( progress.getEstimatedTimeLeft() ).append( "</tl>" );
-      buff.append( "<s>" ).append( progress.getStatus() ).append( "</s>" );
+      buff.append( "{" );
+      buff.append( "r:" ).append( progress.getBytesRead() ).append( "," );
+      buff.append( "cl:" ).append( progress.getContentLength() ).append( "," );
+      buff.append( "pc:" ).append( progress.getPercentCompleted() ).append( "," );
+      buff.append( "tr:" ).append( progress.getTransferRate() ).append( "," );
+      buff.append( "tl:" ).append( progress.getEstimatedTimeLeft() ).append( "," );
+      buff.append( "s:'" ).append( progress.getStatus() ).append( "'," );
+      buff.append( "m:'" ).append( progress.getMessage() ).append( "'" );
+      buff.append( "}" );
     }
     else
     {
-      buff.append( "<r>0</r><cl>0</cl><pc>0</pc><tr>0</tr><tl>0</tl><s></s>" );
+      buff.append( "{r:0,cl:0,pc:0,tr:0,tl:0,s:,m:}" );
     }
-    buff.append( "</p>" );
 
-    conn.setContentType( ContentType.TEXT_XML );
+    conn.setContentType( ContentType.TEXT_PLAIN );
     conn.getWriter().write( buff.toString() );
   }
 }

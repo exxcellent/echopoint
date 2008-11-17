@@ -6,6 +6,7 @@ import echopoint.tucana.FileUploadSelector;
 import echopoint.tucana.ProgressBar;
 import echopoint.tucana.event.DefaultUploadCallback;
 import echopoint.tucana.event.DownloadCallbackAdapter;
+import echopoint.tucana.event.InvalidContentTypeEvent;
 import echopoint.tucana.event.UploadCallback;
 import echopoint.tucana.event.UploadFinishEvent;
 import nextapp.echo.app.Border;
@@ -23,6 +24,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.File;
+import java.util.HashSet;
 import java.util.logging.Level;
 
 /**
@@ -117,6 +119,18 @@ public class FileUploadSelectorTest extends AbstractTest<FileUploadSelector>
   }
 
   @Test
+  public void filter()
+  {
+    final HashSet<String> set = new HashSet<String>();
+    set.add( "image/gif" );
+    set.add( "image/jpeg" );
+    set.add( "image/png" );
+    getComponent().setContentTypeFilter( set );
+    assertEquals( "Ensure content type filter set", set,
+        getComponent().getContentTypeFilter() );
+  }
+
+  @Test
   public void callback()
   {
     final DefaultUploadCallback callback =
@@ -165,8 +179,15 @@ public class FileUploadSelectorTest extends AbstractTest<FileUploadSelector>
         if ( upload.getProgressBar() != null )
         {
           if ( success ) upload.getProgressBar().setPercentage( 100 );
-          upload.getProgressBar().setText( ( success ) ?
-              "Finished upload!" : "Cancelled upload!" );
+
+          if ( ! ( callback.getEvent() instanceof InvalidContentTypeEvent ) )
+          {
+            final ProgressBar bar = (ProgressBar) upload.getProgressBar();
+            if ( bar != null )
+            {
+              bar.setText( ( success ) ? "Finished upload!" : "Cancelled upload!" );
+            }
+          }
         }
       }
     }

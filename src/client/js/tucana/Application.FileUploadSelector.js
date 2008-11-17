@@ -105,22 +105,28 @@ echopoint.tucana.UploadProgress = Core.extend(
   /** The status of the current upload process. */
   status: null,
 
+  /** An optional message indicating errors sent back by service. */
+  message: null,
+
   /**
    * Create a new instance using the XML response from the service.
    *
-   * @param xml The entire XML DOM structure.
+   * @param json The JSON data structure to be parsed
    */
-  $construct: function( xml )
+  $construct: function( json )
   {
-    if ( xml )
+    if ( json )
     {
-      var doc = xml.documentElement;
-      this.bytesRead = doc.getElementsByTagName( "r" )[0].childNodes[0].nodeValue;
-      this.contentLength = doc.getElementsByTagName( "cl" )[0].childNodes[0].nodeValue;
-      this.percentComplete = doc.getElementsByTagName( "pc" )[0].childNodes[0].nodeValue;
-      this.transferRate = doc.getElementsByTagName( "tr" )[0].childNodes[0].nodeValue;
-      this.estimatedTimeLeft = doc.getElementsByTagName( "tl" )[0].childNodes[0].nodeValue;
-      this.status = doc.getElementsByTagName( "s" )[0].childNodes[0].nodeValue;
+      var data = eval( "(" + json + ")" );
+
+      this.bytesRead = data.r;
+      this.contentLength = data.cl;
+      this.percentComplete = data.pc;
+      this.transferRate = data.tr;
+      this.estimatedTimeLeft = data.tl;
+      this.status = data.s;
+      var m = data.m;
+      if ( m && ( m != "null") && ( m != "" ) ) this.message = m;
     }
   }
 });

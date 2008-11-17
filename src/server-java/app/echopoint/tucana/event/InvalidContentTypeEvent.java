@@ -15,35 +15,37 @@
  * for the specific language governing rights and limitations under the
  * License.
  */
-package echopoint.tucana;
+package echopoint.tucana.event;
+
+import echopoint.tucana.FileUploadSelector;
 
 /**
- * Enumeration of status values for the state of the upload progress.
+ * An upload event that represents the case where an upload was terminated
+ * by the server due to the uploaded content-type not being allowed by the
+ * service.
  *
  * <p><b>Note:</b> Development of this component was sponsored by <a
  * href='http://tcnbroadcasting.com/index.jsp' target='_top'>TCN
  * Broadcasting</a>.  We are grateful for their support and sponsorship.</p>
  *
- * @author Rakesh 2008-11-09
+ * @author Rakesh 2008-11-17
  * @version $Id$
  */
-public enum Status
+public class InvalidContentTypeEvent extends UploadEvent
 {
-  /** Indicator that a file upload/download has finished successfully. */
-  completed,
-
-  /** Indicator that file upload/download was cancelled. */
-  cancelled,
-
-  /** Indicator the file upload/download was disallowed by the server. */
-  disallowed,
+  private static final long serialVersionUID = 1l;
 
   /**
-   * Indicator that a file upload/download failed due to reasons other than
-   * user cancellation.
+   * Creates a new {@link UploadEvent}.
+   *
+   * @param source the source of the event
+   * @param index the index of the upload
+   * @param fileName the name of the file, may not contain path information
+   * @param contentType the content type of the uploaded file
    */
-  failed,
-
-  /** Indicator that a file upload/download is in progress. */
-  inprogress
+  public InvalidContentTypeEvent( final FileUploadSelector source,
+      final String index, final String fileName, final String contentType )
+  {
+    super( source, index, fileName, contentType );
+  }
 }

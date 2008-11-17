@@ -48,6 +48,14 @@ public interface UploadCallback extends EventListener, Serializable
   void uploadCancelled( final UploadCancelEvent event );
 
   /**
+   * Indicates that a file upload was rejected by the server since the client
+   * attempted to send restricted content.
+   *
+   * @param event The event that was generated.
+   */
+  void uploadDisallowed( final InvalidContentTypeEvent event );
+
+  /**
    * Indicates a file upload has progressed.
    *
    * @param event the event

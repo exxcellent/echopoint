@@ -404,8 +404,9 @@ echopoint.tucana.FileUploadSelectorSync.Frame = Core.extend(
       Core.Debug.consoleWrite( "Invalid response: " + e.source.getResponseText() );
     }
 
-    var xml = e.source.getResponseXml();
-    var uploadProgress = new echopoint.tucana.UploadProgress( xml );
+    Core.Debug.consoleWrite( "Response: " + e.source.getResponseText() );
+    var json = e.source.getResponseText();
+    var uploadProgress = new echopoint.tucana.UploadProgress( json );
     var text = parseInt( uploadProgress.bytesRead / 1000 ) +
                " of " + parseInt( uploadProgress.contentLength / 1000 ) + "Kb";
 
@@ -442,8 +443,20 @@ echopoint.tucana.FileUploadSelectorSync.Frame = Core.extend(
 
     var status = uploadProgress.status;
     if ( ( status == "completed" ) || ( status == "failed") ||
-        ( status == "cancelled" ) )
+        ( status == "cancelled" ) || ( status == "disallowed" ) )
     {
+      if ( uploadProgress.message )
+      {
+        if ( progressBar )
+        {
+          progressBar.set( echopoint.ProgressBar.TEXT, uploadProgress.message );
+        }
+        else
+        {
+          if ( status != "completed" ) alert( uploadProgress.message );
+        }
+      }
+
       this._uploadEnded();
     }
 

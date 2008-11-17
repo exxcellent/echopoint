@@ -19,6 +19,7 @@ package echopoint.tucana;
 
 import echopoint.ProgressBar;
 import echopoint.internal.AbstractContainer;
+import echopoint.tucana.event.InvalidContentTypeEvent;
 import echopoint.tucana.event.UploadCallback;
 import echopoint.tucana.event.UploadCancelEvent;
 import echopoint.tucana.event.UploadEvent;
@@ -31,7 +32,10 @@ import nextapp.echo.app.ImageReference;
 import nextapp.echo.app.event.ActionEvent;
 import nextapp.echo.app.event.ActionListener;
 
+import java.util.Collections;
 import java.util.EventListener;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * The file upload selector component.  This component is a re-implementation
@@ -61,6 +65,14 @@ import java.util.EventListener;
  *    selector.setProgressBar( new ProgressBar() );
  *    selector.setUploadCallback( new DefaultUploadCallback( new File( "/tmp" ) ) );
  *    selector.addActionListener( ... );
+ *
+ *    // Allow only the following types of files to be uploaded.
+ *    final HashSet&lt;String&gt; set = new HashSet&lt;String&gt;();
+ *    set.add( "image/gif" );
+ *    set.add( "image/jpeg" );
+ *    set.add( "image/png" );
+ *    selector.setContentTypeFilter( set );
+ *
  *    parent.add( selector );
  * </pre>
  *
@@ -287,6 +299,12 @@ public class FileUploadSelector extends AbstractContainer
 
   /** The action command that was triggered by upload completion. */
   private String actionCommand;
+
+  /**
+   * The allowed content-type(s) for the upload.  Uploads of other types of
+   * files will be rejected.
+   */
+  private Set<String> contentTypeFilter = new HashSet<String>();
 
   /**
    * Sets the upload button image.
@@ -541,6 +559,32 @@ public class FileUploadSelector extends AbstractContainer
   }
 
   /**
+   * Accessor for property 'contentTypeFilter'.  Returns the content-types
+   * that are allowed to be uploaded by this component.
+   *
+   * @return Value for property 'contentTypeFilter'.
+   */
+  public Set<String> getContentTypeFilter()
+  {
+    return Collections.unmodifiableSet( contentTypeFilter );
+  }
+
+  /**
+   * Mutator for property 'contentTypeFilter'.
+   *
+   * @param contentTypeFilter Value to set for property 'contentTypeFilter'.
+   */
+  public void setContentTypeFilter( final Set<String> contentTypeFilter )
+  {
+    this.contentTypeFilter.clear();
+
+    if ( contentTypeFilter != null )
+    {
+      this.contentTypeFilter.addAll( contentTypeFilter );
+    }
+  }
+
+  /**
    * The only allowed sub-component is a {@link echopoint.ProgressBar}.
    *
    * @param child The child component that is to be added if allowed.
@@ -567,6 +611,10 @@ public class FileUploadSelector extends AbstractContainer
     if ( e instanceof UploadCancelEvent )
     {
       callback.uploadCancelled( (UploadCancelEvent) e );
+    }
+    if ( e instanceof InvalidContentTypeEvent )
+    {
+      callback.uploadDisallowed( (InvalidContentTypeEvent) e );
     }
     else if ( e instanceof UploadFailEvent )
     {

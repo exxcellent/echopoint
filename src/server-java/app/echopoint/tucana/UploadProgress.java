@@ -56,15 +56,26 @@ public class UploadProgress implements Serializable
    */
   private static final int MILESTONE_BYTE_INTERVAL = 10240 / 4;
 
+  /** The total length in bytes of the content being uploaded. */
   private final long contentLength;
 
+  /** The total bytes that have been read so far. */
   private long bytesRead;
 
+  /** The list of milestones that have been completed so far. */
   private final LinkedList<Milestone> milestones;
 
+  /** The number of bytes read at the end of the previous milestone. */
   private long lastMilestoneBytesRead;
 
+  /** The status of the current content upload. */
   private Status status;
+
+  /**
+   * An optional message returned by the service to the client.  Usually
+   * used to indicate errors.
+   */
+  private String message;
 
   /** @param contentLength the total number of bytes, <code>-1</code> if unknown */
   public UploadProgress( long contentLength )
@@ -214,6 +225,26 @@ public class UploadProgress implements Serializable
   public void setStatus( final Status status )
   {
     this.status = status;
+  }
+
+  /**
+   * Accessor for property 'message'.
+   *
+   * @return Value for property 'message'.
+   */
+  public String getMessage()
+  {
+    return message;
+  }
+
+  /**
+   * Mutator for property 'message'.
+   *
+   * @param message Value to set for property 'message'.
+   */
+  public void setMessage( final String message )
+  {
+    this.message = message;
   }
 
   private static final class Milestone implements Serializable

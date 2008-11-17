@@ -93,6 +93,21 @@ public class UploadCallbackAdapter implements UploadCallback
   }
 
   /**
+   * Indicates that a file upload was rejected by the server since the client
+   * attempted to send restricted content.
+   *
+   * @param event The event that was generated.
+   */
+  public void uploadDisallowed( final InvalidContentTypeEvent event )
+  {
+    this.event = event;
+    logger.log( level, "Upload disallowed for event: " + event.getIndex() +
+        " fileName: " + event.getFileName() +
+        "with contentType: " + event.getContentType() +
+        " is not of allowed type." );
+  }
+
+  /**
    * Indicates a file upload has progressed.
    *
    * @param event the event
@@ -102,14 +117,12 @@ public class UploadCallbackAdapter implements UploadCallback
     if ( ( uploadIndex.equals( event.getIndex() ) ) &&
       ( this.event instanceof UploadFinishEvent ) )
     {
-      // We are done
+      return;
     }
-    else
-    {
-      this.event = event;
-      logger.log( level, "Upload progress read bytes : "
-          + event.getProgress().getBytesRead() );
-    }
+
+    this.event = event;
+    logger.log( level, "Upload progress read bytes : "
+        + event.getProgress().getBytesRead() );
   }
 
   /**
@@ -132,6 +145,12 @@ public class UploadCallbackAdapter implements UploadCallback
    */
   public void uploadFailed( final UploadFailEvent event )
   {
+    if ( ( uploadIndex.equals( event.getIndex() ) ) &&
+        ( this.event instanceof InvalidContentTypeEvent ) )
+    {
+      return;
+    }
+    
     this.event = event;
     logger.log( level, "Upload failed for event: " + event.getIndex(),
         event.getException() );

@@ -17,6 +17,7 @@
  */
 package echopoint.tucana;
 
+import echopoint.tucana.event.InvalidContentTypeEvent;
 import echopoint.tucana.event.UploadCancelEvent;
 import echopoint.tucana.event.UploadFailEvent;
 import echopoint.tucana.event.UploadFinishEvent;
@@ -32,6 +33,8 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
+
+import java.util.Set;
 
 /**
  * {@link UploadSPI} implementation that uses the
@@ -83,6 +86,21 @@ public class JakartaCommonsFileUploadProvider extends AbstractFileUploadProvider
         {
           fileName = FilenameUtils.getName( stream.getName() );
           contentType = stream.getContentType();
+
+          final Set<String> types = uploadSelect.getContentTypeFilter();
+          if ( !types.isEmpty() )
+          {
+            if ( !types.contains( contentType ) )
+            {
+              final String message =
+                  "Disallowed content-type: " + contentType + "!";
+              uploadSelect.notifyCallback( new InvalidContentTypeEvent(
+                  uploadSelect, uploadIndex, fileName, contentType ) );
+              progress.setStatus( Status.disallowed );
+              progress.setMessage( message );
+              return;
+            }
+          }
 
           progress.setStatus( Status.inprogress );
           uploadSelect.notifyCallback( new UploadStartEvent( uploadSelect,
