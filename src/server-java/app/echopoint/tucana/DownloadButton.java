@@ -17,20 +17,35 @@
  */
 package echopoint.tucana;
 
-import nextapp.echo.app.Button;
+import echopoint.tucana.event.DownloadCallback;
+import echopoint.tucana.event.DownloadCallbackAdapter;
 import nextapp.echo.app.ApplicationInstance;
-import nextapp.echo.app.event.ActionListener;
+import nextapp.echo.app.Button;
 import nextapp.echo.app.event.ActionEvent;
+import nextapp.echo.app.event.ActionListener;
 
 import java.io.File;
-import java.util.logging.Level;
-
-import echopoint.tucana.event.DownloadCallbackAdapter;
-import echopoint.tucana.event.DownloadCallback;
 
 /**
  * A convenience component to display a {@link DownloadCommand} as a button
  * with a pre-configured {@link nextapp.echo.app.event.ActionListener}.
+ *
+ * <p>The following shows sample use of this component:</p>
+ * <pre>
+ *   import echopoint.Strut;
+ *   import echopoint.tucana.DownloadButton;
+ *   import nextapp.echo.app.Row;
+ *   import java.io.File;
+ *
+ *     ...
+ *     final File file = new File( "/path/tofile" );
+ *     final Row row = new Row();
+ *     final DownloadButton button = new DownloadButton( file );
+ *     button.setText( "Download File" );
+ *     row.add( new Strut() );
+ *     row.add( button );
+ *     row.add( new Strut() );
+ * </pre>
  *
  * @author Rakesh 2008-11-11
  * @version $Id$
@@ -84,7 +99,7 @@ public class DownloadButton extends Button
   }
 
   /**
-   * Over-ridden to no allow any other listeners than the default.  Does not
+   * Over-ridden to not allow any other listeners than the default.  Does not
    * throw any exception, just ignores the call.
    *
    * @param listener The listener to add.

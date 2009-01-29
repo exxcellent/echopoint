@@ -57,7 +57,6 @@ public class FileUploadSelectorPeer extends AbstractContainerPeer
   static
   {
     UploadProgressService.install();
-    UploadReceiverService.install();
     WebContainerServlet.getServiceRegistry().add( COMPONENT_SERVICE );
     final ResourceRegistry resources = WebContainerServlet.getResourceRegistry();
     resources.add( "echopoint", "images/upload.png", ContentType.IMAGE_PNG );
@@ -87,6 +86,7 @@ public class FileUploadSelectorPeer extends AbstractContainerPeer
   public void init( final Context context, final Component component )
   {
     super.init( context, component );
+    UploadReceiverService.install();
     final ServerMessage serverMessage =
         (ServerMessage) context.get( ServerMessage.class );
     serverMessage.addLibrary( COMPONENT_NAME );

@@ -69,7 +69,7 @@ public class ProgressBar extends echopoint.ProgressBar
   /** Create a default styled progress bar. */
   public ProgressBar()
   {
-    setBackground( new Color( 0xcfcfcf ) );
+    setBackground( new Color( 0xd6d5d4 ) );
     setForeground( new Color( 0xffffff ) );
     setBarBackground( new Color( 0x1a428a ) );
     setBorder( new Border( 1, Color.BLACK, Border.STYLE_INSET ) );

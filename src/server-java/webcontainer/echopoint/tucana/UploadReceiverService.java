@@ -38,6 +38,9 @@ public class UploadReceiverService extends BaseUploadService
 {
   private static final Service INSTANCE = new UploadReceiverService();
 
+  /** A flag used to track whether multi-part wrapper has been set. */
+  private static boolean installed = false;
+
   static
   {
     WebContainerServlet.getServiceRegistry().add( INSTANCE );
@@ -45,11 +48,15 @@ public class UploadReceiverService extends BaseUploadService
 
   private UploadReceiverService() {}
 
-  /** Installs this service. */
+  /** Installs this service if not already installed. */
   public static void install()
   {
-    WebContainerServlet.setMultipartRequestWrapper(
-        UploadProviderFactory.getUploadProvider() );
+    if ( ! installed )
+    {
+      installed = true;
+      WebContainerServlet.setMultipartRequestWrapper(
+          UploadProviderFactory.getUploadProvider() );
+    }
   }
 
   /** @see nextapp.echo.webcontainer.Service#getId() */
