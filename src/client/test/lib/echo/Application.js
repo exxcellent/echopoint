@@ -8,8 +8,7 @@
  * Main namespace of Echo framework.
  * @namespace
  */
-Echo = {
-};
+Echo = { };
 
 /**
  * Representation of a single application instance.
@@ -40,6 +39,31 @@ Echo.Application = Core.extend({
     
     $abstract: true,
     
+    $virtual: {
+    
+        /**
+         * Performs application initialization operations.  This method should be provided by an application implementation
+         * if required.  The superclass' <code>init()</code> method should always be invoked out of convention.
+         * The <code>client</code> property will be available. 
+         */
+        init: function() { },
+        
+        /**
+         * Performs application disposal/resource cleanup operations.  This method should be provided by an application implementation
+         * if required.  The superclass' <code>dispose()</code> method should always be invoked out of convention.
+         * The <code>client</code> property will be available. 
+         */
+        dispose: function() { }
+    },
+    
+    /**
+     * The client engine hosting the application.  
+     * This property is provided solely for use by the application itself, it is not (and may not be) used internally for any
+     * purpose. 
+     * @type Object
+     */
+    client: null,
+
     /** 
      * Mapping between component ids and component instances.
      * @type Core.Arrays.LargeMap
@@ -124,12 +148,22 @@ Echo.Application = Core.extend({
     },
     
     /**
-     * Disposes of the application.
+     * Invoked by application container to dispose of the application.
+     * Invokes application-overridable <code>dispose()</code> method.
      * Once invoked, the application will no longer function and cannot be used again.
      * This method will free any resources allocated by the application.
      */ 
-    dispose: function() {
+    doDispose: function() {
         this.updateManager.dispose();
+        this.dispose();
+    },
+    
+    /**
+     * Invoked by application container to initialize of the application.
+     * Invokes application-overridable <code>init()</code> method.
+     */ 
+    doInit: function() {
+        this.init();
     },
     
     /**
@@ -210,7 +244,6 @@ Echo.Application = Core.extend({
      * @type Echo.LayoutDirection 
      */
     getLayoutDirection: function() {
-        // FIXME ensure layout direction gets set upon application instantiation
         return this._layoutDirection ? this._layoutDirection : Echo.LayoutDirection.LTR;
     },
         
@@ -228,6 +261,7 @@ Echo.Application = Core.extend({
      * Returns the root component of the modal context.
      *
      * @return the root component of the modal context
+     * @type Echo.Component
      */
     getModalContextRoot: function() {
         if (this._modalComponents.length === 0) {
@@ -345,6 +379,7 @@ Echo.Application = Core.extend({
      */
     setLayoutDirection: function(newValue) {
         this._layoutDirection = newValue;
+        this.updateManager._processFullRefresh();
     },
     
     /**
@@ -354,12 +389,16 @@ Echo.Application = Core.extend({
      */
     setLocale: function(newValue) {
         this._locale = newValue;
+        this.updateManager._processFullRefresh();
     },
     
     /**
      * Informs the application of the modal state of a specific component.
      * When modal components are unregistered, this method must be executed
      * in order to avoid a memory leak.
+     * 
+     * @param component the component
+     * @param modal the modal state
      */
     _setModal: function(component, modal) {
         Core.Arrays.remove(this._modalComponents, component);
@@ -388,10 +427,8 @@ Echo.Application = Core.extend({
      * @param {Echo.StyleSheet} newValue the new style sheet
      */
     setStyleSheet: function(newValue) {
-        var oldValue = this._styleSheet;
         this._styleSheet = newValue;
-    // FIXME updatemanager can't handle this yet.    
-    //    this.notifyComponentUpdate(null, "styleSheet", oldValue, newValue);
+        this.updateManager._processFullRefresh();
     },
     
     /**
@@ -418,8 +455,6 @@ Echo.ComponentFactory = {
     
     /**
      * Mapping between type names and object constructors.
-     * 
-     * @type Object
      */
     _typeToConstructorMap: {},
     
@@ -462,7 +497,8 @@ Echo.ComponentFactory = {
     getSuperType: function(typeName) {
         var typeConstructor = this._typeToConstructorMap[typeName];
         if (!typeConstructor) {
-            throw new Error("Type not registered with ComponentFactory: " + typeName);
+            // Type not registered, return Component base class name.
+            return "Component";
         }
         if (typeConstructor.$super) {
             return typeConstructor.$super.prototype.componentType;
@@ -496,7 +532,7 @@ Echo.ComponentFactory = {
  * @sp {#Color} background the background color
  * @sp {#Font} font the component font
  * @sp {#Color} foreground the foreground color
- * @sp {Object} layoutData layout data information, describing how the component should be rendered by its container 
+ * @sp layoutData layout data information, describing how the component should be rendered by its container 
  * @event property An event fired when the a property of the component changes.  The <code>propertyName</code> property
  *        will specify the name of the changed property.  The <code>oldValue</code> and <code>newValue</code> properties
  *        (may) describe the previous and current states of the property, respectively.
@@ -527,27 +563,41 @@ Echo.Component = Core.extend({
     $virtual: {
     
         /**
-         * Component type.  This must be set by implementors in order for peer discovery to work properly.
+         * Component type.  
+         * This value should be the fully-qualified name of the component, e.g. "Foo.ExampleComponent".
+         * This property must be set by implementors in order for peer discovery to work properly.
+         * @type String
          */
         componentType: "Component",
+        
+        /** 
+         * Flag indicating whether or not the component is focusable.
+         * @type Boolean 
+         */
+        focusable: false,
 
         /**
-         * Returns the child component at the specified index
-         * after sorting the children in the order which they 
-         * should be focused.  The default implementation simply
-         * returns the same value as getComponent().
-         * Implementations should override this method when
-         * the natural order to focus child components is
-         * different than their normal ordering (e.g., when
-         * the component at index 1 is positioned above the 
-         * component at index 0).
+         * Returns the child component at the specified index after sorting the
+         * children in the order which they should be focused. The default
+         * implementation simply returns the same value as getComponent().
+         * Implementations should override this method when the natural order to
+         * focus child components is different than their normal ordering (e.g.,
+         * when the component at index 1 is positioned above the component at
+         * index 0).
          * 
-         * @param index the index of the child (in focus order)
+         * @param {Number} index the index of the child (in focus order)
          * @return the child component
+         * @type Echo.Component
          */
         getFocusComponent: function(index) {
             return this.children[index];
-        }
+        },
+        
+        /**
+         *  Flag indicating whether component is rendered as a pane (pane components consume available height).
+         *  @type Boolean 
+         */
+        pane: false
     },
     
     /**
@@ -591,7 +641,6 @@ Echo.Component = Core.extend({
     
     /**
      * Referenced external style
-     * @type Object
      */
     _style: null,
     
@@ -616,14 +665,16 @@ Echo.Component = Core.extend({
     
     /**
      * Internal style used to store properties set directly on component.
-     * @type Object
      */
     _localStyle: null,
     
     /**
      * Creates a new Component.
+     * The parent constructor MUST be invoked if it is overridden.  This is accomplished by including the statement
+     * "BaseComponent.call(this, properties)" in any derivative constructor, where "BaseComponent" is
+     * class from which the component is immediately derived (which may or may not be Echo.Component itself).
      *  
-     * @param {Object} properties associative mapping of initial property values (may be null)
+     * @param properties (Optional) associative mapping of initial property values (may be null)
      *        By default, all properties will be placed into the local style, except for the following:
      *        <ul>
      *         <li><code>styleName</code> specifies the component stylesheet style name</li>
@@ -632,7 +683,6 @@ Echo.Component = Core.extend({
      *         <li><code>children</code> an array specifying the initial children of the component</li>
      *         <li><code>events</code> an associative mapping between event names and listener methods</li>
      *        </ul>
-     * @constructor
      */
     $construct: function(properties) {
         this.children = [];
@@ -756,7 +806,7 @@ Echo.Component = Core.extend({
     },
     
     /**
-     * Returns the number of child components
+     * Returns the number of child components.
      * 
      * @return the number of child components
      * @type Number
@@ -779,8 +829,7 @@ Echo.Component = Core.extend({
     
     /**
      * Returns the component layout direction.
-     * Note that in most cases it is preferable to set the layout direction of the Application, 
-     * rather than individual components.
+     * Note that in most cases it is preferable to set the layout direction of the Application, rather than individual components.
      * 
      * @return the component layout direction
      * @type Echo.LayoutDirection
@@ -791,8 +840,7 @@ Echo.Component = Core.extend({
     
     /**
      * Returns the component locale.
-     * Note that in most cases it is preferable to set the locale of the Application, 
-     * rather than individual components.
+     * Note that in most cases it is preferable to set the locale of the Application, rather than individual components.
      * 
      * @return the component locale
      * @type String
@@ -802,22 +850,18 @@ Echo.Component = Core.extend({
     },
     
     /**
-     * Retrieves local style property map associations.
-     * This method should only be used by a de-serialized for
-     * the purpose of rapidly loading properties into a new
-     * component.
+     * Retrieves local style property map associations.  This method should only be used by a de-serialized for
+     * the purpose of rapidly loading properties into a new component.
      * 
      * @return the internal style property map associations
-     *         (an associative array).
      */
     getLocalStyleData: function() {
         return this._localStyle;
     },
     
     /**
-     * Returns the layout direction with which the component should be
-     * rendered, based on analyzing the component's layout direction,
-     * its parent's, and/or the application's.
+     * Returns the layout direction with which the component should be rendered, based on analyzing the component's layout 
+     * direction, its parent's, and/or the application's.
      * 
      * @return the rendering layout direction
      * @type Echo.LayoutDirection
@@ -837,8 +881,7 @@ Echo.Component = Core.extend({
     },
     
     /**
-     * Returns the locale  with which the component should be
-     * rendered, based on analyzing the component's locale,
+     * Returns the locale  with which the component should be rendered, based on analyzing the component's locale,
      * its parent's, and/or the application's.
      * 
      * @return the rendering locale
@@ -862,7 +905,6 @@ Echo.Component = Core.extend({
      * Returns the style assigned to this component, if any.
      * 
      * @return the assigned style
-     * @type Object
      */
     getStyle: function() {
         return this._style;
@@ -939,8 +981,7 @@ Echo.Component = Core.extend({
     
     /**
      * Determines the enabled state of this component.
-     * Use isRenderEnabled() to determine whether a component
-     * should be RENDERED as enabled.
+     * Use isRenderEnabled() to determine whether a component should be rendered as enabled.
      * 
      * @return the enabled state of this specific component
      */
@@ -953,7 +994,7 @@ Echo.Component = Core.extend({
      * an enabled state.
      * Disabled <code>Component</code>s are not eligible to receive user input.
      * 
-     * @return true if the component should be rendered enabled.
+     * @return true if the component should be rendered enabled
      * @type Boolean
      */
     isRenderEnabled: function() {
@@ -968,12 +1009,10 @@ Echo.Component = Core.extend({
     },
     
     /**
-     * Registers / unregisters a component that has been 
-     * added/removed to/from a registered hierarchy
+     * Registers / unregisters a component that has been added/removed to/from a registered hierarchy
      * (a hierarchy that is registered to an application).
      * 
-     * @param {Echo.Application} application the application 
-     *        (null to unregister the component)
+     * @param {Echo.Application} application the application (null to unregister the component)
      */
     register: function(application) {
         // Sanity check.
@@ -1012,7 +1051,7 @@ Echo.Component = Core.extend({
         if (application) { // registering
             // Assign render id if required.
             if (this.renderId == null) {
-                this.renderId = "cl_" + (++Echo.Component._nextRenderId);
+                this.renderId = "CL." + (++Echo.Component._nextRenderId);
             }
     
             // Notify application.
@@ -1093,8 +1132,7 @@ Echo.Component = Core.extend({
     /**
      * Removes a child component.
      * 
-     * @param componentOrIndex 
-     *        the index of the component to remove, or the component to remove
+     * @param componentOrIndex the index of the component to remove, or the component to remove
      *        (values may be of type Echo.Component or Number)
      */
     remove: function(componentOrIndex) {
@@ -1104,7 +1142,7 @@ Echo.Component = Core.extend({
             index = componentOrIndex;
             component = this.children[index];
             if (!component) {
-                throw new Error("Index out of bounds: " + index);
+                throw new Error("Component.remove(): index out of bounds: " + index + ", parent: " + this);
             }
         } else {
             component = componentOrIndex;
@@ -1169,6 +1207,9 @@ Echo.Component = Core.extend({
      */
     set: function(name, newValue) {
         var oldValue = this._localStyle[name];
+        if (oldValue === newValue) {
+            return;
+        }
         this._localStyle[name] = newValue;
         if (this._listenerList && this._listenerList.hasListeners("property")) {
             this._listenerList.fireEvent({type: "property", source: this, propertyName: name, 
@@ -1204,6 +1245,9 @@ Echo.Component = Core.extend({
         var oldValue = null;
         if (valueArray) {
             oldValue = valueArray[index];
+            if (oldValue === newValue) {
+                return;
+            }
         } else {
             valueArray = [];
             this._localStyle[name] = valueArray;
@@ -1251,7 +1295,7 @@ Echo.Component = Core.extend({
     /**
      * Sets the style of the component.
      * 
-     * @param {Object} newValue the new style
+     * @param newValue the new style
      */
     setStyle: function(newValue) {
         var oldValue = this._style;
@@ -1304,11 +1348,17 @@ Echo.Component = Core.extend({
  */
 Echo.FocusManager = Core.extend({
 
+    /**
+     * The managed application.
+     * @type Echo.Application
+     */
     _application: null,
 
     /**
      * Focus management handler for a specific application instance.
      * One FocusManager is created for each application.
+     * 
+     * @param {Echo.Application} the managed application
      */
     $construct: function(application) { 
         this._application = application;
@@ -1413,11 +1463,20 @@ Echo.FocusManager = Core.extend({
      * be a descendant of the specified parent component.  The search will
      * be limited to descendants of the parent component, i.e., if a suitable descendant
      * component cannot be found, null will be returned.
+     * 
+     * The <code>minimumDistance</code> property may be used to skip a number of siblings.
+     * This is used by components such as "Grid" which may want to find a focusable component
+     * in the next row, skipping over all columns of the current row.  
+     * If omitted the default value of this property is 1.  As an example, a value of 2
+     * would skip the immediately adjacent sibling of the current focused component.
      *
-     * @param parentComponent the parent component to search
-     * @param reverse the search direction, false indicating to search forward, true
+     * @param {Echo.Component} parentComponent the parent component to search
+     * @param {Boolean} reverse the search direction, false indicating to search forward, true
      *        indicating reverse
-     * @param minimumDistance FIXME
+     * @param {Number} minimumDistance the fewest number of lateral focus moves to make before
+     *        returning a focusable component (optional, default value of 1)
+     * @return the focusable descendant, or null if one cannot be found
+     * @type Echo.Component
      */
     findInParent: function(parentComponent, reverse, minimumDistance) {
         if (!minimumDistance) {
@@ -1450,14 +1509,23 @@ Echo.FocusManager = Core.extend({
         return component;
     },
     
-    _getDescendantIndex: function(parentComponent, descendant) {
-        while (descendant.parent != parentComponent && descendant.parent != null) {
+    /**
+     * Determines the index of the child of <code>parent</code> in which
+     * <code>descendant</code> is contained.
+     * 
+     * @param {Echo.Component} parent the parent component
+     * @param {Echo.Component} descendant the descendant component
+     * @return the descendant index, or -1 if the component is not a descendant of <code>parent</code>
+     * @type Number
+     */
+    _getDescendantIndex: function(parent, descendant) {
+        while (descendant.parent != parent && descendant.parent != null) {
             descendant = descendant.parent;
         }
         if (descendant.parent == null) {
             return -1;
         }
-        return parentComponent.indexOf(descendant);
+        return parent.indexOf(descendant);
     }
 });
 
@@ -1475,7 +1543,8 @@ Echo.LayoutDirection = Core.extend({
     
     /**
      * LayoutDirection property.  Do not instantiate, use LTR/RTL constants.
-     * @constructor
+     * 
+     * @param {Boolean} ltr true if the layout direction is left-to-right 
      */
     $construct: function(ltr) {
         this._ltr = ltr;
@@ -1511,8 +1580,13 @@ Echo.LayoutDirection.RTL = new Echo.LayoutDirection(false);
  */
 Echo.StyleSheet = Core.extend({
 
+    /** Map between style names and type-name to style maps. */
     _nameToStyleMap: null,
 
+    /** 
+     * Style cache mapping style names and type-name to style maps.  Behaves identically to _nameToStyleMap except styles are 
+     * stored explicitly for every component type.  This provides quick access to style information for the renderer. 
+     */
     _renderCache: null,
     
     /**
@@ -1537,10 +1611,9 @@ Echo.StyleSheet = Core.extend({
     /**
      * Returns the style that should be used for a component.
      * 
-     *  @param {String} name the component's style name
-     *  @param {String} componentType the type of the component
-     *  @return the style
-     *  @type Object
+     * @param {String} name the component's style name
+     * @param {String} componentType the type of the component
+     * @return the style
      */
     getRenderStyle: function(name, componentType) {
         // Retrieve style from cache.
@@ -1557,6 +1630,14 @@ Echo.StyleSheet = Core.extend({
         }
     },
     
+    /**
+     * Creates a rendered style object for a specific style name and componentType and stores it in
+     * the cache.  This method is invoked by <code>getRenderStyle()</code> when a cached style cannot be found.
+     *
+     * @param {String} name the style name
+     * @param {String} componentType the type of the component
+     * @return the style
+     */
     _loadRenderStyle: function(name, componentType) {
         // Retrieve value (type-to-style-map) from name-to-style-map with specified name key.
         var typeToStyleMap = this._nameToStyleMap[name];
@@ -1591,7 +1672,6 @@ Echo.StyleSheet = Core.extend({
      * @param {String} name the style name
      * @param {String} componentType the component type
      * @return the style
-     * @type Object
      */
     getStyle: function(name, componentType) {
         var typeToStyleMap = this._nameToStyleMap[name];
@@ -1606,7 +1686,7 @@ Echo.StyleSheet = Core.extend({
      * 
      * @param {String} name the style name
      * @param {String} componentType the component type
-     * @param {Object} the style
+     * @param the style
      */
     setStyle: function(name, componentType, style) {
         // Create or clear cache entry for name.
@@ -1678,7 +1758,6 @@ Echo.Update.ComponentUpdate = Core.extend({
     /**
      * A mapping between property names of the parent component and 
      * <code>PropertyUpdate</code>s.
-     * @type Object
      */
     _propertyUpdates: null,
     
@@ -1706,15 +1785,13 @@ Echo.Update.ComponentUpdate = Core.extend({
      * The set of listener types which have been added to/removed from the component.
      * Associative mapping between listener type names and boolean values, true representing
      * the notion that listeners of a type have been added or removed.
-     * @type Object
      */
     _listenerUpdates: null,
 
     /**
      * Creates a new ComponentUpdate.
      * 
-     * @constructor
-     * @param parent the updated component
+     * @param {Echo.Component} parent the updated component
      */
     $construct: function(manager, parent) {
     
@@ -1792,7 +1869,7 @@ Echo.Update.ComponentUpdate = Core.extend({
         if (!this._addedChildIds) {
             return null;
         }
-        var components = new Array(this._addedChildIds.length);
+        var components = [];
         for (var i = 0; i < this._addedChildIds.length; ++i) {
             components[i] = this._manager._idMap[this._addedChildIds[i]];
         }
@@ -1810,7 +1887,7 @@ Echo.Update.ComponentUpdate = Core.extend({
         if (!this._removedChildIds) {
             return null;
         }
-        var components = new Array(this._removedChildIds.length);
+        var components = [];
         for (var i = 0; i < this._removedChildIds.length; ++i) {
             components[i] = this._manager._removedIdMap[this._removedChildIds[i]];
         }
@@ -1829,7 +1906,7 @@ Echo.Update.ComponentUpdate = Core.extend({
         if (!this._removedDescendantIds) {
             return null;
         }
-        var components = new Array(this._removedDescendantIds.length);
+        var components = [];
         for (var i = 0; i < this._removedDescendantIds.length; ++i) {
             components[i] = this._manager._removedIdMap[this._removedDescendantIds[i]];
         }
@@ -1848,7 +1925,7 @@ Echo.Update.ComponentUpdate = Core.extend({
         if (!this._updatedLayoutDataChildIds) {
             return null;
         }
-        var components = new Array(this._updatedLayoutDataChildIds.length);
+        var components = [];
         for (var i = 0; i < this._updatedLayoutDataChildIds.length; ++i) {
             components[i] = this._manager._idMap[this._updatedLayoutDataChildIds[i]];
         }
@@ -1901,6 +1978,7 @@ Echo.Update.ComponentUpdate = Core.extend({
      * 
      * @param name the name of the property being updated
      * @return the <code>PropertyUpdate</code>, or null if none exists
+     * @type Echo.Update.ComponentUpdate.PropertyUpdate
      */
     getUpdatedProperty: function(name) {
         if (this._propertyUpdates == null) {
@@ -1942,7 +2020,11 @@ Echo.Update.ComponentUpdate = Core.extend({
      * updated in this update.  The provided object should have
      * have keys for the desired property names and  values that evaluate 
      * to true, e.g. to determine if either the "text" and/or "icon" properties
-     * changed, specify {text: true, icon: true}. 
+     * changed, specify {text: true, icon: true}.
+     * 
+     * @param updatedPropertySet the updated property set
+     * @return true if any of the specified properties has been updated in this update
+     * @type Boolean
      */
     hasUpdatedPropertyIn: function(updatedPropertySet) {
         for (var x in this._propertyUpdates) {
@@ -1959,6 +2041,10 @@ Echo.Update.ComponentUpdate = Core.extend({
      * have keys for the desired property names and  values that evaluate 
      * to true, e.g. to determine if no properties other than "text" and "icon"
      * changed, specify {text: true, icon: true}. 
+     * 
+     * @param updatedPropertySet the updated property set
+     * @return true if the set of updated property names is contained within the specified set
+     * @type Boolean
      */
     isUpdatedPropertySetIn: function(updatedPropertySet) {
         for (var x in this._propertyUpdates) {
@@ -2063,7 +2149,7 @@ Echo.Update.ComponentUpdate = Core.extend({
     /**
      * Records the update of a property of the parent component.
      * 
-     * @param propertyName the name of the property
+     * @param {String} propertyName the name of the property
      * @param oldValue the previous value of the property
      * @param newValue the new value of the property
      */
@@ -2086,7 +2172,6 @@ Echo.Update.Manager = Core.extend({
     /**
      * Associative mapping between component ids and Echo.Update.ComponentUpdate
      * instances.
-     * @type Object
      */
     _componentUpdateMap: null,
     
@@ -2106,7 +2191,7 @@ Echo.Update.Manager = Core.extend({
      * Flag indicating whether any updates are pending.
      * @type Boolean
      */
-    _hasUpdates: true,
+    _hasUpdates: false,
     
     /**
      * Internal listener list for update listeners.
@@ -2129,6 +2214,8 @@ Echo.Update.Manager = Core.extend({
      * The id of the last parent component whose child was analyzed by
      * _isAncestorBeingAdded() that resulted in that method returning false.
      * This id is stored for performance optimization purposes.
+     * This performance optimization relies on the fact that _isAncestorBeingAdded()
+     * will be invoked for each attempt to modify the hierarchy.
      * @type String
      */
     _lastAncestorTestParentId: null,
@@ -2215,6 +2302,7 @@ Echo.Update.Manager = Core.extend({
     
     /**
      * Determines if an ancestor of the specified component is being added.
+     * This method must be invoked by all hierarchy modification operations.
      * 
      * @param {Echo.Component} component the component to evaluate
      * @return true if the component or an ancestor of the component is being added
@@ -2226,6 +2314,8 @@ Echo.Update.Manager = Core.extend({
         
         var originalParentId = parent ? parent.renderId : null;
         if (originalParentId && this._lastAncestorTestParentId == originalParentId) {
+            // If last invocation of _isAncestorBeingAdded for the same component returned false, it is safe
+            // to assume that this invocation will return false as well.
             return false;
         }
         
@@ -2254,9 +2344,11 @@ Echo.Update.Manager = Core.extend({
      */
     _processComponentAdd: function(parent, child) {
         if (this.fullRefreshRequired) {
+            // A full refresh indicates an update already exists which encompasses this update.
             return;
         }
         if (this._isAncestorBeingAdded(child)) {
+            // An ancestor being added indicates an update already exists which encompasses this update.
             return;
         }
         var update = this._createComponentUpdate(parent);
@@ -2270,10 +2362,12 @@ Echo.Update.Manager = Core.extend({
      */
     _processComponentLayoutDataUpdate: function(updatedComponent) {
         if (this.fullRefreshRequired) {
+            // A full refresh indicates an update already exists which encompasses this update.
             return;
         }
         var parent = updatedComponent.parent;
         if (parent == null || this._isAncestorBeingAdded(parent)) {
+            // An ancestor being added indicates an update already exists which encompasses this update.
             return;
         }
         var update = this._createComponentUpdate(parent);
@@ -2287,9 +2381,11 @@ Echo.Update.Manager = Core.extend({
      */
     _processComponentListenerUpdate: function(parent, listenerType) {
         if (this.fullRefreshRequired) {
+            // A full refresh indicates an update already exists which encompasses this update.
             return;
         }
         if (this._isAncestorBeingAdded(parent)) {
+            // An ancestor being added indicates an update already exists which encompasses this update.
             return;
         }
         var update = this._createComponentUpdate(parent);
@@ -2304,9 +2400,11 @@ Echo.Update.Manager = Core.extend({
      */
     _processComponentRemove: function(parent, child) {
         if (this.fullRefreshRequired) {
+            // A full refresh indicates an update already exists which encompasses this update.
             return;
         }
         if (this._isAncestorBeingAdded(parent)) {
+            // An ancestor being added indicates an update already exists which encompasses this update.
             return;
         }
         var update = this._createComponentUpdate(parent);
@@ -2338,16 +2436,18 @@ Echo.Update.Manager = Core.extend({
     /**
      * Processes a property update to a component.
      * 
-     * @component {Echo.Component} the updated component
-     * @propertyName {String} the updated property name
-     * @oldValue the previous value of the property
-     * @newValue the new value of the property
+     * @param {Echo.Component} component the updated component
+     * @param {String} propertyName the updated property name
+     * @param oldValue the previous value of the property
+     * @param newValue the new value of the property
      */
     _processComponentPropertyUpdate: function(component, propertyName, oldValue, newValue) {
         if (this.fullRefreshRequired) {
+            // A full refresh indicates an update already exists which encompasses this update.
             return;
         }
         if (this._isAncestorBeingAdded(component)) {
+            // An ancestor being added indicates an update already exists which encompasses this update.
             return;
         }
         var update = this._createComponentUpdate(component);
@@ -2355,25 +2455,56 @@ Echo.Update.Manager = Core.extend({
     },
     
     /**
-     * Processes component updates received from the application instance.
+     * Processes an event requiring a full-refresh.
+     */
+    _processFullRefresh: function() {
+        // Mark all components as having being removed from root.
+        for (var i = 0; i < this.application.rootComponent.children.length; ++i) {
+            this._processComponentRemove(this.application.rootComponent, this.application.rootComponent.children[i]);
+        }
+
+        // Flag full refresh as required, such that all future property updates bounce.
+        this.fullRefreshRequired = true;
+        
+        // Retrieve root component update and mark as full refresh.
+        var update = this._createComponentUpdate(this.application.rootComponent);
+        update.fullRefresh = true;
+        
+        // Notify container.
+        this._fireUpdate();
+    },
+    
+    /**
+     * Processes component update notification received from the application instance.
+     * 
+     * @param {Echo.Component} component the updated component
+     * @param {String} propertyName the updated property name
+     * @param oldValue the previous value of the property
+     * @param newValue the new value of the property
      */
     _processComponentUpdate: function(parent, propertyName, oldValue, newValue) {
         if (propertyName == "children") {
+            // Child added/removed.
             if (newValue == null) {
+                // Process child removal.
                 this._processComponentRemove(parent, oldValue);
             } else {
+                // Process child addition.
                 this._processComponentAdd(parent, newValue);
             }
         } else if (propertyName == "layoutData") {
+            // Process a layout data update.
             this._processComponentLayoutDataUpdate(parent);
         } else if (propertyName == "listeners") {
+            // Process listeners addition/removal.
             this._processComponentListenerUpdate(parent, oldValue || newValue);
         } else {
+            // Process property update.
             this._processComponentPropertyUpdate(parent, propertyName, oldValue, newValue);
         }
         this._fireUpdate();
     },
-    
+
     /**
      * Purges all updates from the manager.
      * Invoked after the client has repainted the screen.
@@ -2418,11 +2549,12 @@ Echo.Update.Manager = Core.extend({
 // Built-in Component Object Definitions
 
 /**
- * Base class from which button components are derived.
+ * Abstract base class for button components.
  *
  * @sp {String} actionCommand the action command fired in action events 
  *     when the button is pushed
- * @sp {#Alignment} alignment the alignment of the button's content
+ * @sp {#Alignment} alignment the alignment of the button's content (only horizontal alignments are supported, any vertical
+ *     component of the alignment value will not be rendered)
  * @sp {#FillImage} backgroundImage the background image
  * @sp {#Border} border the default button border
  * @sp {#Color} disabledBackground the disabled background color
@@ -2474,7 +2606,10 @@ Echo.AbstractButton = Core.extend(Echo.Component, {
         Echo.ComponentFactory.registerType("AB", this);
     },
 
+    /** @see Echo.Component#componentType */
     componentType: "AbstractButton",
+
+    /** @see Echo.Component#focusable */
     focusable: true,
     
     $virtual: {
@@ -2489,8 +2624,9 @@ Echo.AbstractButton = Core.extend(Echo.Component, {
 });
 
 /**
- * Button component.
- */ 
+ * Button component: a stateless "push" button which is used to initiate an
+ * action.  May not contain child components.
+ */
 Echo.Button = Core.extend(Echo.AbstractButton, {
 
     $load: function() {
@@ -2498,11 +2634,12 @@ Echo.Button = Core.extend(Echo.AbstractButton, {
         Echo.ComponentFactory.registerType("B", this);
     },
 
+    /** @see Echo.Component#componentType */
     componentType: "Button"
 });
 
 /**
- * Abstract base class for toggle button component.
+ * An abstract base class for on/off toggle button components.
  *
  * @sp {#ImageReference} disabledStateIcon the disabled state icon to display when the toggle state is deselected
  * @sp {#ImageReference} disabledSelectedStateIcon the disabled state icon to display when thetoggle  state is selected
@@ -2524,11 +2661,14 @@ Echo.ToggleButton = Core.extend(Echo.AbstractButton, {
     },
 
     $abstract: true,
+
+    /** @see Echo.Component#componentType */
     componentType: "ToggleButton"
 });
 
 /**
- * CheckBox component.
+ * CheckBox component: a simple on/off toggle button. May not contain child
+ * components.
  */
 Echo.CheckBox = Core.extend(Echo.ToggleButton, {
 
@@ -2537,14 +2677,20 @@ Echo.CheckBox = Core.extend(Echo.ToggleButton, {
         Echo.ComponentFactory.registerType("CB", this);
     },
 
+    /** @see Echo.Component#componentType */
     componentType: "CheckBox"
 });
 
 /**
- * RadioButton component.
- *
- * @sp {String} group a unique identifier used to group radio buttons together (set this property to a value generated by 
- *     Echo.Application.generateUid() to guarantee uniqueness)
+ * RadioButton component: a toggle button which allows a user to select one
+ * option from a group of options. Radio buttons should be assigned to a unique
+ * named group (by setting the <code>group</code> property). Only one radio
+ * button in a group will be selected at a given time. May not contain child
+ * components.
+ * 
+ * @sp {String} group a unique identifier used to group radio buttons together
+ *     (set this property to a value generated by Echo.Application.generateUid()
+ *     to guarantee uniqueness)
  */
 Echo.RadioButton = Core.extend(Echo.ToggleButton, {
 
@@ -2553,32 +2699,35 @@ Echo.RadioButton = Core.extend(Echo.ToggleButton, {
         Echo.ComponentFactory.registerType("RB", this);
     },
 
+    /** @see Echo.Component#componentType */
     componentType: "RadioButton"
 });
 
 /**
- * Base class for list components (i.e., SelectFields and ListBoxes).
- *
- * @cp {Array} items the array of items contained in the list component.
- *     The value of the 'text' property or toString() value of the item
- *     will be displayed in the selection component.
- * @cp selectedId the values of the id property of the selected item,
- *     or an array of the id values when multiple items are selected
- * @cp selection the index of the selected item, or an array of the 
- *     indices of selected items when multiple items are selected
- *
+ * Abstract base class for selection list components (i.e., SelectFields and
+ * ListBoxes).
+ * 
+ * @cp {Array} items the array of items contained in the list component. The
+ *     value of the 'text' property or toString() value of the item will be
+ *     displayed in the selection component.
+ * @cp selectedId the values of the id property of the selected item, or an
+ *     array of the id values when multiple items are selected
+ * @cp selection the index of the selected item, or an array of the indices of
+ *     selected items when multiple items are selected
+ * 
  * @sp {#Border} border the default border
  * @sp {#Color} disabledBackground the disabled background color
  * @sp {#Border} disabledBorder the disabled border
  * @sp {#Font} disabledFont the disabled font
  * @sp {#Color} disabledForeground the disabled foreground color
  * @sp {#Extent} height the component height
- * @sp {#Insets} insets the inset margin between the border and the items of the list component
+ * @sp {#Insets} insets the inset margin between the border and the items of the
+ *     list component
  * @sp {#Color} rolloverBackground the rollover background color
  * @sp {#Border} rolloverBorder the rollover border
  * @sp {#Font} rolloverFont the rollover font
  * @sp {#Color} rolloverForeground the rollover foreground color
- * @sp {#Extent} width the component width 
+ * @sp {#Extent} width the component width
  * @event action An event fired when an item is selected (clicked).
  */
 Echo.AbstractListComponent = Core.extend(Echo.Component, {
@@ -2590,7 +2739,10 @@ Echo.AbstractListComponent = Core.extend(Echo.Component, {
         Echo.ComponentFactory.registerType("LC", this);
     },
 
+    /** @see Echo.Component#componentType */
     componentType: "AbstractListComponent",
+
+    /** @see Echo.Component#focusable */
     focusable: true,
     
     $virtual: {
@@ -2605,12 +2757,16 @@ Echo.AbstractListComponent = Core.extend(Echo.Component, {
 });
 
 /**
- * ListBox component.
- *
- * @sp {Number} selectionMode a value indicating the selection mode, one of the following values:
+ * ListBox component: a selection component which displays selection items in a
+ * list. May be configured to allow the selection of one item at a time, or to
+ * allow the selection of multiple items at one time. Does not support child
+ * components.
+ * 
+ * @sp {Number} selectionMode a value indicating the selection mode, one of the
+ *     following values:
  *     <ul>
- *      <li><code>Echo.ListBox.SINGLE_SELECTION</code> (the default)</li>
- *      <li><code>Echo.ListBox.MULTIPLE_SELECTION</code></li>
+ *     <li><code>Echo.ListBox.SINGLE_SELECTION</code> (the default)</li>
+ *     <li><code>Echo.ListBox.MULTIPLE_SELECTION</code></li>
  *     </ul>
  */
 Echo.ListBox = Core.extend(Echo.AbstractListComponent, {
@@ -2619,11 +2775,13 @@ Echo.ListBox = Core.extend(Echo.AbstractListComponent, {
 
         /**
          * Constant for <code>selectionMode</code> property indicating single selection.
+         * @type Number
          */
         SINGLE_SELECTION: 0,
         
         /**
          * Constant for <code>selectionMode</code> property indicating multiple selection.
+         * @type Number
          */
         MULTIPLE_SELECTION: 2
     },
@@ -2633,11 +2791,14 @@ Echo.ListBox = Core.extend(Echo.AbstractListComponent, {
         Echo.ComponentFactory.registerType("LB", this);
     },
 
+    /** @see Echo.Component#componentType */
     componentType: "ListBox"
 });
 
 /**
- * SelectField component.
+ * SelectField component: a selection component which display selection items in
+ * a drop-down field. Allows the selection of only one item at a time. Does not
+ * support child components.
  */
 Echo.SelectField = Core.extend(Echo.AbstractListComponent, {
 
@@ -2646,22 +2807,27 @@ Echo.SelectField = Core.extend(Echo.AbstractListComponent, {
         Echo.ComponentFactory.registerType("SF", this);
     },
 
+    /** @see Echo.Component#componentType */
     componentType: "SelectField"
 });
 
 /**
- * A container component which displays cells in a column in vertical order.
- *
+ * Column component: a layout container which renders its content in a single
+ * vertical column of cells. May contain zero or more child components. Does not
+ * support pane components as children.
+ * 
  * @sp {#Border} border the border displayed around the entire column
  * @sp {#Extent} cellSpacing the extent margin between cells of the column
  * @sp {#Insets} insets the inset margin between the column border and its cells
- *
- * @ldp {#Alignment} alignment the alignment of the child component within its cell
+ * 
+ * @ldp {#Alignment} alignment the alignment of the child component within its
+ *      cell
  * @ldp {#Color} background the background of the child component's cell
- * @ldp {#FillImage} backrgoundImage the background image of the child component's cell
+ * @ldp {#FillImage} backrgoundImage the background image of the child
+ *      component's cell
  * @ldp {#Extent} height the height of the child component's cell
- * @ldp {#Insets} insets the insets margin of the child component's cell 
- *      (this inset is added to any inset set on the container component)
+ * @ldp {#Insets} insets the insets margin of the child component's cell (this
+ *      inset is added to any inset set on the container component)
  */
 Echo.Column = Core.extend(Echo.Component, {
 
@@ -2670,29 +2836,47 @@ Echo.Column = Core.extend(Echo.Component, {
         Echo.ComponentFactory.registerType("C", this);
     },
 
+    /** @see Echo.Component#componentType */
     componentType: "Column"
 });
 
 /**
- * Composite component.
- * A single-child container that provides no rendering properties.
+ * Composite component: a generic composite component abstract base class. This
+ * class is intended to be used as base class for composite components. Provides
+ * no rendering properties (other than those specified in Component). May
+ * contain at most one child component. May not contain a pane component as a
+ * child.
+ * 
+ * This class provides no benefit if you are providing a custom
+ * synchronization/rendering peer. In such cases, <code>Echo.Component</code>
+ * itself should be derived instead of this class.
  */
 Echo.Composite = Core.extend(Echo.Component, {
 
+    $abstract: true,
+    
     $load: function() {
         Echo.ComponentFactory.registerType("Composite", this);
         Echo.ComponentFactory.registerType("CM", this);
     },
 
+    /** @see Echo.Component#componentType */
     componentType: "Composite"
 });
 
 /**
- * Panel component.
- * A single-child container that provides a configurable border and margin.
- *
+ * Panel component: a single child container. Provides a configurable border,
+ * margin, background image, and dimensions. May contain at most one child. May
+ * contain pane components, and may be used as a means to add pane components to
+ * containers which do not allow pane components as children. In such a case it
+ * may be necessary to manually set the height property of the Panel itself.
+ * 
+ * @sp {#FillImage} backgroundImage the background image
  * @sp {#Border} border the panel border surrounding the child component
- * @sp {#Insets} insets the inset padding margin between the panel border and its content
+ * @sp {#Extent} height the height of the panel
+ * @sp {#Insets} insets the inset padding margin between the panel border and
+ *     its content
+ * @sp {#Extent} width the width of the panel
  */
 Echo.Panel = Core.extend(Echo.Composite, {
 
@@ -2701,22 +2885,27 @@ Echo.Panel = Core.extend(Echo.Composite, {
         Echo.ComponentFactory.registerType("P", this);
     },
 
+    /** @see Echo.Component#componentType */
     componentType: "Panel"
 });
 
 /**
- * A content pane is a high-level container/layout object which provides
- * layout for a content region and floating WindowPanes.
- *
+ * ContentPane component: a high-level container/layout object which fills a
+ * region and optionally provides the capability to add floating panes (e.g.
+ * <code>WindowPane</code>s) above that content. A ContentPane is often
+ * suitable for use as a base class to extend when creating a composite (pane)
+ * component. May contain at most one non-floating pane component as a child.
+ * May contain zero or more floating pane components as children.
+ * 
  * @sp {#FillImage} backgroundImage the background image
  * @sp {#Extent} horizontalScroll the horizontal scroll position
  * @sp {#Insets} insets the inset margin of the content
- * @sp {Number} overflow the scrollbar behavior used when content overflows
- *     the boundaries of the pane, one of the following values:
+ * @sp {Number} overflow the scrollbar behavior used when content overflows the
+ *     boundaries of the pane, one of the following values:
  *     <ul>
- *      <li><code>OVERFLOW_AUTO</code> (the default)</li>
- *      <li><code>OVERFLOW_HIDDEN</code> hide content that overflows</li>
- *      <li><code>OVERFLOW_SCROLL</code> always display scrollbars</li>
+ *     <li><code>OVERFLOW_AUTO</code> (the default)</li>
+ *     <li><code>OVERFLOW_HIDDEN</code> hide content that overflows</li>
+ *     <li><code>OVERFLOW_SCROLL</code> always display scrollbars</li>
  *     </ul>
  * @sp {#Extent} verticalScroll the vertical scroll position
  */
@@ -2726,16 +2915,19 @@ Echo.ContentPane = Core.extend(Echo.Component, {
     
         /**
          * Setting for <code>overflow</code> property that scrollbars should be displayed when content overflows.
+         * @type Number
          */
         OVERFLOW_AUTO: 0,
 
-        /**
+        /** 
          * Setting for <code>overflow</code> property indicating that overflowing content should be hidden.
+         * @type Number 
          */
         OVERFLOW_HIDDEN: 1,
 
-        /**
+        /** 
          * Setting for <code>overflow</code> property indicating that scrollbars should always be displayed.
+         * @type Number 
          */
         OVERFLOW_SCROLL: 2
     },
@@ -2745,45 +2937,53 @@ Echo.ContentPane = Core.extend(Echo.Component, {
         Echo.ComponentFactory.registerType("CP", this);
     },
 
+    /** @see Echo.Component#componentType */
     componentType: "ContentPane",
+    
+    /** @see Echo.Component#pane */
     pane: true
 });
 
 /**
- * A container component which displays children in a grid.
- * Cells may be configured to span multiple rows and/or columns.
- *
+ * Grid component: a layout container which displays children in a grid.
+ * Individual child component cells may be configured to span multiple rows or
+ * columns using layout data. May contain zero or more components as children.
+ * May not contain panes as children.
+ * 
  * @sp {#Border} border the border displayed around the grid, and between cells
- * @sp {#Extent} columnWidth an indexed property whose indices represent the width 
- *     of each column of the grid
+ * @sp {#Extent} columnWidth an indexed property whose indices represent the
+ *     width of each column of the grid
  * @sp {#Extent} height the overall height of the grid
  * @sp {#Insets} insets the default inset margin displayed in each cell
  * @sp {Number} orientation a value indicating whether the grid will be laid out
- *     horizontally and then vertically or vice-versa, one of the
- *     following values:
+ *     horizontally and then vertically or vice-versa, one of the following
+ *     values:
  *     <ul>
- *      <li><code>ORIENTATION_HORIZONTAL</code> (the default) lay children out horizontally, then vertically</li> 
- *      <li><code>ORIENTATION_VERTICAL</code> lay children out vertically, then horizontally</li> 
+ *     <li><code>ORIENTATION_HORIZONTAL</code> (the default) lay children out
+ *     horizontally, then vertically</li>
+ *     <li><code>ORIENTATION_VERTICAL</code> lay children out vertically,
+ *     then horizontally</li>
  *     </ul>
- * @sp {#Extent} rowWidth an indexed property whose indices represent the height 
+ * @sp {#Extent} rowWidth an indexed property whose indices represent the height
  *     of each row of the grid
  * @sp {Number} size the number of cells to render before wrapping to the next
  *     column/row (default 2)
  * @sp {#Extent} width the overall width of the grid
- *
- * @ldp {#Alignment} alignment the alignment of the child component within its cell
+ * @ldp {#Alignment} alignment the alignment of the child component within its
+ *      cell
  * @ldp {#Color} background the background of the child component's cell
- * @ldp {#FillImage} backrgoundImage the background image of the child component's cell
+ * @ldp {#FillImage} backrgoundImage the background image of the child
+ *      component's cell
  * @ldp {Number} columnSpan the number of column the containing cell should span
- *      (a value of <code>SPAN_FILL</code> indicates that cell should fill all columns until
- *      the end of the grid is reached; this value may only be used in
- *      this property for horizontally oriented grids)
- * @ldp {#Insets} insets the insets margin of the child component's cell 
- *      (this inset is added to any inset set on the container component)
- * @ldp {Number} rowSpan the number of rows the containing cell should span
- *      (a value of <code>SPAN_FILL</code> indicates that cell should fill all rows until
- *      the end of the grid is reached; this value may only be used in
- *      this property for vertically oriented grids)
+ *      (a value of <code>SPAN_FILL</code> indicates that cell should fill all
+ *      columns until the end of the grid is reached; this value may only be
+ *      used in this property for horizontally oriented grids)
+ * @ldp {#Insets} insets the insets margin of the child component's cell (this
+ *      inset is added to any inset set on the container component)
+ * @ldp {Number} rowSpan the number of rows the containing cell should span (a
+ *      value of <code>SPAN_FILL</code> indicates that cell should fill all
+ *      rows until the end of the grid is reached; this value may only be used
+ *      in this property for vertically oriented grids)
  */
 Echo.Grid = Core.extend(Echo.Component, {
 
@@ -2793,12 +2993,14 @@ Echo.Grid = Core.extend(Echo.Component, {
          * Constant value for <code>orientation</code> property indicating cells 
          * should be laid out horizontally and then vertically.
          * <code>ORIENTATION_HORIZONTAL</code> is the default orientation setting.
+         * @type Number
          */
         ORIENTATION_HORIZONTAL: 0,
     
         /**
          * Constant value for <code>orientation</code> property indicating cells 
          * should be laid out vertically and then horizontally. 
+         * @type Number
          */
         ORIENTATION_VERTICAL: 1,
 
@@ -2811,6 +3013,7 @@ Echo.Grid = Core.extend(Echo.Component, {
          * direction of the layout of the <code>Grid</code>, i.e., it may only be 
          * used for column-spans if the orientation is horizontal, and it may only
          * be used for row-spans if the orientation is vertical.
+         * @type Number
          */
         SPAN_FILL: -1
     },
@@ -2820,24 +3023,26 @@ Echo.Grid = Core.extend(Echo.Component, {
         Echo.ComponentFactory.registerType("G", this);
     },
 
+    /** @see Echo.Component#componentType */
     componentType: "Grid"
 });
 
 /**
- * Label component.
- *
- * @sp {Boolean} formatWhitespace a boolean flag indicating whether whitespace 
+ * Label component: displays a text string, an icon, or both. May not contain
+ * child components.
+ * 
+ * @sp {Boolean} formatWhitespace a boolean flag indicating whether whitespace
  *     formatting should be applied to the label
- * @sp {Boolean} lineWrap a boolean flag indicating whether long lines should
- *     be wrapped
+ * @sp {Boolean} lineWrap a boolean flag indicating whether long lines should be
+ *     wrapped
  * @sp {#ImageReference} icon the icon/image to display in the label
- * @sp {#Extent} iconTextMargin an extent setting describing the distance between
- *     the label and icon
+ * @sp {#Extent} iconTextMargin an extent setting describing the distance
+ *     between the label and icon
  * @sp {String} text the text to display in the label
- * @sp {#Alignment} textAlignment an alignment setting describing the alignment of 
- *     the label's text
- * @sp {#Alignment} textPosition an alignment setting describing the position of the
- *     label's text relative to the icon
+ * @sp {#Alignment} textAlignment an alignment setting describing the alignment
+ *     of the label's text
+ * @sp {#Alignment} textPosition an alignment setting describing the position of
+ *     the label's text relative to the icon
  */
 Echo.Label = Core.extend(Echo.Component, {
 
@@ -2846,11 +3051,13 @@ Echo.Label = Core.extend(Echo.Component, {
         Echo.ComponentFactory.registerType("L", this);
     },
 
+    /** @see Echo.Component#componentType */
     componentType: "Label"
 });
 
 /**
- * A container component which displays cells in a row in horizontal order.
+ * Row component: a layout container which renders its content in a single horizontal row of cells.
+ * May have zero or more child components.  Does not support pane components as children.
  *
  * @sp {#Border} border the border displayed around the entire column
  * @sp {#Extent} cellSpacing the extent margin between cells of the column
@@ -2870,80 +3077,143 @@ Echo.Row = Core.extend(Echo.Component, {
         Echo.ComponentFactory.registerType("R", this);
     },
 
+    /** @see Echo.Component#componentType */
     componentType: "Row"
 });
 
 /**
- * SplitPane component.
- * Splits a pane into two regions.  A maximum of two components may be added as children.
- *
- * @sp {Boolean} autoPositioned flag indicating whether the pane should set the separator position automatically
- *     based on size of first child.  This feature is only available on vertically oriented panes, where the
- *     first child contains non-pane content. 
- * @sp {Number} orientation the orientation of the SplitPane, one of the following values:
+ * SplitPane component: a pane component which displays two components
+ * horizontally or vertically adjacent to one another, optionally allowing the
+ * user to apportion space between the two using a resize handle. May have at
+ * most two child components. Supports pane components as children.
+ * 
+ * @sp {Boolean} autoPositioned flag indicating whether the pane should set the
+ *     separator position automatically based on size of first child. This
+ *     feature is only available on vertically oriented panes, where the first
+ *     child contains non-pane content.
+ * @sp {Number} orientation the orientation of the SplitPane, one of the
+ *     following values:
  *     <ul>
- *      <li><code>ORIENTATION_HORIZONTAL_LEADING_TRAILING</code> (the default)</li>
- *      <li><code>ORIENTATION_HORIZONTAL_TRAILING_LEADING</code></li>
- *      <li><code>ORIENTATION_HORIZONTAL_LEFT_RIGHT</code></li>
- *      <li><code>ORIENTATION_HORIZONTAL_RIGHT_LEFT</code></li>
- *      <li><code>ORIENTATION_VERTICAL_TOP_BOTTOM</code></li>
- *      <li><code>ORIENTATION_VERTICAL_BOTTOM_TOP</code></li>
+ *     <li><code>ORIENTATION_HORIZONTAL_LEADING_TRAILING</code> (the default)</li>
+ *     <li><code>ORIENTATION_HORIZONTAL_TRAILING_LEADING</code></li>
+ *     <li><code>ORIENTATION_HORIZONTAL_LEFT_RIGHT</code></li>
+ *     <li><code>ORIENTATION_HORIZONTAL_RIGHT_LEFT</code></li>
+ *     <li><code>ORIENTATION_VERTICAL_TOP_BOTTOM</code></li>
+ *     <li><code>ORIENTATION_VERTICAL_BOTTOM_TOP</code></li>
  *     </ul>
- * @sp {Boolean} resizable flag indicating whether the pane separator can be moved
+ * @sp {Boolean} resizable flag indicating whether the pane separator can be
+ *     moved
  * @sp {#Color} separatorColor the separator color
- * @sp {#Extent} separatorHeight the height of the separator (this property is used to determine the size
- *     of the separator in vertical orientations)
- * @sp {#FillImage} separatorHorizontalImage a FillImage used to paint the separator for horizontal orientations
- * @sp {#FillImage} separatorHorizontalRolloverImage a FillImage used to paint the separator for horizontal orientations when
- *     the mouse is over it
- * @sp {#Extent} separatorPosition an extent specifying the position of the separator
+ * @sp {#Extent} separatorHeight the height of the separator (this property is
+ *     used to determine the size of the separator in vertical orientations)
+ * @sp {#FillImage} separatorHorizontalImage a FillImage used to paint the
+ *     separator for horizontal orientations
+ * @sp {#FillImage} separatorHorizontalRolloverImage a FillImage used to paint
+ *     the separator for horizontal orientations when the mouse is over it
+ * @sp {#Extent} separatorPosition an extent specifying the position of the
+ *     separator
  * @sp {#Color} separatorRolloverColor the rollover separator color
- * @sp {#FillImage} separatorVerticalImage a FillImage used to paint the separator for vertical orientations
- * @sp {#FillImage} separatorVerticalRolloverImage a FillImage used to paint the separator for vertical orientations when the
- *     mouse is over it
- * @sp {#Extent} separatorWidth the width of the separator (this property is used to determine the size
- *     of the separator in horizontal orientations)
- * @ldp {#Alignment} alignment the alignment of the child component within its subpane
+ * @sp {#FillImage} separatorVerticalImage a FillImage used to paint the
+ *     separator for vertical orientations
+ * @sp {#FillImage} separatorVerticalRolloverImage a FillImage used to paint the
+ *     separator for vertical orientations when the mouse is over it
+ * @sp {#Extent} separatorWidth the width of the separator (this property is
+ *     used to determine the size of the separator in horizontal orientations)
+ * @ldp {#Alignment} alignment the alignment of the child component within its
+ *      subpane
  * @ldp {#Color} background the background of the child component's subpane
- * @ldp {#FillImage} backrgoundImage the background image of the child component's subpane
+ * @ldp {#FillImage} backrgoundImage the background image of the child
+ *      component's subpane
  * @ldp {#Insets} insets the insets margin of the child component's subpane
  * @ldp {#Extent} maximumSize the maximum size of the child component's subpane
  * @ldp {#Extent} minimumSize the minimum size of the child component's subpane
- * @ldp {Number} overflow the layout behavior to use when the child component is larger than 
- *      its containing subpane, one of the following values:
+ * @ldp {Number} overflow the layout behavior to use when the child component is
+ *      larger than its containing subpane, one of the following values:
  *      <ul>
- *       <li><code>OVERFLOW_AUTO</code> (the default)</li>
- *       <li><code>OVERFLOW_HIDDEN</code></li>
- *       <li><code>OVERFLOW_SCROLL</code></li>
- *     </ul>
+ *      <li><code>OVERFLOW_AUTO</code> (the default)</li>
+ *      <li><code>OVERFLOW_HIDDEN</code></li>
+ *      <li><code>OVERFLOW_SCROLL</code></li>
+ *      </ul>
  */
 Echo.SplitPane = Core.extend(Echo.Component, {
 
     $static: {
+    
+        /**
+         * Orientation property value indicating a leading / trailing layout.
+         * @type Number
+         */
         ORIENTATION_HORIZONTAL_LEADING_TRAILING: 0,
+
+        /**
+         * Orientation property value indicating a trailing / leading layout.
+         * @type Number
+         */
         ORIENTATION_HORIZONTAL_TRAILING_LEADING: 1,
-        ORIENTATION_HORIZONTAL_LEFT_RIGHT: 2,
-        ORIENTATION_HORIZONTAL_RIGHT_LEFT: 3,
-        ORIENTATION_VERTICAL_TOP_BOTTOM: 4,
-        ORIENTATION_VERTICAL_BOTTOM_TOP: 5,
-        
-        DEFAULT_SEPARATOR_POSITION: "50%",
-        DEFAULT_SEPARATOR_SIZE_FIXED: 0,
-        DEFAULT_SEPARATOR_SIZE_RESIZABLE: 4,
-        DEFAULT_SEPARATOR_COLOR: "#3f3f4f",
         
         /**
-         * Setting for <code>overflow</code> property that scrollbars should be displayed when content overflows.
+         * Orientation property value indicating a left / right layout.
+         * @type Number
+         */
+        ORIENTATION_HORIZONTAL_LEFT_RIGHT: 2,
+        
+        /**
+         * Orientation property value indicating a right / left layout.
+         * @type Number
+         */
+        ORIENTATION_HORIZONTAL_RIGHT_LEFT: 3,
+        
+        /**
+         * Orientation property value indicating a top / bottom layout.
+         * @type Number
+         */
+        ORIENTATION_VERTICAL_TOP_BOTTOM: 4,
+
+        /**
+         * Orientation property value indicating a bottom / top layout.
+         * @type Number
+         */
+        ORIENTATION_VERTICAL_BOTTOM_TOP: 5,
+        
+        /**
+         * Default separator position.
+         * @type {#Extent}
+         */
+        DEFAULT_SEPARATOR_POSITION: "50%",
+        
+        /**
+         * Default separator size for fixed SplitPanes.
+         * @type {#Extent}
+         */
+        DEFAULT_SEPARATOR_SIZE_FIXED: 0,
+
+        /**
+         * Default separator size for resizable SplitPanes.
+         * @type {#Extent}
+         */
+        DEFAULT_SEPARATOR_SIZE_RESIZABLE: 4,
+        
+        /** 
+         * Default separator color.
+         * @type {#Color}
+         */
+        DEFAULT_SEPARATOR_COLOR: "#3f3f4f",
+        
+        /** 
+         * Setting for <code>overflow</code> property that scrollbars should be displayed when content overflows. 
+         * @type Number
          */
         OVERFLOW_AUTO: 0,
 
-        /**
+        /** 
          * Setting for <code>overflow</code> property indicating that overflowing content should be hidden.
+         * @type Number
          */
         OVERFLOW_HIDDEN: 1,
 
-        /**
-         * Setting for <code>overflow</code> property indicating that scrollbars should always be displayed.
+        /** 
+         * Setting for <code>overflow</code> property indicating that scrollbars should always be displayed. 
+         * @type Number
          */
         OVERFLOW_SCROLL: 2
     },
@@ -2953,17 +3223,22 @@ Echo.SplitPane = Core.extend(Echo.Component, {
         Echo.ComponentFactory.registerType("SP", this);
     },
 
+    /** @see Echo.Component#componentType */
     componentType: "SplitPane",
+
+    /** @see Echo.Component#pane */
     pane: true
 });
 
 /**
- * Abstract base class for text components.
- *
- * @sp {String} actionCommand the action command fired when the enter key is pressed
- *     within the text component
- * @sp {#Alignment} alignment an alignment setting describing the alignment of the text
- * @sp {#FillImage} backgroundImage the background image to display in the component
+ * Abstract base class for text-entry components.
+ * 
+ * @sp {String} actionCommand the action command fired when the enter key is
+ *     pressed within the text component
+ * @sp {#Alignment} alignment an alignment setting describing the alignment of
+ *     the text
+ * @sp {#FillImage} backgroundImage the background image to display in the
+ *     component
  * @sp {#Border} border the border to display around the component
  * @sp {#Color} disabledBackground the disabled background color
  * @sp {#Color} disabledBackgroundImage the disabled background image
@@ -2973,11 +3248,13 @@ Echo.SplitPane = Core.extend(Echo.Component, {
  * @sp {#Extent} height the height of the component
  * @sp {#Extent} horizontalScroll the horizontal scrollbar position
  * @sp {#Insets} insets the inset margin between the border and the text content
- * @sp {Number} maximumLength the maximum number of characters which may be entered 
+ * @sp {Number} maximumLength the maximum number of characters which may be
+ *     entered
  * @sp {String} toolTipText the tool tip text
  * @sp {#Extent} verticalScroll the vertical scrollbar position
  * @sp {#Extent} width the width of the component
- * @event action An event fired when the enter/return key is pressed while the field is focused.
+ * @event action An event fired when the enter/return key is pressed while the
+ *        field is focused.
  */
 Echo.TextComponent = Core.extend(Echo.Component, {
 
@@ -2998,12 +3275,16 @@ Echo.TextComponent = Core.extend(Echo.Component, {
         }
     },
 
+    /** @see Echo.Component#componentType */
     componentType: "TextComponent",
+
+    /** @see Echo.Component#focusable */
     focusable: true
 });
 
 /**
- * TextArea component.
+ * TextArea component: a multiple-line text input field. May not contain child
+ * components.
  */
 Echo.TextArea = Core.extend(Echo.TextComponent, {
 
@@ -3012,11 +3293,13 @@ Echo.TextArea = Core.extend(Echo.TextComponent, {
         Echo.ComponentFactory.registerType("TA", this);
     },
 
+    /** @see Echo.Component#componentType */
     componentType: "TextArea"
 });
 
 /**
- * TextField component.
+ * TextField component: a single-line text input field. May not contain child
+ * components.
  */
 Echo.TextField = Core.extend(Echo.TextComponent, {
 
@@ -3025,11 +3308,13 @@ Echo.TextField = Core.extend(Echo.TextComponent, {
         Echo.ComponentFactory.registerType("TF", this);
     },
 
+    /** @see Echo.Component#componentType */
     componentType: "TextField"
 });
 
 /**
- * PasswordField component.
+ * PasswordField component: a single-line text input field which masks input.
+ * May not contain child components.
  */
 Echo.PasswordField = Core.extend(Echo.TextField, {
 
@@ -3038,33 +3323,44 @@ Echo.PasswordField = Core.extend(Echo.TextField, {
         Echo.ComponentFactory.registerType("PF", this);
     },
     
+    /** @see Echo.Component#componentType */
     componentType: "PasswordField"
 });
 
 /**
- * WindowPane component.
- *
- * @sp {#FillImage} backgroundImage the background image to display within the content area
+ * WindowPane component: displays content in a movable and/or resizable window.
+ * May only be added to a <code>ContentPane</code>. May contain at most one
+ * child component. May contain pane components as children.
+ * 
+ * @sp {#FillImage} backgroundImage the background image to display within the
+ *     content area
  * @sp {#FillImageBorder} border the border frame containing the WindowPane
  * @sp {Boolean} closable flag indicating whether the window is closable
  * @sp {#ImageReference} closeIcon the close button icon
  * @sp {#Insets} closeIconInsets the inset margin around the close button icon
  * @sp {#ImageReference} closeRolloverIcon the close button rollover icon
+ * @sp {#Extent} contentHeight the height of the content region of the window
+ * @sp {#Extent} contentWidth the width of the content region of the window
  * @sp {#Insets} controlsInsets the inset margin around the controls area
- * @sp {#Extent} controlsSpacing the spacing between controls in the controls area
+ * @sp {#Extent} controlsSpacing the spacing between controls in the controls
+ *     area
  * @sp {#Extent} height the outside height of the window, including its border
  * @sp {#ImageReference} icon the icon to display adjacent the window title
  * @sp {#Insets} iconInsets the inset margin around the icon
  * @sp {#Insets} insets the inset margin around the window content
- * @sp {Boolean} maximizeEnabled flag indicating whether maximize feature should be enabled
+ * @sp {Boolean} maximizeEnabled flag indicating whether maximize feature should
+ *     be enabled
  * @sp {#ImageReference} maximizeIcon the minimize button icon
- * @sp {#Insets} maximizeIconInsets the inset margin around the maximize button icon
+ * @sp {#Insets} maximizeIconInsets the inset margin around the maximize button
+ *     icon
  * @sp {#ImageReference} maximizeRolloverIcon the maximize button rollover icon
  * @sp {#Extent} maximumHeight the maximum height of the window
  * @sp {#Extent} maximumWidth the maximum width of the window
- * @sp {Boolean} minimizeEnabled flag indicating whether maximize feature should be enabled
+ * @sp {Boolean} minimizeEnabled flag indicating whether maximize feature should
+ *     be enabled
  * @sp {#ImageReference} minimizeIcon the minimize button icon
- * @sp {#Insets} minimizeIconInsets the inset margin around the minimize button icon
+ * @sp {#Insets} minimizeIconInsets the inset margin around the minimize button
+ *     icon
  * @sp {#ImageReference} minimizeRolloverIcon the minimize button rollover icon
  * @sp {#Extent} minimumHeight the minimum height of the window
  * @sp {#Extent} minimumWidth the minimum width of the window
@@ -3074,7 +3370,8 @@ Echo.PasswordField = Core.extend(Echo.TextField, {
  * @sp {Boolean} resizable flag indicating whether the window is resizable
  * @sp {String} title the title of the window
  * @sp {#Color} titleBackground the background color to display in the title bar
- * @sp {#FillImage} titleBackgroundImage the background image to display in the title bar
+ * @sp {#FillImage} titleBackgroundImage the background image to display in the
+ *     title bar
  * @sp {#Font} titleFont the font in which to display the title text
  * @sp {#Color} titleForeground the foreground color of the title text
  * @sp {#Extent} titleHeight the height of the title bar
@@ -3092,23 +3389,102 @@ Echo.WindowPane = Core.extend(Echo.Component, {
     },
 
     $static: {
-        DEFAULT_BORDER: { color: "#4f4faf", borderInsets: 20, contentInsets: 3 },
+        
+        /** 
+         * Default WindowPane border.
+         * @type #FillImageBorder
+         */
+        DEFAULT_BORDER: { color: "#36537a", borderInsets: 20, contentInsets: 3 },
+        
+        /** 
+         * Default WindowPane content background color.
+         * @type #Color
+         */
         DEFAULT_BACKGROUND: "#ffffff",
+        
+        /** 
+         * Default WindowPane content background color.
+         * @type #Color
+         */
         DEFAULT_FOREGROUND: "#000000",
+        
+        /** 
+         * Default insets around WindowPane controls.
+         * @type #Insets
+         */
         DEFAULT_CONTROLS_INSETS: 4,
+        
+        /** 
+         * Default spacing between WindowPane controls.
+         * @type #Extent
+         */
         DEFAULT_CONTROLS_SPACING: 4,
+        
+        /** 
+         * Default WindowPane height.
+         * @type #Extent
+         */
         DEFAULT_HEIGHT: "15em",
+        
+        /** 
+         * Default WindowPane minimum width.
+         * @type #Extent
+         */
         DEFAULT_MINIMUM_WIDTH: 100,
+        
+        /** 
+         * Default WindowPane minimum height.
+         * @type #Extent
+         */
         DEFAULT_MINIMUM_HEIGHT: 100,
+        
+        /** 
+         * Default WindowPane title background color.
+         * @type #Color
+         */
+        DEFAULT_TITLE_BACKGROUND: "#becafe",
+        
+        /** 
+         * Default WindowPane title height.
+         * @type #Extent
+         */
         DEFAULT_TITLE_HEIGHT: 30,
+        
+        /** 
+         * Default WindowPane title insets.
+         * @type #Insets
+         */
+        DEFAULT_TITLE_INSETS: "5px 10px",
+        
+        /** 
+         * Default WindowPane width.
+         * @type #Extent
+         */
         DEFAULT_WIDTH: "30em"
     },
 
+    /** @see Echo.Component#componentType */
     componentType: "WindowPane",
+    
+    /** @see Echo.Component#modalSupport */
     modalSupport: true,
+    
+    /**
+     * Render as floating pane in ContentPanes. 
+     * @see Echo.ContentPane 
+     */
     floatingPane: true,
+
+    /** @see Echo.Component#pane */
     pane: true,
+    
+    /** @see Echo.Component#focusable */
     focusable: true,
+    
+    /** 
+     * Object specifying state of window pane before it was maximized,
+     * May contain x, y, width, height integer properties or be null.
+     */
     _preMaximizedState: null,
     
     /**

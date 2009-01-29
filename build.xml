@@ -174,9 +174,11 @@
         <file name='Application.js'/>
         <file name='Render.js'/>
         <file name='Sync.js'/>
+        <file name='Sync.Composite.js'/>
         <file name='Serial.js'/>
         <file name='Client.js'/>
         <file name='FreeClient.js'/>
+        <file name='DebugConsole.js'/>
         <file name='Arc.js'/>
         <file name='Sync.ArrayContainer.js'/>
         <file name='Sync.Button.js'/>

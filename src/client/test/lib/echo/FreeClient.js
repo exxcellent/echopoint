@@ -1,7 +1,7 @@
 /**
  * @fileoverview
  * Freestanding Client Implementation.
- * Provides capapbility to develop server-independent applications.
+ * Provides capability to develop server-independent applications.
  * Requires Core, Core.Web, Application, Render, Serial, Client.
  */
  
@@ -13,8 +13,26 @@
  */ 
 Echo.FreeClient = Core.extend(Echo.Client, {
 
+    /** 
+     * Method reference to <code>_processUpdate()</code> 
+     * @type Function
+     */
     _processUpdateRef: null,
+    
+    /** 
+     * Method reference to <code>_doRender()</code> 
+     * @type Function
+     */
+    _doRenderRef: null,
+    
+    /** Resource package name to base URL mapping for resource paths. */
     _resourcePaths: null,
+    
+    /** 
+     * Flag indicating that a runnable has been enqueued to invoke _doRender(). 
+     * @type Boolean
+     */
+    _renderPending: false,
 
     /**
      * Creates a new FreeClient.
@@ -24,6 +42,7 @@ Echo.FreeClient = Core.extend(Echo.Client, {
      */
     $construct: function(application, domainElement) {
         Echo.Client.call(this);
+        this._doRenderRef = Core.method(this, this._doRender);
         this._processUpdateRef = Core.method(this, this._processUpdate);
         this.configure(application, domainElement);
         this._processUpdate();
@@ -35,8 +54,8 @@ Echo.FreeClient = Core.extend(Echo.Client, {
      * URLs with the specified <code>baseUrl</code> prepended to the resource name provided in the
      * call to <code>getResourceUrl()</code>.
      *
-     * @param packageName the resource package name
-     * @param baseUrl the base URL to prepend to resources in the specified package
+     * @param {String} packageName the resource package name
+     * @param {String} baseUrl the base URL to prepend to resources in the specified package
      */
     addResourcePath: function(packageName, baseUrl) {
         if (!this._resourcePaths) {
@@ -54,10 +73,22 @@ Echo.FreeClient = Core.extend(Echo.Client, {
         Echo.Render.renderComponentDispose(null, this.application.rootComponent);
         Echo.Client.prototype.dispose.call(this);
     },
-
+    
     /**
-     * @override
-     */    
+     * Performs rendering operations by invoking Echo.Render.processUpdates().
+     * Invoked in separate execution context (scheduled).
+     */
+    _doRender: function() {
+        if (this.application) {
+            // Only execute updates in the event client has not been deconfigured, which can
+            // occur before auto-update fires if other operations were scheduled for immediate
+            // execution.
+            this.processUpdates();
+            this._renderPending = false;
+        }
+    },
+    
+    /** @see Echo.Client#getResoruceUrl */
     getResourceUrl: function(packageName, resourceName) {
         if (this._resourcePaths && this._resourcePaths[packageName]) {
             return this._resourcePaths[packageName] + resourceName;
@@ -75,12 +106,10 @@ Echo.FreeClient = Core.extend(Echo.Client, {
         this.application.updateManager.addUpdateListener(this._processUpdateRef);
     },
     
-    //FIXME This method is asynchronous, first autoupdate might want to wait on it being completed.
-    // This currently causes occassional bugginess in the freeclient test app (race).
     /**
      * Loads an XML style sheet into the client application from a URL.
      * 
-     * @param url the URL from which the StyleSheet should be fetched.
+     * @param {String} url the URL from which the StyleSheet should be fetched.
      */
     loadStyleSheet: function(url) {
         var conn = new Core.Web.HttpConnection(url, "GET");
@@ -89,10 +118,9 @@ Echo.FreeClient = Core.extend(Echo.Client, {
     },
     
     /**
-     * Event listener invoked when a StyleSheet fetched via
-     * loadStyleSheet() has been retrieved.
+     * Event listener invoked when a StyleSheet fetched via loadStyleSheet() has been retrieved.
      * 
-     * @param {Event} e the HttpConnection response event
+     * @param e the HttpConnection response event
      */
     _processStyleSheet: function(e) {
         if (!e.valid) {
@@ -104,44 +132,11 @@ Echo.FreeClient = Core.extend(Echo.Client, {
         this.application.setStyleSheet(styleSheet);
     },
 
+    /** Schedules doRender() to run in next execution context. */  
     _processUpdate: function(e) {
-        if (!this._autoUpdate) {
-            this._autoUpdate = new Echo.FreeClient.AutoUpdate(this);
-            Core.Web.Scheduler.add(this._autoUpdate);
-        }
-    }
-});
-
-/**
- * <code>Core.Web.Scheduler.Runnable</code> to automatically update client when application state has changed.
- */
-Echo.FreeClient.AutoUpdate = Core.extend(Core.Web.Scheduler.Runnable, {
-
-    timeInterval: 0,
-    
-    repeat: false,
-    
-    _client: null,
-
-    /**
-     * Creates a new automatic render update runnable.
-     * 
-     * @param client the supported client
-     */
-    $construct: function(client) {
-        this._client = client;
-    },
-    
-    /**
-     * Runnable run() implementation.
-     */
-    run: function() {
-        if (this._client.application) {
-            // Only execute updates in the event client has not been deconfigured, which can
-            // occur before auto-update fires if other operations were scheduled for immediate
-            // execution.
-            Echo.Render.processUpdates(this._client);
-            this._client._autoUpdate = null;
+        if (!this._renderPending) {
+            this._renderPending = true;
+            Core.Web.Scheduler.run(this._doRenderRef);
         }
     }
 });

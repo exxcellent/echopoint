@@ -5,11 +5,40 @@
  */
 Echo.DebugConsole = {
         
+    /** 
+     * Flag indicating whether the debug console has been installed. 
+     * @type Boolean
+     */
     _installed: false,
+    
+    /** 
+     * Flag indicating whether the console has been rendered on screen. 
+     * @type Boolean
+     */
     _rendered: false,
+    
+    /** 
+     * The DOM element to which log messages should be appended. 
+     * @type Element
+     */
     _contentElement: null,
+    
+    /** 
+     * The outer container DOM element of the rendered console. 
+     * @type Element
+     */
     _windowElement: null,
+    
+    /** 
+     * Flag indicating whether the console is logging/processing output.
+     * @type Boolean 
+     */
     _logging: false,
+    
+    /** 
+     * Flag indicating whether the console is maximized.
+     * @type Boolean 
+     */
     _maximized: false,
     
     /**
@@ -31,16 +60,19 @@ Echo.DebugConsole = {
         Echo.DebugConsole._installed = true;
     },
     
+    /** Listener for click events from the "Clear" button: removes all content. */
     _clearListener: function() {
         while (Echo.DebugConsole._contentElement.firstChild) {
             Echo.DebugConsole._contentElement.removeChild(Echo.DebugConsole._contentElement.firstChild);
         }
     },
     
+    /** Listener for click events from the close (X) button: sets display to none. */
     _closeListener: function() {
         Echo.DebugConsole._windowElement.style.display = "none";
     },
     
+    /** Listener for click events from the maximize (^) button: toggles maximization state. */
     _maximizeListener: function() {
         Echo.DebugConsole._maximized = !Echo.DebugConsole._maximized;
         if (Echo.DebugConsole._maximized) {
@@ -64,6 +96,8 @@ Echo.DebugConsole = {
     
     /**
      * Method which will overwrite Core.Debug.consoleWrite().
+     * 
+     * @text {String} the text to output
      */
     _consoleWrite: function(text) {
         if (!Echo.DebugConsole._logging) {
@@ -80,6 +114,9 @@ Echo.DebugConsole = {
         Echo.DebugConsole._contentElement.scrollTop = 10000000;
     },
     
+    /** 
+     * Listener for keyboard events (shows/hides console with Ctrl+Alt+C 
+     */
     _keyListener: function(e) {
         e = e ? e : window.event;
         if (!(e.keyCode == 67 && e.ctrlKey && e.altKey)) {
@@ -103,6 +140,9 @@ Echo.DebugConsole = {
         return Echo.DebugConsole._windowElement.style.display == "block";
     },
     
+    /**
+     * Renders the debug console to the screen.
+     */
     _render: function() {
         Echo.DebugConsole._windowElement = document.createElement("div");
         Echo.DebugConsole._windowElement.id = "__DebugConsole__";

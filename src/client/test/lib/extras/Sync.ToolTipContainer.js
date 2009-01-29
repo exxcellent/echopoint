@@ -73,11 +73,12 @@ Extras.Sync.ToolTipContainer = Core.extend(Echo.Render.ComponentSync, {
         Echo.Render.renderComponentAdd(update, applyToComponent, div);
         
         if (this.component.getComponentCount() > 1) {
-            var mouseEnterLeaveSupport = Core.Web.Env.PROPRIETARY_EVENT_MOUSE_ENTER_LEAVE_SUPPORTED;
-            var enterEvent = mouseEnterLeaveSupport ? "mouseenter" : "mouseover";
-            var exitEvent = mouseEnterLeaveSupport ? "mouseleave" : "mouseout";
-            Core.Web.Event.add(div, enterEvent, Core.method(this, this._processRolloverEnter), true);
-            Core.Web.Event.add(div, exitEvent, Core.method(this, this._processRolloverExit), true);
+            Core.Web.Event.add(div,
+                    Core.Web.Env.PROPRIETARY_EVENT_MOUSE_ENTER_LEAVE_SUPPORTED ? "mouseenter" : "mouseover", 
+                    Core.method(this, this._processRolloverEnter), true);
+            Core.Web.Event.add(div,
+                    Core.Web.Env.PROPRIETARY_EVENT_MOUSE_ENTER_LEAVE_SUPPORTED ? "mouseleave" : "mouseout", 
+                    Core.method(this, this._processRolloverExit), true);
             Core.Web.Event.add(div, "mousemove", Core.method(this, this._processMove), true);
         }
         
@@ -85,11 +86,37 @@ Extras.Sync.ToolTipContainer = Core.extend(Echo.Render.ComponentSync, {
     },
     
     _positionToolTip: function(e) {
-        var x = e.pageX || (e.clientX + (document.documentElement.scrollLeft || document.body.scrollLeft));
-        var y = e.pageY || (e.clientY + (document.documentElement.scrollTop || document.body.scrollTop));
+        // Determine cursor position.
+        var cursorX = (e.pageX || (e.clientX + (document.documentElement.scrollLeft || document.body.scrollLeft)));
+        var cursorY = (e.pageY || (e.clientY + (document.documentElement.scrollTop || document.body.scrollTop)));
         
-        this._toolTipDiv.style.left = (x + 10) + "px";
-        this._toolTipDiv.style.top = (y + 10) + "px";
+        // Determine size of window and tip.
+        var bodyBounds = new Core.Web.Measure.Bounds(document.body);
+        var tipBounds = new Core.Web.Measure.Bounds(this._toolTipDiv);
+        
+        // Load default tip position.
+        var tipX = cursorX + 10;
+        var tipY = cursorY + 10;
+        
+        // Ensure tip is on screen vertically.
+        if (tipY + tipBounds.height > bodyBounds.height) {
+            tipY = bodyBounds.height - tipBounds.height;
+            if (tipY < 0) {
+                tipY = 0;
+            }
+        }
+        
+        // Ensure tip is on screen horizontally (but never position it under cursor).
+        if (cursorY < tipY && (tipX + tipBounds.width > bodyBounds.width)) {
+            tipX = bodyBounds.width - tipBounds.width;
+            if (tipX < 0) {
+                tipX = 0;
+            }
+        }
+        
+        // Render tip position.
+        this._toolTipDiv.style.left = tipX + "px";
+        this._toolTipDiv.style.top = tipY + "px";
     },
     
     _processMove: function(e) {

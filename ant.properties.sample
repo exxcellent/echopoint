@@ -45,7 +45,7 @@ dir.echo                          ../../NextApp_Echo/v3/echo3
 dir.echo.extras                   ../../NextApp_Echo/v3/extras
 dir.src.client.test.tempdir       /tmp/out
 clienttestwarfile                 echopointclienttest.war
-yuicompressor.lib.jar             ${dir.lib}/yuicompressor-2.3.5.jar
+yuicompressor.lib.jar             ${dir.lib}/yuicompressor-2.4.2.jar
 
 # Javadoc configuration
 javadoc.cssfile                   ${dir.docs}/javadoc.css

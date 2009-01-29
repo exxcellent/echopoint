@@ -8,18 +8,22 @@
  * Namespace for application-rendered component support.
  * @namespace
  */
-Echo.Arc = function() { };
+Echo.Arc = { };
 
 /**
  * Client for application-rendered components.
  * These clients are automatically created and destroyed by the
  * ArcClient component synchronization peer.
- * @class 
  */
 Echo.Arc.Client = Core.extend(Echo.FreeClient, {
     
+    /**
+     * The synchronization peer for the application-rendered component.
+     * @type Echo.Arc.ComponentSync
+     */
     arcSync: null,
     
+    /** @see Echo.Client#verifyInput */
     verifyInput: function(component, flags) {
         if (!this.arcSync.client.verifyInput(this.arcSync.component, flags)) {
             return false;
@@ -33,11 +37,8 @@ Echo.Arc.Client = Core.extend(Echo.FreeClient, {
  * Application rendered component peers should extend this peer.
  * The super-implementations of the renderAdd(), renderDispose(),
  * renderDisplay(), and renderUpdate() methods must be invoked.
- * @class 
  */
 Echo.Arc.ComponentSync = Core.extend(Echo.Render.ComponentSync, {
-
-    $construct: function() { },
 
     $abstract: {
     
@@ -65,6 +66,8 @@ Echo.Arc.ComponentSync = Core.extend(Echo.Render.ComponentSync, {
         
         /**
          * renderAdd() implementation: must be invoked by overriding method.
+         * 
+         * @see Echo.Render.ComponentSync#renderAdd
          */
         renderAdd: function(update, parentElement) {
             if (!this.getDomainElement()) {
@@ -83,6 +86,8 @@ Echo.Arc.ComponentSync = Core.extend(Echo.Render.ComponentSync, {
          * When the application is created, the component returned by createComponent() 
          * will be added to the root component of the application.  The application will
          * be installed in the DOM at the element returned by the getDomainElement().
+         * 
+         * @see Echo.Render.ComponentSync#renderDisplay
          */
         renderDisplay: function() {
             if (this.arcApplication) {
@@ -105,7 +110,7 @@ Echo.Arc.ComponentSync = Core.extend(Echo.Render.ComponentSync, {
         /**
          * renderDispose() implementation: must be invoked by overriding method.
          * 
-         * Disposes of the client, application, and references to DOM resources.
+         * @see Echo.Render.ComponentSync#renderDispose
          */
         renderDispose: function(update) {
             if (this.arcClient) {
@@ -113,7 +118,6 @@ Echo.Arc.ComponentSync = Core.extend(Echo.Render.ComponentSync, {
                 this.arcClient = null;
             }
             if (this.arcApplication) {
-                this.arcApplication.dispose();
                 this.arcApplication = null;
                 this.baseComponent = null;
             }
@@ -127,6 +131,8 @@ Echo.Arc.ComponentSync = Core.extend(Echo.Render.ComponentSync, {
          * rendered component desires to perform a more efficient update.
          * This implementation may be called by the overriding implementation if
          * replacing-and-redrawing is desired.
+         * 
+         * @see Echo.Render.ComponentSync#renderUpdate
          */
         renderUpdate: function(update) {
             var domainElement = this.getDomainElement();
@@ -148,6 +154,7 @@ Echo.Arc.ChildContainer = Core.extend(Echo.Component, {
         Echo.ComponentFactory.registerType("ArcChildContainer", this);
     },
 
+    /** @see Echo.Component#componentType */
     componentType: "ArcChildContainer"
 });
 
@@ -160,9 +167,7 @@ Echo.Arc.ChildContainerPeer = Core.extend(Echo.Render.ComponentSync, {
         Echo.Render.registerPeer("ArcChildContainer", this);
     },
 
-    $construct: function() {
-    },
-
+    /** @see Echo.Render.ComponentSync#renderAdd */
     renderAdd: function(update, parentElement) {
         this._div = document.createElement("div");
         var component = this.component.get("component");
@@ -175,6 +180,7 @@ Echo.Arc.ChildContainerPeer = Core.extend(Echo.Render.ComponentSync, {
         parentElement.appendChild(this._div);
     },
     
+    /** @see Echo.Render.ComponentSync#renderDisplay */
     renderDisplay: function() {
         var component = this.component.get("component");
         if (component) {
@@ -182,6 +188,7 @@ Echo.Arc.ChildContainerPeer = Core.extend(Echo.Render.ComponentSync, {
         }
     },
     
+    /** @see Echo.Render.ComponentSync#renderDispose */
     renderDispose: function(update) {
         var component = this.component.get("component");
         if (component) {
@@ -190,6 +197,6 @@ Echo.Arc.ChildContainerPeer = Core.extend(Echo.Render.ComponentSync, {
         this._div = null;
     },
     
-    renderUpdate: function(update) {
-    }
+    /** @see Echo.Render.ComponentSync#renderUpdate */
+    renderUpdate: function(update) { }
 });

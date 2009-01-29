@@ -4,12 +4,11 @@
 Extras.Sync.AccordionPane = Core.extend(Echo.Render.ComponentSync, {
 
     $static: {
-        _paneInsets: 0,
         _defaultTabBackground: "#cfcfcf",
         _defaultTabBorder: "1px outset #cfcfcf",
         _defaultTabForeground: "#000000",
         _defaultTabInsets: "2px 5px",
-        _defaultTabContentInsets: this._paneInsets
+        _defaultTabContentInsets: 0
     },
     
     $load: function() {
@@ -36,8 +35,7 @@ Extras.Sync.AccordionPane = Core.extend(Echo.Render.ComponentSync, {
         this._div = document.createElement("div");
         this._div.id = this.component.renderId;
         this._div.style.cssText = "position:absolute;width:100%;height:100%;";
-        Echo.Sync.Color.renderFB(this.component, this._div);
-        Echo.Sync.Font.render(this.component.render("font"), this._div);
+        Echo.Sync.renderComponentDefaults(this.component, this._div);
         
         var componentCount = this.component.getComponentCount();
         for (var i = 0; i < componentCount; ++i) {
@@ -289,7 +287,9 @@ Extras.Sync.AccordionPane.Tab = Core.extend({
     
     _highlight: function(state) {
         var tabDiv = this._tabDiv,
-            border;
+            border,
+            borderData,
+            borderDataBottom;
         if (state) {
             var background = this._parent.component.render("tabRolloverBackground");
             if (!background) {
@@ -309,16 +309,24 @@ Extras.Sync.AccordionPane.Tab = Core.extend({
             }
             border = this._parent.component.render("tabRolloverBorder");
             if (!border) {
-                var borderData = Echo.Sync.Border.parse(this._parent._getTabBorder());
-                border = Echo.Sync.Border.compose(borderData.size, borderData.style,
-                        Echo.Sync.Color.adjust(borderData.color, 20, 20, 20));
+                border = this._parent._getTabBorder();
+                if (Echo.Sync.Border.isMultisided(border)) {
+                    borderData = Echo.Sync.Border.parse(border.top);
+                    borderDataBottom = Echo.Sync.Border.parse(border.bottom);
+                    border = {
+                            top: Echo.Sync.Border.compose(borderData.size, borderData.style,
+                                    Echo.Sync.Color.adjust(borderData.color, 20, 20, 20)),
+                            bottom: Echo.Sync.Border.compose(borderDataBottom.size, borderDataBottom.style,
+                                    Echo.Sync.Color.adjust(borderDataBottom.color, 20, 20, 20))
+                    };
+                } else {
+                    borderData = Echo.Sync.Border.parse(border);
+                    border = Echo.Sync.Border.compose(borderData.size, borderData.style,
+                            Echo.Sync.Color.adjust(borderData.color, 20, 20, 20));
+                }
             }
-            Echo.Sync.Border.render(border, tabDiv, "borderTop");
-            Echo.Sync.Border.render(border, tabDiv, "borderBottom");
         } else {
             border = this._parent._getTabBorder();
-            Echo.Sync.Border.render(border, tabDiv, "borderTop");
-            Echo.Sync.Border.render(border, tabDiv, "borderBottom");
             Echo.Sync.Color.render(this._parent._getTabBackground(), tabDiv, "backgroundColor");
             Echo.Sync.Color.render(this._parent.component.render("tabForeground", 
                     Extras.Sync.AccordionPane._defaultTabForeground), tabDiv, "color");
@@ -327,20 +335,32 @@ Extras.Sync.AccordionPane.Tab = Core.extend({
             tabDiv.style.backgroundRepeat = "";
             Echo.Sync.FillImage.render(this._parent.component.render("tabBackgroundImage"), tabDiv);
         }
+
+        if (Echo.Sync.Border.isMultisided(border)) {
+            Echo.Sync.Border.render(border.top, tabDiv, "borderTop");
+            Echo.Sync.Border.render(border.bottom, tabDiv, "borderBottom");
+        } else {
+            Echo.Sync.Border.render(border, tabDiv, "borderTop");
+            Echo.Sync.Border.render(border, tabDiv, "borderBottom");
+        }
     },
     
     _addEventListeners: function() {
         Core.Web.Event.add(this._tabDiv, "click", Core.method(this, this._processClick), false);
         if (this._parent.component.render("tabRolloverEnabled", true)) {
-            Core.Web.Event.add(this._tabDiv, "mouseover", Core.method(this, this._processEnter), false);
-            Core.Web.Event.add(this._tabDiv, "mouseout", Core.method(this, this._processExit), false);
+            Core.Web.Event.add(this._tabDiv, 
+                    Core.Web.Env.PROPRIETARY_EVENT_MOUSE_ENTER_LEAVE_SUPPORTED ? "mouseenter" : "mouseover", 
+                    Core.method(this, this._processEnter), false);
+            Core.Web.Event.add(this._tabDiv, 
+                    Core.Web.Env.PROPRIETARY_EVENT_MOUSE_ENTER_LEAVE_SUPPORTED ? "mouseleave" : "mouseout", 
+                    Core.method(this, this._processExit), false);
         }
         Core.Web.Event.Selection.disable(this._tabDiv);
     },
     
     _getContentInsets: function() {
         if (this._childComponent.pane) {
-            return Extras.Sync.AccordionPane._paneInsets;
+            return 0;
         } else {
             var insets = this._parent.component.render("defaultContentInsets");
             return insets ? insets : Extras.Sync.AccordionPane._defaultTabContentInsets;
