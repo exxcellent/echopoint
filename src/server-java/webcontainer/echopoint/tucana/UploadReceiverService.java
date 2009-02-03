@@ -20,6 +20,7 @@ package echopoint.tucana;
 import echopoint.tucana.event.UploadCallback;
 import echopoint.tucana.event.UploadCancelEvent;
 import echopoint.tucana.event.UploadFailEvent;
+import nextapp.echo.app.ApplicationInstance;
 import nextapp.echo.webcontainer.Connection;
 import nextapp.echo.webcontainer.Service;
 import nextapp.echo.webcontainer.WebContainerServlet;
@@ -80,6 +81,7 @@ public class UploadReceiverService extends BaseUploadService
     throws IOException
   {
     final HttpServletRequest request = conn.getRequest();
+    final ApplicationInstance app = conn.getUserInstance().getApplicationInstance();
     if ( !ServletFileUpload.isMultipartContent( request ) )
     {
       serviceBadRequest( conn, "Request must contain multipart content." );
@@ -115,17 +117,67 @@ public class UploadReceiverService extends BaseUploadService
     }
     catch ( IllegalStateException e )
     {
-      uploadSelect.notifyCallback( new UploadCancelEvent( uploadSelect,
-          uploadIndex, fileName, null, e ) );
+      app.enqueueTask( uploadSelect.getTaskQueue(),
+          new Cancel( uploadSelect, uploadIndex, fileName, e ) );
     }
     catch ( Exception e )
     {
-      uploadSelect.notifyCallback(
-          new UploadFailEvent( uploadSelect, uploadIndex, null, null, e ) );
+      app.enqueueTask( uploadSelect.getTaskQueue(),
+          new Fail( uploadSelect, uploadIndex, e ) );
     }
     finally
     {
       renderState.uploadEnded( uploadIndex );
+    }
+  }
+
+  /**
+   * A runnable used to enque a cancel event to the call back handler.
+   */
+  private class Cancel implements Runnable
+  {
+    private final FileUploadSelector uploadSelect;
+    private final String uploadIndex;
+    private final String fileName;
+    private final Exception e;
+
+    private Cancel( final FileUploadSelector uploadSelect,
+        final String uploadIndex, final String fileName, final Exception e )
+    {
+      this.uploadSelect = uploadSelect;
+      this.uploadIndex = uploadIndex;
+      this.fileName = fileName;
+      this.e = e;
+    }
+
+    public void run()
+    {
+      uploadSelect.notifyCallback( new UploadCancelEvent( uploadSelect,
+          uploadIndex, fileName, null, e ) );
+    }
+  }
+
+  /**
+   * A runnable used to enqueue a fail event to the call back handlers.
+   */
+  private class Fail implements Runnable
+  {
+    private final FileUploadSelector uploadSelect;
+    private final String uploadIndex;
+    private final Exception e;
+
+    private Fail( final FileUploadSelector uploadSelect,
+        final String uploadIndex, final Exception e )
+    {
+      this.uploadSelect = uploadSelect;
+      this.uploadIndex = uploadIndex;
+      this.e = e;
+    }
+
+    public void run()
+    {
+      uploadSelect.notifyCallback(
+          new UploadFailEvent( uploadSelect, uploadIndex, null, null, e ) );
     }
   }
 }

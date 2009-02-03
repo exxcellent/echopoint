@@ -18,7 +18,7 @@ echopoint.ImageIcon = Core.extend( echopoint.internal.AbstractContainer,
   /** Properties defined for this component. */
   $static:
   {
-    ACTION_TYPE: "action",
+    ACTION_COMPLETE: "action",
     ACTION_COMMAND: "actionCommand",
     // The property that holds the URI for the image.
     URL: "url"
@@ -28,7 +28,7 @@ echopoint.ImageIcon = Core.extend( echopoint.internal.AbstractContainer,
   doAction: function()
   {
     var ac = this.get( echopoint.ImageIcon.ACTION_COMMAND );
-    this.fireEvent( { type: echopoint.ImageIcon.ACTION_TYPE, source: this,
+    this.fireEvent( { type: echopoint.ImageIcon.ACTION_COMPLETE, source: this,
       actionCommand: ac } );
   },
 

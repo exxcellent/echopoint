@@ -51,6 +51,9 @@ public class DefaultUploadCallback extends UploadCallbackAdapter
   /** The directory to which uploaded files are to be saved. */
   private File directory;
 
+  /** Default constructor to allow sub-classing. */
+  protected DefaultUploadCallback() {}
+
   /**
    * Create a new callback handler that saves files to the specified directory.
    *
@@ -74,8 +77,6 @@ public class DefaultUploadCallback extends UploadCallbackAdapter
   @Override
   public void uploadSucceeded( final UploadFinishEvent event )
   {
-    super.uploadSucceeded( event );
-
     final File temp = getTempFile();
     final File file = getFileName( event.getFileName() );
 
@@ -106,6 +107,8 @@ public class DefaultUploadCallback extends UploadCallbackAdapter
     {
       throw new RuntimeException( "Error copying uploaded file!", e );
     }
+
+    super.uploadSucceeded( event );
   }
 
   /**

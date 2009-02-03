@@ -69,13 +69,13 @@ public class UploadProgress implements Serializable
   private long lastMilestoneBytesRead;
 
   /** The status of the current content upload. */
-  private Status status;
+  private Status status = Status.inprogress;
 
   /**
    * An optional message returned by the service to the client.  Usually
    * used to indicate errors.
    */
-  private String message;
+  private String message = "";
 
   /** @param contentLength the total number of bytes, <code>-1</code> if unknown */
   public UploadProgress( long contentLength )

@@ -7,7 +7,8 @@ import echopoint.tucana.ProgressBar;
 import echopoint.tucana.event.DefaultUploadCallback;
 import echopoint.tucana.event.DownloadCallbackAdapter;
 import echopoint.tucana.event.InvalidContentTypeEvent;
-import echopoint.tucana.event.UploadCallback;
+import echopoint.tucana.event.UploadCancelEvent;
+import echopoint.tucana.event.UploadFailEvent;
 import echopoint.tucana.event.UploadFinishEvent;
 import nextapp.echo.app.Border;
 import nextapp.echo.app.Color;
@@ -26,6 +27,7 @@ import org.junit.Test;
 import java.io.File;
 import java.util.HashSet;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Unit test suite for the {@link echopoint.tucana.FileUploadSelector}
@@ -130,11 +132,21 @@ public class FileUploadSelectorTest extends AbstractTest<FileUploadSelector>
         getComponent().getContentTypeFilter() );
   }
 
+  //@Test
+  public void uploadSizeLimit()
+  {
+    //final long size = UploadSPI.NO_SIZE_LIMIT;
+    final long size = 100;
+    getComponent().setUploadSizeLimit( size );
+    assertEquals( "Ensuring upload size limit set", size,
+        getComponent().getUploadSizeLimit() );
+  }
+
   @Test
   public void callback()
   {
-    final DefaultUploadCallback callback =
-        new DefaultUploadCallback( new File( "/tmp" ) );
+    final Callback callback = new Callback( getComponent(),
+        new File( "/tmp" ) );
     callback.setLevel( Level.INFO );
     getComponent().setUploadCallback( callback );
     assertEquals( "Ensuring callback set", callback, getComponent().getUploadCallback() );
@@ -143,8 +155,16 @@ public class FileUploadSelectorTest extends AbstractTest<FileUploadSelector>
   @Test
   public void actionListener()
   {
-    final FinishListener listener = new FinishListener();
-    getComponent().addActionListener( listener );
+    getComponent().addActionListener( new ActionListener()
+    {
+      private static final long serialVersionUID = 1l;
+
+      public void actionPerformed( final ActionEvent event )
+      {
+        Logger.getAnonymousLogger().info(
+            "Action command: " + event.getActionCommand() );
+      }
+    });
   }
 
   @AfterClass
@@ -155,55 +175,64 @@ public class FileUploadSelectorTest extends AbstractTest<FileUploadSelector>
     content.add( get() );
   }
 
-  private static class FinishListener implements ActionListener
+  private static class Callback extends DefaultUploadCallback
   {
     private static final long serialVersionUID = 1l;
 
-    public void actionPerformed( final ActionEvent event )
+    private final FileUploadSelector upload;
+
+    private Callback( final FileUploadSelector upload, final File file )
     {
-      final FileUploadSelector upload = ( FileUploadSelector) event.getSource();
-      final UploadCallback callback = upload.getUploadCallback();
-      if ( callback != null )
-      {
-        final boolean success = ( callback.getEvent() instanceof UploadFinishEvent );
-
-        if ( success )
-        {
-          upload.getParent().add( displayDownload( callback ) );
-        }
-        else
-        {
-          displayError( upload, callback );
-        }
-
-        if ( upload.getProgressBar() != null )
-        {
-          if ( success ) upload.getProgressBar().setPercentage( 100 );
-
-          if ( ! ( callback.getEvent() instanceof InvalidContentTypeEvent ) )
-          {
-            final ProgressBar bar = (ProgressBar) upload.getProgressBar();
-            if ( bar != null )
-            {
-              bar.setText( ( success ) ? "Finished upload!" : "Cancelled upload!" );
-            }
-          }
-        }
-      }
+      super( file );
+      this.upload = upload;
     }
 
-    private Component displayDownload( final UploadCallback callback )
+    @Override
+    public void uploadSucceeded( final UploadFinishEvent event )
+    {
+      logger.info( "Running succeeded task" );
+      final ProgressBar bar = (ProgressBar) upload.getProgressBar();
+      bar.setText( "Finished upload!" );
+      upload.getParent().add( displayDownload( event ) );
+      super.uploadSucceeded( event );
+    }
+
+    @Override
+    public void uploadFailed( final UploadFailEvent event )
+    {
+      final ProgressBar bar = (ProgressBar) upload.getProgressBar();
+      bar.setText( "Upload failed!" );
+      displayError();
+      super.uploadFailed( event );
+    }
+
+    @Override
+    public void uploadDisallowed( final InvalidContentTypeEvent event )
+    {
+      final ProgressBar bar = (ProgressBar) upload.getProgressBar();
+      bar.setText( "Upload disallowed!" );
+      super.uploadDisallowed( event );
+    }
+
+    @Override
+    public void uploadCancelled( final UploadCancelEvent event )
+    {
+      final ProgressBar bar = (ProgressBar) upload.getProgressBar();
+      bar.setText( "Upload cancelled!" );
+      super.uploadCancelled( event );
+    }
+
+    private Component displayDownload( final UploadFinishEvent event )
     {
       final StringBuilder builder = new StringBuilder( 128 );
       builder.append( "Upload of file: <b>" );
-      builder.append( callback.getEvent().getFileName() );
+      builder.append( event.getFileName() );
       builder.append( "</b> succeeded.  File size is: <i>");
-      builder.append( ( (UploadFinishEvent)
-          callback.getEvent() ).getFileSize() / 1000 );
+      builder.append( event.getFileSize() / 1000 );
       builder.append( "</i> kilobytes." );
 
       final Row row = new Row();
-      final File file = new File ( "/tmp/" + callback.getEvent().getFileName() );
+      final File file = new File ( "/tmp/" + event.getFileName() );
       final DownloadButton button = new DownloadButton( file );
       ( (DownloadCallbackAdapter) button.getDownloadCallback() ).setLevel( Level.INFO );
       row.add( button );
@@ -213,15 +242,14 @@ public class FileUploadSelectorTest extends AbstractTest<FileUploadSelector>
       return row;
     }
 
-    private void displayError( final FileUploadSelector upload,
-        final UploadCallback callback )
+    private void displayError()
     {
       final StringBuilder builder = new StringBuilder( 128 );
       builder.append( "Upload " );
-      if ( callback.getEvent() != null )
+      if ( getEvent() != null )
       {
         builder.append( " of file: <b>" );
-        builder.append( callback.getEvent().getFileName() );
+        builder.append( getEvent().getFileName() );
         builder.append( "</b>" );
       }
 

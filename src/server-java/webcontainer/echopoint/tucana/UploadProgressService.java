@@ -93,10 +93,11 @@ public class UploadProgressService extends BaseUploadService
     }
     else
     {
-      buff.append( "{r:0,cl:0,pc:0,tr:0,tl:0,s:,m:}" );
+      buff.append( "{r:0,cl:0,pc:0,tr:0,tl:0,s:'failed',m:''}" );
     }
 
     conn.setContentType( ContentType.TEXT_PLAIN );
     conn.getWriter().write( buff.toString() );
+    conn.getWriter().flush();
   }
 }

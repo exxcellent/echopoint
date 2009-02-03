@@ -19,6 +19,7 @@ package echopoint.tucana;
 
 import echopoint.ProgressBar;
 import echopoint.internal.AbstractContainer;
+import echopoint.tucana.event.DefaultUploadListener;
 import echopoint.tucana.event.InvalidContentTypeEvent;
 import echopoint.tucana.event.UploadCallback;
 import echopoint.tucana.event.UploadCancelEvent;
@@ -27,8 +28,10 @@ import echopoint.tucana.event.UploadFailEvent;
 import echopoint.tucana.event.UploadFinishEvent;
 import echopoint.tucana.event.UploadProgressEvent;
 import echopoint.tucana.event.UploadStartEvent;
+import nextapp.echo.app.ApplicationInstance;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.ImageReference;
+import nextapp.echo.app.TaskQueueHandle;
 import nextapp.echo.app.event.ActionEvent;
 import nextapp.echo.app.event.ActionListener;
 
@@ -53,6 +56,7 @@ import java.util.Set;
  *  import echopoint.tucana.ButtonDisplay;
  *  import echopoint.tucana.FileUploadSelector;
  *  import echopoint.tucana.ProgressBar;
+ *  import static echopoint.tucana.UploadSPI;
  *  import echopoint.tucana.event.DefaultUploadCallback;
  *
  *    ...
@@ -60,6 +64,7 @@ import java.util.Set;
  *    selector.setButtonMode( ButtonMode.image );
  *    selector.setButtonDisplayMode( ButtonDisplay.right );
  *    selector.setInputSize( 20 );
+ *    selector.setUploadSizeLimit( NO_SIZE_LIMIT );
  *    selector.setBackground( new Color( 0xa1a1a1 ) );
  *    selector.setBorder( new Border( 1, Color.BLUE, Border.STYLE_GROOVE ) );
  *    selector.setProgressBar( new ProgressBar() );
@@ -76,14 +81,29 @@ import java.util.Set;
  *    parent.add( selector );
  * </pre>
  *
- * <p>There are two different ways to process a completed upload:
+ * <p>There are two different (equivalent) ways to process a completed upload:
  * <ol>
- *   <li>{@link echopoint.tucana.event.UploadCallback} based.  This technique
- *     suffers from the limitation that UI updates require setting up a
- *     {@link nextapp.echo.app.TaskQueueHandle}.</li>
- *   <li>{@link nextapp.echo.app.event.ActionListener} based.  This
- *     technique works in combination with a {@link
- *     echopoint.tucana.event.UploadCallback} and allows UI updates directly.</li>
+ *   <li>{@link echopoint.tucana.event.UploadCallback} based.  It is best
+ *     to use a sub-class of either {@link echopoint.tucana.event.DefaultUploadCallback}
+ *     or {@link echopoint.tucana.event.UploadCallbackAdapter} since they
+ *     ensure removal of the task queue used to enqueue processing from the
+ *     call back methods to the UI thread.  If you implement your own handler
+ *     please make sure that you invoke {@link FileUploadSelector#removeTaskQueue()}
+ *     at the end of your handler methods.  The queue will be automatically
+ *     cleaned up when the component is removed from the hierarchy, so it may
+ *     be acceptable to not invoke {@code removeTaskQueue} depending upon how
+ *     your application logic works.</li>
+ *   <li>{@link nextapp.echo.app.event.ActionListener} based.  Two types of
+ *     events are recieved by the event handler:
+ *     <ol>
+   *     <li>{@link #START_ACTION} - The action command that indicates that
+ *         the file upload has commenced.</li>
+ *     <li>{@link #COMPLETE_ACTION} - The action command that indicates that
+ *         the file upload has finished.</li>
+ *     </ol>
+ *     <p>Please note that it is safest to check on the command value rather
+ *     than check one and default action for the other value.</p>
+ *   </li>
  * </ol>
  *
  * <p>The following callback class and associated runnable may be used to
@@ -98,14 +118,10 @@ import java.util.Set;
  *  public class UploadCallbackImpl extends UploadCallbackAdapter
  *  {
  *    private static final long serialVersionUID = 1l;
- *    private final ApplicationInstance app;
- *    private final TaskQueueHandle queue;
  *    private final Component parent;
  *
  *    private UploadCallbackImpl( final Component parent )
  *    {
- *      this.app = Application.getApplication();
- *      this.queue = app.createTaskQueue();
  *      this.parent = parent;
  *    }
  *
@@ -119,7 +135,8 @@ import java.util.Set;
  *      builder.append( event.getFileSize() / 1000 );
  *      builder.append( "&lt;/i&gt; kilobytes." );
  *      final DirectHtml html = new DirectHtml( builder.toString() );
- *      update( html );
+ *      parent.add( child );
+ *      super.uploadSucceeded( event );
  *    }
  *
  *    &#64;Override
@@ -142,45 +159,9 @@ import java.util.Set;
  *      }
  *
  *      final DirectHtml html = new DirectHtml( builder.toString() );
- *      update( html );
- *    }
- *
- *    private void update( final Component component )
- *    {
- *      app.enqueueTask( queue, new Update( component, parent ) );
- *    }
- *
- *    //
- *    // It is important that clients invoke this method prior to discarding
- *    // this instance to perform proper cleanup and stop client-side polling.
- *    // This action cannot be performed in a &lt;finalize&gt; method due
- *    // to Java garbage collector behaviour.
- *    //
- *    public void closeQueue()
- *    {
- *      app.removeTaskQueue( queue );
- *    }
- *  }
- *
- *  import nextapp.echo.app.Component;
- *  public class Update implements Runnable, Serializable
- *  {
- *    private static final long serialVersionUID = 1l;
- *
- *    private final Component parent;
- *    private final Component child;
- *
- *    private Update( final Component child, final Component parent )
- *    {
- *      this.child = child;
- *      this.parent = parent;
- *    }
- *
- *    public void run()
- *    {
  *      parent.add( child );
+ *      super.uploadFailed( event );
  *    }
- *  }
  * </pre>
  *
  * <p>Processing UI updates after upload completion is much simpler (and
@@ -285,11 +266,24 @@ public class FileUploadSelector extends AbstractContainer
    */
   public static final String PROPERTY_POLLING_INTERVAL = "pollingInterval";
 
+  /** The maximum size of file that is allowed to be uploaded. */
+  public static final String PROPERTY_UPLOAD_SIZE_LIMIT = "uploadSizeLimit";
+
   /**
    * The name of the action that is fired by the client upon completion
    * (regardless of complete or cancel) of the upload process.
+   *
+   * {@value}
    */
-  protected static final String COMPLETE_ACTION = "complete";
+  public static final String COMPLETE_ACTION = "complete";
+
+  /**
+   * The name of the action that is fired by the client upon start
+   * of the upload process.
+   *
+   * {@value}
+   */
+  public static final String START_ACTION = "start";
 
   /**
    * The callback handler that will be notified of the progress of the file
@@ -297,14 +291,26 @@ public class FileUploadSelector extends AbstractContainer
    */
   private UploadCallback callback = null;
 
-  /** The action command that was triggered by upload completion. */
-  private String actionCommand;
-
   /**
    * The allowed content-type(s) for the upload.  Uploads of other types of
    * files will be rejected.
    */
   private Set<String> contentTypeFilter = new HashSet<String>();
+
+  /**
+   * A task queue that may be used to perform UI updates from call back
+   * handlers.  Automatically cleaned up in {@link #dispose}.
+   */
+  private TaskQueueHandle taskQueue;
+
+  /**
+   * Default constructor.  Add {@link echopoint.tucana.event.DefaultUploadListener}
+   * as a listener for this component to initialise the {@link #taskQueue}.
+   */
+  public FileUploadSelector()
+  {
+    addActionListener( new DefaultUploadListener() );
+  }
 
   /**
    * Sets the upload button image.
@@ -468,11 +474,21 @@ public class FileUploadSelector extends AbstractContainer
     return ( display == null ) ? ButtonDisplay.auto : display;
   }
 
+  /**
+   * Mutator for property 'cancelEnabled'.
+   *
+   * @param enabled Value to set for property 'cancelEnabled'.
+   */
   public void setCancelEnabled( final boolean enabled )
   {
     set( PROPERTY_CANCEL_ENABLED, enabled );
   }
 
+  /**
+   * Accessor for property 'cancelEnabled'.
+   *
+   * @return Value for property 'cancelEnabled'.
+   */
   public boolean isCancelEnabled()
   {
     return ( (Boolean) get( PROPERTY_CANCEL_ENABLED ) );
@@ -516,6 +532,31 @@ public class FileUploadSelector extends AbstractContainer
   public void setPollingInterval( final int interval )
   {
     set( PROPERTY_POLLING_INTERVAL, interval );
+  }
+
+  /**
+   * Return the value of the {@link #PROPERTY_UPLOAD_SIZE_LIMIT} property.
+   * If not set the implementation defaults to
+   * {@link echopoint.tucana.AbstractFileUploadProvider#DEFAULT_UPLOAD_SIZE_LIMIT}.
+   *
+   * @return The maximum size in bytes that is allowed to be uploaded.
+   */
+  public long getUploadSizeLimit()
+  {
+    final Object obj = get( PROPERTY_UPLOAD_SIZE_LIMIT );
+    return ( obj == null ) ? 0 : (Long) obj;
+  }
+
+  /**
+   * Set the value of the {@link #PROPERTY_UPLOAD_SIZE_LIMIT} property.
+   * Specify {@link echopoint.tucana.UploadSPI#NO_SIZE_LIMIT} to prevent
+   * size checking.
+   *
+   * @param limit The maximum size in bytes that is allowed.
+   */
+  public void setUploadSizeLimit( final long limit )
+  {
+    set( PROPERTY_UPLOAD_SIZE_LIMIT, limit );
   }
 
   /**
@@ -600,6 +641,40 @@ public class FileUploadSelector extends AbstractContainer
   }
 
   /**
+   * Return the task queue that may be used to enqueue asynchronous tasks
+   * (usually from callback handlers).
+   *
+   * @return Value for property 'taskQueue'.
+   */
+  public TaskQueueHandle getTaskQueue()
+  {
+    return taskQueue;
+  }
+
+  /**
+   * Set the task queue for the component.
+   *
+   * @param taskQueue Value to set for property 'taskQueue'.
+   */
+  public void setTaskQueue( final TaskQueueHandle taskQueue )
+  {
+    this.taskQueue = taskQueue;
+  }
+
+  /**
+   * Remove the current task queue.  It is strongly recommended that this
+   * method be used rather than wait for {@link #dispose}.
+   */
+  public void removeTaskQueue()
+  {
+    if ( taskQueue != null )
+    {
+      ApplicationInstance.getActive().removeTaskQueue( taskQueue );
+      taskQueue = null;
+    }
+  }
+
+  /**
    * Notifies the listener that the given event has occurred.
    *
    * @param e the event
@@ -676,19 +751,24 @@ public class FileUploadSelector extends AbstractContainer
   }
 
   /**
-   * {@inheritDoc}
+   * Over-ridden to fire action events with action commands that are set to
+   * {@link #START_ACTION} or {@link #COMPLETE_ACTION} depending upon whether
+   * the event represents start of the upload or completion of the upload.
+   *
+   * @see nextapp.echo.app.Component#processInput(String, Object)
    */
   @Override
   public void processInput( String name, Object value )
   {
     super.processInput( name, value );
-    if ( ACTION_COMMAND_PROPERTY.equals( name ) )
-    {
-      this.actionCommand = (String) value;
-    }
+
     if ( COMPLETE_ACTION.equals( name ) )
     {
-      fireActionPerformed( new ActionEvent( this, actionCommand ) );
+      fireActionPerformed( new ActionEvent( this, name ) );
+    }
+    else if ( START_ACTION.equals( name ) )
+    {
+      fireActionPerformed( new ActionEvent( this, name ) );
     }
   }
 
@@ -704,5 +784,17 @@ public class FileUploadSelector extends AbstractContainer
 
     getEventListenerList().removeListener( ActionListener.class, listener );
     firePropertyChange( ACTION_LISTENERS_CHANGED_PROPERTY, listener, null );
+  }
+
+  /**
+   * Over-ridden to clean up {@link #taskQueue} if not already cleaned up.
+   *
+   * @see #removeTaskQueue()
+   * @see nextapp.echo.app.Component#dispose()
+   */
+  @Override
+  public void dispose()
+  {
+    removeTaskQueue();
   }
 }

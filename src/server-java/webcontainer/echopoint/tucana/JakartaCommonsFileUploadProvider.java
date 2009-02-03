@@ -17,18 +17,14 @@
  */
 package echopoint.tucana;
 
-import echopoint.tucana.event.InvalidContentTypeEvent;
-import echopoint.tucana.event.UploadCancelEvent;
-import echopoint.tucana.event.UploadFailEvent;
-import echopoint.tucana.event.UploadFinishEvent;
 import echopoint.tucana.event.UploadStartEvent;
+import nextapp.echo.app.ApplicationInstance;
 import nextapp.echo.webcontainer.Connection;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.fileupload.MultipartStream;
-import org.apache.commons.fileupload.ProgressListener;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FilenameUtils;
@@ -54,6 +50,8 @@ public class JakartaCommonsFileUploadProvider extends AbstractFileUploadProvider
       final FileUploadSelector uploadSelect, final String uploadIndex,
       final UploadProgress progress ) throws Exception
   {
+    final ApplicationInstance app = conn.getUserInstance().getApplicationInstance();
+
     DiskFileItemFactory itemFactory = new DiskFileItemFactory();
     itemFactory.setRepository( getDiskCacheLocation() );
     itemFactory.setSizeThreshold( getMemoryCacheThreshold() );
@@ -67,10 +65,10 @@ public class JakartaCommonsFileUploadProvider extends AbstractFileUploadProvider
     ServletFileUpload upload = new ServletFileUpload( itemFactory );
     upload.setHeaderEncoding( encoding );
     upload.setProgressListener( new UploadProgressListener( progress ) );
-    if ( getFileUploadSizeLimit() != NO_SIZE_LIMIT )
-    {
-      upload.setSizeMax( getFileUploadSizeLimit() );
-    }
+
+    long sizeLimit = uploadSelect.getUploadSizeLimit();
+    if ( sizeLimit == 0 ) sizeLimit = getFileUploadSizeLimit();
+    if ( sizeLimit != NO_SIZE_LIMIT ) { upload.setSizeMax( sizeLimit ); }
 
     String fileName = null;
     String contentType = null;
@@ -92,12 +90,9 @@ public class JakartaCommonsFileUploadProvider extends AbstractFileUploadProvider
           {
             if ( !types.contains( contentType ) )
             {
-              final String message =
-                  "Disallowed content-type: " + contentType + "!";
-              uploadSelect.notifyCallback( new InvalidContentTypeEvent(
-                  uploadSelect, uploadIndex, fileName, contentType ) );
-              progress.setStatus( Status.disallowed );
-              progress.setMessage( message );
+              app.enqueueTask( uploadSelect.getTaskQueue(),
+                  new InvalidContentTypeRunnable( uploadSelect, uploadIndex,
+                      fileName, contentType, progress ) );
               return;
             }
           }
@@ -105,56 +100,37 @@ public class JakartaCommonsFileUploadProvider extends AbstractFileUploadProvider
           progress.setStatus( Status.inprogress );
           uploadSelect.notifyCallback( new UploadStartEvent( uploadSelect,
               uploadIndex, fileName, contentType ) );
-          FileItem item = itemFactory.createItem( fileName,
+          final FileItem item = itemFactory.createItem( fileName,
               contentType, false, stream.getName() );
           IOUtils.copy( stream.openStream(), item.getOutputStream() );
 
-          uploadSelect.notifyCallback( new UploadFinishEvent( uploadSelect,
-              uploadIndex, fileName, item.getContentType(), item ) );
-          progress.setStatus( Status.completed );
+          app.enqueueTask( uploadSelect.getTaskQueue(), new FinishRunnable(
+              uploadSelect, uploadIndex, fileName, item, progress ) );
+
           return;
         }
       }
 
-      progress.setStatus( Status.failed );
-      uploadSelect.notifyCallback( new UploadFailEvent( uploadSelect,
-          uploadIndex, fileName, contentType,
-          new RuntimeException( "No multi-part content!" ) ) );
+      app.enqueueTask( uploadSelect.getTaskQueue(), new FailRunnable(
+          uploadSelect, uploadIndex, fileName, contentType,
+          new RuntimeException( "No multi-part content!" ), progress ) );
     }
-    catch ( FileUploadBase.SizeLimitExceededException e )
+    catch ( final FileUploadBase.SizeLimitExceededException e )
     {
-      progress.setStatus( Status.failed );
-      uploadSelect.notifyCallback( new UploadFailEvent( uploadSelect,
-          uploadIndex, fileName, contentType,
-          new UploadSizeLimitExceededException( e ) ) );
+      app.enqueueTask( uploadSelect.getTaskQueue(), new FailRunnable(
+          uploadSelect, uploadIndex, fileName, contentType,
+          new UploadSizeLimitExceededException( e ), progress ) );
     }
-    catch ( FileUploadBase.FileSizeLimitExceededException e )
+    catch ( final FileUploadBase.FileSizeLimitExceededException e )
     {
-      progress.setStatus( Status.failed );
-      uploadSelect.notifyCallback( new UploadFailEvent( uploadSelect,
-          uploadIndex, fileName, contentType,
-          new UploadSizeLimitExceededException( e ) ) );
+      app.enqueueTask( uploadSelect.getTaskQueue(), new FailRunnable(
+          uploadSelect, uploadIndex, fileName, contentType,
+          new UploadSizeLimitExceededException( e ), progress ) );
     }
-    catch ( MultipartStream.MalformedStreamException e )
+    catch ( final MultipartStream.MalformedStreamException e )
     {
-      progress.setStatus( Status.cancelled );
-      uploadSelect.notifyCallback( new UploadCancelEvent( uploadSelect,
-          uploadIndex, fileName, contentType, e  ) );
-    }
-  }
-
-  private static final class UploadProgressListener implements ProgressListener
-  {
-    private final UploadProgress progress;
-
-    private UploadProgressListener( UploadProgress progress )
-    {
-      this.progress = progress;
-    }
-
-    public void update( long pBytesRead, long pContentLength, int pItems )
-    {
-      progress.setBytesRead( pBytesRead );
+      app.enqueueTask( uploadSelect.getTaskQueue(), new CancelRunnable(
+          uploadSelect, uploadIndex, fileName, contentType, e, progress ) );
     }
   }
 }

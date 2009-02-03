@@ -70,6 +70,17 @@ public class FileUploadSelectorPeer extends AbstractContainerPeer
     addRequiredComponentClass( ProgressBar.class );
 
     addEvent( new AbstractComponentSynchronizePeer.EventPeer(
+        FileUploadSelector.START_ACTION,
+        FileUploadSelector.ACTION_LISTENERS_CHANGED_PROPERTY )
+    {
+      @Override
+      public boolean hasListeners( Context context, Component component )
+      {
+        return ( (FileUploadSelector) component ).hasActionListeners();
+      }
+    });
+
+    addEvent( new AbstractComponentSynchronizePeer.EventPeer(
         FileUploadSelector.COMPLETE_ACTION,
         FileUploadSelector.ACTION_LISTENERS_CHANGED_PROPERTY )
     {

@@ -17,7 +17,8 @@ echopoint.tucana.FileUploadSelector = Core.extend( echopoint.internal.AbstractCo
   /** Properties defined for the component. */
   $static:
   {
-    ACTION_TYPE: "complete",
+    ACTION_START: "start",
+    ACTION_COMPLETE: "complete",
     BUTTON_TEXT_UPLOAD: "buttonTextUpload",
     BUTTON_TEXT_CANCEL : "buttonTextCancel",
     BUTTON_TEXT_WAIT : "buttonTextWait",
@@ -62,6 +63,23 @@ echopoint.tucana.FileUploadSelector = Core.extend( echopoint.internal.AbstractCo
   },
 
   /**
+   * Fire an action event that indicates that the file upload has started.
+   * This is used to start a task queue in the server-side component to
+   * assist implementing UI logic in callback handlers.
+   *
+   * @param uploadId
+   */
+  notifyStart: function( uploadId )
+  {
+    this.fireEvent(
+    {
+      source: this,
+      type: echopoint.tucana.FileUploadSelector.ACTION_START,
+      actionCommand: uploadId
+    });
+  },
+
+  /**
    * Fire an action event that indicates that the file upload has finished.
    * This is useful to perform UI updates without having to recourse to
    * task queues.
@@ -73,7 +91,7 @@ echopoint.tucana.FileUploadSelector = Core.extend( echopoint.internal.AbstractCo
     this.fireEvent(
     {
       source: this,
-      type: echopoint.tucana.FileUploadSelector.ACTION_TYPE,
+      type: echopoint.tucana.FileUploadSelector.ACTION_COMPLETE,
       actionCommand: uploadId
     });
   },

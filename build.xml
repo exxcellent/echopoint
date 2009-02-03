@@ -337,7 +337,7 @@
 
 <!-- ************************************************************************************************** -->
   <!-- Create full API documentation -->
-  <target name='doc'
+  <target name='doc' depends='compile'
     description='Creates full JavaDoc documentation for the EchoPoint API'>
 
     <delete dir='${dir.docs.api.app}'/>
@@ -345,7 +345,7 @@
 
     <javadoc sourcepath='${dir.src.server.app}' packagenames='echopoint.*'
       destdir='${dir.docs.api.app}' additionalparam='-breakiterator'
-      classpathref='compile.classpath' version='yes'
+      classpathref='javadoc.classpath' version='yes'
       author='yes' use='yes' splitindex='yes'
       Overview='${dir.src.server.app}/overview.html'
       Header='${javadoc.header}' DocTitle='${javadoc.doctitle.app}'

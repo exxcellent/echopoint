@@ -17,6 +17,8 @@
  */
 package echopoint.tucana.event;
 
+import echopoint.tucana.FileUploadSelector;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -44,7 +46,7 @@ public class UploadCallbackAdapter implements UploadCallback
   protected UploadEvent event;
 
   /** The current upload index being processed. */
-  protected String uploadIndex;
+  protected String uploadIndex = "";
 
   /**
    * Default constructor. Sets logging level to {@link
@@ -90,6 +92,7 @@ public class UploadCallbackAdapter implements UploadCallback
     logger.log( level, "Upload cancelled for event: " + event.getIndex() +
         " fileName: " + event.getFileName() +
         " contentType: " + event.getContentType(), event.getException() );
+    ( (FileUploadSelector) event.getSource() ).removeTaskQueue();
   }
 
   /**
@@ -105,6 +108,7 @@ public class UploadCallbackAdapter implements UploadCallback
         " fileName: " + event.getFileName() +
         "with contentType: " + event.getContentType() +
         " is not of allowed type." );
+    ( (FileUploadSelector) event.getSource() ).removeTaskQueue();
   }
 
   /**
@@ -136,6 +140,7 @@ public class UploadCallbackAdapter implements UploadCallback
     logger.log( level, "Upload completed for event: " + event.getIndex() +
         " fileName: " + event.getFileName() + " size: " + event.getFileSize() +
         " contentType: " + event.getContentType() );
+    ( (FileUploadSelector) event.getSource() ).removeTaskQueue();
   }
 
   /**
@@ -150,10 +155,11 @@ public class UploadCallbackAdapter implements UploadCallback
     {
       return;
     }
-    
+
     this.event = event;
     logger.log( level, "Upload failed for event: " + event.getIndex(),
         event.getException() );
+    ( (FileUploadSelector) event.getSource() ).removeTaskQueue();
   }
 
   /**

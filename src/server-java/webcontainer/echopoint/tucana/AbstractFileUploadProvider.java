@@ -17,8 +17,8 @@
  */
 package echopoint.tucana;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 
@@ -30,11 +30,9 @@ import java.io.IOException;
  */
 public abstract class AbstractFileUploadProvider implements UploadSPI
 {
-  private static final int DEFAULT_MEMORY_CACHE_THRESHOLD = 16 * 1024; // 16 KB
-
-  private static final File DEFAULT_TEMP_LOCATION = new File( System.getProperty( "java.io.tmpdir", "." ) );
-
-  private static final int DEFAULT_UPLOAD_SIZE_LIMIT = 128 * 1024 * 1024; // 128 MB
+  static final int DEFAULT_MEMORY_CACHE_THRESHOLD = 16 * 1024; // 16 KB
+  static final File DEFAULT_TEMP_LOCATION = new File( System.getProperty( "java.io.tmpdir", "." ) );
+  static final int DEFAULT_UPLOAD_SIZE_LIMIT = 128 * 1024 * 1024; // 128 MB
 
   /** @see UploadSPI#getDiskCacheLocation() */
   public File getDiskCacheLocation() throws IOException

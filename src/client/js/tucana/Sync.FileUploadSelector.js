@@ -369,6 +369,7 @@ echopoint.tucana.FileUploadSelectorSync.Frame = Core.extend(
       this.peer._table._input.disabled = true;
     }
 
+    this.component.notifyStart( this._uploadIndex );
     this._startProgressPoller();
   },
 
