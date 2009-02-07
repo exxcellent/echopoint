@@ -141,6 +141,8 @@ public class DownloadService implements Service
     try
     {
       download.notifyCallback( new DownloadStartEvent( download, provider ) );
+      response.setHeader( "Cache-Control", "" );
+      response.setHeader( "Pragma", "" );
       provider.writeFile( out );
       download.notifyCallback( new DownloadFinishEvent( download, provider ) );
     }
