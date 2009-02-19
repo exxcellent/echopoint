@@ -224,6 +224,7 @@ echopoint.google.chart.internal.AdvancedChartSync = Core.extend(
 
       url += "&chxl=";
 
+      Core.Debug.consoleWrite( "labels; " + array );
       for ( var i = 0; i < array.length; ++i )
       {
         url += i + ":|";
@@ -457,7 +458,7 @@ echopoint.google.chart.internal.AdvancedChartSync = Core.extend(
       for ( var i = 0; i < json.list.length; ++i )
       {
         var labels = new Array();
-        var jsonLabels = json.list[i][0];
+        var jsonLabels = json.list[i];
 
         for ( var j = 0; j < jsonLabels.length; ++j )
         {
