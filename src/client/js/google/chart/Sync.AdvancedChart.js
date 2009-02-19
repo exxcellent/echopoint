@@ -223,19 +223,20 @@ echopoint.google.chart.internal.AdvancedChartSync = Core.extend(
       if ( ! array ) return url;
 
       url += "&chxl=";
+      var str = "&chxl=";
 
-      Core.Debug.consoleWrite( "labels; " + array );
       for ( var i = 0; i < array.length; ++i )
       {
-        url += i + ":|";
+        str += i + ":|";
         var labels = array[i];
 
         for ( var j = 0; j < labels.length; ++j )
         {
-          url += labels[j] + "|";
+          str += labels[j] + "|";
         }
       }
 
+      url += str.substring( 0, str.length - 1 );
       return url;
     },
 
