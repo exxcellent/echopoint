@@ -226,20 +226,12 @@ echopoint.google.chart.internal.AdvancedChartSync = Core.extend(
 
       for ( var i = 0; i < array.length; ++i )
       {
-        url += i + ":";
+        url += i + ":|";
         var labels = array[i];
 
         for ( var j = 0; j < labels.length; ++j )
         {
-          url += "|" + labels[j];
-          if ( i < array.length - 1 )
-          {
-            url += "|";
-          }
-          else
-          {
-            if ( j < labels.length - 1 ) url += "|";
-          }
+          url += labels[j] + "|";
         }
       }
 

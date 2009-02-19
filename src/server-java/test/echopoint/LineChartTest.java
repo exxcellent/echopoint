@@ -68,7 +68,7 @@ public class LineChartTest extends GoogleChartTest<LineChart<Integer>>
   @Test
   public void chartData()
   {
-    final Integer[] array = new Integer[] { 30,60,70,90,95,110 };
+    final Integer[] array = new Integer[] { 30,60,70,95,110,80 };
     final List<Integer> xdata = Arrays.asList( array );
     final int xmax = 120;
 
@@ -113,15 +113,15 @@ public class LineChartTest extends GoogleChartTest<LineChart<Integer>>
     String[] one =  new String[] { "0", "20", "40", "60", "80", "100" };
     labels.add( Arrays.asList( one ) );
 
-    String[] two = new String[] { "0", "25", "50", "75", "100" };
-    //String[] two = new String[] { "Min", "Third", "Three Quarter", "Max" };
+    //String[] two = new String[] { "0", "25", "50", "75", "100", "125" };
+    String[] two = new String[] { "Min", "Third", "Three Quarter", "Max" };
     labels.add( Arrays.asList( two ) );
 
     getComponent().setAxisLabels( labels );
     assertNotNull( "Ensuring labels set", getComponent().getAxisLabels() );
   }
 
-  //@Test
+  @Test
   public void labelPositions()
   {
     final Collection<Collection<Integer>> positions =
@@ -129,7 +129,7 @@ public class LineChartTest extends GoogleChartTest<LineChart<Integer>>
     final Integer[] one = new Integer[] {};
     positions.add( Arrays.asList( one ) );
 
-    final Integer[] two = new Integer[] { 0, 33, 75, 100 };
+    final Integer[] two = new Integer[] { 1, 33, 75, 100 };
     positions.add( Arrays.asList( two ) );
 
     getComponent().setLabelPositions( positions );
@@ -192,7 +192,7 @@ public class LineChartTest extends GoogleChartTest<LineChart<Integer>>
     assertEquals( "Ensure fill set", fill, getComponent().getFill() );
   }
 
-  @Test
+  //@Test
   public void fillArea()
   {
     final Collection<FillArea> areas = new ArrayList<FillArea>();
