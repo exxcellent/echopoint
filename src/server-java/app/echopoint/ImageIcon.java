@@ -23,8 +23,6 @@ import nextapp.echo.app.ImageReference;
 import nextapp.echo.app.event.ActionEvent;
 import nextapp.echo.app.event.ActionListener;
 
-import java.util.EventListener;
-
 /**
  * The <code>ImageIcon</code> class provides an component
  * that displays an {@link nextapp.echo.app.ImageReference}.  A height and width
@@ -143,47 +141,29 @@ public class ImageIcon extends AbstractContainer
     fireActionPerformed();
   }
 
-  /**
-   * Adds an <code>ActionListener</code> to this component.
-   *
-   * @param listener The <code>ActionListener</code> to be added.
-   */
+  /** {@inheritDoc} */
+  @Override
   public void addActionListener( final ActionListener listener )
   {
-    getEventListenerList().addListener( ActionListener.class, listener );
+    super.addActionListener( listener );
   }
 
   /** Notifies all listeners that have registered for this event type. */
   protected void fireActionPerformed()
   {
-    final ActionEvent event = new ActionEvent( this, getActionCommand() );
-    final EventListener[] listeners =
-        getEventListenerList().getListeners( ActionListener.class );
-    for ( EventListener listener : listeners )
-    {
-      ( (ActionListener) listener ).actionPerformed( event );
-    }
+    fireActionPerformed( new ActionEvent( this, getActionCommand() ) );
   }
 
-  /**
-   * Removes an <code>ActionListener</code> from this component.
-   *
-   * @param listener The <code>ActionListener</code> to be removed.
-   */
+  /** {@inheritDoc} */
+  @Override
   public void removeActionListener( final ActionListener listener )
   {
-    getEventListenerList().removeListener( ActionListener.class, listener );
+    super.removeActionListener( listener );
   }
 
-  /**
-   * Determines if the <code>ImageIcon</code> has any
-   * {@link nextapp.echo.app.event.ActionListener}s registered.
-   *
-   * @return true if any action listeners are registered
-   */
+  /** {@inheritDoc} */
   public boolean hasActionListeners()
   {
-    return hasEventListenerList() &&
-        getEventListenerList().getListenerCount( ActionListener.class ) != 0;
-    }
+    return super.hasActionListeners();
+  }
 }

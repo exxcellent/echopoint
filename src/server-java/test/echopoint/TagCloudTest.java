@@ -18,11 +18,13 @@
 
 package echopoint;
 
+import echopoint.event.TagEvent;
 import echopoint.model.Tag;
 import nextapp.echo.app.Button;
 import nextapp.echo.app.Color;
 import nextapp.echo.app.Column;
 import nextapp.echo.app.Component;
+import nextapp.echo.app.Label;
 import nextapp.echo.app.Row;
 import nextapp.echo.app.event.ActionEvent;
 import nextapp.echo.app.event.ActionListener;
@@ -98,6 +100,23 @@ public class TagCloudTest extends AbstractTest<TagCloud>
       fail( "TagCloud cannot contain children" );
     }
     catch ( Throwable t ) {}
+  }
+
+  @Test
+  public void listener()
+  {
+    getComponent().addActionListener( new ActionListener()
+    {
+      public void actionPerformed( final ActionEvent event )
+      {
+        final TagEvent te = (TagEvent) event;
+        if ( te.getTag() != null )
+        {
+          final Component content = Application.getContent().getTestArea();
+          content.add( new Label( "Clicked Tag: " + te.getTag().getName() ) );
+        }
+      }
+    });
   }
 
   @AfterClass

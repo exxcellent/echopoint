@@ -19,7 +19,12 @@ package echopoint;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
+import static echopoint.ImageMap.PROPERTY_SECTIONS;
+import static echopoint.internal.AbstractContainer.ACTION_COMMAND_PROPERTY;
+import static echopoint.internal.AbstractContainer.ACTION_LISTENERS_CHANGED_PROPERTY;
+import static echopoint.internal.AbstractContainer.INPUT_ACTION;
 import echopoint.internal.AbstractContainerPeer;
+import echopoint.internal.DefaultEventPeer;
 import echopoint.model.CircleSection;
 import echopoint.model.MapSection;
 import echopoint.model.PolygonSection;
@@ -27,7 +32,6 @@ import echopoint.model.RectangleSection;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.update.ClientUpdateManager;
 import nextapp.echo.app.util.Context;
-import nextapp.echo.webcontainer.AbstractComponentSynchronizePeer;
 import nextapp.echo.webcontainer.ServerMessage;
 import nextapp.echo.webcontainer.Service;
 import nextapp.echo.webcontainer.WebContainerServlet;
@@ -83,15 +87,8 @@ public class ImageMapPeer extends AbstractContainerPeer
 
   public ImageMapPeer()
   {
-    addEvent( new AbstractComponentSynchronizePeer.EventPeer(
-        ImageMap.INPUT_ACTION, ImageMap.ACTION_LISTENERS_CHANGED_PROPERTY )
-    {
-      @Override
-      public boolean hasListeners( Context context, Component component )
-      {
-        return ( (ImageMap) component ).hasActionListeners();
-      }
-    } );
+    addEvent( new DefaultEventPeer(
+        INPUT_ACTION, ACTION_LISTENERS_CHANGED_PROPERTY ) );
   }
 
   /**
@@ -131,7 +128,7 @@ public class ImageMapPeer extends AbstractContainerPeer
   @Override
   public Class getInputPropertyClass( final String propertyName )
   {
-    if ( ImageMap.ACTION_COMMAND_PROPERTY.equals( propertyName ) )
+    if ( ACTION_COMMAND_PROPERTY.equals( propertyName ) )
     {
       return String.class;
     }
@@ -153,29 +150,27 @@ public class ImageMapPeer extends AbstractContainerPeer
       final Component component, final String propertyName,
       final int propertyIndex )
   {
-    if ( ImageMap.PROPERTY_SECTIONS.equals( propertyName ) )
+    if ( PROPERTY_SECTIONS.equals( propertyName ) )
     {
-      return xstream.toXML( component.get( ImageMap.PROPERTY_SECTIONS ) );
+      return xstream.toXML( component.get( PROPERTY_SECTIONS ) );
     }
 
     return super.getOutputProperty(
         context, component, propertyName, propertyIndex );
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public void storeInputProperty( final Context context,
       final Component component, final String propertyName,
       final int propertyIndex, final Object newValue )
   {
-    if ( ImageMap.ACTION_COMMAND_PROPERTY.equals( propertyName ) )
+    if ( ACTION_COMMAND_PROPERTY.equals( propertyName ) )
     {
       final ClientUpdateManager clientUpdateManager =
           (ClientUpdateManager) context.get( ClientUpdateManager.class );
       clientUpdateManager.setComponentProperty( component,
-          ImageMap.ACTION_COMMAND_PROPERTY, newValue );
+          ACTION_COMMAND_PROPERTY, newValue );
     }
   }
 }

@@ -19,8 +19,8 @@
 package echopoint.google.chart.model;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 
 /**
@@ -135,7 +135,10 @@ public class ChartData<N extends Number> implements Serializable
     double max = 0.0;
     for ( N value : xdata )
     {
-      if ( value.doubleValue() > max ) max = value.doubleValue();
+      if ( ( value != null ) && ( value.doubleValue() > max ) )
+      {
+        max = value.doubleValue();
+      }
     }
 
     return (int) max + 5;
@@ -185,7 +188,10 @@ public class ChartData<N extends Number> implements Serializable
     double max = 0.0;
     for ( N value : ydata )
     {
-      if ( value.doubleValue() > max ) max = value.doubleValue();
+      if ( ( value != null ) && ( value.doubleValue() > max ) )
+      {
+        max = value.doubleValue();
+      }
     }
 
     return (int) max + 5;

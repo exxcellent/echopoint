@@ -17,8 +17,6 @@
  */
 package echopoint.tucana;
 
-import java.io.Serializable;
-
 /**
  * An abstract implementation that returns default values for non-mandatory
  * methods.
@@ -27,10 +25,8 @@ import java.io.Serializable;
  * @version $Id$
  */
 public abstract class AbstractDownloadProvider
-    implements DownloadProvider, Serializable
+    implements DownloadProvider
 {
-  private static final long serialVersionUID = 1L;
-
   /**The file name of the content being enqueued to the client. */
   protected String fileName;
 

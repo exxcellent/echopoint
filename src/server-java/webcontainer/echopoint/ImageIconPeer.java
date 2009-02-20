@@ -17,10 +17,12 @@
  */
 package echopoint;
 
+import static echopoint.internal.AbstractContainer.ACTION_LISTENERS_CHANGED_PROPERTY;
+import static echopoint.internal.AbstractContainer.INPUT_ACTION;
 import echopoint.internal.AbstractContainerPeer;
+import echopoint.internal.DefaultEventPeer;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.util.Context;
-import nextapp.echo.webcontainer.AbstractComponentSynchronizePeer;
 import nextapp.echo.webcontainer.ServerMessage;
 import nextapp.echo.webcontainer.Service;
 import nextapp.echo.webcontainer.WebContainerServlet;
@@ -56,15 +58,8 @@ public class ImageIconPeer extends AbstractContainerPeer
 
   public ImageIconPeer()
   {
-    addEvent( new AbstractComponentSynchronizePeer.EventPeer(
-        ImageIcon.INPUT_ACTION, ImageIcon.ACTION_LISTENERS_CHANGED_PROPERTY )
-    {
-      @Override
-      public boolean hasListeners( Context context, Component component )
-      {
-        return ( (ImageIcon) component ).hasActionListeners();
-      }
-    } );
+    addEvent( new DefaultEventPeer(
+        INPUT_ACTION, ACTION_LISTENERS_CHANGED_PROPERTY ) );
   }
 
   /**

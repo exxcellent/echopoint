@@ -18,17 +18,24 @@
 
 package echopoint;
 
+import echopoint.event.TagEvent;
+import echopoint.internal.AbstractContainer;
 import echopoint.model.Tag;
 import nextapp.echo.app.Color;
 import nextapp.echo.app.Component;
+import nextapp.echo.app.event.ActionListener;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * A <a href='http://en.wikipedia.org/wiki/Tag_cloud'>tag cloud</a> component
- * based on client-side code contribued by Tod.  This component supports the
+ * based on client-side code contribued by Tod.  Please note that the tag
+ * model objects specified for this component should have a unique name
+ * property.  This component supports the
  * following style properties in addition to those defined in {@link
  * nextapp.echo.app.Component}:
  *
@@ -44,11 +51,12 @@ import java.util.Collections;
  * <p>The following shows sample usage of this component:</p>
  * <pre>
  *   import echopoint.TagCloud;
+ *   import echopoint.event.TagEvent;
  *   import echopoint.model.Tag;
  *   import nextapp.echo.app.Row;
  *
  *     ...
- *     final Collection&lt;Tag&gt; tags = new ArrayList&lt;Tag&gt;();
+ *     final Collection&lt;Tag&gt; tags = new LinkedHashSet&lt;Tag&gt;();
  *     tags.add( new Tag( "Java", 50 ) );
  *     tags.add( new Tag( "Objective-C", 25 ) );
  *     tags.add( new Tag( "Groovy", 10 ) );
@@ -61,12 +69,25 @@ import java.util.Collections;
  *     tc.setRolloverForeground( new Color( 0xc1c1c1 ) );
  *     tc.setTags( tags );
  *     row.add( tc );
+ *
+ *      tc.addActionListener( new ActionListener()
+ *      {
+ *        public void actionPerformed( final ActionEvent event )
+ *        {
+ *          final TagEvent te = (TagEvent) event;
+ *          if ( te.getTag() != null )
+ *          {
+ *            final Component content = Application.getContent().getTestArea();
+ *            content.add( new Label( "Clicked Tag: " + te.getTag().getName() ) );
+ *          }
+ *        }
+ *      });
  * </pre>
  *
  * @author Rakesh 2008-07-20
  * @version $Id$
  */
-public class TagCloud extends Component
+public class TagCloud extends AbstractContainer
 {
   private static final long serialVersionUID = 1l;
 
@@ -165,8 +186,8 @@ public class TagCloud extends Component
   @SuppressWarnings( {"unchecked"} )
   public Collection<Tag> getTags()
   {
-    return Collections.unmodifiableCollection(
-        (Collection<Tag>) get( PROPERTY_TAGS ) );
+    final Map<String,Tag> map = (Map<String,Tag>) get( PROPERTY_TAGS );
+    return Collections.unmodifiableCollection( map.values() );
   }
 
   /**
@@ -177,7 +198,21 @@ public class TagCloud extends Component
   @SuppressWarnings( {"unchecked"} )
   protected Collection<Tag> getData()
   {
-    return (Collection<Tag>) get( PROPERTY_TAGS );
+    final Map<String,Tag> map = (Map<String,Tag>) get( PROPERTY_TAGS );
+    return new ArrayList<Tag>( map.values() );
+  }
+
+  /**
+   * Return the tag identified by its name.
+   *
+   * @param name The unique name for the tag.
+   * @return The tag model object or {@code null} if no such tag exists.
+   */
+  @SuppressWarnings( {"unchecked"} )
+  public Tag getTag( final String name )
+  {
+    final Map<String,Tag> map = (Map<String,Tag>) get( PROPERTY_TAGS );
+    return map.get( name );
   }
 
   /**
@@ -186,11 +221,51 @@ public class TagCloud extends Component
    * a new collection (or a modified version of the original collection you
    * used to set the property).
    *
-   * @param tags The collection of tag instances to be represented in this component.
+   * @param tags The collection of tag instances to be represented in this
+   *   component.  Please note that a {@link java.util.Set} implementation
+   *   is preferred since this implementation requires unique tag names.
    */
   public void setTags( final Collection<Tag> tags )
   {
-    final ArrayList<Tag> list = new ArrayList<Tag>( tags );
-    set( PROPERTY_TAGS, list );
+    final Map<String,Tag> map = new LinkedHashMap<String,Tag>();
+
+    for ( Tag tag : tags )
+    {
+      map.put( tag.getName(), tag );
+    }
+
+    set( PROPERTY_TAGS, map );
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public void addActionListener( final ActionListener listener )
+  {
+    super.addActionListener( listener );
+  }
+
+  /** {@inheritDoc} */
+  public void removeActionListener( final ActionListener listener )
+  {
+    super.removeActionListener( listener );
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public boolean hasActionListeners()
+  {
+    return super.hasActionListeners();
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public void processInput( String name, Object value )
+  {
+    super.processInput( name, value );
+    if ( INPUT_ACTION.equals( name ) )
+    {
+      final Tag tag = getTag( (String) value );
+      fireActionPerformed( new TagEvent( this, tag.getName(), tag ) );
+    }
   }
 }

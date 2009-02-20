@@ -1,8 +1,9 @@
 package echopoint.tucana;
 
-import echopoint.tucana.event.DownloadFinishEvent;
 import echopoint.tucana.event.DownloadFailEvent;
+import echopoint.tucana.event.DownloadFinishEvent;
 import echopoint.tucana.event.DownloadStartEvent;
+import static nextapp.echo.webcontainer.ClientProperties.BROWSER_INTERNET_EXPLORER;
 import nextapp.echo.webcontainer.Connection;
 import nextapp.echo.webcontainer.ContentType;
 import nextapp.echo.webcontainer.Service;
@@ -22,6 +23,8 @@ import java.io.OutputStream;
 public class DownloadService implements Service
 {
   static final String SERVICE_ID = "echopoint.tucana.DownloadService";
+
+  private static final String HTTPS = "https";
 
   private static final String PARAMETER_DOWNLOAD_UID = "duid";
 
@@ -141,8 +144,15 @@ public class DownloadService implements Service
     try
     {
       download.notifyCallback( new DownloadStartEvent( download, provider ) );
-      response.setHeader( "Cache-Control", "" );
-      response.setHeader( "Pragma", "" );
+
+      // Fix for IE and https connections
+      if ( HTTPS.equals( conn.getRequest().getScheme() ) &&
+        conn.getUserInstance().getClientProperties().getBoolean( BROWSER_INTERNET_EXPLORER ) )
+      {
+        response.setHeader( "Cache-Control", "" );
+        response.setHeader( "Pragma", "" );
+      }
+
       provider.writeFile( out );
       download.notifyCallback( new DownloadFinishEvent( download, provider ) );
     }

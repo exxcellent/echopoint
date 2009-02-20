@@ -27,6 +27,8 @@ import echopoint.google.chart.model.RangeMarker;
 import echopoint.google.chart.model.ShapeMarker;
 import echopoint.google.chart.model.Title;
 import nextapp.echo.app.Component;
+import nextapp.echo.app.Extent;
+import nextapp.echo.app.Insets;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -64,9 +66,9 @@ public class LineChartTest extends GoogleChartTest<LineChart<Integer>>
   }
 
   @Test
-  public void getChartData()
+  public void chartData()
   {
-    final Integer[] array = new Integer[] { 30,60,70,90,95,110 };
+    final Integer[] array = new Integer[] { 30,60,70,95,110,80 };
     final List<Integer> xdata = Arrays.asList( array );
     final int xmax = 120;
 
@@ -111,7 +113,7 @@ public class LineChartTest extends GoogleChartTest<LineChart<Integer>>
     String[] one =  new String[] { "0", "20", "40", "60", "80", "100" };
     labels.add( Arrays.asList( one ) );
 
-    //String[] two = new String[] { "0", "25", "50", "75", "100" };
+    //String[] two = new String[] { "0", "25", "50", "75", "100", "125" };
     String[] two = new String[] { "Min", "Third", "Three Quarter", "Max" };
     labels.add( Arrays.asList( two ) );
 
@@ -127,7 +129,7 @@ public class LineChartTest extends GoogleChartTest<LineChart<Integer>>
     final Integer[] one = new Integer[] {};
     positions.add( Arrays.asList( one ) );
 
-    final Integer[] two = new Integer[] { 0, 33, 75, 100 };
+    final Integer[] two = new Integer[] { 1, 33, 75, 100 };
     positions.add( Arrays.asList( two ) );
 
     getComponent().setLabelPositions( positions );
@@ -143,6 +145,22 @@ public class LineChartTest extends GoogleChartTest<LineChart<Integer>>
 
     getComponent().setAxisRanges( ranges );
     assertNotNull( "Ensuring axis ranges set", getComponent().getAxisRanges() );
+  }
+
+  @Test
+  public void axisType()
+  {
+    final String type = "x,y";
+    getComponent().setAxisType( type );
+    assertEquals( "Ensuring axis type set", getComponent().getAxisType(), type );
+  }
+
+  @Test
+  public void axisStyles()
+  {
+    final String style = "0,00ff33,13,1|1,0033ff,13,-1";
+    getComponent().setAxisStyles( style );
+    assertEquals( "Ensuring axis type set", getComponent().getAxisStyles(), style );
   }
 
   @Test
@@ -167,6 +185,14 @@ public class LineChartTest extends GoogleChartTest<LineChart<Integer>>
   }
 
   @Test
+  public void fill()
+  {
+    final String fill = "bg,s,efefef|c,s,00000080";
+    getComponent().setFill( fill );
+    assertEquals( "Ensure fill set", fill, getComponent().getFill() );
+  }
+
+  //@Test
   public void fillArea()
   {
     final Collection<FillArea> areas = new ArrayList<FillArea>();
@@ -174,6 +200,38 @@ public class LineChartTest extends GoogleChartTest<LineChart<Integer>>
 
     getComponent().setFillArea( areas );
     assertNotNull( "Ensuring fill area set", getComponent().getFillArea() );
+  }
+
+  @Test
+  public void gridLines()
+  {
+    final String grid = "10,10,1,0";
+    getComponent().setGridLines( grid );
+    assertEquals( "Ensure grid lines set", grid, getComponent().getGridLines() );
+  }
+
+  @Test
+  public void insets()
+  {
+    final Insets insets = new Insets( new Extent( 10 ) );
+    getComponent().setInsets( insets );
+    assertEquals( "Ensure insets set", insets, getComponent().getInsets() );
+  }
+
+  @Test
+  public void height()
+  {
+    final Extent height = new Extent( 400 );
+    getComponent().setHeight( height );
+    assertEquals( "Ensure height set", height, getComponent().getHeight() );
+  }
+
+  @Test
+  public void width()
+  {
+    final Extent width = new Extent( 600 );
+    getComponent().setWidth( width );
+    assertEquals( "Ensure width set", width, getComponent().getWidth() );
   }
 
   @AfterClass

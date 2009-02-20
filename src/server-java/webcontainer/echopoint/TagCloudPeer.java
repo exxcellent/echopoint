@@ -15,11 +15,15 @@
  * for the specific language governing rights and limitations under the
  * License.
  */
+
 package echopoint;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
-import echopoint.internal.AbstractPeer;
+import static echopoint.internal.AbstractContainer.ACTION_LISTENERS_CHANGED_PROPERTY;
+import static echopoint.internal.AbstractContainer.INPUT_ACTION;
+import echopoint.internal.AbstractContainerPeer;
+import echopoint.internal.DefaultEventPeer;
 import echopoint.model.Tag;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.util.Context;
@@ -34,7 +38,7 @@ import nextapp.echo.webcontainer.service.JavaScriptService;
  * @author Rakesh 2008-07-20
  * @version $Id$
  */
-public class TagCloudPeer extends AbstractPeer
+public class TagCloudPeer extends AbstractContainerPeer
 {
   /** The component name for which this class is a peer. */
   private static final String COMPONENT_NAME = TagCloud.class.getName();
@@ -61,6 +65,13 @@ public class TagCloudPeer extends AbstractPeer
     xstream = new XStream( new JsonHierarchicalStreamDriver() );
     xstream.processAnnotations( Tag.class );
     xstream.setMode( XStream.NO_REFERENCES );
+  }
+
+  /** Register an event peer for client events. */
+  public TagCloudPeer()
+  {
+    addEvent( new DefaultEventPeer(
+        INPUT_ACTION, ACTION_LISTENERS_CHANGED_PROPERTY, String.class ) );
   }
 
   /**
@@ -91,7 +102,7 @@ public class TagCloudPeer extends AbstractPeer
   {
     if ( TagCloud.PROPERTY_TAGS.equals( propertyName ) )
     {
-      return xstream.toXML( component.get( TagCloud.PROPERTY_TAGS ) );
+      return xstream.toXML( ( (TagCloud) component ).getData() );
     }
 
     return super.getOutputProperty(

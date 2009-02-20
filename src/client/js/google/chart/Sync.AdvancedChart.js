@@ -223,26 +223,20 @@ echopoint.google.chart.internal.AdvancedChartSync = Core.extend(
       if ( ! array ) return url;
 
       url += "&chxl=";
+      var str = "&chxl=";
 
       for ( var i = 0; i < array.length; ++i )
       {
-        url += i + ":";
+        str += i + ":|";
         var labels = array[i];
 
         for ( var j = 0; j < labels.length; ++j )
         {
-          url += "|" + labels[j];
-          if ( i < array.length - 1 )
-          {
-            url += "|";
-          }
-          else
-          {
-            if ( j < labels.length - 1 ) url += "|";
-          }
+          str += labels[j] + "|";
         }
       }
 
+      url += str.substring( 0, str.length - 1 );
       return url;
     },
 
@@ -465,7 +459,7 @@ echopoint.google.chart.internal.AdvancedChartSync = Core.extend(
       for ( var i = 0; i < json.list.length; ++i )
       {
         var labels = new Array();
-        var jsonLabels = json.list[i][0];
+        var jsonLabels = json.list[i];
 
         for ( var j = 0; j < jsonLabels.length; ++j )
         {

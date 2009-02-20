@@ -19,9 +19,12 @@ package echopoint.tucana;
 
 import echopoint.ProgressBar;
 import echopoint.internal.AbstractContainerPeer;
+import echopoint.internal.DefaultEventPeer;
+import static echopoint.tucana.FileUploadSelector.ACTION_LISTENERS_CHANGED_PROPERTY;
+import static echopoint.tucana.FileUploadSelector.COMPLETE_ACTION;
+import static echopoint.tucana.FileUploadSelector.START_ACTION;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.util.Context;
-import nextapp.echo.webcontainer.AbstractComponentSynchronizePeer;
 import nextapp.echo.webcontainer.ContentType;
 import nextapp.echo.webcontainer.ResourceRegistry;
 import nextapp.echo.webcontainer.ServerMessage;
@@ -64,32 +67,14 @@ public class FileUploadSelectorPeer extends AbstractContainerPeer
     resources.add( "echopoint", "images/wait.png", ContentType.IMAGE_PNG );
   }
 
-  /** Default constructor.  Add output properties. */
+  /** Default constructor.  Register events and required componens . */
   public FileUploadSelectorPeer()
   {
     addRequiredComponentClass( ProgressBar.class );
-
-    addEvent( new AbstractComponentSynchronizePeer.EventPeer(
-        FileUploadSelector.START_ACTION,
-        FileUploadSelector.ACTION_LISTENERS_CHANGED_PROPERTY )
-    {
-      @Override
-      public boolean hasListeners( Context context, Component component )
-      {
-        return ( (FileUploadSelector) component ).hasActionListeners();
-      }
-    });
-
-    addEvent( new AbstractComponentSynchronizePeer.EventPeer(
-        FileUploadSelector.COMPLETE_ACTION,
-        FileUploadSelector.ACTION_LISTENERS_CHANGED_PROPERTY )
-    {
-      @Override
-      public boolean hasListeners( Context context, Component component )
-      {
-        return ( (FileUploadSelector) component ).hasActionListeners();
-      }
-    });
+    addEvent( new DefaultEventPeer(
+        START_ACTION, ACTION_LISTENERS_CHANGED_PROPERTY ) );
+    addEvent( new DefaultEventPeer(
+        COMPLETE_ACTION, ACTION_LISTENERS_CHANGED_PROPERTY ) );
   }
 
   /** {@inheritDoc} */

@@ -19,6 +19,7 @@ package echopoint.tucana;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Serializable;
 
 /**
  * An interface to be implemented by the class providing the data to be
@@ -27,7 +28,7 @@ import java.io.OutputStream;
  * @author Echo File Transfer Library
  * @version $Id$
  */
-public interface DownloadProvider
+public interface DownloadProvider extends Serializable
 {
   /**
    * Returns the content type, for example "text/plain".

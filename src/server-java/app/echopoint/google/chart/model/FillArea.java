@@ -23,8 +23,8 @@ import echopoint.google.chart.internal.Marker;
 /**
  * A model object used to represent a fill that represents an area between
  * two sets of lines plotted.  See
- * <a href='http://code.google.com/apis/chart/#fill_area_marker'>Fill area</a>
- * specifications.
+ * <a href='http://code.google.com/apis/chart/colors.html#fill_area_marker'>Fill
+ * area</a> specifications.
  *
  * @author Rakesh 2008-08-10
  * @version $Id$

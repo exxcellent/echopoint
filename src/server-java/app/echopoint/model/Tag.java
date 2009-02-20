@@ -57,25 +57,25 @@ public class Tag implements Serializable
   /**
    * Compares the specified object with this instance for equality.
    *
-   * @param o The object to be compared.
+   * @param object The object to be compared.
    * @return Returns <code>true</code> if the specified object is of the
    *   same type and has the same values.
    */
   @Override
-  public boolean equals( final Object o )
+  public boolean equals( final Object object )
   {
-    if ( this == o ) return true;
-    if ( o == null || getClass() != o.getClass() ) return false;
+    if ( this == object ) return true;
+    if ( object == null ) return false;
 
-    echopoint.model.Tag tag = (echopoint.model.Tag) o;
-
-    if ( count != tag.count ) return false;
-    if ( name != null ? !name.equals( tag.name ) : tag.name != null )
+    boolean result = false;
+    if ( object instanceof Tag )
     {
-      return false;
+      final Tag tag = (Tag) object;
+      result = ( this.name ==  tag.name ) || ( ( this.name != null ) &&
+          this.name.equals( tag.name ) );
     }
 
-    return true;
+    return result;
   }
 
   /**
@@ -86,9 +86,8 @@ public class Tag implements Serializable
   @Override
   public int hashCode()
   {
-    int result;
-    result = ( name != null ? name.hashCode() : 0 );
-    result = 31 * result + count;
+    int result = 31 * 7;
+    result += ( name != null ? name.hashCode() : 0 );
     return result;
   }
 

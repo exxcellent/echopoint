@@ -11,7 +11,7 @@ echopoint.constants.TAG_CLOUD = "echopoint.TagCloud";
  * @sp tags An array containing the {#Tag} data objects to display.
  * @version $Id$
  */
-echopoint.TagCloud = Core.extend( Echo.Component,
+echopoint.TagCloud = Core.extend( echopoint.internal.AbstractContainer,
 {
   $load: function()
   {
@@ -21,6 +21,7 @@ echopoint.TagCloud = Core.extend( Echo.Component,
   /** Properties defined for this component. */
   $static:
   {
+    ACTION_COMPLETE: "action",
     ROLLOVER_ENABLED: "rolloverEnabled",
     ROLLOVER_BACKGROUND: "rolloverBackground",
     ROLLOVER_FOREGROUND: "rolloverForeground",
@@ -29,9 +30,11 @@ echopoint.TagCloud = Core.extend( Echo.Component,
 
   componentType: echopoint.constants.TAG_CLOUD,
 
+  /** Perform when a tag is clicked on. */
   doAction: function( tag )
   {
-    this.fireEvent( { type: "action", source: this, tag: tag } );
+    this.fireEvent( { type: echopoint.TagCloud.ACTION_COMPLETE,
+    source: this, data: tag.name } );
   }
 } );
 
@@ -51,6 +54,12 @@ echopoint.model.Tag = Core.extend(
   {
     this.name = title;
     this.count = occurances;
+  },
+
+  /** Return the string representation of this tag. */
+  toString: function()
+  {
+    return this.name;
   }
 } );
 
