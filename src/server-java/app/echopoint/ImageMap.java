@@ -27,7 +27,6 @@ import nextapp.echo.app.event.ActionListener;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.EventListener;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -237,50 +236,27 @@ public class ImageMap extends AbstractContainer
     setSections( new LinkedHashMap<String,MapSection>() );
   }
 
-  /**
-   * Add the specified action listener to this component.
-   *
-   * @see nextapp.echo.app.Component#firePropertyChange(String, Object, Object)
-   * @param listener The action listener to add.
-   */
+  /** {@inheritDoc} */
+  @Override
   public void addActionListener( final ActionListener listener )
   {
-    getEventListenerList().addListener( ActionListener.class, listener );
-    firePropertyChange( ACTION_LISTENERS_CHANGED_PROPERTY, null, listener );
+    super.addActionListener( listener );
   }
 
-  /**
-   * Determines if the button has any <code>ActionListener</code>s
-   * registered.
-   *
-   * @return true if any action listeners are registered
-   */
+  /** {@inheritDoc} */
+  public void removeActionListener( final ActionListener listener )
+  {
+    super.removeActionListener( listener );
+  }
+
+  /** {@inheritDoc}. */
+  @Override
   public boolean hasActionListeners()
   {
-    return ( hasEventListenerList() &&
-        getEventListenerList().getListenerCount( ActionListener.class ) != 0 );
+    return super.hasActionListeners();
   }
 
-  /**
-   * Notifies all listeners that have registered for this event type.
-   *
-   * @param event The {@link nextapp.echo.app.event.ActionEvent} to send
-   */
-  protected void fireActionPerformed( final ActionEvent event )
-  {
-    if ( !hasEventListenerList() ) return;
-
-    EventListener[] listeners =
-        getEventListenerList().getListeners( ActionListener.class );
-    for ( EventListener listener : listeners )
-    {
-      ( (ActionListener) listener ).actionPerformed( event );
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public void processInput( String name, Object value )
   {
@@ -293,19 +269,5 @@ public class ImageMap extends AbstractContainer
     {
       fireActionPerformed( new ActionEvent( this, actionCommand ) );
     }
-  }
-
-  /**
-   * Remove the specified action listener from the component.
-   *
-   * @see nextapp.echo.app.Component#firePropertyChange(String, Object, Object)
-   * @param listener The listener that is to be removed.
-   */
-  public void removeActionListener( final ActionListener listener )
-  {
-    if ( ! hasEventListenerList() ) return;
-
-    getEventListenerList().removeListener( ActionListener.class, listener );
-    firePropertyChange( ACTION_LISTENERS_CHANGED_PROPERTY, listener, null );
   }
 }

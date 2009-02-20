@@ -3,7 +3,7 @@
  *
  * @version $Id$
  */
-echopoint.TagCloudSync = Core.extend(Echo.Render.ComponentSync,
+echopoint.TagCloudSync = Core.extend( echopoint.internal.AbstractContainerSync,
 {
   $load: function()
   {
@@ -97,9 +97,8 @@ echopoint.TagCloudSync = Core.extend(Echo.Render.ComponentSync,
 
   _renderStyle: function()
   {
-    Echo.Sync.Font.render( this.component.render("font"), this._element );
-    Echo.Sync.Color.renderFB( this.component, this._element );
-
+    this.renderStyle( this._element );
+    
     if ( this.component.render( echopoint.TagCloud.ROLLOVER_ENABLED ) )
     {
       Core.Web.Event.add(this._element, "mouseover",

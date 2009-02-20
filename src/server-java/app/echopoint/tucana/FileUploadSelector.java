@@ -36,7 +36,6 @@ import nextapp.echo.app.event.ActionEvent;
 import nextapp.echo.app.event.ActionListener;
 
 import java.util.Collections;
-import java.util.EventListener;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -713,45 +712,18 @@ public class FileUploadSelector extends AbstractContainer
     }
   }
 
-  /**
-   * Add the specified action listener to this component.
-   *
-   * @see nextapp.echo.app.Component#firePropertyChange(String, Object, Object)
-   * @param listener The action listener to add.
-   */
+  /** {@inheritDoc} */
+  @Override
   public void addActionListener( final ActionListener listener )
   {
-    getEventListenerList().addListener( ActionListener.class, listener );
-    firePropertyChange( ACTION_LISTENERS_CHANGED_PROPERTY, null, listener );
+    super.addActionListener( listener );
   }
 
-  /**
-   * Determines if the button has any <code>ActionListener</code>s
-   * registered.
-   *
-   * @return true if any action listeners are registered
-   */
-  protected boolean hasActionListeners()
+  /** {@inheritDoc} */
+  @Override
+  public void removeActionListener( final ActionListener listener )
   {
-    return ( hasEventListenerList() &&
-        getEventListenerList().getListenerCount( ActionListener.class ) != 0 );
-  }
-
-  /**
-   * Notifies all listeners that have registered for this event type.
-   *
-   * @param event The {@link nextapp.echo.app.event.ActionEvent} to send
-   */
-  protected void fireActionPerformed( final ActionEvent event )
-  {
-    if ( !hasEventListenerList() ) return;
-
-    EventListener[] listeners =
-        getEventListenerList().getListeners( ActionListener.class );
-    for ( EventListener listener : listeners )
-    {
-      ( (ActionListener) listener ).actionPerformed( event );
-    }
+    super.removeActionListener( listener );
   }
 
   /**
@@ -774,20 +746,6 @@ public class FileUploadSelector extends AbstractContainer
     {
       fireActionPerformed( new ActionEvent( this, name ) );
     }
-  }
-
-  /**
-   * Remove the specified action listener from the component.
-   *
-   * @see nextapp.echo.app.Component#firePropertyChange(String, Object, Object)
-   * @param listener The listener that is to be removed.
-   */
-  public void removeActionListener( final ActionListener listener )
-  {
-    if ( ! hasEventListenerList() ) return;
-
-    getEventListenerList().removeListener( ActionListener.class, listener );
-    firePropertyChange( ACTION_LISTENERS_CHANGED_PROPERTY, listener, null );
   }
 
   /**

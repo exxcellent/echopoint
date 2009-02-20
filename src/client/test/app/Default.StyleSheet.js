@@ -397,6 +397,15 @@ echopoint.test.TestApp.StyleSheet = new Echo.StyleSheet(
       insets: 1,
       height: "25px",
       width: "500px"
+    },
+    "echopoint.TagCloud":
+    {
+      border: "2px inset #3d3d3d",
+      insets: 1,
+      rolloverBackground: "#a1a1a1",
+      rolloverForeground: "#c1c1c1",
+      rolloverEnabled: true,
+      width: "500px"
     }
   },
   "DefaultResizableLarge": {

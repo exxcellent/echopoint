@@ -23,6 +23,10 @@ import nextapp.echo.app.Component;
 import nextapp.echo.app.Extent;
 import nextapp.echo.app.ImageReference;
 import nextapp.echo.app.Insets;
+import nextapp.echo.app.event.ActionEvent;
+import nextapp.echo.app.event.ActionListener;
+
+import java.util.EventListener;
 
 /**
  * An abstract super class for container components.  Defines the standard
@@ -200,5 +204,60 @@ public class AbstractContainer extends Component
   public void setWidth( final Extent width )
   {
     set( PROPERTY_WIDTH, width );
+  }
+
+  /**
+   * Notifies all listeners that have registered for this event type.
+   *
+   * @param event The {@link nextapp.echo.app.event.ActionEvent} to send
+   */
+  protected void fireActionPerformed( final ActionEvent event )
+  {
+    if ( ! hasEventListenerList() ) return;
+
+    EventListener[] listeners =
+        getEventListenerList().getListeners( ActionListener.class );
+    for ( EventListener listener : listeners )
+    {
+      ( (ActionListener) listener ).actionPerformed( event );
+    }
+  }
+
+  /**
+   * Add the specified action listener to this component.
+   *
+   * @see nextapp.echo.app.Component#firePropertyChange(String, Object, Object)
+   * @param listener The action listener to add.
+   */
+  protected void addActionListener( final ActionListener listener )
+  {
+    getEventListenerList().addListener( ActionListener.class, listener );
+    firePropertyChange( ACTION_LISTENERS_CHANGED_PROPERTY, null, listener );
+  }
+
+  /**
+   * Remove the specified action listener from the component.
+   *
+   * @see nextapp.echo.app.Component#firePropertyChange(String, Object, Object)
+   * @param listener The listener that is to be removed.
+   */
+  protected void removeActionListener( final ActionListener listener )
+  {
+    if ( ! hasEventListenerList() ) return;
+
+    getEventListenerList().removeListener( ActionListener.class, listener );
+    firePropertyChange( ACTION_LISTENERS_CHANGED_PROPERTY, listener, null );
+  }
+
+  /**
+   * Determines if the button has any {@link
+   * nextapp.echo.app.event.ActionListener}s  registered.
+   *
+   * @return true if any action listeners are registered
+   */
+  protected boolean hasActionListeners()
+  {
+    return ( hasEventListenerList() &&
+        getEventListenerList().getListenerCount( ActionListener.class ) != 0 );
   }
 }

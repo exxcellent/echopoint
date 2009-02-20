@@ -17,20 +17,20 @@
  */
 package echopoint.tucana;
 
-import nextapp.echo.webcontainer.UserInstance;
-import nextapp.echo.webcontainer.ServerMessage;
-import nextapp.echo.webcontainer.WebContainerServlet;
-import nextapp.echo.webcontainer.AbstractCommandSynchronizePeer;
-import nextapp.echo.webcontainer.Service;
-import nextapp.echo.webcontainer.service.JavaScriptService;
 import nextapp.echo.app.Command;
 import nextapp.echo.app.util.Context;
+import nextapp.echo.webcontainer.AbstractCommandSynchronizePeer;
+import nextapp.echo.webcontainer.ServerMessage;
+import nextapp.echo.webcontainer.Service;
+import nextapp.echo.webcontainer.UserInstance;
+import nextapp.echo.webcontainer.WebContainerServlet;
+import nextapp.echo.webcontainer.service.JavaScriptService;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Synchronisation peer for the {@link DownloadCommand} command.
+ * Synchronisation peer for the {@link echopoint.tucana.DownloadCommand} command.
  *
  * @author Rakesh Vidyadharan 2008-11-10
  * @version $Id$
@@ -80,8 +80,8 @@ public class DownloadCommandPeer extends AbstractCommandSynchronizePeer
   }
 
   /**
-   * Returns the {@link DownloadCommand} having the passed id, and removes it
-   * from the internal map.
+   * Returns the {@link echopoint.tucana.DownloadCommand} having the passed
+   * id, and removes it from the internal map.
    *
    * <p>This means that a particular download command
    * cannot be re-used. A new download command must be created every time,
@@ -89,8 +89,8 @@ public class DownloadCommandPeer extends AbstractCommandSynchronizePeer
    *
    * <p>This is necessary to prevent memory leaks.</p>
    *
-   * @param id the download id.
-   * @return the {@link DownloadCommand} instance.
+   * @param id The download id.
+   * @return The {@link echopoint.tucana.DownloadCommand} instance.
    */
   public static DownloadCommand getAndRemoveDownload( String id )
   {
