@@ -45,6 +45,7 @@ public class ComponentList extends Column
           "ImageMap",
           "InfoWindow",
           "ProgressBar",
+          "PushButton",
           "Strut",
           "TagCloud",
           "FileUploadSelector",

@@ -398,6 +398,11 @@ echopoint.test.TestApp.StyleSheet = new Echo.StyleSheet(
       height: "25px",
       width: "500px"
     },
+    "echopoint.PushButton":
+    {
+      text: "Click Me",
+      toolTipText: "Click me to test"
+    },
     "echopoint.TagCloud":
     {
       border: "2px inset #3d3d3d",

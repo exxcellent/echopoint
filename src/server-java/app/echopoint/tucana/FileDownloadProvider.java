@@ -1,15 +1,13 @@
 package echopoint.tucana;
 
-import eu.medsea.util.MimeUtil;
+import static eu.medsea.util.MimeUtil.getMimeType;
+import org.apache.commons.io.IOUtils;
 
-import java.io.OutputStream;
-import java.io.File;
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.SocketException;
-
-import org.apache.commons.io.IOUtils;
+import java.io.OutputStream;
 
 /**
  * A download provider for sending files to the client.
@@ -38,8 +36,7 @@ public class FileDownloadProvider extends AbstractDownloadProvider
    */
   public String getContentType()
   {
-    final String mimeType = MimeUtil.getMimeType(file);
-    return ( mimeType == null ) ? MimeUtil.UNKNOWN_MIME_TYPE : mimeType;
+    return ( contentType != null ) ? contentType : getMimeType( file );
   }
 
   /**
@@ -66,7 +63,7 @@ public class FileDownloadProvider extends AbstractDownloadProvider
       status = Status.failed;
       throw e;
     }
-    
+
     status = Status.completed;
   }
 }

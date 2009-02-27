@@ -36,6 +36,12 @@ public abstract class AbstractDownloadProvider
   /** The content disposition for the file being sent to client. */
   protected String contentDisposition = "attachment";
 
+  /**
+   * The content-type to set for the file. Specify only if you wish to
+   * over-ride default processing.
+   */
+  protected String contentType;
+
   /** The status of the download process. */
   protected Status status;
 
@@ -55,6 +61,17 @@ public abstract class AbstractDownloadProvider
   public String getContentDisposition()
   {
     return contentDisposition;
+  }
+
+  /**
+   * Set the content-type for the file.  Specify if you wish to explicitly
+   * set the content-type rather than let default rules apply.
+   *
+   * @param contentType The content-type to set.
+   */
+  public void setContentType( final String contentType )
+  {
+    this.contentType = contentType;
   }
 
   /** {@inheritDoc} */

@@ -226,7 +226,9 @@
         <file name='Application.InfoWindow.js'/>
         <file name='Sync.InfoWindow.js'/>
         <file name='Application.ProgressBar.js'/>
+        <file name='Application.PushButton.js'/>
         <file name='Sync.ProgressBar.js'/>
+        <file name='Sync.PushButton.js'/>
         <file name='Application.Strut.js'/>
         <file name='Sync.Strut.js'/>
         <file name='Application.TagCloud.js'/>
@@ -267,6 +269,7 @@
         <file name='ImageMapTest.js'/>
         <file name='InfoWindowTest.js'/>
         <file name='ProgressBarTest.js'/>
+        <file name='PushButtonTest.js'/>
         <file name='StrutTest.js'/>
         <file name='TagCloudTest.js'/>
         <file name='BarChartTest.js'/>
