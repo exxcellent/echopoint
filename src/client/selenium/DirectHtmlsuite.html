@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://localhost:8080/" />
+<title>Access DirectHtml page</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Access DirectHtml page</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/echopointclienttest/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTitle</td>
+	<td>EchoPoint Client-Side Test Application</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>echopointUnitTestButtonDirectHtml</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>1000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='cl_10']/table/tbody/tr/td[1]/div/span</td>
+	<td>Edit</td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='cl_10']/table/tbody/tr/td[2]/div/span</td>
+	<td>Insert</td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='cl_10']/table/tbody/tr/td[3]/div/span</td>
+	<td>Format</td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='cl_14']/img</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='cl_15']/img</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='cl_17']/img</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='cl_18']/img</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='cl_19']/img</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='cl_21']/img</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='cl_22']/img</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='cl_24']/img</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='cl_25']/img</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='cl_26']/img</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='cl_27']/img</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='cl_29']/img</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='cl_30']/img</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='cl_32']/img</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='cl_33']/img</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='cl_34']/img</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='cl_35']/img</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='cl_36']/img</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='cl_37']/img</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>echopointUnitTestDirectHtmlDisplay</td>
+	<td>Save</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//div[@id='echopointUnitTestDirectHtmlNoTarget']/p[3]</td>
+	<td>Clicking link should open in the same browser window/tab.</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=link</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTitle</td>
+	<td>exact:echopoint: Home</td>
+	<td></td>
+</tr>
+<tr>
+	<td>goBackAndWait</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>echopointUnitTestButtonDirectHtml</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//div[@id='echopointUnitTestDirectHtmlTarget']/p[1]</td>
+	<td>Clicking link should open in a new browser window/tab.</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//div[@id='echopointUnitTestDirectHtmlTarget']/p[2]</td>
+	<td>Clicking link should open in the same browser window/tab.</td>
+</tr>
+
+</tbody></table>
+</body>
+</html>
