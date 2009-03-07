@@ -225,6 +225,8 @@
         <file name='Sync.ImageMap.js'/>
         <file name='Application.InfoWindow.js'/>
         <file name='Sync.InfoWindow.js'/>
+        <file name='Application.LightBox.js'/>
+        <file name='Sync.LightBox.js'/>
         <file name='Application.ProgressBar.js'/>
         <file name='Application.PushButton.js'/>
         <file name='Sync.ProgressBar.js'/>
@@ -268,6 +270,7 @@
         <file name='ImageIconTest.js'/>
         <file name='ImageMapTest.js'/>
         <file name='InfoWindowTest.js'/>
+        <file name='LightBoxTest.js'/>
         <file name='ProgressBarTest.js'/>
         <file name='PushButtonTest.js'/>
         <file name='StrutTest.js'/>

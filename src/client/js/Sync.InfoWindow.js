@@ -42,7 +42,7 @@ echopoint.InfoWindowSync = Core.extend( Echo.Render.ComponentSync,
     this._renderStyle();
   },
 
-  renderDispose: function( update )
+  renderDispose: function()
   {
     this._content = null;
     this._titleBar = null;
@@ -343,7 +343,6 @@ echopoint.InfoWindowSync = Core.extend( Echo.Render.ComponentSync,
    * This may also be invoked from {@link #renderUpdate} to selectively
    * re-apply the styles that have changed.
    *
-   * @param container The element to which the styles are to be applied.
    * @param update The update object that will be queried for style updates.
    *   If this is not specified or is <code>null</code>, then the styles
    *   will be applied unconditionally.  This helps to use this optional
@@ -531,7 +530,7 @@ echopoint.InfoWindowSync = Core.extend( Echo.Render.ComponentSync,
   },
 
   /** The event handler for mouse-out from the text element. */
-  _processRolloverExit: function( e )
+  _processRolloverExit: function()
   {
     if ( !this.client || !this.client.verifyInput( this.component ) )
     {

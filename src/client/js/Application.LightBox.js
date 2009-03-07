@@ -14,11 +14,14 @@ echopoint.LightBox = Core.extend( Echo.Component,
   $static:
   {
     HIDDEN: "hidden",
+    PARENT_ONLY: "parentOnly",
     TRANSLUCENT_IMAGE: "translucentImage"
   },
 
   $load: function()
   {
     Echo.ComponentFactory.registerType( echopoint.constants.LIGHT_BOX, this );
-  }
+  },
+
+  componentType: echopoint.constants.LIGHT_BOX
 });

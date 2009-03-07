@@ -44,6 +44,7 @@ public class ComponentList extends Column
           "ImageIcon",
           "ImageMap",
           "InfoWindow",
+          "LightBox",
           "ProgressBar",
           "PushButton",
           "Strut",

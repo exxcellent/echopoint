@@ -18,44 +18,44 @@
 
 package echopoint;
 
-import echopoint.internal.AbstractContainerPeer;
+import echopoint.internal.AbstractPeer;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.util.Context;
-import static nextapp.echo.webcontainer.ContentType.IMAGE_GIF;
+import static nextapp.echo.webcontainer.ContentType.IMAGE_PNG;
 import nextapp.echo.webcontainer.ServerMessage;
 import nextapp.echo.webcontainer.Service;
 import static nextapp.echo.webcontainer.WebContainerServlet.getResourceRegistry;
 import static nextapp.echo.webcontainer.WebContainerServlet.getServiceRegistry;
-import nextapp.echo.webcontainer.service.JavaScriptService;
+import static nextapp.echo.webcontainer.service.JavaScriptService.forResources;
 
 /**
- * Rendering peer for the {@link echopoint.Strut} component.
+ * Component rendering peer for the {@link echopoint.LightBox} component.
  *
- * @author Rakesh 2008-07-20
+ * @author Rakesh Vidyadharan 2009-03-06
  * @version $Id$
  */
-public class StrutPeer extends AbstractContainerPeer
+public class LightBoxPeer extends AbstractPeer
 {
   /** The component name for which this class is a peer. */
-  private static final String COMPONENT_NAME = Strut.class.getName();
+  private static final String COMPONENT_NAME = LightBox.class.getName();
 
   /** The JS service files to load. */
   private static final String[] SERVICE_FILES =
       {
-          "resource/js/Application.Strut.js",
-          "resource/js/Sync.Strut.js"
+          "resource/js/Application.LightBox.js",
+          "resource/js/Sync.LightBox.js"
       };
 
   /** The service for the client side peer for this component. */
   private static final Service COMPONENT_SERVICE =
-      JavaScriptService.forResources( COMPONENT_NAME, SERVICE_FILES );
+      forResources( COMPONENT_NAME, SERVICE_FILES );
 
   /** Register the services and resources. */
   static
   {
     getServiceRegistry().add( COMPONENT_SERVICE );
     getResourceRegistry().add( "echopoint",
-        "images/transparent1x1.gif", IMAGE_GIF );
+        "images/translucent_80_percent.png", IMAGE_PNG );
   }
 
   /**
@@ -78,14 +78,13 @@ public class StrutPeer extends AbstractContainerPeer
   @Override
   public Class getComponentClass()
   {
-    return Strut.class;
+    return LightBox.class;
   }
 
   /**
    * {@inheritDoc}
    * @see nextapp.echo.webcontainer.AbstractComponentSynchronizePeer#getClientComponentType
    */
-  @Override
   public String getClientComponentType( final boolean shortType )
   {
     return COMPONENT_NAME;
