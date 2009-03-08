@@ -56,6 +56,7 @@ public class LightBoxTest extends AbstractTest<LightBox>
   public void add()
   {
     final Button button = new Button( "Close" );
+    button.setRenderId( "echopointUnitTestLightBoxClose" );
     button.addActionListener( new ActionListener()
     {
       private static final long serialVersionUID = 1L;
@@ -86,6 +87,7 @@ public class LightBoxTest extends AbstractTest<LightBox>
 
     final LightBox box = (LightBox) get();
     final Button button = new Button( "Toggle" );
+    button.setRenderId( "echopointUnitTestLightBoxToggle" );
     button.addActionListener( new ActionListener()
     {
       private static final long serialVersionUID = 1L;
@@ -103,6 +105,7 @@ public class LightBoxTest extends AbstractTest<LightBox>
   private static void createWindowPane()
   {
     final WindowPane pane = new WindowPane();
+    pane.setRenderId( "echopointUnitTestLightBoxWindowPane" );
     pane.setClosable( false );
     pane.setHeight( new Extent( 300 ) );
     pane.setWidth( new Extent( 400 ) );

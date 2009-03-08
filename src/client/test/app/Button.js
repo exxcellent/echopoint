@@ -30,7 +30,7 @@ echopoint.test.Button = Core.extend( Echo.Button,
    * The event listener for displaying the component test object in
    * {@link MainContent#getTestArea}.
    */
-  _actionPerformed: function( event )
+  _actionPerformed: function()
   {
     var mainContent = testApp.getMainContent();
     var testArea = mainContent.getTestArea();

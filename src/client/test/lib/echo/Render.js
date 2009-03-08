@@ -438,6 +438,10 @@ Echo.Render = {
     updateFocus: function(client) {
         var focusedComponent = client.application.getFocusedComponent();
         if (focusedComponent && focusedComponent.peer) {
+            if (!focusedComponent.peer.renderFocus) {
+                throw new Error("Cannot focus component: " + focusedComponent + 
+                        ", peer does not provide renderFocus() implemnetation."); 
+            }
             focusedComponent.peer.renderFocus();
         }
     }
@@ -624,7 +628,6 @@ Echo.Render.ComponentSync = Core.extend({
          *         <li><code>SIZE_HEIGHT</code></li>
          *        </ul>
          * @return the preferred rendered size of the component
-         * @type {Number}
          */
         getPreferredSize: null,
         

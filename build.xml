@@ -233,6 +233,9 @@
         <file name='Sync.PushButton.js'/>
         <file name='Application.Strut.js'/>
         <file name='Sync.Strut.js'/>
+        <file name='Application.TextComponent.js'/>
+        <file name='Sync.TextComponent.js'/>
+        <file name='Sync.NumberTextField.js'/>
         <file name='Application.TagCloud.js'/>
         <file name='Sync.TagCloud.js'/>
       </filelist>
@@ -271,6 +274,7 @@
         <file name='ImageMapTest.js'/>
         <file name='InfoWindowTest.js'/>
         <file name='LightBoxTest.js'/>
+        <file name='NumberTextFieldTest.js'/>
         <file name='ProgressBarTest.js'/>
         <file name='PushButtonTest.js'/>
         <file name='StrutTest.js'/>

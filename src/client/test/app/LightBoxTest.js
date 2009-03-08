@@ -9,15 +9,16 @@ echopoint.test.LightBoxTest = Core.extend(
   $construct: function( testArea )
   {
     var lightBox = this._createComponent();
-    lightBox.add( this._createLabel() );
-    lightBox.add( new echopoint.Strut() );
-    lightBox.add( this._createTextField() );
-    lightBox.add( new echopoint.Strut() );
     lightBox.add( this._createImage( lightBox ) );
     lightBox.add( new echopoint.Strut() );
     lightBox.add( this._createControl( lightBox ) );
     lightBox.add( new echopoint.Strut() );
 
+    testArea.add( this._createLabel() );
+    testArea.add( new echopoint.Strut() );
+    testArea.add( this._createTextField() );
+    testArea.add( new echopoint.Strut() );
+    testArea.add( this._createOpen( lightBox ) );
     testArea.add( lightBox );
   },
 
@@ -65,16 +66,31 @@ echopoint.test.LightBoxTest = Core.extend(
   {
     return new Echo.Button(
     {
-      renderId: "echopointUnitTestLightBoxButton",
+      renderId: "echopointUnitTestLightBoxClose",
       styleName: "Default",
       text: "Close",
       events:
       {
         action: function()
         {
-          var hidden = lightBox.get( echopoint.LightBox.HIDDEN );
-          var state = ( hidden == "true" ) ? "false" : "true";
-          lightBox.set( echopoint.LightBox.HIDDEN, state );
+          lightBox.set( echopoint.LightBox.HIDDEN, true );
+        }
+      }
+    });
+  },
+
+  _createOpen: function( lightBox )
+  {
+    return new Echo.Button(
+    {
+      renderId: "echopointUnitTestLightBoxOpen",
+      styleName: "Default",
+      text: "Open",
+      events:
+      {
+        action: function()
+        {
+          lightBox.set( echopoint.LightBox.HIDDEN, false );
         }
       }
     });

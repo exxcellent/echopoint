@@ -1,5 +1,6 @@
 /**
- * Component rendering peer: Button
+ * Component rendering peer: Button.
+ * This class should not be extended by developers, the implementation is subject to change.
  */
 Echo.Sync.Button = Core.extend(Echo.Render.ComponentSync, {
 
@@ -293,7 +294,7 @@ Echo.Sync.Button = Core.extend(Echo.Render.ComponentSync, {
     
     /** Processes a mouse roll over exit event, displaying the button's normal appearance. */
     _processRolloverExit: function(e) {
-        if (!this.client) {
+        if (!this.client || !this.client.application) {
             return true;
         }
         if (this._processRolloverExitRef) {
