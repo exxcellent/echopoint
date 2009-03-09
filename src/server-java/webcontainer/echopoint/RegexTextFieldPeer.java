@@ -15,14 +15,14 @@ import static nextapp.echo.webcontainer.service.JavaScriptService.forResource;
  * @author Rakesh Vidyadharan 2009-03-07
  * @version $Id$
  */
-public class NumberTextFieldPeer extends TextFieldPeer
+public class RegexTextFieldPeer extends TextFieldPeer
 {
   /** The name of the component for which this class is a peer. */
-  private static final String COMPONENT_NAME = NumberTextField.class.getName();
+  private static final String COMPONENT_NAME = RegexTextField.class.getName();
 
   /** The service for the client side peer for this component. */
   private static final Service COMPONENT_SERVICE = forResource( COMPONENT_NAME,
-      "resource/js/Sync.NumberTextField.js" );
+      "resource/js/Sync.RegexTextField.js" );
 
   /** Register the services */
   static
@@ -50,7 +50,7 @@ public class NumberTextFieldPeer extends TextFieldPeer
   @Override
   public Class getComponentClass()
   {
-    return NumberTextField.class;
+    return RegexTextField.class;
   }
 
   /**

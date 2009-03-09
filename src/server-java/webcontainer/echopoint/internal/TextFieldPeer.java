@@ -1,28 +1,34 @@
-package echopoint;
+package echopoint.internal;
 
-import echopoint.internal.TextFieldPeer;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.util.Context;
 import nextapp.echo.webcontainer.ServerMessage;
 import nextapp.echo.webcontainer.Service;
 import static nextapp.echo.webcontainer.WebContainerServlet.getServiceRegistry;
-import static nextapp.echo.webcontainer.service.JavaScriptService.forResource;
+import static nextapp.echo.webcontainer.service.JavaScriptService.forResources;
 
 /**
- * <p>&copy; Copyright 2009 <a href='http://sptci.com/' target='_top'>Sans
- * Pareil Technologies, Inc.</a></p>
+ * Base component rendering peer for the text field extension components.
  *
  * @author Rakesh Vidyadharan 2009-03-07
  * @version $Id$
  */
-public class NumberTextFieldPeer extends TextFieldPeer
+public abstract class TextFieldPeer extends
+    nextapp.echo.webcontainer.sync.component.TextFieldPeer
 {
   /** The name of the component for which this class is a peer. */
-  private static final String COMPONENT_NAME = NumberTextField.class.getName();
+  private static final String COMPONENT_NAME = TextField.class.getName();
+
+  /** The JS service files to load. */
+  private static final String[] SERVICE_FILES =
+      {
+          "resource/js/Application.TextField.js",
+          "resource/js/Sync.TextField.js"
+      };
 
   /** The service for the client side peer for this component. */
-  private static final Service COMPONENT_SERVICE = forResource( COMPONENT_NAME,
-      "resource/js/Sync.NumberTextField.js" );
+  private static final Service COMPONENT_SERVICE =
+      forResources( COMPONENT_NAME, SERVICE_FILES );
 
   /** Register the services */
   static
@@ -50,7 +56,7 @@ public class NumberTextFieldPeer extends TextFieldPeer
   @Override
   public Class getComponentClass()
   {
-    return NumberTextField.class;
+    return TextField.class;
   }
 
   /**

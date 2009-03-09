@@ -16,18 +16,12 @@
  * License.
  */
 
-package echopoint;
-
-import echopoint.internal.TextField;
+package echopoint.internal;
 
 /**
- * A simple extension of {@link nextapp.echo.app.TextField} that allows only
- * numeric characters and one period ({@code .}) to be entered.
+ * A base class for text field extensions.
  *
- * @author Rakesh 2009-03-07
+ * @author Rakesh 2009-03-08
  * @version $Id$
  */
-public class NumberTextField extends TextField
-{
-  private static final long serialVersionUID = 1l;
-}
+public abstract class TextField extends nextapp.echo.app.TextField {}

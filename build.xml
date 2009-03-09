@@ -233,8 +233,9 @@
         <file name='Sync.PushButton.js'/>
         <file name='Application.Strut.js'/>
         <file name='Sync.Strut.js'/>
-        <file name='Application.TextComponent.js'/>
-        <file name='Sync.TextComponent.js'/>
+        <file name='Application.TextField.js'/>
+        <file name='Sync.TextField.js'/>
+        <file name='Sync.RegexTextField.js'/>
         <file name='Sync.NumberTextField.js'/>
         <file name='Application.TagCloud.js'/>
         <file name='Sync.TagCloud.js'/>
@@ -274,11 +275,12 @@
         <file name='ImageMapTest.js'/>
         <file name='InfoWindowTest.js'/>
         <file name='LightBoxTest.js'/>
-        <file name='NumberTextFieldTest.js'/>
         <file name='ProgressBarTest.js'/>
         <file name='PushButtonTest.js'/>
         <file name='StrutTest.js'/>
         <file name='TagCloudTest.js'/>
+        <file name='NumberTextFieldTest.js'/>
+        <file name='RegexTextFieldTest.js'/>
         <file name='BarChartTest.js'/>
         <file name='LineChartTest.js'/>
         <file name='SparklineTest.js'/>

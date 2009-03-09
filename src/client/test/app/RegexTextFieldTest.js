@@ -1,0 +1,54 @@
+/**
+ * The test class used to test echopoint.RegexTextField component.
+ *
+ * @author Rakesh 2009-03-0u
+ * @version $Id$
+ */
+echopoint.test.RegexTextFieldTest = Core.extend(
+{
+  $construct: function( testArea )
+  {
+    var row = new Echo.Row( { styleName: "Default" } );
+    row.add( this._createLabel() );
+    row.add( new echopoint.Strut() );
+    row.add( this._createTextField() );
+
+    testArea.add( new echopoint.Strut() );
+    testArea.add( row );
+    testArea.add( new echopoint.Strut() );
+    testArea.add( this._createNote() );
+  },
+
+  _createLabel: function()
+  {
+    return new Echo.Label(
+    {
+      renderId: "echopointUnitTestRegexTextFieldLabel",
+      styleName: "Default",
+      text: "Try entering characters"
+    });
+  },
+
+  _createTextField: function()
+  {
+    return new echopoint.RegexTextField(
+    {
+      renderId: "echopointUnitTestRegexTextField",
+      styleName: "Default",
+      regex: "^[\\d]+[.]{0,1}[\\d]{0,2}$"
+    });
+  },
+
+  _createNote: function()
+  {
+    return new echopoint.HtmlLabel(
+    {
+      renderId: "echopointUnitTestRegexTextFieldNote",
+      styleName: "Default",
+      text: "Note that the field will allow only the number characters " +
+            "0-9 and the period (.).  Also note that only one period " +
+            "character is allowed by the field.  You may enter up to " +
+            "two fractional digits."
+    });
+  }
+});
