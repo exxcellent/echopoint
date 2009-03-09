@@ -41,6 +41,14 @@ public class NumberTextFieldTest extends AbstractTest<NumberTextField>
     assertEquals( "Ensure width set", size, getComponent().getWidth() );
   }
 
+  @Test
+  public void precision()
+  {
+    final int precision = 4;
+    getComponent().setPrecision( precision );
+    assertEquals( "Ensure precision set", precision, getComponent().getPrecision() );
+  }
+
   @AfterClass
   public static void finish()
   {

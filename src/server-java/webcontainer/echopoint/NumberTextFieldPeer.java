@@ -1,6 +1,5 @@
 package echopoint;
 
-import echopoint.internal.TextFieldPeer;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.util.Context;
 import nextapp.echo.webcontainer.ServerMessage;
@@ -15,7 +14,7 @@ import static nextapp.echo.webcontainer.service.JavaScriptService.forResource;
  * @author Rakesh Vidyadharan 2009-03-07
  * @version $Id$
  */
-public class NumberTextFieldPeer extends TextFieldPeer
+public class NumberTextFieldPeer extends RegexTextFieldPeer
 {
   /** The name of the component for which this class is a peer. */
   private static final String COMPONENT_NAME = NumberTextField.class.getName();

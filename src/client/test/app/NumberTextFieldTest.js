@@ -34,7 +34,8 @@ echopoint.test.NumberTextFieldTest = Core.extend(
     return new echopoint.NumberTextField(
     {
       renderId: "echopointUnitTestNumberTextField",
-      styleName: "Default"
+      styleName: "Default",
+      precision: 4
     });
   },
 

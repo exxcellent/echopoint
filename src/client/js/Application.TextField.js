@@ -31,20 +31,6 @@ echopoint.internal.TextField = Core.extend( Echo.TextField,
 });
 
 /**
- * Component for allowing only numeric values into a text field.
- */
-echopoint.NumberTextField = Core.extend( echopoint.internal.TextField,
-{
-  $load: function()
-  {
-    Echo.ComponentFactory.registerType(
-        echopoint.constants.NUMBER_TEXT_FIELD, this );
-  },
-
-  componentType: echopoint.constants.NUMBER_TEXT_FIELD
-});
-
-/**
  * Component that uses a regex to pre-filter out invalid characters (or
  * patterns) from being input into a text field.
  */
@@ -62,4 +48,30 @@ echopoint.RegexTextField = Core.extend( echopoint.internal.TextField,
   },
 
   componentType: echopoint.constants.REGEX_TEXT_FIELD
+});
+
+/**
+ * Component for allowing only numeric values into a text field.
+ */
+echopoint.NumberTextField = Core.extend( echopoint.RegexTextField,
+{
+  $load: function()
+  {
+    Echo.ComponentFactory.registerType(
+        echopoint.constants.NUMBER_TEXT_FIELD, this );
+  },
+
+  $static:
+  {
+    // The default regex for numbers
+    NUMBER_REGEX: "^[\\d]+[.]{0,1}[\\d]*$",
+
+    // The regex to use for numbers with limitation on fractional part
+    FRACTION_REGEX: "^[\\d]+[.]{0,1}[\\d]{0,",
+
+    // The property used to set the maximum number of fractional digits
+    PRECISION: "precision"
+  },
+
+  componentType: echopoint.constants.NUMBER_TEXT_FIELD
 });

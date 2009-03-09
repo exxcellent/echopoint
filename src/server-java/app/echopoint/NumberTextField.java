@@ -18,16 +18,59 @@
 
 package echopoint;
 
-import echopoint.internal.TextField;
-
 /**
- * A simple extension of {@link nextapp.echo.app.TextField} that allows only
- * numeric characters and one period ({@code .}) to be entered.
+ * A simple extension of {@link RegexTextField} that allows only
+ * numeric characters and one period ({@code .}) to be entered.  The  precision
+ * (number of fractional digits may be controlled using the {@link
+ * #setPrecision} method.
  *
  * @author Rakesh 2009-03-07
  * @version $Id$
  */
-public class NumberTextField extends TextField
+public class NumberTextField extends RegexTextField
 {
   private static final long serialVersionUID = 1l;
+
+  public static final String PROPERTY_PRECISION = "precision";
+
+  /**
+   * Return the value of the {@link #PROPERTY_PRECISION} property.  This
+   * indicates the number of fractional digits allowed in the number.
+   *
+   * @return The precision or {@code -1} if not set.
+   */
+  public int getPrecision()
+  {
+    int precision = -1;
+
+    Object value = get( PROPERTY_PRECISION );
+    if ( value != null )
+    {
+      precision = (Integer) value;
+    }
+
+    return precision;
+  }
+
+  /**
+   * Set the value of the {@link #PROPERTY_PRECISION} property.
+   *
+   * @param precision The maximum number of fractional digits.
+   */
+  public void setPrecision( final int precision )
+  {
+    set( PROPERTY_PRECISION, precision );
+  }
+
+  /**
+   * Over-ridden to do nothing.  This component does not allow custom
+   * regular expressions.
+   *
+   * @param regex The regular expression to use.
+   */
+  @Override
+  public void setRegex( final String regex )
+  {
+    // No-op
+  }
 }
