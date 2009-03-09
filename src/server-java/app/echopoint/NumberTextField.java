@@ -24,6 +24,16 @@ package echopoint;
  * (number of fractional digits may be controlled using the {@link
  * #setPrecision} method.
  *
+ * <p>The following shows sample use of this component:</p>
+ * <pre>
+ *  import nextapp.echo.app.TextField;
+ *  import echopoint.NumberTextField;
+ *
+ *    ...
+ *    final TextField tf = new NumberTextField( 2 );
+ *    grid.add( tf );
+ * </pre>
+ *
  * @author Rakesh 2009-03-07
  * @version $Id$
  */
@@ -32,6 +42,19 @@ public class NumberTextField extends RegexTextField
   private static final long serialVersionUID = 1l;
 
   public static final String PROPERTY_PRECISION = "precision";
+
+  /** Default constructor.  No actions required. */
+  public NumberTextField() {}
+
+  /**
+   * Create a new instance with the specified precision value.
+   *
+   * @param precision The maximum number of fractional digits allowed.
+   */
+  public NumberTextField( final int precision )
+  {
+    setPrecision( precision );
+  }
 
   /**
    * Return the value of the {@link #PROPERTY_PRECISION} property.  This
