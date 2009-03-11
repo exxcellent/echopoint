@@ -4,12 +4,12 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="" />
-<title>Access Html Label page</title>
+<title>Access NumberTextField page</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Access Html Label page</td></tr>
+<tr><td rowspan="1" colspan="3">Access NumberTextField page</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
@@ -18,7 +18,7 @@
 </tr>
 <tr>
 	<td>click</td>
-	<td>echopointUnitTestButtonHtmlLabel</td>
+	<td>echopointUnitTestButtonNumberTextField</td>
 	<td></td>
 </tr>
 <tr>
@@ -27,9 +27,19 @@
 	<td></td>
 </tr>
 <tr>
-	<td>assertTextPresent</td>
-	<td>HtmlLabel simple test content.</td>
+	<td>verifyText</td>
+	<td>echopointUnitTestNumberTextField</td>
 	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>echopointUnitTestNumberTextField</td>
+	<td>125000009.5009</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>echopointUnitTestNumberTextFieldNote</td>
+	<td>Note that the field will allow only the number characters 0-9 and the period (.). Also note that only one period character is allowed by the field.</td>
 </tr>
 
 </tbody></table>

@@ -4,21 +4,21 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="" />
-<title>Access Html Label page</title>
+<title>pushButtonTest</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Access Html Label page</td></tr>
+<tr><td rowspan="1" colspan="3">pushButtonTest</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
-	<td>/echopointclienttest/</td>
+	<td>http://sptci.com/echopointclienttest/</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>echopointUnitTestButtonHtmlLabel</td>
+	<td>echopointUnitTestButtonPushButton</td>
 	<td></td>
 </tr>
 <tr>
@@ -27,9 +27,14 @@
 	<td></td>
 </tr>
 <tr>
-	<td>assertTextPresent</td>
-	<td>HtmlLabel simple test content.</td>
+	<td>click</td>
+	<td>echopointUnitTestPushButton</td>
 	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//div[@id='CL.5']/div[2]</td>
+	<td>Button clicked: 1</td>
 </tr>
 
 </tbody></table>
