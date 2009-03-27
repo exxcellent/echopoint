@@ -60,6 +60,29 @@ echopoint.LightBoxSync = Core.extend( Echo.Render.ComponentSync,
     }
   },
 
+  /**
+   * Returns the measured size of the content pane element.  Child floating
+   * pane (e.g. WindowPane) peers may invoke this
+   * method to determine dimensions in which such panes can be placed/moved.
+   *
+   * @return a bounds object describing the measured size
+   * @type Core.Web.Measure.Bounds
+   */
+  getSize: function()
+  {
+    return new Core.Web.Measure.Bounds( this._container );
+  },
+
+  /**
+   * Raises a floating pane child to the top.
+   *
+   * @param child The child component to raise
+   */
+  raise: function( child )
+  {
+    return true;
+  },
+
   /** Create the container used to display the light box image. */
   _createContainer: function()
   {

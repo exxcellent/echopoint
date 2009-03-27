@@ -57,13 +57,14 @@ public class LightBoxTest extends AbstractTest<LightBox>
   {
     final Button button = new Button( "Close" );
     button.setRenderId( "echopointUnitTestLightBoxClose" );
+    final LightBox box = getComponent();
     button.addActionListener( new ActionListener()
     {
       private static final long serialVersionUID = 1L;
 
       public void actionPerformed( final ActionEvent event )
       {
-        getComponent().setHidden( true );
+        box.setHidden( true );
       }
     });
 

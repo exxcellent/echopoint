@@ -23,5 +23,8 @@ echopoint.LightBox = Core.extend( Echo.Component,
     Echo.ComponentFactory.registerType( echopoint.constants.LIGHT_BOX, this );
   },
 
-  componentType: echopoint.constants.LIGHT_BOX
+  componentType: echopoint.constants.LIGHT_BOX,
+
+  /** Mark this component as a pane (PaneContainer). */
+  pane: true
 });

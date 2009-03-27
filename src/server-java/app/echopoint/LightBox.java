@@ -34,7 +34,7 @@ import nextapp.echo.app.PaneContainer;
  * @author Brad Baker, Rakesh 2009-03-06
  * @version $Id$
  */
-public class LightBox extends Component
+public class LightBox extends Component implements PaneContainer
 {
   private static final long serialVersionUID = 1L;
 

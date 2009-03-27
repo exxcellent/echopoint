@@ -9,10 +9,12 @@ echopoint.test.LightBoxTest = Core.extend(
   $construct: function( testArea )
   {
     var lightBox = this._createComponent();
+
     lightBox.add( this._createImage( lightBox ) );
     lightBox.add( new echopoint.Strut() );
     lightBox.add( this._createControl( lightBox ) );
     lightBox.add( new echopoint.Strut() );
+    lightBox.add( this._createWindowPane() );
 
     testArea.add( this._createLabel() );
     testArea.add( new echopoint.Strut() );
@@ -31,6 +33,18 @@ echopoint.test.LightBoxTest = Core.extend(
       parentOnly: true,
       hidden: false
     } );
+  },
+
+  /** Display a child window pane to test appding panes. */
+  _createWindowPane: function()
+  {
+    return new Echo.WindowPane(
+    {
+      renderId: "echopointUnitTestLightBoxWP",
+      styleName: "Default",
+      height: "300",
+      width: "400"
+    });
   },
 
   _createLabel: function()
