@@ -34,7 +34,8 @@ echopoint.ImageIconSync = Core.extend( echopoint.internal.AbstractContainerSync,
   {
     this._image = document.createElement( "img" );
     this._image.id = this.component.renderId;
-    this._image.src = this.component.render( echopoint.ImageIcon.URL );
+    Echo.Sync.ImageReference.renderImg(
+        this.component.render( echopoint.ImageIcon.URL ), this._image );
     Core.Web.Event.add( this._image, "click",
         Core.method( this, this._processClick ), false );
 
