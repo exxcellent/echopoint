@@ -18,12 +18,13 @@
 
 package echopoint;
 
+import nextapp.echo.app.Component;
+import nextapp.echo.app.FloatingPane;
+import nextapp.echo.app.Label;
 import nextapp.echo.app.event.ActionEvent;
 import nextapp.echo.app.event.ActionListener;
-import nextapp.echo.app.Component;
-import nextapp.echo.app.Label;
-import org.junit.runner.JUnitCore;
 import org.junit.runner.Description;
+import org.junit.runner.JUnitCore;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 
@@ -79,6 +80,15 @@ class TestListener implements ActionListener
     final Class testCase = Class.forName( testCaseName );
 
     Application.getContent().getLogArea().removeAll();
+
+    for ( int i = 0; i < Application.getContent().getComponentCount(); ++i )
+    {
+      final Component component = Application.getContent().getComponent( i );
+      if ( component instanceof FloatingPane )
+      {
+        Application.getContent().remove( component );
+      }
+    }
     final JUnitCore unitCore = new JUnitCore();
     unitCore.addListener( new Listener() );
     unitCore.run( testCase );

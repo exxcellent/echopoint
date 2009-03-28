@@ -20,6 +20,7 @@ package echopoint;
 
 import nextapp.echo.app.Component;
 import nextapp.echo.app.ImageReference;
+import nextapp.echo.app.Pane;
 import nextapp.echo.app.PaneContainer;
 
 /**
@@ -34,7 +35,7 @@ import nextapp.echo.app.PaneContainer;
  * @author Brad Baker, Rakesh 2009-03-06
  * @version $Id$
  */
-public class LightBox extends Component implements PaneContainer
+public class LightBox extends Component implements Pane
 {
   private static final long serialVersionUID = 1L;
 

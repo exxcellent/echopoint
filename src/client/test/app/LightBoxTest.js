@@ -10,11 +10,11 @@ echopoint.test.LightBoxTest = Core.extend(
   {
     var lightBox = this._createComponent();
 
-    lightBox.add( this._createImage( lightBox ) );
+    lightBox.add( this._createImage() );
     lightBox.add( new echopoint.Strut() );
     lightBox.add( this._createControl( lightBox ) );
     lightBox.add( new echopoint.Strut() );
-    lightBox.add( this._createWindowPane() );
+    lightBox.add( this._createRemove( testArea, lightBox ) );
 
     testArea.add( this._createLabel() );
     testArea.add( new echopoint.Strut() );
@@ -33,18 +33,6 @@ echopoint.test.LightBoxTest = Core.extend(
       parentOnly: true,
       hidden: false
     } );
-  },
-
-  /** Display a child window pane to test appding panes. */
-  _createWindowPane: function()
-  {
-    return new Echo.WindowPane(
-    {
-      renderId: "echopointUnitTestLightBoxWP",
-      styleName: "Default",
-      height: "300",
-      width: "400"
-    });
   },
 
   _createLabel: function()
@@ -99,12 +87,29 @@ echopoint.test.LightBoxTest = Core.extend(
     {
       renderId: "echopointUnitTestLightBoxOpen",
       styleName: "Default",
-      text: "Open",
+      text: "Toggle",
       events:
       {
         action: function()
         {
           lightBox.set( echopoint.LightBox.HIDDEN, false );
+        }
+      }
+    });
+  },
+
+  _createRemove: function( testArea, lightBox )
+  {
+    return new Echo.Button(
+    {
+      renderId: "echopointUnitTestLightBoxRemove",
+      styleName: "Default",
+      text: "Remove",
+      events:
+      {
+        action: function()
+        {
+          testArea.remove( lightBox );
         }
       }
     });

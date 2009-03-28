@@ -110,6 +110,7 @@ public class LightBoxTest extends AbstractTest<LightBox>
     pane.setClosable( false );
     pane.setHeight( new Extent( 300 ) );
     pane.setWidth( new Extent( 400 ) );
+    pane.setZIndex( 2000000 );
     pane.add( get() );
     Application.getContent().add( pane );
   }

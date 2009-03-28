@@ -27,11 +27,11 @@ echopoint.LightBoxSync = Core.extend( Echo.Render.ComponentSync,
     this._createContainer();
     this._createLayoutContainer();
 
-    var children = this.component.children;
-    for ( var i = 0; i < children.length; ++i )
+    var componentCount = this.component.getComponentCount();
+    for ( var i = 0; i < componentCount; ++i )
     {
       Echo.Render.renderComponentAdd(
-          update, this.component.children[i], this._layoutContainer );
+          update, this.component.getComponent( i ), this._layoutContainer );
     }
 
     var po = this.component.render( echopoint.LightBox.PARENT_ONLY, false );
@@ -47,6 +47,13 @@ echopoint.LightBoxSync = Core.extend( Echo.Render.ComponentSync,
 
   renderDispose: function()
   {
+    var parentOnly = this.component.render( echopoint.LightBox.PARENT_ONLY, false );
+
+    if ( ! parentOnly )
+    {
+      document.body.removeChild( this._container );
+    }
+
     this._container = null;
     this._layoutContainer = null;
   },
@@ -58,29 +65,6 @@ echopoint.LightBoxSync = Core.extend( Echo.Render.ComponentSync,
     {
       this._toggle( toggle.newValue );
     }
-  },
-
-  /**
-   * Returns the measured size of the content pane element.  Child floating
-   * pane (e.g. WindowPane) peers may invoke this
-   * method to determine dimensions in which such panes can be placed/moved.
-   *
-   * @return a bounds object describing the measured size
-   * @type Core.Web.Measure.Bounds
-   */
-  getSize: function()
-  {
-    return new Core.Web.Measure.Bounds( this._container );
-  },
-
-  /**
-   * Raises a floating pane child to the top.
-   *
-   * @param child The child component to raise
-   */
-  raise: function( child )
-  {
-    return true;
   },
 
   /** Create the container used to display the light box image. */
@@ -108,6 +92,7 @@ echopoint.LightBoxSync = Core.extend( Echo.Render.ComponentSync,
   _createLayoutContainer: function()
   {
     this._layoutContainer = this._createDiv();
+    this._layoutContainer.id = this.component.renderId + "LayoutContainer";
     this._container.appendChild( this._layoutContainer );
 
     return this._layoutContainer;
