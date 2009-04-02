@@ -23,6 +23,7 @@ echopoint.internal.AbstractContainer = Core.extend( Echo.Component,
     FOREGROUND: "foreground",
     INSETS: "insets",
     HEIGHT: "height",
+    LAYOUT_DATA: "layoutData",
     WIDTH: "width"
   },
 

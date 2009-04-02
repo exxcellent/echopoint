@@ -215,6 +215,8 @@
         <file name='Sync.AbstractHtmlComponent.js'/>
         <file name='Application.Anchor.js'/>
         <file name='Sync.Anchor.js'/>
+        <file name='Application.BorderLayout.js'/>
+        <file name='Sync.BorderLayout.js'/>
         <file name='Sync.DirectHtml.js'/>
         <file name='Sync.HtmlLabel.js'/>
         <file name='Application.HttpPane.js'/>
@@ -281,6 +283,7 @@
         <file name='TagCloudTest.js'/>
         <file name='NumberTextFieldTest.js'/>
         <file name='RegexTextFieldTest.js'/>
+        <file name='BorderLayoutTest.js'/>
         <file name='BarChartTest.js'/>
         <file name='LineChartTest.js'/>
         <file name='SparklineTest.js'/>

@@ -317,6 +317,11 @@ echopoint.test.TestApp.StyleSheet = new Echo.StyleSheet(
       toolTipText: "Click the link",
       uri: "https://echopoint.dev.java.net/"
     },
+    "echopoint.BorderLayout":
+    {
+      border: "2px groove #cfdfff",
+      width: "500px"
+    },
     "echopoint.DirectHtml":
     {
       background: "#cfdfff",

@@ -236,6 +236,18 @@ public class ImageMap extends AbstractContainer
     setSections( new LinkedHashMap<String,MapSection>() );
   }
 
+  /**
+   * Over-ridden to be a {@code noop} since image map does not support a
+   * background image.
+   *
+   * @param backgroundImage The backgroundImage to apply.
+   */
+  @Override
+  public void setBackgroundImage( final ImageReference backgroundImage )
+  {
+    // noop
+  }
+
   /** {@inheritDoc} */
   @Override
   public void addActionListener( final ActionListener listener )

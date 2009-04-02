@@ -56,14 +56,20 @@ echopoint.ImageMapSync = Core.extend( echopoint.internal.AbstractContainerSync,
   {
     this._image = null;
     this._map = null;
+    this._sections = null;
     echopoint.ImageMapSync.instances.remove( this.component.renderId );
   },
 
   renderUpdate: function( update )
   {
-    this.renderStyle( this._image, update );
-    this._createAreas();
-    return false; // Child elements not supported: safe to return false.
+    var parentElement = this._image.parent;
+    Echo.Render.renderComponentDispose( update, update.parent );
+    parentElement.removeChild( this._image );
+    parentElement.removeChild( this._map );
+    
+    this._sections = null;
+    this.renderAdd( update, parentElement );
+    return false;
   },
 
   /**

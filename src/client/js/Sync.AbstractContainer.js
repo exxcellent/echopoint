@@ -64,13 +64,6 @@ echopoint.internal.AbstractContainerSync = Core.extend( Echo.Render.ComponentSyn
      * This may also be invoked from {@link #renderUpdate} to selectively
      * re-apply the styles that have changed.
      *
-     * @see #renderAlignment
-     * @see #renderBorder
-     * @see #renderFB
-     * @see #renderBackgroundImage
-     * @see #renderInsets
-     * @see #renderHeight
-     * @see #renderWidth
      * @param container The element to which the styles are to be applied.
      * @param update The update object that will be queried for style updates.
      *   If this is not specified or is <code>null</code>, then the styles
@@ -305,6 +298,26 @@ echopoint.internal.AbstractContainerSync = Core.extend( Echo.Render.ComponentSyn
       {
         container.style.height = Echo.Sync.Extent.toCssValue(
             this.getHeight(), false, true );
+      }
+    },
+
+    /**
+     * Render the basic cell layout data for the specified component.
+     * Sub-classes that implement their own layout data objects must over-ride
+     * this method.
+     *
+     * @param container The element to which the layout data is to be applied.
+     * @param layoutData The layout data to apply.
+     */
+    renderLayoutData: function( container, layoutData )
+    {
+      if ( layoutData )
+      {
+        Echo.Sync.Alignment.render(
+            layoutData.alignment, container, true, this.component );
+        Echo.Sync.FillImage.render( layoutData.backgroundImage, container );
+        Echo.Sync.Insets.render( layoutData.insets, container, "padding" );
+        Echo.Sync.Color.render( layoutData.background, container, "backgroundColor" );
       }
     }
   }
