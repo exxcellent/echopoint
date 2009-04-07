@@ -36,7 +36,7 @@ echopoint.internal.AbstractHtmlComponentSync = Core.extend( echopoint.internal.A
     parentElement.appendChild( this._container );
   },
 
-  renderDispose: function( update )
+  renderDispose: function()
   {
     this._container = null;
     this.containerType = null;

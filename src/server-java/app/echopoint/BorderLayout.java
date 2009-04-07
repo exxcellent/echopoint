@@ -58,6 +58,7 @@ import java.util.Map;
  *
  * @author Rakesh 2009-04-02
  * @version $Id$
+ * @since 3.0.0a11
  */
 public class BorderLayout extends AbstractContainer
 {

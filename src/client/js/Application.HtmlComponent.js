@@ -15,6 +15,9 @@ echopoint.constants.DIRECT_HTML = "echopoint.DirectHtml";
 /** The name of the HtmlLabel component. */
 echopoint.constants.HTML_LABEL = "echopoint.HtmlLabel";
 
+/** The name of the HtmlLayout component. */
+echopoint.constants.HTML_LAYOUT = "echopoint.HtmlLayout";
+
 /**
  * Abstract super-class component of components that render raw HTML
  * content.
@@ -64,3 +67,19 @@ echopoint.HtmlLabel = Core.extend( echopoint.internal.AbstractHtmlComponent,
   componentType: echopoint.constants.HTML_LABEL
 });
 
+/**
+ * A container component that takes XHTML layout code using which arbitrary
+ * components may be displayed on screen.
+ *
+ * @author Simon Wei 2009-03-16
+ */
+echopoint.HtmlLayout = Core.extend( echopoint.internal.AbstractHtmlComponent,
+{
+  $load: function()
+  {
+    Echo.ComponentFactory.registerType( echopoint.constants.HTML_LAYOUT, this );
+    Echo.ComponentFactory.registerType( "HL", this );
+  },
+
+  componentType: echopoint.constants.HTML_LAYOUT
+});

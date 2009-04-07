@@ -26,7 +26,7 @@ echopoint.AnchorSync = Core.extend( Echo.Render.ComponentSync,
 
   renderUpdate: function( update )
   {
-    var parentElement = this._anchor.parent;
+    var parentElement = this._anchor.parentNode;
     Echo.Render.renderComponentDispose( update, update.parent );
     parentElement.removeChild( this._anchor );
     this.renderAdd( update, parentElement );

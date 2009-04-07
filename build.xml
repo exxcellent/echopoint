@@ -219,6 +219,7 @@
         <file name='Sync.BorderLayout.js'/>
         <file name='Sync.DirectHtml.js'/>
         <file name='Sync.HtmlLabel.js'/>
+        <file name='Sync.HtmlLayout.js'/>
         <file name='Application.HttpPane.js'/>
         <file name='Sync.HttpPane.js'/>
         <file name='Application.ImageIcon.js'/>
@@ -284,6 +285,7 @@
         <file name='NumberTextFieldTest.js'/>
         <file name='RegexTextFieldTest.js'/>
         <file name='BorderLayoutTest.js'/>
+        <file name='HtmlLayoutTest.js'/>
         <file name='BarChartTest.js'/>
         <file name='LineChartTest.js'/>
         <file name='SparklineTest.js'/>

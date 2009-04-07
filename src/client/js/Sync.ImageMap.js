@@ -62,14 +62,21 @@ echopoint.ImageMapSync = Core.extend( echopoint.internal.AbstractContainerSync,
 
   renderUpdate: function( update )
   {
-    var parentElement = this._image.parent;
-    Echo.Render.renderComponentDispose( update, update.parent );
-    parentElement.removeChild( this._image );
-    parentElement.removeChild( this._map );
-    
-    this._sections = null;
-    this.renderAdd( update, parentElement );
-    return false;
+    var property = update.getUpdatedProperty( echopoint.ImageMap.URL );
+    if ( property )
+    {
+      Echo.Sync.ImageReference.renderImg( property.newValue, this._image );
+
+      var parentElement = this._image.parentNode;
+      parentElement.removeChild( this._image );
+      parentElement.removeChild( this._map );
+      parentElement.appendChild( this._image );
+      parentElement.appendChild( this._map );
+    }
+
+    this.renderStyle( this._image, update );
+    this._createAreas( update );
+    return false; // Child elements not supported: safe to return false.n false.
   },
 
   /**
@@ -89,7 +96,6 @@ echopoint.ImageMapSync = Core.extend( echopoint.internal.AbstractContainerSync,
   {
     this._image = document.createElement( "img" );
     this._image.id = this.component.renderId;
-    //this._image.src = this.component.render( echopoint.ImageMap.URL );
     Echo.Sync.ImageReference.renderImg(
         this.component.render( echopoint.ImageMap.URL ), this._image );
     this._image.useMap = "#" + this._getName();
@@ -108,17 +114,16 @@ echopoint.ImageMapSync = Core.extend( echopoint.internal.AbstractContainerSync,
   },
 
   /** Function used to (re)populate the map areas. */
-  _createAreas: function()
+  _createAreas: function( update )
   {
-    if ( this._map.hasChildNodes() )
+    if ( update )
     {
-      while( this._map.childNodes.length >= 1 )
-      {
-        this._map.removeChild( this._map.firstChild );
-      }
+      var property = update.getUpdatedProperty( echopoint.ImageMap.SECTIONS );
+      if ( ! property ) return;
     }
 
-    var sections = this._getSections();
+    var sections = this._getSections( update );
+
     for ( var i in sections )
     {
       if ( sections[i] instanceof echopoint.model.MapSection )
@@ -173,10 +178,18 @@ echopoint.ImageMapSync = Core.extend( echopoint.internal.AbstractContainerSync,
   },
 
   /** Return the map of clickable sections used to build the map element. */
-  _getSections: function()
+  _getSections: function( update )
   {
-    if ( this._sections ) return this._sections;
+    if ( ! update && this._sections ) return this._sections;
+
     var value = this.component.get( echopoint.ImageMap.SECTIONS );
+
+    if ( update )
+    {
+      var property = update.getUpdatedProperty( echopoint.ImageMap.SECTIONS );
+      if ( property ) value = property.newValue;
+      else if ( this._sections ) return this._sections;
+    }
 
     if ( value instanceof Core.Arrays.LargeMap )
     {

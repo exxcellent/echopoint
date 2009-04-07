@@ -52,6 +52,7 @@ public class ComponentList extends Column
           "RegexTextField",
           "NumberTextField",
           "BorderLayout",
+          "HtmlLayout",
           "FileUploadSelector",
           "BarChart",
           "LineChart",

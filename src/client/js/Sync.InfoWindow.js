@@ -53,7 +53,7 @@ echopoint.InfoWindowSync = Core.extend( Echo.Render.ComponentSync,
 
   renderUpdate: function( update )
   {
-    var parentElement = this._text.parent;
+    var parentElement = this._text.parentNode;
     Echo.Render.renderComponentDispose( update, update.parent );
     parentElement.removeChild( this._span );
     document.body.removeChild( this._infoWindow );
