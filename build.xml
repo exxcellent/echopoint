@@ -436,8 +436,7 @@
         <include name='echopoint-${version}.jar' />
       </fileset>
       <fileset dir='${dir.lib}'>
-        <include name='Echo3*.jar' />
-        <include  name='xstream*.jar' />
+        <include  name='*.jar' />
       </fileset>
     </zip>
   </target>

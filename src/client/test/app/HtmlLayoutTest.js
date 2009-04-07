@@ -24,6 +24,11 @@ echopoint.test.HtmlLayoutTest = Core.extend(
       styleName: "Default",
       text: "<table border='1'>" +
             "<tr>" +
+            "<td colspan='2'>" +
+            "This is regular HTML text in component!" +
+            "</td>" +
+            "</tr>" +
+            "<tr>" +
             "<td id='one' colspan='2'>" +
             "</td>" +
             "</tr>" +
@@ -31,6 +36,14 @@ echopoint.test.HtmlLayoutTest = Core.extend(
             "<td id='two'>" +
             "</td>" +
             "<td id='three'>" +
+            "</td>" +
+            "</tr>" +
+            "<tr>" +
+            "<td>" +
+            "A regular column." +
+            "</td>" +
+            "<td>" +
+            "Another regular column." +
             "</td>" +
             "</tr>" +
             "</table>"

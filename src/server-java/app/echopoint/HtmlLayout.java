@@ -42,6 +42,11 @@ import java.io.InputStreamReader;
  *    ...
  *    final String text = "&lt;table border='1'&gt;" +
  *        "&lt;tr&gt;" +
+ *        "&lt;td colspan='2'&gt;" +
+ *        "This is regular HTML text in layout component!" +
+ *        "&lt;/td&gt;" +
+ *        "&lt;/tr&gt;" +
+ *        "&lt;tr&gt;" +
  *         "&lt;td id='one' colspan='2'&gt;&lt;/td&gt;" +
  *         "&lt;/tr&gt;" +
  *         "&lt;tr&gt;" +
@@ -132,5 +137,12 @@ public class HtmlLayout extends AbstractHtmlComponent
   public boolean isValidChild( final Component component )
   {
     return true;
+  }
+
+  /** Over-ridden to make no-op. */
+  @Override
+  public void setTarget( final String target )
+  {
+    // no op
   }
 }
