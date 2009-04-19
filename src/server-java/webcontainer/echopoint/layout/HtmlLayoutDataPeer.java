@@ -11,7 +11,7 @@ import org.w3c.dom.Element;
  * <p>&copy; Copyright 2009 <a href='http://sptci.com/' target='_top'>Sans
  * Pareil Technologies, Inc.</a></p>
  *
- * @author Simon Wei 2009-03-16
+ * @author Simon Lei 2009-03-16
  * @version $Id$
  */
 public class HtmlLayoutDataPeer extends LayoutDataPeer

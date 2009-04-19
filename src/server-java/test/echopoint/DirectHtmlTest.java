@@ -148,10 +148,6 @@ public class DirectHtmlTest extends AbstractTest<DirectHtml>
     rta.setText( COMPLEX_TEXT );
     content.add( rta );
 
-    final Row row = new Row();
-    row.add( createButton( rta ) );
-    content.add( row );
-
     final Border border = new Border( new Extent( 2 ),
         new Color( 0xcfdfff ), Border.STYLE_GROOVE );
     final Extent height = new Extent( 100 );
@@ -161,6 +157,11 @@ public class DirectHtmlTest extends AbstractTest<DirectHtml>
     complex.setBorder( border );
     complex.setHeight( height );
     complex.setWidth( width );
+    set( complex );
+
+    final Row row = new Row();
+    row.add( createButton( rta ) );
+    content.add( row );
     content.add( complex );
 
     final DirectHtml simple = new DirectHtml( LINK_TEXT, "_new" );

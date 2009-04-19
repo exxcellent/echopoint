@@ -29,7 +29,7 @@ import nextapp.echo.webcontainer.service.JavaScriptService;
 /**
  * Rendering peer for the {@link echopoint.HtmlLayout} class.
  *
- * @author Simon Wei 2009-03-16
+ * @author Simon Lei 2009-03-16
  * @version $Id$
  */
 public class HtmlLayoutPeer  extends AbstractHtmlComponentPeer

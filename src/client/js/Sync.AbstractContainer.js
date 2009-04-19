@@ -99,8 +99,7 @@ echopoint.internal.AbstractContainerSync = Core.extend( Echo.Render.ComponentSyn
         if ( property )
         {
           Echo.Sync.Alignment.render(
-              this.component.render( property.newValue ),
-              container, false, null );
+              property.newValue, container, false, null );
         }
       }
       else
@@ -127,8 +126,7 @@ echopoint.internal.AbstractContainerSync = Core.extend( Echo.Render.ComponentSyn
             echopoint.internal.AbstractContainer.BACKGROUND_IMAGE );
         if ( property )
         {
-          Echo.Sync.FillImage.render( this.component.render(
-              property.newValue ), container );
+          Echo.Sync.FillImage.render( property.newValue, container );
         }
       }
       else
@@ -154,8 +152,7 @@ echopoint.internal.AbstractContainerSync = Core.extend( Echo.Render.ComponentSyn
             echopoint.internal.AbstractContainer.BORDER );
         if ( property )
         {
-          Echo.Sync.Border.render( this.component.render(
-              property.newValue ), container );
+          Echo.Sync.Border.render( property.newValue, container );
         }
       }
       else
@@ -209,8 +206,7 @@ echopoint.internal.AbstractContainerSync = Core.extend( Echo.Render.ComponentSyn
             echopoint.internal.AbstractContainer.FONT );
         if ( property )
         {
-          Echo.Sync.Font.render( this.component.render(
-              property.newValue ), container );
+          Echo.Sync.Font.render( property.newValue, container );
         }
       }
       else
@@ -236,8 +232,7 @@ echopoint.internal.AbstractContainerSync = Core.extend( Echo.Render.ComponentSyn
             echopoint.internal.AbstractContainer.INSETS );
         if ( property )
         {
-          Echo.Sync.Insets.render( this.component.render(
-              property.newValue ), container, "padding" );
+          Echo.Sync.Insets.render( property.newValue, container, "padding" );
         }
       }
       else

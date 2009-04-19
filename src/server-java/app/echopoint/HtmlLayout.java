@@ -77,7 +77,7 @@ import java.io.InputStreamReader;
  *    final HtmlLayout fromFile = new HtmlLayout( "/tmp/test.html", "UTF-8" );
  * </pre>
  *
- * @author Simon Wei 2009-03-16
+ * @author Simon Lei 2009-03-16
  * @version $Id$
  * @since 3.0.0a11
  */

@@ -71,7 +71,7 @@ echopoint.HtmlLabel = Core.extend( echopoint.internal.AbstractHtmlComponent,
  * A container component that takes XHTML layout code using which arbitrary
  * components may be displayed on screen.
  *
- * @author Simon Wei 2009-03-16
+ * @author Simon Lei 2009-03-16
  */
 echopoint.HtmlLayout = Core.extend( echopoint.internal.AbstractHtmlComponent,
 {

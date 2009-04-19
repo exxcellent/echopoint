@@ -50,8 +50,7 @@ echopoint.internal.AbstractHtmlComponentSync = Core.extend( echopoint.internal.A
         echopoint.internal.AbstractHtmlComponent.TEXT );
     if ( property )
     {
-      this._container.innerHTML =
-        this.component.render( property.newValue, "" );
+      this._container.innerHTML = property.newValue;
       this._processLinks();
     }
   },

@@ -6,7 +6,7 @@ import nextapp.echo.app.LayoutData;
  * A layout data implementation for child components that are added to the
  * {@link echopoint.HtmlLayout} layout container.
  *
- * @author Simon Wei 2009-03-16
+ * @author Simon Lei 2009-03-16
  * @version $Id$
  * @since 3.0.0a11
  */

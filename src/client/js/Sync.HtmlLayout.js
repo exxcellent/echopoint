@@ -1,7 +1,7 @@
 /**
  * Component rendering peer: HtmlLayout
  *
- * @author Simon Wei 2009-03-16
+ * @author Simon Lei 2009-03-16
  * @version $Id$
  */
 echopoint.HtmlLayoutSync = Core.extend( echopoint.internal.AbstractHtmlComponentSync,
