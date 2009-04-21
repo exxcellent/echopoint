@@ -35,7 +35,7 @@ import echopoint.internal.AbstractPeer;
  *
  * @author Hans Holmlund 2009-04-06
  */
-public class DateFieldPeer extends AbstractPeer {
+public class DateFieldPeer extends JQueryAbstractPeer {
 
 
     /** The component name for which this class is a peer. */

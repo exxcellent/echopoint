@@ -62,10 +62,10 @@ echopoint.ContainerExSync = Core.extend(Echo.Render.ComponentSync, {
         }
         else if (postition == 8) {
                 this._containerDiv.style.position = "fixed";
-        }
-        else { // if (postition == 4) {
+            }
+            else { // if (postition == 4) {
                 this._containerDiv.style.position = "relative";
-        }
+            }
         var width = this.component.render(echopoint.ContainerExSync.WIDTH);
         var height = this.component.render(echopoint.ContainerExSync.HEIGHT);
         if (width) {
@@ -160,11 +160,6 @@ echopoint.ContainerExSync = Core.extend(Echo.Render.ComponentSync, {
             var child = this.component.getComponent(i);
             this._renderAddChild(update, child);
         }
-
-        // Store values of horizontal/vertical scroll such that
-        // renderDisplay() will adjust scrollbars appropriately after rendering.
-        //        this._pendingScrollX = this.component.render("horizontalScroll");
-        //        this._pendingScrollY = this.component.render("verticalScroll");
 
         this._renderRequired = true;
         
@@ -337,12 +332,6 @@ echopoint.ContainerExSync = Core.extend(Echo.Render.ComponentSync, {
         // restore the over flow back to the previous values
         eStyle.overflow = saveOverflow;
         parentStyle.overflow = saveParentOverflow;
-
-//        if (this.stretchAfterCallbackFunction) {
-//            newHeight = parseInt(eStyle.height, 10);
-//            this.stretchAfterCallbackFunction(newHeight, this.stretchAfterCallbackContext, this);
-//        }
-
     }
 
 });

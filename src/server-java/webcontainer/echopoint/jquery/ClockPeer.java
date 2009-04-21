@@ -30,7 +30,7 @@ import nextapp.echo.app.Component;
  *
  * @author Hans Holmlund 2009-03-23
  */
-public class ClockPeer extends AbstractPeer {
+public class ClockPeer extends JQueryAbstractPeer {
 
     /**
      * The component name for which this class is a peer.

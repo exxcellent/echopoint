@@ -1,46 +1,49 @@
-/*
- * This file is part of the Echo Point Project.  This project is a
- * collection of Components that have extended the Echo Web Application
- * Framework Version 3.
- *
- * Version: MPL 1.1
- *
- * The contents of this file are subject to the Mozilla Public License Version
- * 1.1 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- *
- * Software distributed under the License is distributed on an "AS IS" basis,
- * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
- * for the specific language governing rights and limitations under the
- * License.
- */
-
-package echopoint;
+package echopoint.jquery;
 
 
 import nextapp.echo.app.*;
+import echopoint.AbleComponent;
 import echopoint.able.*;
 
 /**
- * ContainerEx is a component that can be positioned anywhere on the screen with an specified size attributes.
+ * TooltipContainer is a component that can be positioned anywhere on the screen with an specified size attributes.
  * By default, the children of ContainerEx are layed out one after the other, left to right and without any
- * other specified processing. Therefore to get more precise layout within the ContainerEx, you may want to
- * consider using a Column/Row/Grid as the child of this component or you can associated a DisplayLayoutData object
- * with each child component and use that to position the children where you want.
+ * other specified processing. Therefore to get more precise layout within the TooltipContainer.
  *
  * This component is a PaneContainer and hence can have components that implement Pane as a child.
  * However many Panes, such as SplitPane, require a definite height to be set in order to work properly.
  * So make sure you call setHeight() if one of the children implements Pane
  */
-public class ContainerEx extends AbleComponent implements Alignable, PaneContainer, Positionable, Scrollable, BackgroundImageable, Stretchable {
+public class TooltipContainer extends AbleComponent implements Alignable, PaneContainer, Positionable, Scrollable, BackgroundImageable {
 
-    private static final Extent PX_0 = new Extent(0);
-    private static final Extent SCROLL_BOTTOM = new Extent(-1);
-
-    public static final String PROPERTY_HORIZONTAL_SCROLL = "horizontalScroll";
-    public static final String PROPERTY_VERTICAL_SCROLL = "verticalScroll";
     public static final String PROPERTY_LAYOUT_STYLE = "layoutStyle";
+    public static final String PROPERTY_POSITION_TOOLTIP = "positionTooltip";
+    public static final String PROPERTY_POSITION_TARGET = "positionTarget";
+    public static final String PROPERTY_TOOLTIP_BORDER_COLOR = "tooltipBorderColor";
+    public static final String PROPERTY_TOOLTIP_BORDER_WIDTH = "tooltipBorderWidth";
+    public static final String PROPERTY_TOOLTIP_BORDER_RADIUS = "tooltipBorderRadius";
+    public static final String PROPERTY_TOOLTIP_BACKGROUND_COLOR = "tooltipBackground";
+    public static final String PROPERTY_TOOLTIP_FOREGROUND_COLOR = "tooltipForeground";
+    public static final String PROPERTY_TOOLTIP_INSETS = "tooltipInsets";
+    public static final String PROPERTY_TOOLTIP_ALIGNMENT = "tooltipAlignment";
+    public static final String PROPERTY_TOOLTIP_STYLENAME = "tooltipStyle";
+    public static final String PROPERTY_TOOLTIP_THUMBNAIL = "thumbnail";
+    public static final String PROPERTY_TOOLTIP_VIDEO = "video";
+
+    public static final String TOPLEFT = "topLeft";
+    public static final String TOPMIDDLE = "topMiddle";
+    public static final String TOPRIGHT = "topRight";
+    public static final String LEFTMIDDLE = "leftMiddle";
+    public static final String RIGHTMIDDLE = "rightMiddle";
+    public static final String BOTTOMLEFT = "bottomLeft";
+    public static final String BOTTOMMIDDLE = "bottomMiddle";
+    public static final String BOTTOMRIGHT = "bottomRight";
+
+
+    public static final String ALIGN_CENTER = "center";
+    public static final String ALIGN_LEFT = "left";
+    public static final String ALIGN_RIGHT = "right";
+
 
     public static final int DEFAULT_LAYOUT = 0;
     public static final int COLUMN_LAYOUT = 1;
@@ -50,7 +53,7 @@ public class ContainerEx extends AbleComponent implements Alignable, PaneContain
     /**
      * Creates a new <code>ContentPane</code>.
      */
-    public ContainerEx() {
+    public TooltipContainer() {
         super();
     }
 
@@ -86,7 +89,7 @@ public class ContainerEx extends AbleComponent implements Alignable, PaneContain
      * </ul>
      */
     public int getPosition() {
-        return get(PROPERTY_POSITION, RELATIVE);        
+        return get(PROPERTY_POSITION, RELATIVE);
     }
 
     /**
@@ -130,7 +133,7 @@ public class ContainerEx extends AbleComponent implements Alignable, PaneContain
      * Set the left X position of the component
      */
     public void setLeft(Extent newValue) {
-        set(PROPERTY_LEFT,newValue);        
+        set(PROPERTY_LEFT,newValue);
     }
 
     /**
@@ -145,7 +148,7 @@ public class ContainerEx extends AbleComponent implements Alignable, PaneContain
      * </ul>
      */
     public void setPosition(int newPositioning) {
-        set(PROPERTY_POSITION,newPositioning);        
+        set(PROPERTY_POSITION,newPositioning);
     }
 
     /**
@@ -166,7 +169,7 @@ public class ContainerEx extends AbleComponent implements Alignable, PaneContain
      * Sets the z-index of the component
      */
     public void setZIndex(int newValue) {
-        set(PROPERTY_Z_INDEX,newValue);        
+        set(PROPERTY_Z_INDEX,newValue);
     }
 
     /**
@@ -198,15 +201,6 @@ public class ContainerEx extends AbleComponent implements Alignable, PaneContain
     }
 
     /**
-     * Returns the horizontal scrollbar position.   todo
-     *
-     * @return the horizontal scrollbar position
-     */
-    public Extent getHorizontalScroll() {
-        return (Extent) get(PROPERTY_HORIZONTAL_SCROLL);
-    }
-
-    /**
      * Returns the inset margin of the content.
      * Note that <code>FloatingPane</code>s, such as
      * <code>WindowPane</code>s, will NOT be constrained by
@@ -220,45 +214,12 @@ public class ContainerEx extends AbleComponent implements Alignable, PaneContain
     }
 
     /**
-     * Returns the vertical scrollbar position.  todo
-     *
-     * @return the vertical scrollbar position
-     */
-    public Extent getVerticalScroll() {
-        return (Extent) get(PROPERTY_VERTICAL_SCROLL);
-    }
-
-
-    /**
-     * @see nextapp.echo.app.Component#processInput(java.lang.String, java.lang.Object)
-     */
-    public void processInput(String inputName, Object inputValue) {
-        if (PROPERTY_HORIZONTAL_SCROLL.equals(inputName)) {
-            setHorizontalScroll((Extent) inputValue);
-        } else if (PROPERTY_VERTICAL_SCROLL.equals(inputName)) {
-            setVerticalScroll((Extent) inputValue);
-        }
-    }
-
-    /**
      * Sets the background image.
      *
      * @param newValue the new background image
      */
     public void setBackgroundImage(FillImage newValue) {
         set(PROPERTY_BACKGROUND_IMAGE, newValue);
-    }
-
-    /**
-     * Sets the horizontal scrollbar position.
-     * Values must be in pixel units.
-     * A value of -1px indicates that the scrollbar should be positioned
-     * at the end of the range.
-     *
-     * @param newValue the new horizontal scrollbar position
-     */
-    public void setHorizontalScroll(Extent newValue) {
-        set(PROPERTY_HORIZONTAL_SCROLL, newValue);
     }
 
     /**
@@ -272,21 +233,6 @@ public class ContainerEx extends AbleComponent implements Alignable, PaneContain
      */
     public void setInsets(Insets newValue) {
         set(PROPERTY_INSETS, newValue);
-    }
-
-    /**
-     * Sets the vertical scrollbar position.
-     * Values must be in pixel units.
-     * A value of -1px indicates that the scrollbar should be positioned
-     * at the end of the range.
-     *
-     * @param newValue the new vertical scrollbar position
-     */
-    public void setVerticalScroll(Extent newValue) {
-        if (SCROLL_BOTTOM.equals(newValue)) {
-            set(PROPERTY_VERTICAL_SCROLL, PX_0);
-        }
-        set(PROPERTY_VERTICAL_SCROLL, newValue);
     }
 
     /**
@@ -342,6 +288,27 @@ public class ContainerEx extends AbleComponent implements Alignable, PaneContain
     }
 
     /**
+     * Returns the tool tip text (displayed when the mouse cursor is hovered
+     * over the ToolTipable).
+     *
+     * @return the tool tip text
+     */
+    public String getToolTipText() {
+        return (String) get(PROPERTY_TOOL_TIP_TEXT);
+    }
+
+    /**
+     * Sets the tool tip text (displayed when the mouse cursor is hovered over
+     * the ToolTipable).
+     *
+     * @param newValue
+     *            the new tool tip text
+     */
+    public void setToolTipText(String newValue) {
+        set(PROPERTY_TOOL_TIP_TEXT, newValue);
+    }
+
+    /**
      * Returns the ScrollBarPolicy in place
      *
      * This can be one of :
@@ -361,7 +328,7 @@ public class ContainerEx extends AbleComponent implements Alignable, PaneContain
      * @return the base color of the ScrollBarProperties associated with this <code>Scrollable</code>
      */
     public Color getScrollBarBaseColor() {
-        return (Color) get(PROPERTY_SCROLL_BAR_BASE_COLOR);        
+        return (Color) get(PROPERTY_SCROLL_BAR_BASE_COLOR);
     }
 
     /**                                          todo
@@ -405,68 +372,6 @@ public class ContainerEx extends AbleComponent implements Alignable, PaneContain
         set(Scrollable.PROPERTY_SCROLL_BAR_PROPERTIES,newValue);
     }
 
-    /**
-     * @return true if the height should be stretched to use all available space
-     *         of its parent.
-     */
-    public boolean isHeightStretched() {
-        return get(PROPERTY_HEIGHT_STRETCHED, false);
-    }
-
-    /**
-     * Set to true if the height should be stretched to use all available space
-     * of its parent.
-     *
-     * @param newValue -
-     *            a boolean flag indicating whether the height should be
-     *            stretched to use all available space of its parent or not.
-     */
-    public void setHeightStretched(boolean newValue) {
-        set(PROPERTY_HEIGHT_STRETCHED, newValue);
-    }
-
-    /**
-     * @return - the minimum height that the component should stretch itself
-     *         down to in pixels.
-     */
-    public Extent getMinimumStretchedHeight() {
-        return (Extent) get(PROPERTY_MINIMUM_STRETCHED_HEIGHT) ;
-    }
-
-    /**
-     * Sets the minimum height that the component should stretch itself down to
-     * in pixels.
-     *
-     * @param newValue -
-     *            a new Extent value that MUST be in pixel units.
-     */
-    public void setMinimumStretchedHeight(Extent newValue) {
-        Extent.validate(newValue, Extent.PX);
-		set(PROPERTY_MAXIMUM_STRETCHED_HEIGHT, newValue);
-
-    }
-
-    /**
-     * @return - the maximum height that the component should stretch itself up
-     *         to in pixels.
-     */
-    public Extent getMaximumStretchedHeight() {
-		return (Extent) get(PROPERTY_MAXIMUM_STRETCHED_HEIGHT) ;
-	}
-
-    /**
-     * Sets the maximum height that the component should stretch itself up to in
-     * pixels.
-     *
-     * @param newValue -
-     *            a new Extent value that MUST be in pixel units.
-     */
-    public void setMaximumStretchedHeight(Extent newValue) {
-        Extent.validate(newValue, Extent.PX);
-		set(PROPERTY_MAXIMUM_STRETCHED_HEIGHT, newValue);
-	}
-
-
     public int getLayoutStyle() {
         return get(PROPERTY_LAYOUT_STYLE, DEFAULT_LAYOUT);
     }
@@ -487,11 +392,229 @@ public class ContainerEx extends AbleComponent implements Alignable, PaneContain
     /**
      * Sets the alignment of the container.
      *
-     * @param newValue the new alignment
+     * @param newValue of the new alignment
      */
     public void setAlignment(Alignment newValue) {
         set(PROPERTY_ALIGNMENT, newValue);
     }
 
+    /**
+     * Returns the tooltip-"arrow" position.
+     *
+     * @return the tooltip position
+     */
+    public String getPositionTooltip() {
+        return (String) get(PROPERTY_POSITION_TOOLTIP);
+    }
+
+    /**
+     * Sets the tooltip-"arrow" position.
+     *
+     * @param newPosition of the tooltip-arrow
+     */
+    public void setPositionTooltip(String newPosition) {
+        set(PROPERTY_POSITION_TOOLTIP, newPosition);
+    }
+
+    /**
+     * Returns the tooltip-targetposition.
+     *
+     * @return the target position
+     */
+    public String getPositionTarget() {
+        return (String) get(PROPERTY_POSITION_TARGET);
+    }
+
+    /**
+     * Sets the tooltip-target position. this is normally the opposite part of the positionTarget 
+     *
+     * @param newPosition of the tooltip-target
+     */
+    public void setPositionTarget(String newPosition) {
+        set(PROPERTY_POSITION_TARGET, newPosition);
+    }
+
+    /**
+     * Returns the tooltip-border color.
+     *
+     * @return the border color
+     */
+    public Color getTooltipBorderColor() {
+        return (Color) get(PROPERTY_TOOLTIP_BORDER_COLOR);
+    }
+
+    /**
+     * Sets the tooltip-border color.
+     *
+     * @param newColor of the tooltip-border
+     */
+    public void setTooltipBorderColor(Color newColor) {
+        set(PROPERTY_TOOLTIP_BORDER_COLOR, newColor);
+    }
+
+    /**
+     * Returns the tooltip-border width.
+     *
+     * @return the border width
+     */
+    public int getTooltipBorderWidth() {
+        return (Integer) get(PROPERTY_TOOLTIP_BORDER_WIDTH);
+    }
+
+    /**
+     * Sets the tooltip-border width.
+     *
+     * @param newWidth of the tooltip-border
+     */
+    public void setTooltipBorderWidth(int newWidth) {
+        set(PROPERTY_TOOLTIP_BORDER_WIDTH, newWidth);
+    }
+
+    /**
+     * Returns the tooltip-border radius.
+     *
+     * @return the border radius
+     */
+    public int getTooltipBorderRadius() {
+        return (Integer) get(PROPERTY_TOOLTIP_BORDER_RADIUS);
+    }
+
+    /**
+     * Sets the tooltip-border radius.
+     *
+     * @param newRadius of the tooltip-border
+     */
+    public void setTooltipBorderRadius(int newRadius) {
+        set(PROPERTY_TOOLTIP_BORDER_RADIUS, newRadius);
+    }
+
+    /**
+     * Returns the tooltip background color.
+     *
+     * @return the background color
+     */
+    public Color getTooltipBackground() {
+        return (Color) get(PROPERTY_TOOLTIP_BACKGROUND_COLOR);
+    }
+
+    /**
+     * Sets the tooltip background color.
+     *
+     * @param newColor of the background
+     */
+    public void setTooltipBackground(Color newColor) {
+        set(PROPERTY_TOOLTIP_BACKGROUND_COLOR, newColor);
+    }
+
+    /**
+     * Returns the tooltip foreground color.
+     *
+     * @return the foreground color
+     */
+    public Color getTooltipForeground() {
+        return (Color) get(PROPERTY_TOOLTIP_FOREGROUND_COLOR);
+    }
+
+    /**
+     * Sets the tooltip foreground color.
+     *
+     * @param newColor of the foreground
+     */
+    public void setTooltipForeground(Color newColor) {
+        set(PROPERTY_TOOLTIP_FOREGROUND_COLOR, newColor);
+    }
+
+    /**
+     * Returns the tooltip insets.
+     *
+     * @return the tooltip insets
+     */
+    public Color getTooltipInsets() {
+        return (Color) get(PROPERTY_TOOLTIP_INSETS);
+    }
+
+    /**
+     * Sets the tooltip insets.
+     *
+     * @param newValue of the insets
+     */
+    public void setTooltipInsets(Color newValue) {
+        set(PROPERTY_TOOLTIP_INSETS, newValue);
+    }
+
+    /**
+     * Returns the tooltip text alignment.
+     *
+     * @return the tooltip text alignment
+     */
+    public String getTooltipAlignment() {
+        return (String) get(PROPERTY_TOOLTIP_ALIGNMENT);
+    }
+
+    /**
+     * Sets the tooltip text alignment.
+     *
+     * @param newValue of the tooltip text alignment
+     */
+    public void setTooltipAlignment(String newValue) {
+        set(PROPERTY_TOOLTIP_ALIGNMENT, newValue);
+    }
+
+    /**
+     * Returns the tooltip style name.
+     *
+     * @return the tooltip style name
+     */
+    public String getTooltipStyle() {
+        return (String) get(PROPERTY_TOOLTIP_STYLENAME);
+    }
+
+    /**
+     * Sets the tooltip style name.
+     *
+     * @param newValue of the tooltip style name
+     */
+    public void setTooltipStyle(String newValue) {
+        set(PROPERTY_TOOLTIP_STYLENAME, newValue);
+    }
+
+    /**
+     * Returns the tooltip thumbnail URL.
+     *
+     * @return the tooltip thumbnail URL
+     */
+    public String getThumbnailURL() {
+        return (String) get(PROPERTY_TOOLTIP_THUMBNAIL);
+    }
+
+    /**
+     * Sets the tooltip thumbnail URL.
+     *
+     * @param newValue of the tooltip thumbnail URL
+     */
+    public void setThumbnailURL(String newValue) {
+        set(PROPERTY_TOOLTIP_THUMBNAIL, newValue);
+    }
+
+    /**
+     * Returns the tooltip video URL.
+     *
+     * @return the tooltip video URL
+     */
+    public String getVideoURL() {
+        return (String) get(PROPERTY_TOOLTIP_VIDEO);
+    }
+
+    /**
+     * Sets the tooltip video URL.
+     *
+     * @param newValue of the tooltip video URL
+     */
+    public void setVideoURL(String newValue) {
+        set(PROPERTY_TOOLTIP_VIDEO, newValue);
+    }
+
+
 
 }
+
