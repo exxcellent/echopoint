@@ -9,7 +9,36 @@ import java.util.Map;
 import echopoint.template.TemplateDataSource;
 
 /**
- * Created: 2009-apr-06
+ * <code>TemplatePanel</code> is a container that uses a
+ * <code>TemplateLayoutData</code> to render a template of content.
+ * <p>
+ * This layout data can itself contained "named" Components and "named" Text
+ * Substitutions.
+ * <p>
+ * A singleton <code>TemplateDataSource</code> can be used for more than one
+ * <code>TemplatePanel</code> and hence the memory footprint is reduced if
+ * used in this way.
+ * <p>
+ * <h3>Supplied Implementation</h3>
+ * <p>
+ * The supplied template implementation reads XHTML template data from a number
+ * of different sources including Files, Strings, Resources and JSP pages.
+ * <p>
+ * The markup :
+ *
+ * <pre><code>
+ *
+ *
+ *   &lt;component name=&quot;xxx&quot; /&gt;
+ *
+ *
+ * </code></pre>
+ *
+ * is used to indicate where in the template a named component will be placed.
+ * <p>
+ *
+ * In EchopointNG it was possible to set style and css properties. This feature is not implemented yet.
+ *
  */
 public class TemplatePanel extends Component implements PaneContainer {
 
@@ -29,7 +58,7 @@ public class TemplatePanel extends Component implements PaneContainer {
      * Constructs a <code>TemplatePanel</code> with the specified
      * TemplateDataSource.
      *
-     * @param template -
+     * @param tds -
      *                 the source for the template data.
      */
     public TemplatePanel(TemplateDataSource tds) {
@@ -49,12 +78,27 @@ public class TemplatePanel extends Component implements PaneContainer {
 		set(PROPERTY_TEMPLATE_DATA_SOURCE, templateDataSource);
 	}
 
+    /**
+	 * Returns the TemplateDataSource which contains the template data.
+	 *
+	 * @return the TemplateDataSource in place
+	 */
     public TemplateDataSource getTemplateDataSource()
     {
         return (TemplateDataSource) get(PROPERTY_TEMPLATE_DATA_SOURCE);
     }
 
 
+   /**
+	 * Adds a component to the <code>TemplatePanel</code> with the associated
+	 * name which can the be references from the template data.
+	 *
+	 * @param component
+	 *            the component to add
+	 * @param componentName -
+	 *            the name to use when referencing this component in the
+	 *            template data.
+	 */
     public void addNamedComponent(Component component, String componentName) {
         if (component == null)
             throw new IllegalArgumentException("component must be non null.");
@@ -65,7 +109,7 @@ public class TemplatePanel extends Component implements PaneContainer {
         add(component);
     }
 
-    public Map getComponentMapping()
+    Map getComponentMapping()
     {
         return (Map) get(PROPERTY_COMPONENT_MAPPING); 
     }
@@ -111,6 +155,9 @@ public class TemplatePanel extends Component implements PaneContainer {
 	}
 
 
+    /**
+	 * @see nextapp.echo.app.Component#remove(nextapp.echo.app.Component)
+	 */
 	public void remove(Component c) {
 		String componentName = getComponentName(c);
 		if (componentName != null) {

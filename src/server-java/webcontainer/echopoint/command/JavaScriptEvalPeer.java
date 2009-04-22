@@ -9,7 +9,9 @@ import nextapp.echo.app.util.Context;
 import nextapp.echo.app.Command;
 
 /**
- * Created: 2009-apr-12
+ * A <code>CommandSynchronizePeer</code> implementation for the {@link JavaScriptEval} command.
+ *
+ * @author Mikael S\u00f6derman 2009-04-03
  */
 public class JavaScriptEvalPeer extends AbstractCommandSynchronizePeer {
 

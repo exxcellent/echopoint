@@ -14,6 +14,9 @@ import echopoint.template.TemplateDataSource;
 import echopoint.template.ui.TemplateCompilerLoader;
 import echopoint.template.ui.TemplateCompiler;
 
+/**
+ * <code>TemplatePanelPeer</code> is a peer for <code>TemplatePanel</code>
+ */
 public class TemplatePanelPeer extends AbstractPeer {
 
     /**
