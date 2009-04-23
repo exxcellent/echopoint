@@ -614,6 +614,11 @@ public class TooltipContainer extends AbleComponent implements Alignable, PaneCo
         set(PROPERTY_TOOLTIP_VIDEO, newValue);
     }
 
+    public void setTooltip(String tooltip) {
+        if (tooltip != null && tooltip.length() > 0) {
+            setToolTipText(tooltip);
+        }
+    }
 
 
 }

@@ -145,6 +145,10 @@ echopoint.ContainerExSync = Core.extend(Echo.Render.ComponentSync, {
             this._containerDiv.appendChild(table);
 
             var tbody = document.createElement("tbody");
+            tbody.style.paddingBottom = "0px";
+            tbody.style.paddingLeft = "0px";
+            tbody.style.paddingTop = "0px";
+            tbody.style.paddingRight = "0px";
             table.appendChild(tbody);
 
             this._containerTr = document.createElement("tr");
@@ -191,6 +195,11 @@ echopoint.ContainerExSync = Core.extend(Echo.Render.ComponentSync, {
     _renderAddChild: function(update, child) {
         if (this.layoutStyle == 2) {    // Row
             var childTd = document.createElement("td");
+            childTd.style.paddingBottom = "0px";
+            childTd.style.paddingLeft = "0px";
+            childTd.style.paddingTop = "0px";
+            childTd.style.paddingRight = "0px";
+
             Echo.Render.renderComponentAdd(update, child, childTd);
             this._containerTr.appendChild(childTd);
         }
