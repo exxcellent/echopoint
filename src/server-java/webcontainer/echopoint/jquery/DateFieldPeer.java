@@ -34,6 +34,7 @@ import echopoint.internal.AbstractPeer;
  * Rendering peer for the {@link echopoint.jquery.DateField} component.
  *
  * @author Hans Holmlund 2009-04-06
+ * @version $Id$
  */
 public class DateFieldPeer extends JQueryAbstractPeer {
 

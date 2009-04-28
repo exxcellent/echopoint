@@ -2,6 +2,8 @@ echopoint.constants.DATEFIELD = "echopoint.jquery.DateField";
 
 /**
  * Component rendering peer: DateField.
+ * @author HansH 2009-04-28
+ * @version $ID$
  */
 echopoint.DateField = Core.extend(Echo.Render.ComponentSync, {
 
@@ -35,7 +37,15 @@ echopoint.DateField = Core.extend(Echo.Render.ComponentSync, {
      * @type Element
      */
     _dateTimediv: null,
-    dateFormatPattern: null,
+    _inputElem: null,
+    _dateFormatPattern: null,
+
+    /**
+     * Actual focus state of component, based on received DOM focus/blur events.
+     * @type Boolean
+     */
+//    _focused: false,
+
 
     /** @see Echo.Render.ComponentSync#renderAdd */
     renderAdd: function(update, parentElement) {
@@ -60,29 +70,29 @@ echopoint.DateField = Core.extend(Echo.Render.ComponentSync, {
         if (width) {
             this._dateTimediv.style.width = width;
         }
-        else {
-            this._dateTimediv.style.width = "100%";
-        }
+//        else {
+//            this._dateTimediv.style.width = "100%";
+//        }
         if (height) {
             this._dateTimediv.style.height = height;
         }
-        else {
-            this._dateTimediv.style.height = "100%";
-        }
+//        else {
+//            this._dateTimediv.style.height = "100%";
+//        }
 
-        var inputElem = document.createElement("input");
-        inputElem.type= "text";
+        this._inputElem = document.createElement("input");
+        this._inputElem.type= "text";
         if (!this.component.isRenderEnabled()) {
-            inputElem.disabled = "disabled";   
+            this._inputElem.disabled = "disabled";
         }
         var font = this.component.render(echopoint.DateField.FONT);
-        Echo.Sync.Font.renderClear(font, inputElem);
-        this._dateTimediv.appendChild(inputElem);
-        inputElem.id = this.component.renderId + "dateTime";
+        Echo.Sync.Font.renderClear(font, this._inputElem);
+        this._dateTimediv.appendChild(this._inputElem);
+        this._inputElem.id = this.component.renderId + "dateTime";
 
         var dateStr = this.component.get("date");
         if (dateStr) {
-            inputElem.value = dateStr;
+            this._inputElem.value = dateStr;
         }
 
         var imgElement = document.createElement("img");
@@ -91,6 +101,10 @@ echopoint.DateField = Core.extend(Echo.Render.ComponentSync, {
         Echo.Sync.ImageReference.renderImg(this.component.render(echopoint.DateField.BUTTONICON), imgElement);
         this._dateTimediv.appendChild(imgElement);
 
+//        Core.Web.Event.add(this._inputElem, "focus", Core.method(this, this._processFocus), false);
+//        Core.Web.Event.add(this._inputElem, "click", Core.method(this, this._processClick), false);
+//        Core.Web.Event.add(this._inputElem, "blur", Core.method(this, this._processBlur), false);
+
         parentElement.appendChild(this._dateTimediv);
         this._renderRequired = true;
     },
@@ -98,14 +112,55 @@ echopoint.DateField = Core.extend(Echo.Render.ComponentSync, {
     /** @see Echo.Render.ComponentSync#renderDispose */
     renderDispose: function(update) {
         this._dateTimediv = null;
-        this.dateFormatPattern = null;
+        this._inputElem = null;
+        this._dateFormatPattern = null;
     },
+
+    /**
+     * Processes a focus blur event.
+     */
+//    _processBlur: function(e) {
+//        this._focused = false;
+//        return this._storeValue();
+//    },
+
+    /**
+     * Processes a focus event. Notifies application of focus.
+     */
+//    _processFocus: function(e) {
+//        this._focused = true;
+//        if (!this.client || !this.component.isActive()) {
+//            return true;
+//        }
+//        this.client.application.setFocusedComponent(this.component);
+//    },
+
+    /** @see Echo.Render.ComponentSync#renderFocus */
+//    renderFocus: function() {
+//        if (this._focused) {
+//            return;
+//        }
+//
+//        this._focused = true;
+//        Core.Web.DOM.focusElement(this._inputElem);
+//    },
+
+    /**
+     * Processes a mouse click event. Notifies application of focus.
+     */
+//    _processClick: function(e) {
+//        if (!this.client || !this.component.isActive()) {
+//            return true;
+//        }
+//        this.client.application.setFocusedComponent(this.component);
+//    },
+
 
     /**
      * Stores the selected date in the <code>Echo.Component</code> instance.
      */
     _storeValue: function(theCalendar) {
-        this.component.set("date", theCalendar.date.print(this.dateFormatPattern));
+        this.component.set("date", theCalendar.date.print(this._dateFormatPattern));
         theCalendar.destroy();
     },
 
@@ -115,7 +170,7 @@ echopoint.DateField = Core.extend(Echo.Render.ComponentSync, {
 
             var foreground = this.component.render(echopoint.DateField.FOREGROUND);
             var background = this.component.render(echopoint.DateField.BACKGROUND);
-            this.dateFormatPattern = this.component.render(echopoint.DateField.DATEFORMAT);
+            this._dateFormatPattern = this.component.render(echopoint.DateField.DATEFORMAT);
 
             if (this.component.isRenderEnabled()) {
                 var useTime = this.component.render(echopoint.DateField.USETIME, false );
@@ -124,12 +179,12 @@ echopoint.DateField = Core.extend(Echo.Render.ComponentSync, {
                     onClose: jQuery.context(this).callback(this._storeValue),
                     showsTime: useTime,
                     //                debug: true,
-                    ifFormat: this.dateFormatPattern,
+                    ifFormat: this._dateFormatPattern,
                     button: ".next()" //next sibling
                 };
 
                 jQuery("#" + this._dateTimediv.id.replace('.', '\\.')).css(this.component.render(echopoint.DateField.CSS));
-                jQuery("#" + this._dateTimediv.id.replace('.', '\\.') + "dateTime").dynDateTime(options);
+                jQuery("#" + this._inputElem.id.replace('.', '\\.')).dynDateTime(options);
             }
 
             Echo.Sync.Color.renderClear(foreground, this._dateTimediv, "color");

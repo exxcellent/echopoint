@@ -2,7 +2,8 @@ echopoint.constants.APPLICATIONBACKGROUND = "echopoint.ApplicationBackground";
 
 /**
  * Component rendering peer: echopoint.ApplicationBackground
- *
+ * @author MikaelS 2009-04-28
+ * @version $ID$
  */
 
 echopoint.ApplicationBackgroundSync = Core.extend(Echo.Render.ComponentSync, {

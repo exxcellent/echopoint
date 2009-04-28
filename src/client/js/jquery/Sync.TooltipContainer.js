@@ -2,6 +2,7 @@ echopoint.constants.TOOLTIPCONTAINER = "echopoint.TooltipContainer";
 
 /**
  * Component rendering peer: echopoint.TooltipContainer
+ * @version $ID$
  */
 
 echopoint.TooltipContainerSync = Core.extend(Echo.Render.ComponentSync, {
@@ -81,15 +82,15 @@ echopoint.TooltipContainerSync = Core.extend(Echo.Render.ComponentSync, {
         if (width) {
             this._containerDiv.style.width = width;
         }
-        else {
-            this._containerDiv.style.width = "100%";
-        }
+//        else {
+//            this._containerDiv.style.width = "100%";
+//        }
         if (height) {
             this._containerDiv.style.height = height;
         }
-        else {
-            this._containerDiv.style.height = "100%";
-        }
+//        else {
+//            this._containerDiv.style.height = "100%";
+//        }
         var top = this.component.render(echopoint.TooltipContainerSync.TOP);
         if (top) {
             this._containerDiv.style.top = top;
@@ -175,10 +176,13 @@ echopoint.TooltipContainerSync = Core.extend(Echo.Render.ComponentSync, {
             var child = this.component.getComponent(i);
             this._renderAddChild(update, child);
         }
-
+        Core.Web.Event.add(this._containerDiv, "mousedown", Core.method(this, this._processMouseDown), false);
         this._renderRequired = true;
     },
 
+    _processMouseDown: function(e) {
+        jQuery("#"+this._containerDiv.id.replace('.', '\\.')).qtip("hide");
+    },
 
     renderDisplay: function() {
         if (this._renderRequired) {

@@ -35,7 +35,8 @@ import java.util.EventListener;
  * to listen for ExternalEvents.
  *
  * @see echopoint.externalevent.ExternalEvent
- *
+ * @author Brad Baker <p>Modified by Mikael Soderman 2009-04-28</p>
+ * @version $Id$
  */
 public interface ExternalEventListener extends EventListener {
 

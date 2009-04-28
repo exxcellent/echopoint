@@ -2,7 +2,8 @@ echopoint.constants.SEPARATOR = "echopoint.Separator";
 
 /**
  * Component rendering peer: echopoint.Separator
- *
+ * @author HansH 2009-04-28
+ * @version $ID$
  */
 
 echopoint.SeparatorSync = Core.extend(Echo.Render.ComponentSync, {

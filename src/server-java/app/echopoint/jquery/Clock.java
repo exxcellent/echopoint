@@ -28,6 +28,7 @@ import echopoint.able.Alignable;
  * It is based on the jQuery plugin jClock
  *
  * @author Hans Holmlund - 2009-03-23
+ * @version $Id$
  */
 public class Clock extends Component implements Sizeable, Alignable {
 

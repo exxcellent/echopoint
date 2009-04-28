@@ -29,6 +29,7 @@ import nextapp.echo.app.Component;
  * Rendering peer for the {@link echopoint.jquery.Clock} component.
  *
  * @author Hans Holmlund 2009-03-23
+ * @version $Id$
  */
 public class ClockPeer extends JQueryAbstractPeer {
 

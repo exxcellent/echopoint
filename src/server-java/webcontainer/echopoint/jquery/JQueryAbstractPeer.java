@@ -15,6 +15,7 @@ import echopoint.internal.AbstractPeer;
  * @see echopoint.internal.CommonResources
  * @see echopoint.internal.CommonService
  * @author Hans Holmlund 2009-04-21
+ * @version $Id$
  */
 public abstract class JQueryAbstractPeer extends AbstractPeer
 {

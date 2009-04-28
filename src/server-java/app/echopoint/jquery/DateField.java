@@ -40,10 +40,12 @@ import echopoint.able.Alignable;
  * It is based on the jQuery plugin DynDateTime
  *
  * @author Hans Holmlund - 2009-04-03
+ * @version $Id$ 
  */
-public class DateField  extends Component implements Sizeable, Alignable {
+public class DateField extends Component implements Sizeable, Alignable {
 
     public static final String DATE_CHANGED_PROPERTY = "date";
+    public static final String PROPERTY_EDITABLE = "editable";    
     public static final String PROPERTY_DATEFORMAT = "dateFormat";
     public static final String PROPERTY_USETIME = "useTime";
     public static final String PROPERTY_BORDER = "border";
@@ -387,6 +389,25 @@ public class DateField  extends Component implements Sizeable, Alignable {
         Date oldValue = date;
         date = newValue;
         firePropertyChange(DATE_CHANGED_PROPERTY, (oldValue != null ? dateFormatter.format(oldValue) : null), dateFormatter.format(newValue));
+    }
+
+    /**
+     * Sets the editable state of this component.
+     *
+     * @param newValue the new editable state
+     */
+    public void setEditable(boolean newValue) {
+        set(PROPERTY_EDITABLE, Boolean.valueOf(newValue));
+    }
+
+    /**
+     * Determines the editable state of this component. 
+     *
+     * @return <code>true</code> if this component is editable
+     */
+    public boolean isEditable() {
+        Object property = get(PROPERTY_EDITABLE);
+        return null == property ? true : ((Boolean) property).booleanValue();
     }
 
 

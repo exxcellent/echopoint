@@ -36,6 +36,8 @@ import java.util.Map;
  * <code>ExternalEvent</code> represents an event that
  * has been raised externally to the Echo
  * web application.
+ * @author Brad Baker <p>Modified by Mikael Soderman 2009-04-28</p>
+ * @version $Id$
  */
 public class ExternalEvent extends EventObject {
 

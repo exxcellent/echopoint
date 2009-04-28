@@ -2,6 +2,8 @@ echopoint.constants.CONTAINEREX = "echopoint.ContainerEx";
 
 /**
  * Component rendering peer: echopoint.ContainerEx
+ * @author HansH 2009-04-28
+ * @version $ID$
  */
 
 echopoint.ContainerExSync = Core.extend(Echo.Render.ComponentSync, {
@@ -71,15 +73,15 @@ echopoint.ContainerExSync = Core.extend(Echo.Render.ComponentSync, {
         if (width) {
             this._containerDiv.style.width = width;
         }
-        else {
-            this._containerDiv.style.width = "100%";
-        }
+//        else {
+//            this._containerDiv.style.width = "100%";
+//        }
         if (height) {
             this._containerDiv.style.height = height;
         }
-        else {
-            this._containerDiv.style.height = "100%";
-        }
+//        else {
+//            this._containerDiv.style.height = "100%";
+//        }
         var top = this.component.render(echopoint.ContainerExSync.TOP);
         if (top) {
             this._containerDiv.style.top = top;
@@ -199,6 +201,7 @@ echopoint.ContainerExSync = Core.extend(Echo.Render.ComponentSync, {
             childTd.style.paddingLeft = "0px";
             childTd.style.paddingTop = "0px";
             childTd.style.paddingRight = "0px";
+            Echo.Sync.Alignment.render(this.component.render(echopoint.ContainerExSync.ALIGNMENT), childTd, false, this.component);            
 
             Echo.Render.renderComponentAdd(update, child, childTd);
             this._containerTr.appendChild(childTd);

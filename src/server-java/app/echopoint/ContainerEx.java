@@ -32,6 +32,8 @@ import echopoint.able.*;
  * This component is a PaneContainer and hence can have components that implement Pane as a child.
  * However many Panes, such as SplitPane, require a definite height to be set in order to work properly.
  * So make sure you call setHeight() if one of the children implements Pane
+ * @author Brad Baker <p>Modified by Hans Holmlund 2009-04-20</p>
+ * @version $Id$
  */
 public class ContainerEx extends AbleComponent implements Alignable, PaneContainer, Positionable, Scrollable, BackgroundImageable, Stretchable {
 

@@ -57,6 +57,8 @@ import java.util.EventListener;
  *
  * @see echopoint.externalevent.ExternalEvent
  * @see echopoint.externalevent.ExternalEventListener
+ * @author Brad Baker <p>Modified by Mikael Soderman 2009-04-28</p>
+ * @version $Id$
  */
 public class ExternalEventMonitor extends Component {
 

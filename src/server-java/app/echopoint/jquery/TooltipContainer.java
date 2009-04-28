@@ -1,3 +1,20 @@
+/*
+ * This file is part of the Echo Point Project.  This project is a
+ * collection of Components that have extended the Echo Web Application
+ * Framework Version 3.
+ *
+ * Version: MPL 1.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ */
 package echopoint.jquery;
 
 
@@ -7,12 +24,12 @@ import echopoint.able.*;
 
 /**
  * TooltipContainer is a component that can be positioned anywhere on the screen with an specified size attributes.
- * By default, the children of ContainerEx are layed out one after the other, left to right and without any
- * other specified processing. Therefore to get more precise layout within the TooltipContainer.
+ * A tooltip can be set for the whole container.
+ * This component is built around the jQuery project qTip: http://craigsworks.com/projects/qtip/
  *
  * This component is a PaneContainer and hence can have components that implement Pane as a child.
- * However many Panes, such as SplitPane, require a definite height to be set in order to work properly.
- * So make sure you call setHeight() if one of the children implements Pane
+ * @author HansH 2009-04-28
+ * @version $ID$
  */
 public class TooltipContainer extends AbleComponent implements Alignable, PaneContainer, Positionable, Scrollable, BackgroundImageable {
 
@@ -51,7 +68,7 @@ public class TooltipContainer extends AbleComponent implements Alignable, PaneCo
 
 
     /**
-     * Creates a new <code>ContentPane</code>.
+     * Creates a new <code>TooltipContainer</code>.
      */
     public TooltipContainer() {
         super();
@@ -589,6 +606,9 @@ public class TooltipContainer extends AbleComponent implements Alignable, PaneCo
 
     /**
      * Sets the tooltip thumbnail URL.
+     * If you set the URL to for example www.amazon.com you will see a thumbnail of the amazon site.
+     *
+     * This feature is now hardcoded with the websnapr-service at: http://www.websnapr.com
      *
      * @param newValue of the tooltip thumbnail URL
      */
@@ -607,6 +627,8 @@ public class TooltipContainer extends AbleComponent implements Alignable, PaneCo
 
     /**
      * Sets the tooltip video URL.
+     * You could use this feature to display a youtube video.
+     * Example: setVideoURL("http://www.youtube.com/v/i_pcYd-9svs")
      *
      * @param newValue of the tooltip video URL
      */

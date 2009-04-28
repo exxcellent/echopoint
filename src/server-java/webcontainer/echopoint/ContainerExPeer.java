@@ -30,6 +30,7 @@ import nextapp.echo.app.Component;
  * Rendering peer for the {@link echopoint.ContainerEx} component.
  *
  * @author Hans Holmlund 2009-04-03
+ * @version $Id$
  */
 public class ContainerExPeer extends AbstractPeer {
 

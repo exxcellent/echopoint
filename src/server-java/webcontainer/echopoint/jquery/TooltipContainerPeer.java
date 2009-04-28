@@ -11,6 +11,7 @@ import nextapp.echo.app.Component;
  * Rendering peer for the {@link echopoint.jquery.TooltipContainerPeer} component.
  *
  * @author Hans Holmlund 2009-04-21
+ * @version $Id$
  */
 
 public class TooltipContainerPeer  extends JQueryAbstractPeer {
@@ -23,7 +24,7 @@ public class TooltipContainerPeer  extends JQueryAbstractPeer {
     /** The JS service files to load. */
     private static final String[] SERVICE_FILES =
             {
-                    "resource/js/jquery/jquery.qtip-1.0.0-beta4.min.js",
+                    "resource/js/jquery/jquery.qtip-1.0.0-rc2.min.js",
                     "resource/js/jquery/Application.TooltipContainer.js",
                     "resource/js/jquery/Sync.TooltipContainer.js"
             };

@@ -55,7 +55,9 @@ import echopoint.able.Attributeable;
  * then shown, as it may not redraw all sub components.
  * <p>
  * In CSS/XHTML terms, hidden is equivalent to display:none.
- * 
+ *
+ * @author Brad Baker
+ * @version $Id$
  */
 public abstract class ComponentEx extends Component implements Attributeable {
 

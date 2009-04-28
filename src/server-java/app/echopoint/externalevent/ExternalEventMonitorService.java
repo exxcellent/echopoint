@@ -1,3 +1,20 @@
+/*
+ * This file is part of the Echo Point Project.  This project is a
+ * collection of Components that have extended the Echo Web Application
+ * Framework Version 3.
+ *
+ * Version: MPL 1.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ */
 package echopoint.externalevent;
 
 import nextapp.echo.webcontainer.*;
@@ -18,6 +35,8 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * This service is used to listen for external events that come in when
  * the user follows a URI that has ?sid=ExternalEvent on it.
+ * @author Brad Baker <p>Modified by Mikael Soderman 2009-04-28</p>
+ * @version $Id$
  */
 public class ExternalEventMonitorService
 implements Service {
