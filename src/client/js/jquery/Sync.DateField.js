@@ -40,13 +40,6 @@ echopoint.DateField = Core.extend(Echo.Render.ComponentSync, {
     _inputElem: null,
     _dateFormatPattern: null,
 
-    /**
-     * Actual focus state of component, based on received DOM focus/blur events.
-     * @type Boolean
-     */
-//    _focused: false,
-
-
     /** @see Echo.Render.ComponentSync#renderAdd */
     renderAdd: function(update, parentElement) {
         if (jQuery("#dateFieldCss").length == 0) {
@@ -101,10 +94,6 @@ echopoint.DateField = Core.extend(Echo.Render.ComponentSync, {
         Echo.Sync.ImageReference.renderImg(this.component.render(echopoint.DateField.BUTTONICON), imgElement);
         this._dateTimediv.appendChild(imgElement);
 
-//        Core.Web.Event.add(this._inputElem, "focus", Core.method(this, this._processFocus), false);
-//        Core.Web.Event.add(this._inputElem, "click", Core.method(this, this._processClick), false);
-//        Core.Web.Event.add(this._inputElem, "blur", Core.method(this, this._processBlur), false);
-
         parentElement.appendChild(this._dateTimediv);
         this._renderRequired = true;
     },
@@ -115,46 +104,6 @@ echopoint.DateField = Core.extend(Echo.Render.ComponentSync, {
         this._inputElem = null;
         this._dateFormatPattern = null;
     },
-
-    /**
-     * Processes a focus blur event.
-     */
-//    _processBlur: function(e) {
-//        this._focused = false;
-//        return this._storeValue();
-//    },
-
-    /**
-     * Processes a focus event. Notifies application of focus.
-     */
-//    _processFocus: function(e) {
-//        this._focused = true;
-//        if (!this.client || !this.component.isActive()) {
-//            return true;
-//        }
-//        this.client.application.setFocusedComponent(this.component);
-//    },
-
-    /** @see Echo.Render.ComponentSync#renderFocus */
-//    renderFocus: function() {
-//        if (this._focused) {
-//            return;
-//        }
-//
-//        this._focused = true;
-//        Core.Web.DOM.focusElement(this._inputElem);
-//    },
-
-    /**
-     * Processes a mouse click event. Notifies application of focus.
-     */
-//    _processClick: function(e) {
-//        if (!this.client || !this.component.isActive()) {
-//            return true;
-//        }
-//        this.client.application.setFocusedComponent(this.component);
-//    },
-
 
     /**
      * Stores the selected date in the <code>Echo.Component</code> instance.
