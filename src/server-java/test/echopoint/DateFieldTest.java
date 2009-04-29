@@ -89,7 +89,7 @@ public class DateFieldTest extends AbstractTest<DateField> {
     public void dateFormat()
     {
         final String dateFormat = "yyyy/MM/dd HH:mm";
-        getComponent().setDateFormat( "yyyy/MM/dd HH:mm" );
+        getComponent().setDateFormat( dateFormat );
         assertEquals( "Ensuring dateformat set", dateFormat, getComponent().getDateFormat() );
     }
 
