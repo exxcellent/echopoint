@@ -124,7 +124,7 @@ public class TooltipContainerTest extends AbstractTest<TooltipContainer> {
         TooltipContainer testContainer2 = new TooltipContainer();
         testContainer2.setPosition(TooltipContainer.ABSOLUTE);
         testContainer2.setLeft(new Extent(300));
-        testContainer2.setTop(new Extent(200));
+        testContainer2.setTop(new Extent(210));
         testContainer2.setBackground(new Color(203, 233, 245));
         testContainer2.setWidth(new Extent(300));
         testContainer2.setInsets(new Insets(5,5,5,5));
