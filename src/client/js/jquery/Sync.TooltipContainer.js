@@ -82,15 +82,15 @@ echopoint.TooltipContainerSync = Core.extend(Echo.Render.ComponentSync, {
         if (width) {
             this._containerDiv.style.width = width;
         }
-//        else {
-//            this._containerDiv.style.width = "100%";
-//        }
+        //        else {
+        //            this._containerDiv.style.width = "100%";
+        //        }
         if (height) {
             this._containerDiv.style.height = height;
         }
-//        else {
-//            this._containerDiv.style.height = "100%";
-//        }
+        //        else {
+        //            this._containerDiv.style.height = "100%";
+        //        }
         var top = this.component.render(echopoint.TooltipContainerSync.TOP);
         if (top) {
             this._containerDiv.style.top = top;
@@ -198,7 +198,8 @@ echopoint.TooltipContainerSync = Core.extend(Echo.Render.ComponentSync, {
                 content += '" alt="Loading thumbnail..." height="152" width="202" />';
             }
             else if (video) {
-                var content = '<object width="425" height="264">';
+                var title = content;
+                content = '<object width="425" height="264">';
                 content += '<param name="movie" value="';
                 content += video;
                 content += '&fs=0&rel=0"></param>';
@@ -212,43 +213,41 @@ echopoint.TooltipContainerSync = Core.extend(Echo.Render.ComponentSync, {
                 content += '</object>';
             }
             var style = this.component.render(echopoint.TooltipContainerSync.TOOLTIPSTYLENAME);
-            if (!style) {
-                var tooltipPos = this.component.render(echopoint.TooltipContainerSync.POSITIONTOOLTIP);
-                if (!tooltipPos) {
-                    tooltipPos = "topMiddle";
-                }
-                var target = this.component.render(echopoint.TooltipContainerSync.POSITIONTARGET);
-                if (!target) {
-                    target = "bottomMiddle";
-                }
-                var borderCol = this.component.render(echopoint.TooltipContainerSync.TOOLTIPBORDERCOLOR);
-                if (!borderCol) {
-                    borderCol = "#e6eaf0";
-                }
-                var borderWidth = this.component.render(echopoint.TooltipContainerSync.TOOLTIPBORDERWIDTH);
-                if (!borderWidth) {
-                    borderWidth = 1;
-                }
-                var borderRadius = this.component.render(echopoint.TooltipContainerSync.TOOLTIPBORDERRADIUS);
-                if (!borderRadius) {
-                    borderRadius = 4;
-                }
-                var backgr = this.component.render(echopoint.TooltipContainerSync.TOOLTIPBACKGROUNDCOLOR);
-                if (!backgr) {
-                    backgr = "#140000";
-                }
-                var foregr = this.component.render(echopoint.TooltipContainerSync.TOOLTIPFOREGROUNDCOLOR);
-                if (!foregr) {
-                    foregr = "#d4f6a6";
-                }
-                var insets = this.component.render(echopoint.TooltipContainerSync.TOOLTIPINSETS);
-                if (!insets) {
-                    insets = 15;
-                }
-                var align = this.component.render(echopoint.TooltipContainerSync.TOOLTIPALIGNMENT);
-                if (!align) {
-                    align = "center";
-                }
+            var tooltipPos = this.component.render(echopoint.TooltipContainerSync.POSITIONTOOLTIP);
+            if (!tooltipPos && !style) {
+                tooltipPos = "topMiddle";
+            }
+            var target = this.component.render(echopoint.TooltipContainerSync.POSITIONTARGET);
+            if (!target && !style) {
+                target = "bottomMiddle";
+            }
+            var borderCol = this.component.render(echopoint.TooltipContainerSync.TOOLTIPBORDERCOLOR);
+            if (!borderCol && !style) {
+                borderCol = "#e6eaf0";
+            }
+            var borderWidth = this.component.render(echopoint.TooltipContainerSync.TOOLTIPBORDERWIDTH);
+            if (!borderWidth && !style) {
+                borderWidth = 1;
+            }
+            var borderRadius = this.component.render(echopoint.TooltipContainerSync.TOOLTIPBORDERRADIUS);
+            if (!borderRadius && !style) {
+                borderRadius = 4;
+            }
+            var backgr = this.component.render(echopoint.TooltipContainerSync.TOOLTIPBACKGROUNDCOLOR);
+            if (!backgr && !style) {
+                backgr = "#140000";
+            }
+            var foregr = this.component.render(echopoint.TooltipContainerSync.TOOLTIPFOREGROUNDCOLOR);
+            if (!foregr && !style) {
+                foregr = "#d4f6a6";
+            }
+            var insets = this.component.render(echopoint.TooltipContainerSync.TOOLTIPINSETS);
+            if (!insets && !style) {
+                insets = 15;
+            }
+            var align = this.component.render(echopoint.TooltipContainerSync.TOOLTIPALIGNMENT);
+            if (!align && !style) {
+                align = "center";
             }
             var options = {
                 position: {
@@ -294,11 +293,13 @@ echopoint.TooltipContainerSync = Core.extend(Echo.Render.ComponentSync, {
                         when: 'click', // Show it on click...
                         solo: true // ...and hide all others when its shown
                     },
-                    hide: 'click',
+                    hide: {
+                        when: 'inactive'
+                    },
                     style: {
                         width: {
-                           max: 500,
-                           min: 400
+                            max: 500,
+                            min: 400
                         },
                         border: {
                             color: borderCol,
@@ -316,7 +317,13 @@ echopoint.TooltipContainerSync = Core.extend(Echo.Render.ComponentSync, {
                         tip: true, // Give it a speech bubble tip with automatic corner detection
                         name: style // Style it according to the preset 'cream' style
                     },
-                    content: content
+                    content: {
+                        text: content,
+                        title: {
+                            text: title,
+                            button: 'close'
+                        }
+                    }
                 };
             }
             if (content) {
