@@ -6,7 +6,7 @@
 #
 dir.appserver                     /usr/local/apache-tomcat-6.0.14
 
-version                           3.0.0a11
+version                           3.0.0b1
 debug                             true
 
 dir.src                           src
@@ -33,6 +33,7 @@ dir.docs.api.webcontainer         ${dir.docs.api}/webcontainer
 
 echo.app.lib.jar                  ${dir.lib}/Echo3_App.jar
 echo.webcontainer.lib.jar         ${dir.lib}/Echo3_WebContainer.jar
+jsp.lib.jar                       ${dir.appserver}/lib/jsp-api.jar
 junit.lib.jar                     ${dir.lib}/junit-4.4.jar
 servlet.lib.jar                   ${dir.appserver}/lib/servlet-api.jar
 

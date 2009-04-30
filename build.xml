@@ -41,6 +41,7 @@
       <include name='*.jar' />
       <exclude name='yuicompressor-2.3.5.jar' />
     </fileset>
+    <pathelement path='${jsp.lib.jar}' />
     <pathelement path='${servlet.lib.jar}' />
   </path>
 
@@ -127,6 +128,7 @@
       <include name='*.jar' />
       <exclude name='yuicompressor-2.3.5.jar' />
     </fileset>
+    <pathelement path='${jsp.lib.jar}' />
     <pathelement path='${servlet.lib.jar}' />
     <pathelement path='${dir.dist}/${jarfile}' />
   </path>
@@ -348,6 +350,7 @@
       <include name='*.jar' />
       <exclude name='yuicompressor-2.3.5.jar' />
     </fileset>
+    <pathelement path='${jsp.lib.jar}' />
     <pathelement path='${servlet.lib.jar}' />
     <pathelement path='${dir.build}' />
   </path>
