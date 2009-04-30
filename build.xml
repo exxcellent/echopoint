@@ -83,12 +83,14 @@
     description='Compile EchoPoint main classes.'>
 
     <javac srcdir='${dir.src.server.app}' destdir='${dir.build.api}'
-      debug='${debug}' deprecation='yes'>
+      debug='${debug}' deprecation='yes'
+      source='${jdk.version}' target='${jdk.version}'>
       <classpath refid='compile.classpath'/>
     </javac>
 
     <javac srcdir='${dir.src.server.webcontainer}' destdir='${dir.build.api}'
-           debug='${debug}' deprecation='yes'>
+      debug='${debug}' deprecation='yes'
+      source='${jdk.version}' target='${jdk.version}'>
       <classpath refid='compile.classpath'/>
     </javac>
   </target>
