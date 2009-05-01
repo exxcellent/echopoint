@@ -20,16 +20,15 @@ package echopoint.jquery;
 import nextapp.echo.app.*;
 
 import java.util.Date;
-import java.util.Locale;
-import java.util.Hashtable;
 import java.util.Calendar;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-
 import echopoint.able.Sizeable;
 import echopoint.able.Alignable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -42,7 +41,11 @@ import echopoint.able.Alignable;
  * @author Hans Holmlund - 2009-04-03
  * @version $Id$ 
  */
-public class DateField extends Component implements Sizeable, Alignable {
+public class DateField extends Component implements Sizeable, Alignable
+{
+
+    /** The logger to use to log the download progress. */
+    protected static final Logger logger = Logger.getAnonymousLogger();
 
     public static final String DATE_CHANGED_PROPERTY = "date";
     public static final String PROPERTY_EDITABLE = "editable";    
@@ -426,7 +429,7 @@ public class DateField extends Component implements Sizeable, Alignable {
             }
         }
         catch (Exception e) {
-            System.out.println(e);
+            logger.log(Level.SEVERE, "Could not load resource <"+resource+">", e);
         }
         finally {
             if (in != null) { try { in.close(); } catch (IOException ex) { } }
