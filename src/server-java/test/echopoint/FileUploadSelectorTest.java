@@ -4,6 +4,7 @@ import echopoint.tucana.ButtonMode;
 import echopoint.tucana.DownloadButton;
 import echopoint.tucana.FileUploadSelector;
 import echopoint.tucana.ProgressBar;
+import echopoint.tucana.ButtonDisplay;
 import echopoint.tucana.event.DefaultUploadCallback;
 import echopoint.tucana.event.DownloadCallbackAdapter;
 import echopoint.tucana.event.InvalidContentTypeEvent;
@@ -49,7 +50,17 @@ public class FileUploadSelectorTest extends AbstractTest<FileUploadSelector>
   {
     final ButtonMode mode = ButtonMode.image;
     getComponent().setButtonMode( mode );
-    assertEquals( "Ensure button mode set", mode, getComponent().getButtonMode() );
+    assertEquals( "Ensure button mode set", mode,
+        getComponent().getButtonMode() );
+  }
+
+  @Test
+  public void buttonDisplay()
+  {
+    final ButtonDisplay display = ButtonDisplay.none;
+    getComponent().setButtonDisplayMode( display );
+    assertEquals( "Ensure button display set", display,
+        getComponent().getButtonDisplayMode() );
   }
 
   @Test

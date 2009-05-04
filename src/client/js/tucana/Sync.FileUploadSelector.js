@@ -67,7 +67,7 @@ echopoint.tucana.FileUploadSelectorSync = Core.extend( echopoint.internal.Abstra
     Echo.Render.renderComponentAdd( update, child, this._div );
   },
 
-  renderDispose: function( update )
+  renderDispose: function()
   {
     for ( var uploadId in this._frames )
     {
@@ -159,7 +159,7 @@ echopoint.tucana.FileUploadSelectorSync = Core.extend( echopoint.internal.Abstra
   },
 
   /** Create the parent container that holds the upload select interface. */
-  _createParent: function( update )
+  _createParent: function()
   {
     this._div = document.createElement( "div" );
     this._div.id = this.component.renderId;
@@ -248,9 +248,8 @@ echopoint.tucana.FileUploadSelectorSync = Core.extend( echopoint.internal.Abstra
    * Removes the specified frame and creates a new one.
    *
    * @param frame {echopoint.tucana.FileUploadSelectorSync}
-   * @param cancel A flag indicating that the upload was cancelled.
    */
-  _refreshFrame: function( frame, cancel )
+  _refreshFrame: function( frame )
   {
     this._removeFrame( frame );
     this._table._renderDispose();
@@ -313,7 +312,7 @@ echopoint.tucana.FileUploadSelectorSync.Frame = Core.extend(
    */
   $construct: function( uploadSelectPeer, uploadId )
   {
-    this.peer = uploadSelectPeer
+    this.peer = uploadSelectPeer;
     this.component = uploadSelectPeer.component;
     this._uploadIndex = uploadId;
     this._submitListenerBound = false;
@@ -361,7 +360,11 @@ echopoint.tucana.FileUploadSelectorSync.Frame = Core.extend(
     this._loadStage = echopoint.tucana.FileUploadSelectorSync._STAGE_UPLOADING;
     this.peer._form.target = this._frameElement.id;
     this.peer._form.submit();
-    this.peer._table._submit._renderButton( true, this.peer._table );
+
+    if ( this.peer._table._submit )
+    {
+      this.peer._table._submit._renderButton( true, this.peer._table );
+    }
 
     if ( !Core.Web.Env.BROWSER_SAFARI )
     {
@@ -621,7 +624,7 @@ echopoint.tucana.FileUploadSelectorSync.Table = Core.extend(
    */
   $construct: function( uploadSelectPeer )
   {
-    this.peer = uploadSelectPeer
+    this.peer = uploadSelectPeer;
     this.component = uploadSelectPeer.component;
   },
 
@@ -635,7 +638,7 @@ echopoint.tucana.FileUploadSelectorSync.Table = Core.extend(
 
   _renderDispose: function()
   {
-    this._submit._renderDispose();
+    if ( this._submit ) this._submit._renderDispose();
     this._submit = null;
     this._input = null;
     this._tdSubmitLeft = null;
@@ -697,7 +700,7 @@ echopoint.tucana.FileUploadSelectorSync.Table = Core.extend(
     this.peer.renderInsets( this._input );
     this.peer.renderFont( this._input );
 
-    return this._input
+    return this._input;
   },
 
   _createSubmit: function()
@@ -706,10 +709,10 @@ echopoint.tucana.FileUploadSelectorSync.Table = Core.extend(
         echopoint.tucana.FileUploadSelector.BUTTON_DISPLAY,
         echopoint.tucana.FileUploadSelector.DEFAULT_BUTTON_DISPLAY );
 
-    if ( display != 3 )
+    if ( display != "none" )
     {
       this._submit = new echopoint.tucana.FileUploadSelectorSync.Button( this.peer );
-      this._submit._renderAdd( this )
+      this._submit._renderAdd( this );
     }
     else
     {
@@ -762,7 +765,7 @@ echopoint.tucana.FileUploadSelectorSync.Button = Core.extend(
    */
   $construct: function( uploadSelectPeer )
   {
-    this.peer = uploadSelectPeer
+    this.peer = uploadSelectPeer;
     this.component = uploadSelectPeer.component;
   },
 
@@ -776,11 +779,13 @@ echopoint.tucana.FileUploadSelectorSync.Button = Core.extend(
 
   _renderDispose: function()
   {
+    /*
     if ( this._cancel )
     {
       Core.Web.Event.remove( this._submit, "onclick",
           Core.method( this, this._cancelAction ), false );
     }
+    */
   },
 
   _renderStyle: function()

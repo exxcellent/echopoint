@@ -35,7 +35,7 @@ echopoint.tucana.FileUploadSelector = Core.extend( echopoint.internal.AbstractCo
     UPLOAD_INDEX: "uploadIndex",
     UPLOAD_CANCELLED: "uploadCancelled",
 
-    DEFAULT_BUTTON_MODE: "text",
+    DEFAULT_BUTTON_MODE: "submit",
     DEFAULT_BUTTON_DISPLAY: "auto",
     DEFAULT_CANCEL_ENABLED: true,
     DEFAULT_IMAGE_UPLOAD: "images/upload.png",
