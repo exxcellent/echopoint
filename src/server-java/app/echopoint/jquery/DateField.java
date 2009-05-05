@@ -58,6 +58,8 @@ public class DateField extends Component implements Sizeable, Alignable
     public static final String PROPERTY_LANGUAGE = "language";
     public static final ImageReference imageReference = new ResourceImageReference("/resource/images/calendar.gif");
     public static final String cssReference = getFileAsString("resource/js/jquery/calendar-win2k-cold-2.css");
+    public static final String PROPERTY_INPUT_WIDTH = "inputWidth";
+    public static final String PROPERTY_INPUT_HEIGHT = "inputHeight";
 
 
     /**
@@ -435,5 +437,41 @@ public class DateField extends Component implements Sizeable, Alignable
             if (in != null) { try { in.close(); } catch (IOException ex) { } }
         }
         return sb.toString();
+    }
+
+    /**
+     * Returns the input field width.
+     *
+     * @return The input field width
+     */
+    public Extent getInputWidth() {
+        return (Extent) get(PROPERTY_INPUT_WIDTH);
+    }
+
+    /**
+     * Sets the editable state of this component.
+     *
+     * @param newValue the new width of the input field
+     */
+    public void setInputWidth(Extent newValue) {
+        set(PROPERTY_INPUT_WIDTH, newValue);
+    }
+
+    /**
+     * Returns the input field height.
+     *
+     * @return The input field height
+     */
+    public Extent getInputHeight() {
+        return (Extent) get(PROPERTY_INPUT_HEIGHT);
+    }
+
+    /**
+     * Sets the editable state of this component.
+     *
+     * @param newValue the new height of the input field
+     */
+    public void setInputHeight(Extent newValue) {
+        set(PROPERTY_INPUT_HEIGHT, newValue);
     }
 }

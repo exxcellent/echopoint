@@ -23,7 +23,9 @@ echopoint.DateField = Core.extend(Echo.Render.ComponentSync, {
         DATEFORMAT: "dateFormat",
         USETIME: "useTime",
         CSS: "css",
-        LANGUAGE: "language"
+        LANGUAGE: "language",
+        INPUTWIDTH: "inputWidth",
+        INPUTHEIGHT: "inputHeight"
     },
 
     $load: function()
@@ -78,6 +80,15 @@ echopoint.DateField = Core.extend(Echo.Render.ComponentSync, {
         if (!this.component.isRenderEnabled()) {
             this._inputElem.disabled = "disabled";
         }
+        var inputWidth = this.component.render(echopoint.DateField.INPUTWIDTH);
+        var inputHeight = this.component.render(echopoint.DateField.INOUTHEIGHT);
+        if (inputWidth) {
+            this._inputElem.style.width = inputWidth;
+        }
+        if (inputHeight) {
+            this._inputElem.style.height = inputHeight;
+        }
+
         var font = this.component.render(echopoint.DateField.FONT);
         Echo.Sync.Font.renderClear(font, this._inputElem);
         this._dateTimediv.appendChild(this._inputElem);
