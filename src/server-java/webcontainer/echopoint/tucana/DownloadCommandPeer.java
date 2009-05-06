@@ -29,6 +29,9 @@ import nextapp.echo.webcontainer.service.JavaScriptService;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import echopoint.internal.CommonService;
+import echopoint.internal.CommonResources;
+
 /**
  * Synchronisation peer for the {@link echopoint.tucana.DownloadCommand} command.
  *
@@ -46,6 +49,7 @@ public class DownloadCommandPeer extends AbstractCommandSynchronizePeer
 
   static
   {
+    CommonResources.install();
     DownloadService.install();
     WebContainerServlet.getServiceRegistry().add( DOWNLOAD_SERVICE );
   }
@@ -70,7 +74,9 @@ public class DownloadCommandPeer extends AbstractCommandSynchronizePeer
   public void init( Context context )
   {
     super.init( context );
-    ServerMessage serverMessage = (ServerMessage) context.get( ServerMessage.class );
+    ServerMessage serverMessage = (ServerMessage)
+        context.get( ServerMessage.class );
+    serverMessage.addLibrary( CommonService.ECHOPOINT_SERVICE.getId() );
     serverMessage.addLibrary( DOWNLOAD_SERVICE.getId() );
   }
 

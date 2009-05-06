@@ -28,12 +28,16 @@ import nextapp.echo.webcontainer.WebContainerServlet;
  */
 public class CommonResources
 {
-  /** Register the <code>Echopoint</code> package. */
-  static
-  {
-    WebContainerServlet.getResourceRegistry().addPackage( "echopoint", "resource/");
-  }
+  private static boolean installed = false;
 
-  /** Dummy method that must be invoked by all component peers. */
-  public static void install() {}
+  /** Method that must be invoked by all component peers. */
+  public static void install()
+  {
+    if ( ! installed )
+    {
+      WebContainerServlet.getResourceRegistry().addPackage(
+          "echopoint", "resource/" );
+      installed = true;
+    }
+  }
 }

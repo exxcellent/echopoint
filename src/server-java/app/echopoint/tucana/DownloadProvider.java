@@ -39,9 +39,17 @@ public interface DownloadProvider extends Serializable
 
   /**
    * Returns the value of the disposition-type in the Content-Disposition
-   * parameter of the response header.  <code>null</code> indicates that a
+   * parameter of the response header.  {@code null} indicates that a
    * Content-Disposition parameter should not be included in the reponse
-   * header.  See RFC 2183 for more info.
+   * header.  See RFC 2183 for more info.  The following values are most
+   * commonly used:
+   *
+   * <ul>
+   *   <li>{@code inline} - Indicates that the browser should attempt to
+   *     display the content.</li>
+   *   <li>{@code attachment} - Usually the default action.  The browser
+   *     will display a save content dialogue.</li>
+   * </ul>
    *
    * @return The file's Content-Disposition
    */

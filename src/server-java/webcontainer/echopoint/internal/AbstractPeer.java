@@ -37,7 +37,7 @@ public abstract class AbstractPeer extends AbstractComponentSynchronizePeer
     /** Register the core services */
     static
     {
-        CommonResources.install();
+      CommonResources.install();
     }
 
     /**
