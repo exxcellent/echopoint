@@ -74,6 +74,30 @@ echopoint.internal.TextFieldSync = Core.extend( Echo.Sync.TextField,
     processKeyUp: function( event )
     {
       if ( this.status ) this._textFieldProcessKeyUp( event );
+    },
+
+    /** Return the caret position in the text field component. */
+    getCaretPosition: function()
+    {
+      var position = ( this.input.value ) ? this.input.value.length : 0;
+
+      if ( document.selection )
+      {
+        // IE
+        this.input.focus();
+        var selection = document.selection.createRange();
+        var length = document.selection.createRange().text.length;
+        selection.moveStart( 'character', -this.input.value.length );
+        position = selection.text.length - length;
+      }
+      else if ( this.input.selectionStart ||
+                this.input.selectionStart == '0' )
+      {
+        // FireFox
+        position = this.input.selectionStart;
+      }
+
+      return position;
     }
   },
 

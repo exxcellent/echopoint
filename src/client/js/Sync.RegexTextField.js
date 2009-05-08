@@ -17,7 +17,7 @@ echopoint.RegexTextFieldSync = Core.extend( echopoint.internal.TextFieldSync,
     event = (event) ? event : window.event;
     var charCode = (event.which) ? event.which : event.keyCode;
 
-    if ( charCode <= 31 )
+    if ( ( charCode <= 31 ) || ( charCode == 37 ) || ( charCode == 39 ) )
     {
       this.status = true;
       return this.status;
@@ -26,8 +26,11 @@ echopoint.RegexTextFieldSync = Core.extend( echopoint.internal.TextFieldSync,
     var regexString = this.component.render( echopoint.RegexTextField.REGEX );
     if ( regexString )
     {
+      var position = this.getCaretPosition();
       var regex = new RegExp( regexString );
-      var value = this.input.value + String.fromCharCode( charCode );
+      var value = this.input.value.substring( 0, position ) +
+                  String.fromCharCode( charCode ) +
+          this.input.value.substring( position );
       this.status = regex.test( value );
     }
 
