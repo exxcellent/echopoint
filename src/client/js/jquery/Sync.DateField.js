@@ -81,7 +81,7 @@ echopoint.DateField = Core.extend(Echo.Render.ComponentSync, {
             this._inputElem.disabled = "disabled";
         }
         var inputWidth = this.component.render(echopoint.DateField.INPUTWIDTH);
-        var inputHeight = this.component.render(echopoint.DateField.INOUTHEIGHT);
+        var inputHeight = this.component.render(echopoint.DateField.INPUTHEIGHT);
         if (inputWidth) {
             this._inputElem.style.width = inputWidth;
         }
