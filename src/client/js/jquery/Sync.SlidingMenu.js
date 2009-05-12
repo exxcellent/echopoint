@@ -162,6 +162,7 @@ echopoint.SLIDINGMENU = Core.extend(Echo.Render.ComponentSync, {
 
 
         var buttonTd = document.createElement("td");
+        Echo.Sync.Alignment.render(this.component.render(echopoint.SLIDINGMENU.ALIGNMENT), buttonTd, true, this.component);
         containerTr.appendChild(buttonTd);
 
         this.slidingMenuState = false;
