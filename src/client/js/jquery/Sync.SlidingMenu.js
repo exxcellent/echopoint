@@ -252,7 +252,8 @@ echopoint.SLIDINGMENU = Core.extend(Echo.Render.ComponentSync, {
                     echopoint.SLIDINGMENU.PRESSEDICON, this.slidingMenuState), this.imgElement);
             this.slidingMenuState = false;
             t = (t<=0) ? 0 : t-1;
-            if (Core.Web.Env.BROWSER_INTERNET_EXPLORER && Core.Web.Env.BROWSER_VERSION_MAJOR == 6) {
+//            if (Core.Web.Env.BROWSER_INTERNET_EXPLORER && Core.Web.Env.BROWSER_VERSION_MAJOR == 6) {
+            if (Core.Web.Env.BROWSER_INTERNET_EXPLORER) {
                 this.defaultContentLI.style.visibility = "hidden";
                 this.slidingMenuLI.style.visibility = "visible";
             }
@@ -262,7 +263,8 @@ echopoint.SLIDINGMENU = Core.extend(Echo.Render.ComponentSync, {
                     echopoint.SLIDINGMENU.PRESSEDICON, this.slidingMenuState), this.imgElement);
             this.slidingMenuState = true;
             t = (t>=ts) ? ts : t+1;
-            if (Core.Web.Env.BROWSER_INTERNET_EXPLORER && Core.Web.Env.BROWSER_VERSION_MAJOR == 6) {
+//            if (Core.Web.Env.BROWSER_INTERNET_EXPLORER && Core.Web.Env.BROWSER_VERSION_MAJOR == 6) {
+            if (Core.Web.Env.BROWSER_INTERNET_EXPLORER) {
                 this.slidingMenuLI.style.visibility = "hidden";
                 this.defaultContentLI.style.visibility = "visible";
             }
