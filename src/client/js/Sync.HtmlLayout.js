@@ -27,7 +27,7 @@ echopoint.HtmlLayoutSync = Core.extend( echopoint.internal.AbstractHtmlComponent
       throw new Error( "HtmlLayout must have html layout definition!" );
     }
 
-    echopoint.internal.AbstractHtmlComponentSync.prototype.renderAdd.call(
+    this.constructor.$super.prototype.renderAdd.call(
         this, update, parentElement );
 
     var childCount = this.component.getComponentCount();
@@ -144,7 +144,7 @@ echopoint.HtmlLayoutSync = Core.extend( echopoint.internal.AbstractHtmlComponent
 
   renderDispose: function( update )
   {
-    echopoint.internal.AbstractHtmlComponentSync.prototype.renderDispose.call(
+    this.constructor.$super.prototype.renderDispose.call(
         this, update );
     this._childToComponent = null;
     this._childToParent = null;

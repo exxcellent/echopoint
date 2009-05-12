@@ -576,7 +576,7 @@ echopoint.tucana.FileUploadSelectorSync.Frame = Core.extend(
     }
     else
     {
-      if ( this._frameElement.parentNode )
+      if ( this._frameElement && this._frameElement.parentNode )
       {
         this._frameElement.parentNode.removeChild( this._frameElement );
       }
