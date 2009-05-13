@@ -39,20 +39,10 @@ echopoint.DateField = Core.extend(Echo.Render.ComponentSync, {
      * @type Element
      */
     _dateTimediv: null,
-    _inputElem: null,
     _dateFormatPattern: null,
 
     /** @see Echo.Render.ComponentSync#renderAdd */
     renderAdd: function(update, parentElement) {
-        if (jQuery("#dateFieldCss").length == 0) {
-            var stylesheet = this.component.render(echopoint.DateField.CSS);
-            var styleElem = document.createElement("style");
-            styleElem.type = "text/css";
-            styleElem.id = "dateFieldCss";
-            jQuery("head").append(styleElem);
-            jQuery("#dateFieldCss").text(stylesheet);
-        }
-
         this._dateTimediv = document.createElement("div");
         this._dateTimediv.id = this.component.renderId;
 
@@ -75,18 +65,18 @@ echopoint.DateField = Core.extend(Echo.Render.ComponentSync, {
 //            this._dateTimediv.style.height = "100%";
 //        }
 
-        this._inputElem = document.createElement("input");
-        this._inputElem.type= "text";
+        var inputElem = document.createElement("input");
+        inputElem.type= "text";
         if (!this.component.isRenderEnabled()) {
-            this._inputElem.disabled = "disabled";
+            this.inputElem.disabled = "disabled";
         }
         var inputWidth = this.component.render(echopoint.DateField.INPUTWIDTH);
         var inputHeight = this.component.render(echopoint.DateField.INPUTHEIGHT);
         if (inputWidth) {
-            this._inputElem.style.width = inputWidth;
+            inputElem.style.width = inputWidth;
         }
         if (inputHeight) {
-            this._inputElem.style.height = inputHeight;
+            inputElem.style.height = inputHeight;
         }
 
         var font = this.component.render(echopoint.DateField.FONT);
@@ -112,7 +102,6 @@ echopoint.DateField = Core.extend(Echo.Render.ComponentSync, {
     /** @see Echo.Render.ComponentSync#renderDispose */
     renderDispose: function(update) {
         this._dateTimediv = null;
-        this._inputElem = null;
         this._dateFormatPattern = null;
     },
 
@@ -128,6 +117,11 @@ echopoint.DateField = Core.extend(Echo.Render.ComponentSync, {
         if (this._renderRequired) {
             this._renderRequired = false;
 
+            if (jQuery("#dateFieldCss").length == 0) {
+                var stylesheet = this.component.render(echopoint.DateField.CSS);
+                jQuery("head").append("<style type=\"text/css\" id=\"dateFieldCss\">"+stylesheet+"</style>");
+            }
+            
             var foreground = this.component.render(echopoint.DateField.FOREGROUND);
             var background = this.component.render(echopoint.DateField.BACKGROUND);
             this._dateFormatPattern = this.component.render(echopoint.DateField.DATEFORMAT);
@@ -135,16 +129,17 @@ echopoint.DateField = Core.extend(Echo.Render.ComponentSync, {
             if (this.component.isRenderEnabled()) {
                 var useTime = this.component.render(echopoint.DateField.USETIME, false );
                 var options = {
-                    //                date: this._date,
                     onClose: jQuery.context(this).callback(this._storeValue),
                     showsTime: useTime,
+                    eventName: "click",
+                    singleClick: true,
                     //                debug: true,
                     ifFormat: this._dateFormatPattern,
                     button: ".next()" //next sibling
                 };
 
-                jQuery("#" + this._dateTimediv.id.replace('.', '\\.')).css(this.component.render(echopoint.DateField.CSS));
-                jQuery("#" + this._inputElem.id.replace('.', '\\.')).dynDateTime(options);
+
+                jQuery("#" + this._dateTimediv.id.replace('.', '\\.') + "dateTime").dynDateTime(options);
             }
 
             Echo.Sync.Color.renderClear(foreground, this._dateTimediv, "color");
@@ -154,11 +149,15 @@ echopoint.DateField = Core.extend(Echo.Render.ComponentSync, {
 
     /** @see Echo.Render.ComponentSync#renderUpdate */
     renderUpdate: function(update) {
-        var containerElement = this._dateTimediv.parentNode;
-        Echo.Render.renderComponentDispose(update, update.parent);
-        containerElement.removeChild(this._dateTimediv);
-        this.renderAdd(update, containerElement);
-        return true;
+        var fullRender = update.hasUpdatedProperties();
+        if (fullRender) {
+            var element = this._dateTimediv;
+            var containerElement = element.parentNode;
+            containerElement.removeChild(element);
+            Echo.Render.renderComponentDispose(update, update.parent);
+            this.renderAdd(update, containerElement);
+        }
+        return fullRender;
     }
 
 
