@@ -53,6 +53,7 @@ echopoint.SLIDINGMENU = Core.extend(Echo.Render.ComponentSync, {
     scrollSpeed: null,
     defaultIcon: null,
     rolloverIcon: null,
+    pressedIcon: null,
 
 
     /** @see Echo.Render.ComponentSync#renderAdd */
@@ -176,6 +177,7 @@ echopoint.SLIDINGMENU = Core.extend(Echo.Render.ComponentSync, {
         this.imgElement = document.createElement("img");
         this.defaultIcon = this.component.render(echopoint.SLIDINGMENU.ICON);
         this.rolloverIcon = this.component.render(echopoint.SLIDINGMENU.ROLLOVERICON);
+        this.pressedIcon = this.component.render(echopoint.SLIDINGMENU.PRESSEDICON);
         Echo.Sync.ImageReference.renderImg(this.defaultIcon, this.imgElement);
         buttonDiv.appendChild(this.imgElement);
         Core.Web.Event.add(this.imgElement, "click", Core.method(this, this._processClick), false);
@@ -248,8 +250,7 @@ echopoint.SLIDINGMENU = Core.extend(Echo.Render.ComponentSync, {
         jQuery("li", obj).css('float','left');
 
         if (this.slidingMenuState) {
-            Echo.Sync.ImageReference.renderImg(Echo.Sync.getEffectProperty(this.component, echopoint.SLIDINGMENU.ICON,
-                    echopoint.SLIDINGMENU.PRESSEDICON, this.slidingMenuState), this.imgElement);
+            Echo.Sync.ImageReference.renderImg(this.pressedIcon, this.imgElement);
             this.slidingMenuState = false;
             t = (t<=0) ? 0 : t-1;
 //            if (Core.Web.Env.BROWSER_INTERNET_EXPLORER && Core.Web.Env.BROWSER_VERSION_MAJOR == 6) {
@@ -259,8 +260,7 @@ echopoint.SLIDINGMENU = Core.extend(Echo.Render.ComponentSync, {
             }
         }
         else {
-            Echo.Sync.ImageReference.renderImg(Echo.Sync.getEffectProperty(this.component, echopoint.SLIDINGMENU.ICON,
-                    echopoint.SLIDINGMENU.PRESSEDICON, this.slidingMenuState), this.imgElement);
+            Echo.Sync.ImageReference.renderImg(this.defaultIcon, this.imgElement);
             this.slidingMenuState = true;
             t = (t>=ts) ? ts : t+1;
 //            if (Core.Web.Env.BROWSER_INTERNET_EXPLORER && Core.Web.Env.BROWSER_VERSION_MAJOR == 6) {
@@ -288,7 +288,12 @@ echopoint.SLIDINGMENU = Core.extend(Echo.Render.ComponentSync, {
         if (!this.client || !this.client.verifyInput(this.component)) {
             return;
         }
-        Echo.Sync.ImageReference.renderImg(this.defaultIcon, e.target);
+        if (this.slidingMenuState) {
+            Echo.Sync.ImageReference.renderImg(this.defaultIcon, e.target);
+        }
+        else {
+            Echo.Sync.ImageReference.renderImg(this.pressedIcon, e.target);            
+        }
     },
 
     renderDisplay: function() {
