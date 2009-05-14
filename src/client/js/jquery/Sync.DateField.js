@@ -81,14 +81,14 @@ echopoint.DateField = Core.extend(Echo.Render.ComponentSync, {
 
         var font = this.component.render(echopoint.DateField.FONT);
         if (font) {
-            Echo.Sync.Font.renderClear(font, this._inputElem);
+            Echo.Sync.Font.renderClear(font, inputElem);
         }
-        this._dateTimediv.appendChild(this._inputElem);
-        this._inputElem.id = this.component.renderId + "dateTime";
+        this._dateTimediv.appendChild(inputElem);
+        inputElem.id = this.component.renderId + "dateTime";
 
         var dateStr = this.component.get("date");
         if (dateStr) {
-            this._inputElem.value = dateStr;
+            inputElem.value = dateStr;
         }
 
         var imgElement = document.createElement("img");
