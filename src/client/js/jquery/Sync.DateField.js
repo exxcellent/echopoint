@@ -68,7 +68,7 @@ echopoint.DateField = Core.extend(Echo.Render.ComponentSync, {
         var inputElem = document.createElement("input");
         inputElem.type= "text";
         if (!this.component.isRenderEnabled()) {
-            this.inputElem.disabled = "disabled";
+            inputElem.disabled = "disabled";
         }
         var inputWidth = this.component.render(echopoint.DateField.INPUTWIDTH);
         var inputHeight = this.component.render(echopoint.DateField.INPUTHEIGHT);
@@ -80,7 +80,9 @@ echopoint.DateField = Core.extend(Echo.Render.ComponentSync, {
         }
 
         var font = this.component.render(echopoint.DateField.FONT);
-        Echo.Sync.Font.renderClear(font, this._inputElem);
+        if (font) {
+            Echo.Sync.Font.renderClear(font, this._inputElem);
+        }
         this._dateTimediv.appendChild(this._inputElem);
         this._inputElem.id = this.component.renderId + "dateTime";
 
