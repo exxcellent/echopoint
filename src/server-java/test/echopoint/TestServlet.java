@@ -19,7 +19,7 @@
 package echopoint;
 
 import nextapp.echo.app.ApplicationInstance;
-import nextapp.echo.webcontainer.WebContainerServlet;
+import echopoint.style.StyleSheet;
 
 /**
  * The web container servlet implementation of the test application.
@@ -27,7 +27,7 @@ import nextapp.echo.webcontainer.WebContainerServlet;
  * @author Rakesh 2008-06-24
  * @version $Id$
  */
-public class Servlet extends WebContainerServlet
+public class TestServlet extends Servlet
 {
   private static final long serialVersionUID = 1l;
 
@@ -40,6 +40,8 @@ public class Servlet extends WebContainerServlet
    */
   public ApplicationInstance newApplicationInstance()
   {
-    return new Application();
+    final Application app =  new Application();
+    app.setStyleSheet( new StyleSheet() );
+    return app;
   }
 }

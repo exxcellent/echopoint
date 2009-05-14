@@ -365,7 +365,6 @@ echopoint.test.TestApp.StyleSheet = new Echo.StyleSheet(
     },
     "echopoint.InfoWindow":
     {
-      textAlignment: "center",
       textForeground: "#2f2f4f",
       textBackground: "#cfdfff",
       textFont: {
