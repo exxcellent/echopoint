@@ -39,6 +39,7 @@ public class ComponentList extends Column
       {
           "Anchor",
           "Clock",
+          "ContainerEx",
           "DateField",
           "DirectHtml",
           "HtmlLabel",
