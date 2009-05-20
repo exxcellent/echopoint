@@ -35,7 +35,7 @@ public class SeparatorPeer extends AbstractPeer {
 
 
     /** The component name for which this class is a peer. */
-    private static final String COMPONENT_NAME = SeparatorPeer.class.getName();
+    private static final String COMPONENT_NAME = Separator.class.getName();
 
     /** The JS service files to load. */
     private static final String[] SERVICE_FILES =
