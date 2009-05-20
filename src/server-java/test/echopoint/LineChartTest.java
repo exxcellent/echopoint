@@ -192,7 +192,7 @@ public class LineChartTest extends GoogleChartTest<LineChart<Integer>>
     assertEquals( "Ensure fill set", fill, getComponent().getFill() );
   }
 
-  //@Test
+  @Test
   public void fillArea()
   {
     final Collection<FillArea> areas = new ArrayList<FillArea>();

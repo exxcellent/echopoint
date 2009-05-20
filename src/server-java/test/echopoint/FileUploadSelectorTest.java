@@ -137,7 +137,9 @@ public class FileUploadSelectorTest extends AbstractTest<FileUploadSelector>
     final HashSet<String> set = new HashSet<String>();
     set.add( "image/gif" );
     set.add( "image/jpeg" );
+    set.add( "image/pjpeg" );
     set.add( "image/png" );
+    set.add( "image/x-png" );
     getComponent().setContentTypeFilter( set );
     assertEquals( "Ensure content type filter set", set,
         getComponent().getContentTypeFilter() );

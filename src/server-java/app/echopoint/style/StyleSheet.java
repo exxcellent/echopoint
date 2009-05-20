@@ -21,6 +21,20 @@ package echopoint.style;
 import nextapp.echo.app.MutableStyleSheet;
 import echopoint.Anchor;
 import echopoint.InfoWindow;
+import echopoint.ProgressBar;
+import echopoint.TagCloud;
+import echopoint.google.chart.BarChart;
+import echopoint.google.chart.LineChart;
+import echopoint.google.chart.Sparkline;
+import echopoint.google.chart.ScatterPlot;
+import echopoint.google.chart.RadarChart;
+import echopoint.google.chart.Map;
+import echopoint.style.google.chart.BarChartStyle;
+import echopoint.style.google.chart.LineChartStyle;
+import echopoint.style.google.chart.SparklineStyle;
+import echopoint.style.google.chart.ScatterPlotStyle;
+import echopoint.style.google.chart.RadarChartStyle;
+import echopoint.style.google.chart.MapStyle;
 
 /**
  * An extensible stylesheet that enforces a default look-and-feel for all
@@ -64,6 +78,9 @@ public class StyleSheet extends MutableStyleSheet
   {
     addAnchorStyles();
     addInfoWindowStyles();
+    addProgressBarStyles();
+    addTagCloudStyles();
+    addChartStyles();
   }
 
   /** Add styles for {@link echopoint.Anchor} components. */
@@ -80,5 +97,83 @@ public class StyleSheet extends MutableStyleSheet
     final InfoWindowStyle style = new InfoWindowStyle();
     addStyle( InfoWindow.class, "", style );
     addStyle( InfoWindow.class, "Default", style );
+  }
+
+  /** Set the styles for {@link echopoint.ProgressBar} components. */
+  protected void addProgressBarStyles()
+  {
+    final ProgressBarStyle style = new ProgressBarStyle();
+    addStyle( ProgressBar.class, "", style );
+    addStyle( ProgressBar.class, "Default", style );
+  }
+
+  /** Add styles for {@link echopoint.TagCloud} components. */
+  protected void addTagCloudStyles()
+  {
+    final TagCloudStyle style = new TagCloudStyle();
+    addStyle( TagCloud.class, "", style );
+    addStyle( TagCloud.class, "Default", style );
+  }
+
+  /**
+   * Add styles for {@link echopoint.google.chart} components.  Delegates
+   * to the individual chart style method.  Over-ride as necessary.
+   */
+  protected void addChartStyles()
+  {
+    addBarChartStyles();
+    addLineChartStyles();
+    addMapStyles();
+    addScatterPlotStyles();
+    addSparklineStyles();
+    addRadarChartStyles();
+  }
+
+  /** Add styles for {@link echopoint.google.chart.BarChart} components. */
+  protected void addBarChartStyles()
+  {
+    final BarChartStyle style = new BarChartStyle();
+    addStyle( BarChart.class, "", style );
+    addStyle( BarChart.class, "Default", style );
+  }
+
+  /** Add styles for {@link echopoint.google.chart.LineChart} components. */
+  protected void addLineChartStyles()
+  {
+    final LineChartStyle style = new LineChartStyle();
+    addStyle( LineChart.class, "", style );
+    addStyle( LineChart.class, "Default", style );
+  }
+
+  /** Add styles for {@link echopoint.google.chart.Map} components. */
+  protected void addMapStyles()
+  {
+    final MapStyle style = new MapStyle();
+    addStyle( Map.class, "", style );
+    addStyle( Map.class, "Default", style );
+  }
+
+  /** Add styles for {@link echopoint.google.chart.ScatterPlot} components. */
+  protected void addScatterPlotStyles()
+  {
+    final ScatterPlotStyle style = new ScatterPlotStyle();
+    addStyle( ScatterPlot.class, "", style );
+    addStyle( ScatterPlot.class, "Default", style );
+  }
+
+  /** Add styles for {@link echopoint.google.chart.Sparkline} components. */
+  protected void addSparklineStyles()
+  {
+    final SparklineStyle style = new SparklineStyle();
+    addStyle( Sparkline.class, "", style );
+    addStyle( Sparkline.class, "Default", style );
+  }
+
+  /** Add styles for {@link echopoint.google.chart.RadarChart} components. */
+  protected void addRadarChartStyles()
+  {
+    final RadarChartStyle style = new RadarChartStyle();
+    addStyle( RadarChart.class, "", style );
+    addStyle( RadarChart.class, "Default", style );
   }
 }

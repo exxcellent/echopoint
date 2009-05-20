@@ -29,7 +29,7 @@
       </init-param>
       <init-param>
         <param-name>echopoint.style.Background.value</param-name>
-        <param-value>#cbc8d6</param-value>
+        <param-value>#32476a</param-value>
       </init-param>
     </servlet>
 

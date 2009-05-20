@@ -86,7 +86,7 @@ import java.util.Set;
  *     to use a sub-class of either {@link echopoint.tucana.event.DefaultUploadCallback}
  *     or {@link echopoint.tucana.event.UploadCallbackAdapter} since they
  *     ensure removal of the task queue used to enqueue processing from the
- *     call back methods to the UI thread.  If you su-class please note that
+ *     call back methods to the UI thread.  If you sub-class please note that
  *     calls to {@code super.uploadXxx} methods should be invoked at the end
  *     of your over-ridden implementation and not at the top.  The super class
  *     implementations destroys the queue and sets it to {@code null}.

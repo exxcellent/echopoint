@@ -48,13 +48,6 @@ public class InfoWindowStyle extends AbstractStyle
   public static final String TEXT_FOREGROUND = "#2f2f4f";
 
   /**
-   * The default text background to use for the info window title.
-   *
-   * {@value}
-   */
-  public static final String TITLE_BACKGROUND = "#9f9f9f";
-
-  /**
    * The text foreground colour to use for the title bar.
    *
    * {@value}
@@ -110,7 +103,7 @@ public class InfoWindowStyle extends AbstractStyle
   protected void setTitleProperties()
   {
     set( PROPERTY_TITLE_ALIGNMENT, ALIGN_LEFT );
-    set( PROPERTY_TITLE_BACKGROUND, makeColor( TITLE_BACKGROUND ) );
+    set( PROPERTY_TITLE_BACKGROUND, Background.getInstance() );
     set( PROPERTY_TITLE_FONT, DefaultFont.getInstance( "BOLD", "12px" ) );
     set( PROPERTY_TITLE_FOREGROUND, makeColor( TITLE_FOREGROUND ) );
   }

@@ -88,7 +88,7 @@ public class JakartaCommonsFileUploadProvider extends AbstractFileUploadProvider
           final Set<String> types = uploadSelect.getContentTypeFilter();
           if ( !types.isEmpty() )
           {
-            if ( !types.contains( contentType ) )
+            if ( ! types.contains( contentType ) )
             {
               app.enqueueTask( uploadSelect.getTaskQueue(),
                   new InvalidContentTypeRunnable( uploadSelect, uploadIndex,

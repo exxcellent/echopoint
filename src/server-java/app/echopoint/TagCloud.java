@@ -48,6 +48,11 @@ import java.util.Map;
  *     of the tag element over which the mouse hovers.</li>
  * </ul>
  *
+ * <p><b>Note:</b> There is a bug in how updates to the tags properties are
+ * handled by the update manager at present.  For the time-being, please
+ * remove and re-add the tag cloud to its parent if the tags have been
+ * updated during an event cycle (see {@code TagCloudTest} for example).</p>
+ *
  * <p>The following shows sample usage of this component:</p>
  * <pre>
  *   import echopoint.TagCloud;
@@ -124,7 +129,8 @@ public class TagCloud extends AbstractContainer
    */
   public boolean getRolloverEnabled()
   {
-    return (Boolean) get( PROPERTY_ROLLOVER_ENABLED );
+    final Boolean enabled =  (Boolean) get( PROPERTY_ROLLOVER_ENABLED );
+    return ( enabled != null ) ? enabled : false;
   }
 
   /**

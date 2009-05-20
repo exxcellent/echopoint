@@ -97,7 +97,7 @@ public class TagCloudTest extends AbstractTest<TagCloud>
     try
     {
       getComponent().add( new TagCloud() );
-      fail( "TagCloud cannot contain children" );
+      fail( "TagCloudStyle cannot contain children" );
     }
     catch ( Throwable t ) {}
   }
@@ -127,12 +127,6 @@ public class TagCloudTest extends AbstractTest<TagCloud>
 
     final Row row = new Row();
     final TagCloud tagCloud = (TagCloud) get();
-
-    assertTrue( tagCloud.getRolloverEnabled() );
-    assertNotNull( tagCloud.getRolloverBackground() );
-    assertNotNull( tagCloud.getRolloverForeground() );
-    assertNotNull( tagCloud.getTags() );
-
     row.add( tagCloud );
 
     final Column column = new Column();
@@ -167,7 +161,12 @@ public class TagCloudTest extends AbstractTest<TagCloud>
 
       public void actionPerformed( final ActionEvent event )
       {
-        ( (TagCloud) get() ).setTags( createTags() );
+        final TagCloud tagCloud =  (TagCloud) get();
+        tagCloud.setTags( createTags() );
+        final Component parent = tagCloud.getParent();
+        final int index = parent.indexOf( tagCloud );
+        parent.remove( tagCloud );
+        parent.add( tagCloud, index );
       }
     });
 

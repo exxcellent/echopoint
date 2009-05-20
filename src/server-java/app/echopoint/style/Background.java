@@ -28,7 +28,7 @@ public class Background
    *
    * {@value}
    */
-  public static final String BACKGROUND = "#8eabcc";
+  public static final String BACKGROUND = "#32476a";
 
   /** The default colour value to use. */
   private static String color;

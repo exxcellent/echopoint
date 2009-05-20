@@ -303,6 +303,10 @@ echopoint.google.chart.internal.AbstractChartSync = Core.extend(
 
       var foreground = this.component.render(
           echopoint.internal.AbstractContainer.FOREGROUND );
+      if ( foreground && foreground.charAt( 0 ) == '#' )
+      {
+        foreground = foreground.substr( 1 );
+      }
       url += ( foreground ) ? foreground : "000000";
 
       var font = this.component.render( echopoint.internal.AbstractContainer.FONT );

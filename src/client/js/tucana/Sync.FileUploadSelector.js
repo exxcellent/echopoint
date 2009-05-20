@@ -71,7 +71,11 @@ echopoint.tucana.FileUploadSelectorSync = Core.extend( echopoint.internal.Abstra
   {
     for ( var uploadId in this._frames )
     {
-      this._frames[uploadId]._dispose();
+      if ( ( uploadId != 'remove' ) && ( uploadId != 'contains' )
+          && ( uploadId != 'indexOf' ) )
+      {
+        this._frames[uploadId]._dispose();
+      }
     }
 
     this._table._renderDispose();
@@ -79,7 +83,8 @@ echopoint.tucana.FileUploadSelectorSync = Core.extend( echopoint.internal.Abstra
     var progress = this.component.getComponent( 0 );
     if ( progress )
     {
-      this._div.removeChild( document.getElementById( progress.renderId ) );
+      var progressElement = progress.peer._div ;
+      Core.Web.DOM.removeNode( progressElement );
     }
 
     this._getBody().removeChild( this._hidden );
@@ -576,13 +581,9 @@ echopoint.tucana.FileUploadSelectorSync.Frame = Core.extend(
     }
     else
     {
-      if ( this._frameElement && this._frameElement.parentNode )
+      if ( this._frameElement )
       {
-        this._frameElement.parentNode.removeChild( this._frameElement );
-      }
-      else
-      {
-        Core.Debug.consoleWrite( "No parent node for frame" );
+        Core.Web.DOM.removeNode( this._frameElement );
       }
     }
 
