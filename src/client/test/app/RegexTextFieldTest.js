@@ -35,6 +35,8 @@ echopoint.test.RegexTextFieldTest = Core.extend(
     {
       renderId: "echopointUnitTestRegexTextField",
       styleName: "Default",
+      defaultText: "1234.56",
+      //text: "1.23",
       regex: "^[\\d]+[.]{0,1}[\\d]{0,2}$"
     });
   },

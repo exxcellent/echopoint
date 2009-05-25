@@ -1,7 +1,7 @@
 package echopoint.style;
 
-import nextapp.echo.app.Font;
 import static echopoint.util.FontKit.makeFont;
+import nextapp.echo.app.Font;
 
 /**
  * A font utility class that is used to enforce an application wide font face

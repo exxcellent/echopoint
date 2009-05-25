@@ -3,7 +3,7 @@ echopoint.constants.CLOCK = "echopoint.jquery.Clock";
 /**
  * Component rendering peer: echopoint.jquery.Clock
  *
- * @version $ID$
+ * @version $Id$
  */
 
 echopoint.ClockSync = Core.extend(Echo.Render.ComponentSync, {

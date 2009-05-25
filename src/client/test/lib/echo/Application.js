@@ -49,9 +49,9 @@ Echo.Application = Core.extend({
         init: function() { },
         
         /**
-         * Performs application disposal/resource cleanup operations.  This method should be provided by an application implementation
-         * if required.  The superclass' <code>dispose()</code> method should always be invoked out of convention.
-         * The <code>client</code> property will be available. 
+         * Performs application disposal/resource cleanup operations. This method should be provided by an application
+         * implementation if required. The superclass' <code>dispose()</code> method should always be invoked out of convention.
+         * The <code>client</code> property will be available.
          */
         dispose: function() { }
     },
@@ -303,8 +303,10 @@ Echo.Application = Core.extend({
      * @param {String} propertyName the updated property
      * @param oldValue the previous property value
      * @param newValue the new property value
+     * @param rendered optional flag indicating whether the update has already been rendered by the containing client; 
+     *        if enabled, the property update will not be sent to the update manager
      */
-    notifyComponentUpdate: function(parent, propertyName, oldValue, newValue) {
+    notifyComponentUpdate: function(parent, propertyName, oldValue, newValue, rendered) {
         if (parent.modalSupport && propertyName == "modal") {
             this._setModal(parent, newValue);
         }
@@ -312,7 +314,9 @@ Echo.Application = Core.extend({
             this._listenerList.fireEvent({type: "componentUpdate", parent: parent, propertyName: propertyName, 
                     oldValue: oldValue, newValue: newValue});
         }
-        this.updateManager._processComponentUpdate(parent, propertyName, oldValue, newValue);
+        if (!rendered) {
+            this.updateManager._processComponentUpdate(parent, propertyName, oldValue, newValue);
+        }
     },
     
     /**
@@ -350,6 +354,8 @@ Echo.Application = Core.extend({
      * @param {Echo.Component} newValue the new focused component
      */
     setFocusedComponent: function(newValue) {
+        var oldValue = this._focusedComponent;
+        
         // If required, find focusable parent containing 'newValue'.
         while (newValue != null && !newValue.focusable) {
             newValue = newValue.parent;
@@ -369,7 +375,7 @@ Echo.Application = Core.extend({
         }
         
         this._focusedComponent = newValue;
-        this._listenerList.fireEvent({type: "focus", source: this});
+        this._listenerList.fireEvent({type: "focus", source: this, oldValue: oldValue, newValue: newValue });
     },
     
     /**
@@ -1216,8 +1222,10 @@ Echo.Component = Core.extend({
      * 
      * @param {String} name the name of the property
      * @param value the new value of the property
+     * @param rendered optional flag indicating whether the update has already been rendered by the containing client; 
+     *        if enabled, the property update will not be sent to the update manager
      */
-    set: function(name, newValue) {
+    set: function(name, newValue, rendered) {
         var oldValue = this._localStyle[name];
         if (oldValue === newValue) {
             return;
@@ -1228,7 +1236,7 @@ Echo.Component = Core.extend({
                     oldValue: oldValue, newValue: newValue});
         }
         if (this.application) {
-            this.application.notifyComponentUpdate(this, name, oldValue, newValue);
+            this.application.notifyComponentUpdate(this, name, oldValue, newValue, rendered);
         }
     },
     
@@ -1251,8 +1259,10 @@ Echo.Component = Core.extend({
      * @param {String} name the name of the property
      * @param {Number} index the index of the property
      * @param newValue the new value of the property
+     * @param rendered optional flag indicating whether the update has already been rendered by the containing client; 
+     *        if enabled, the property update will not be sent to the update manager
      */
-    setIndex: function(name, index, newValue) {
+    setIndex: function(name, index, newValue, rendered) {
         var valueArray = this._localStyle[name];
         var oldValue = null;
         if (valueArray) {
@@ -1266,7 +1276,7 @@ Echo.Component = Core.extend({
         }
         valueArray[index] = newValue;
         if (this.application) {
-            this.application.notifyComponentUpdate(this, name, oldValue, newValue);
+            this.application.notifyComponentUpdate(this, name, oldValue, newValue, rendered);
         }
         if (this._listenerList && this._listenerList.hasListeners("property")) {
             this._listenerList.fireEvent({type: "property", source: this, propertyName: name, index: index,
@@ -1727,7 +1737,7 @@ Echo.StyleSheet = Core.extend({
 /**
  * Namespace for update management.
  * Provides capabilities for storing property changes made to applications and components
- * such that display redraws may be performed efficiently. 
+ * such that display redraws may be performed efficiently in batches by application container.
  * @namespace
  */
 Echo.Update = { };
@@ -2137,7 +2147,7 @@ Echo.Update.ComponentUpdate = Core.extend({
         s += "- Adds: " + this._addedChildIds + "\n";
         s += "- Removes: " + this._removedChildIds + "\n";
         s += "- DescendantRemoves: " + this._removedDescendantIds + "\n";
-        s += "- Properties: " + this._propertyUpdates + "\n";
+        s += "- Properties: " + Core.Debug.toString(this._propertyUpdates) + "\n";
         s += "- LayoutDatas: " + this._updatedLayoutDataChildIds + "\n";
         return s;
     },
@@ -2893,10 +2903,11 @@ Echo.Composite = Core.extend(Echo.Component, {
  * may be necessary to manually set the height property of the Panel itself.
  * 
  * @sp {#FillImage} backgroundImage the background image
- * @sp {#Border} border the panel border surrounding the child component
+ * @sp {#Border} border the border surrounding the child component
  * @sp {#Extent} height the height of the panel
- * @sp {#Insets} insets the inset padding margin between the panel border and
- *     its content
+ * @sp {#FillImageBorder} imageBorder an image-based border surrounding the child component (overrides <code>border</code>
+ *     property when set)
+ * @sp {#Insets} insets the inset padding margin between the panel border and its content
  * @sp {#Extent} width the width of the panel
  */
 Echo.Panel = Core.extend(Echo.Composite, {
@@ -3271,6 +3282,8 @@ Echo.SplitPane = Core.extend(Echo.Component, {
  * @sp {#Insets} insets the inset margin between the border and the text content
  * @sp {Number} maximumLength the maximum number of characters which may be
  *     entered
+ * @sp {Number} selectionStart the character index of the beginning of the selection
+ * @sp {Number} selectionEnd the character index of the end of the selection
  * @sp {String} toolTipText the tool tip text
  * @sp {#Extent} verticalScroll the vertical scrollbar position
  * @sp {#Extent} width the width of the component
@@ -3293,6 +3306,29 @@ Echo.TextComponent = Core.extend(Echo.Component, {
          */
         doAction: function() {
             this.fireEvent({type: "action", source: this, actionCommand: this.get("actionCommand")});
+        },
+        
+        /**
+         * Notifies listeners of a key down event.
+         * 
+         * @param keyCode the (standardized) key code
+         */
+        doKeyDown: function(keyCode) {
+            var e = { type: "keyDown", source: this, keyCode: keyCode };
+            this.fireEvent(e);
+            return !e.veto;
+        },
+        
+        /**
+         * Notifies listeners of a key press event.
+         * 
+         * @param keyCode the (standardized) key code
+         * @param charCode the charater code
+         */
+        doKeyPress: function(keyCode, charCode) {
+            var e = { type: "keyPress", source: this, keyCode: keyCode, charCode: charCode };
+            this.fireEvent(e);
+            return !e.veto;
         }
     },
 

@@ -79,6 +79,12 @@ Core.Web.DOM = {
      * Temporary storage for the element about to be focused (for clients that require 'delayed' focusing).
      */
     _focusPendingElement: null,
+    
+    /**
+     * Runnable to invoke focus implementation (lazily created).
+     * @type Core.Web.Scheduler.Runnable
+     */
+    _focusRunnable: null,
 
     /**
      * Adds an event listener to an object, using the client's supported event 
@@ -149,8 +155,11 @@ Core.Web.DOM = {
      */
     focusElement: function(element) {
         if (Core.Web.Env.QUIRK_DELAYED_FOCUS_REQUIRED) {
+            if (!this._focusRunnable) {
+                this._focusRunnable = new Core.Web.Scheduler.MethodRunnable(this._focusElementImpl);
+            }
             Core.Web.DOM._focusPendingElement = element;
-            Core.Web.Scheduler.run(Core.method(window, this._focusElementImpl));
+            Core.Web.Scheduler.add(this._focusRunnable);
         } else {
             this._focusElementImpl(element);
         }
@@ -546,6 +555,24 @@ Core.Web.Env = {
     PROPRIETARY_IE_PNG_ALPHA_FILTER_REQUIRED: null,
     
     /**
+     * Flag indicating that keypress events will place charCode value in keyCode property.
+     * @type Boolean
+     */
+    QUIRK_KEY_CODE_IS_CHAR_CODE: null,
+    
+    /**
+     * Flag indicating that keypress events are fired for special keys.
+     * @type Boolean
+     */
+    QUIRK_KEY_PRESS_FIRED_FOR_SPECIAL_KEYS: null,
+    
+    /**
+     * Flag indicating that keypress events are fired for special keys.
+     * @type Boolean
+     */
+    QUIRK_KEY_DOWN_NOT_FIRED_FOR_SPECIAL_KEYS: null,
+    
+    /**
      * Flag indicating collapsed borders appear inside a table's rendered rather
      * than around it. For example, a proper rendering for a 2px collapsed
      * border is that one pixel appear inside the table's are and one pixel
@@ -580,6 +607,15 @@ Core.Web.Env = {
      * @type Boolean
      */
     QUIRK_IE_BLANK_SCREEN: null,
+    
+    /**
+     * Flag indicating a fundamental issue in Internet Explorer's rendering engine wherein the browser is incapable of correctly
+     * sizing/positioning elements unless certain CSS attributes (which should not be necessary) are present.
+     * Setting the proprietary "zoom" attribute to a value of '1' can force this browser to properly layout an an element that 
+     * sufferes this quirk.
+     * See http://msdn.microsoft.com/en-us/library/bb250481.aspx 
+     */
+    QUIRK_IE_HAS_LAYOUT: null,
 
     /**
      * Flag indicating multiple keydown events will be fired when a key is held down.
@@ -606,6 +642,14 @@ Core.Web.Env = {
      * @type Boolean
      */
     QUIRK_IE_SELECT_Z_INDEX: null,
+    
+    /**
+     * Flag indicating an IE browser that incorrectly displays the security warning,
+     * "This page contains both secure and nonsecure items. Do you want to display the nonsecure items?".
+     * See http://support.microsoft.com/kb/925014
+     * @type Boolean
+     */
+    QUIRK_IE_SECURE_ITEMS: null,
 
     /**
      * Flag indicating that IE browser does not properly render tables whose
@@ -759,6 +803,8 @@ Core.Web.Env = {
         if (this.BROWSER_INTERNET_EXPLORER) {
             // Internet Explorer Flags (all versions).
             this.CSS_FLOAT = "styleFloat";
+            this.QUIRK_KEY_CODE_IS_CHAR_CODE = true;
+            this.QUIRK_IE_SECURE_ITEMS = true;
             this.PROPRIETARY_EVENT_MOUSE_ENTER_LEAVE_SUPPORTED = true;
             this.PROPRIETARY_EVENT_SELECT_START_SUPPORTED = true;
             this.QUIRK_IE_KEY_DOWN_EVENT_REPEAT = true;
@@ -766,6 +812,7 @@ Core.Web.Env = {
             this.QUIRK_UNLOADED_IMAGE_HAS_SIZE = true;
             this.MEASURE_OFFSET_EXCLUDES_BORDER = true;
             this.QUIRK_IE_BLANK_SCREEN = true;
+            this.QUIRK_IE_HAS_LAYOUT = true;
             
             if (this.BROWSER_VERSION_MAJOR < 8) {
                 // Internet Explorer 6 and 7 Flags.
@@ -788,6 +835,7 @@ Core.Web.Env = {
                 }
             }
         } else if (this.ENGINE_GECKO) {
+            this.QUIRK_KEY_PRESS_FIRED_FOR_SPECIAL_KEYS = true;
             this.MEASURE_OFFSET_EXCLUDES_BORDER = true;
             this.QUIRK_MEASURE_OFFSET_HIDDEN_BORDER = true;
             if (this.BROWSER_FIREFOX) {
@@ -799,6 +847,7 @@ Core.Web.Env = {
                 this.QUIRK_DELAYED_FOCUS_REQUIRED = true;
             }
         } else if (this.ENGINE_PRESTO) {
+            this.QUIRK_KEY_CODE_IS_CHAR_CODE = true;
             this.QUIRK_TABLE_CELL_WIDTH_EXCLUDES_PADDING = true;
             if (this.BROWSER_VERSION_MAJOR == 9 && this.BROWSER_VERSION_MINOR >= 50) {
                 this.QUIRK_OPERA_CSS_POSITIONING = true;
@@ -1454,7 +1503,7 @@ Core.Web.Image = {
          */
         $construct: function(element, listener, interval) {
             this._listener = listener;
-            this._interval = interval || 2000;
+            this._interval = interval || 250;
             this._processImageLoadRef = Core.method(this, this._processImageLoad);
             var imgs = element.getElementsByTagName("img");
             this._count = imgs.length;
@@ -1503,6 +1552,57 @@ Core.Web.Image = {
      */
     monitor: function(element, l, interval) {
         var monitor = new Core.Web.Image._Monitor(element, l, interval);
+    }
+};
+
+Core.Web.Key = {
+    
+    _KEY_TABLES: {
+        
+        GECKO: { 
+            59: 186, 
+            61: 187,
+            109: 189
+        },
+        
+        MAC_GECKO: {
+        },
+        
+        PRESTO: {
+            59: 186,
+            61: 187,
+            44: 188,
+            45: 189,
+            46: 190,
+            47: 191,
+            96: 192,
+            91: 219,
+            92: 220,
+            93: 221,
+            39: 222
+        },
+        
+        WEBKIT: {
+        }
+    },
+    
+    _keyTable: null,
+    
+    _loadKeyTable: function() {
+        if (Core.Web.Env.ENGINE_GECKO) {
+            this._keyTable = this._KEY_TABLES.GECKO;
+        } else if(Core.Web.Env.ENGINE_PRESTO) {
+            this._keyTable = this._KEY_TABLES.PRESTO;
+        } else {
+            this._keyTable = { };
+        }
+    },
+
+    translateKeyCode: function(keyCode) {
+        if (!this._keyTable) {
+            this._loadKeyTable();
+        }
+        return this._keyTable[keyCode] || keyCode;
     }
 };
 
@@ -1688,7 +1788,8 @@ Core.Web.Library = {
          */
         _retrieveListener: function(e) {
             if (!e.valid) {
-                throw new Error("Invalid HTTP response from library request: " + e.source.getStatus());
+                throw new Error("Invalid HTTP response retrieving library \"" + this._url + 
+                        "\", received status: " + e.source.getStatus());
             }
             this._content = e.source.getResponseText();
             this._group._notifyRetrieved();
@@ -1936,6 +2037,16 @@ Core.Web.Measure = {
     Bounds: Core.extend({
 
         $static: {
+            /**
+             * Flag indicating that the dimension of elements should be calculated.
+             */
+            FLAG_MEASURE_DIMENSION: 0x1,
+            
+            /**
+             * Flag indicating that the position of elements should be calculated.
+             */
+            FLAG_MEASURE_POSITION: 0x2,
+            
             _initMeasureContainer: function() {
                 // Create off-screen div element for evaluating sizes.
                 this._offscreenDiv = document.createElement("div");
@@ -1978,6 +2089,9 @@ Core.Web.Measure = {
          * @constructor
          */    
         $construct: function(element, constraints) {
+            var flags = (constraints && constraints.flags) || 
+                    (Core.Web.Measure.Bounds.FLAG_MEASURE_DIMENSION | Core.Web.Measure.Bounds.FLAG_MEASURE_POSITION);
+
             if (element === document.body) {
                 return { 
                     x: 0,
@@ -1994,52 +2108,54 @@ Core.Web.Measure = {
             var rendered = testElement == document;
             
             var parentNode, nextSibling;
-            if (!rendered) {
-                // Element must be added to off-screen element for measuring.
-                
-                // Store parent node and next sibling such that element may be replaced into proper position
-                // once off-screen measurement has been completed.
-                parentNode = element.parentNode;
-                nextSibling = element.nextSibling;
-        
-                // Remove element from parent.
-                if (parentNode) {
-                    parentNode.removeChild(element);
+            
+            if (flags & Core.Web.Measure.Bounds.FLAG_MEASURE_DIMENSION) {
+                if (!rendered) {
+                    // Element must be added to off-screen element for measuring.
+                    
+                    // Store parent node and next sibling such that element may be replaced into proper position
+                    // once off-screen measurement has been completed.
+                    parentNode = element.parentNode;
+                    nextSibling = element.nextSibling;
+            
+                    // Remove element from parent.
+                    if (parentNode) {
+                        parentNode.removeChild(element);
+                    }
+                    
+                    if (constraints) {
+                        if (constraints.width) {
+                            Core.Web.Measure.Bounds._offscreenDiv.width = constraints.width;
+                        }
+                        if (constraints.height) {
+                            Core.Web.Measure.Bounds._offscreenDiv.height = constraints.height;
+                        }
+                    }
+                    
+                    // Append element to measuring container DIV.
+                    Core.Web.Measure.Bounds._offscreenDiv.appendChild(element);
+                    
+                    if (constraints) {
+                        Core.Web.Measure.Bounds._offscreenDiv.width = "1600px";
+                        Core.Web.Measure.Bounds._offscreenDiv.height = "1200px";
+                    }
                 }
                 
-                if (constraints) {
-                    if (constraints.width) {
-                        Core.Web.Measure._offscreenDiv.width = constraints.width;
-                    }
-                    if (constraints.height) {
-                        Core.Web.Measure._offscreenDiv.height = constraints.height;
-                    }
-                }
+                // Store width and height of element.
+                this.width = element.offsetWidth;
+                this.height = element.offsetHeight;
                 
-                // Append element to measuring container DIV.
-                Core.Web.Measure.Bounds._offscreenDiv.appendChild(element);
-                
-                if (constraints) {
-                    Core.Web.Measure._offscreenDiv.width = "1600px";
-                    Core.Web.Measure._offscreenDiv.height = "1200px";
+                if (!rendered) {
+                    // Replace off-screen measured element in previous location.
+                    Core.Web.Measure.Bounds._offscreenDiv.removeChild(element);
+                    if (parentNode) {
+                        parentNode.insertBefore(element, nextSibling);
+                    }
                 }
             }
-            
-            // Store width and height of element.
-        
-            this.width = element.offsetWidth;
-            this.height = element.offsetHeight;
-            
-            if (!rendered) {
-                // Replace off-screen measured element in previous location.
-                Core.Web.Measure.Bounds._offscreenDiv.removeChild(element);
-                if (parentNode) {
-                    parentNode.insertBefore(element, nextSibling);
-                }
-            }
-            
+
             // Determine top and left positions of element if rendered on-screen.
-            if (rendered) {
+            if (rendered && (flags & Core.Web.Measure.Bounds.FLAG_MEASURE_POSITION)) {
                 var cumulativeOffset = Core.Web.Measure._getCumulativeOffset(element);
                 var scrollOffset = Core.Web.Measure._getScrollOffset(element);
         
@@ -2055,7 +2171,8 @@ Core.Web.Measure = {
          * @type String
          */
         toString: function() {
-            return (this.left != null ? (this.left + "," + this.top + " : ") : "") + "[" + this.width + "x" + this.height + "]";
+            return (this.left != null ? (this.left + "," + this.top + " : ") : "") + 
+                    (this.width != null ? ("[" + this.width + "x" + this.height + "]") : "");
         }
     })
 };
@@ -2087,6 +2204,8 @@ Core.Web.Scheduler = {
     
     /**
      * Enqueues a Runnable to be executed by the scheduler.
+     * If the runnable is currently enqueued, it will be removed and re-enqueued.  It will be next be invoked
+     * after its specified time interval.
      * 
      * @param {Core.Web.Scheduler.Runnable} runnable the runnable to enqueue
      */
@@ -2323,7 +2442,7 @@ Core.Web.VirtualPosition = {
     _OFFSETS_HORIZONTAL: ["paddingLeft", "paddingRight", "marginLeft", "marginRight", "borderLeftWidth", "borderRightWidth"],
     
     /** Flag indicating whether virtual positioning is required/enabled. */
-    _enabled: false,
+    enabled: false,
     
     /**
      * Calculates horizontal or vertical padding, border, and margin offsets for a particular style.
@@ -2351,7 +2470,7 @@ Core.Web.VirtualPosition = {
      * Enables and initializes the virtual positioning system.
      */
     _init: function() {
-        this._enabled = true;
+        this.enabled = true;
     },
     
     /**
@@ -2363,7 +2482,7 @@ Core.Web.VirtualPosition = {
      * @param element the element to redraw
      */
     redraw: function(element) {
-        if (!this._enabled) {
+        if (!this.enabled) {
             return;
         }
     

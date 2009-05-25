@@ -30,7 +30,7 @@ import nextapp.echo.app.*;
  * and color values.  It also has an Inset value around it.
  *
  * @author Brad Baker <p>Modified by HansH 2009-04-03</p>
- * @version $ID$
+ * @version $Id$
  */
 
 public class Separator extends ComponentEx implements Insetable {
@@ -52,7 +52,7 @@ public class Separator extends ComponentEx implements Insetable {
 	public static final Extent DEFAULT_BOTTOM_SIZE	= new Extent(1);
 
     public static final Style DEFAULT_STYLE;
-    
+
 
 	static {
 		MutableStyle style = new MutableStyle();

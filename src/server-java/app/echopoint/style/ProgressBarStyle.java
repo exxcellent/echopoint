@@ -1,9 +1,9 @@
 package echopoint.style;
 
 import static echopoint.ProgressBar.PROPERTY_BACKGROUND;
-import static echopoint.ProgressBar.PROPERTY_FOREGROUND;
 import static echopoint.ProgressBar.PROPERTY_BAR_BACKGROUND;
 import static echopoint.ProgressBar.PROPERTY_BORDER;
+import static echopoint.ProgressBar.PROPERTY_FOREGROUND;
 import static echopoint.ProgressBar.PROPERTY_HEIGHT;
 import static echopoint.ProgressBar.PROPERTY_INSETS;
 import static echopoint.util.ColorKit.makeColor;

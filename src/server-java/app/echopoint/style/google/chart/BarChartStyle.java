@@ -1,7 +1,7 @@
 package echopoint.style.google.chart;
 
-import static echopoint.google.chart.BarChart.PROPERTY_SIZE;
 import static echopoint.google.chart.BarChart.PROPERTY_HEIGHT;
+import static echopoint.google.chart.BarChart.PROPERTY_SIZE;
 import static echopoint.google.chart.BarChart.PROPERTY_WIDTH;
 
 /**

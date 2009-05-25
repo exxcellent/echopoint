@@ -92,10 +92,10 @@ Echo.Client = Core.extend({
     _inputRescriptionMap: null,
     
     /**
-     * Method reference to this._processKeyPressRef().
+     * Method reference to this._processKey().
      * @type Function
      */
-    _processKeyPressRef: null,
+    _processKeyRef: null,
     
     /**
      * Flag indicating wait indicator is active.
@@ -134,6 +134,12 @@ Echo.Client = Core.extend({
     _waitIndicatorRunnable: null,
     
     /**
+     * Last received keycode from <code>keydown</code> event.  Used for firing cross-browser <Code>keypress</code> events.
+     * @type Number
+     */
+    _lastKeyCode: null,
+
+    /**
      * Creates a new Client instance.  Derived classes must invoke.
      */
     $construct: function() { 
@@ -143,7 +149,7 @@ Echo.Client = Core.extend({
         }
         
         this._inputRestrictionMap = { };
-        this._processKeyPressRef = Core.method(this, this._processKeyPress);
+        this._processKeyRef = Core.method(this, this._processKey);
         this._processApplicationFocusRef = Core.method(this, this._processApplicationFocus);
         this._waitIndicator = new Echo.Client.DefaultWaitIndicator();
         this._waitIndicatorRunnable = new Core.Web.Scheduler.MethodRunnable(Core.method(this, this._waitIndicatorActivate), 
@@ -227,8 +233,8 @@ Echo.Client = Core.extend({
         if (this.application) {
             // Deconfigure current application if one is configured.
             Core.Arrays.remove(Echo.Client._activeClients, this);
-            Core.Web.Event.remove(this.domainElement, 
-                    Core.Web.Env.QUIRK_IE_KEY_DOWN_EVENT_REPEAT ? "keydown" : "keypress", this._processKeyPressRef, false);
+            Core.Web.Event.remove(this.domainElement, "keypress", this._processKeyRef, false);
+            Core.Web.Event.remove(this.domainElement, "keydown", this._processKeyRef, false);
             this.application.removeListener("focus", this._processApplicationFocusRef);
             this.application.doDispose();
             this.application.client = null;
@@ -243,8 +249,8 @@ Echo.Client = Core.extend({
             this.application.client = this;
             this.application.doInit();
             this.application.addListener("focus", this._processApplicationFocusRef);
-            Core.Web.Event.add(this.domainElement, 
-                    Core.Web.Env.QUIRK_IE_KEY_DOWN_EVENT_REPEAT ? "keydown" : "keypress", this._processKeyPressRef, false);
+            Core.Web.Event.add(this.domainElement, "keypress", this._processKeyRef, false);
+            Core.Web.Event.add(this.domainElement, "keydown", this._processKeyRef, false);
             Echo.Client._activeClients.push(this);
         }
     },
@@ -274,8 +280,10 @@ Echo.Client = Core.extend({
      * @param {Function} actionFunction optional function to execute when action button is clicked
      */
     displayError: function(parentElement, message, detail, actionText, actionFunction) {
+        parentElement = parentElement || document.body;
+        
         // Create restriction.
-        var restriction = this.createInputRestriction(false);
+        var restriction = this.createInputRestriction();
 
         // Disable wait indicator.
         this._setWaitVisible(false);
@@ -306,7 +314,7 @@ Echo.Client = Core.extend({
         
         if (detail) {
             var detailDiv = document.createElement("div");
-            detailDiv.style.cssText = "margin-bottom:20px;";
+            detailDiv.style.cssText = "max-height:10em;overflow:auto;margin-bottom:20px;";
             detailDiv.appendChild(document.createTextNode(detail));
             contentDiv.appendChild(detailDiv);
         }
@@ -394,23 +402,26 @@ Echo.Client = Core.extend({
         if (this.parent) {
             this.parent.forceRedraw();
         } else if (Core.Web.Env.QUIRK_IE_BLANK_SCREEN) {
-            if (this.domainElement.offsetHeight === 0) {
+            if (this.domainElement && this.domainElement.offsetHeight === 0) {
                 // Force IE browser to re-render entire document if the height of the application's domain element measures zero.
                 // This is a workaround for an Internet Explorer bug where the browser's rendering engine fundamentally fails and 
                 // simply displays a blank screen (commonly referred to on bug-tracker/forum as the "blank screen of death").
                 // This bug appears to be most prevalent in IE7. 
-                var displayState = document.documentElement.style.display;
-                if (!displayState) {
-                    displayState = "";
-                }
+                var displayState = document.documentElement.style.display || "";
                 document.documentElement.style.display = "none";
                 document.documentElement.style.display = displayState;
             }
-        } else if (Core.Web.Env.QUIRK_OPERA_CSS_POSITIONING) {
-            // Execute renderComponentDisplay() on root component to avoid (some) issues with Opera's absolute CSS positioning bug.
-            // This does not completely work around the issue, but makes it somewhat usable.
-            Echo.Render.renderComponentDisplay(this.application.rootComponent);
         }
+    },
+    
+    /**
+     * Returns the configured wait indicator.
+     *
+     * @return the wait indicator
+     * @type {Echo.Client.WaitIndicator}
+     */
+    getWaitIndicator: function() {
+        return this._waitIndicator;
     },
     
     /**
@@ -427,18 +438,55 @@ Echo.Client = Core.extend({
     },
     
     /**
-     * Root KeyDown event handler.
-     * Specifically processes tab key events for focus management.
+     * Event handler for <code>keydown</code> and <code>keypress</code> events.
+     * Notifies focsued component of event via <code>clientKeyDown</code> and <code>clientKeyPress</code> methods respectively.
      * 
      * @param e the event
      */
-    _processKeyPress: function(e) {
-        if (e.keyCode == 9) { // Tab
+    _processKey: function(e) {
+        var press = e.type == "keypress";
+        var keyCode = press ? this._lastKeyCode : this._lastKeyCode = Core.Web.Key.translateKeyCode(e.keyCode);
+        
+        if (keyCode == 8) {
+            // Prevent backspace from navigating to previous page.
+            var nodeName = e.target.nodeName ? e.target.nodeName.toLowerCase() : null;
+            if (nodeName != "input" && nodeName != "textarea") {
+                Core.Web.DOM.preventEventDefault(e);
+            }
+        } else if (!press && keyCode == 9) {
             this.application.focusNext(e.shiftKey);
             Core.Web.DOM.preventEventDefault(e);
-            return false; // Stop propagation.
         }
-        return true; // Allow propagation.
+        
+        if (press && Core.Web.Env.QUIRK_KEY_PRESS_FIRED_FOR_SPECIAL_KEYS && !e.charCode) {
+            // Do nothing in the event no char code is provided for a keypress.
+            return true;
+        }
+        
+        var component = this.application.getFocusedComponent(),
+            bubble = true,
+            keyEvent = null;
+            
+        if (!component) {
+            return true;
+        }
+        
+        var eventMethod = press ? "clientKeyPress" : "clientKeyDown";
+        
+        while (component && bubble) {
+            if (component.peer && component.peer[eventMethod]) {
+                if (!keyEvent) {
+                    keyEvent = { type: e.type, source: this, keyCode: keyCode, domEvent: e };
+                    if (press) {
+                        keyEvent.charCode = Core.Web.Env.QUIRK_KEY_CODE_IS_CHAR_CODE ? e.keyCode : e.charCode;
+                    }
+                }
+                bubble = component.peer[eventMethod](keyEvent);
+            }
+            component = component.parent;
+        }        
+        
+        return true;
     },
     
     /**
@@ -500,13 +548,15 @@ Echo.Client = Core.extend({
             this._setWaitVisible(false);
             
             if (this._inputRestrictionListeners) {
-                // Notify input restriction listeners.
-                for (var x in this._inputRestrictionListeners) {
-                    this._inputRestrictionListeners[x]();
-                }
-                
-                // Clear input restriction listeners.
+                // Copy restriction listeners to intermediate map, so that listeners can register new
+                // listeners that will be invoked the next time all input restrictions are removed.
+                var listeners = this._inputRestrictionListeners;
                 this._inputRestrictionListeners = null;
+               
+                // Notify input restriction listeners.
+                for (var x in listeners) {
+                    listeners[x]();
+                }
             }
         }
     },
@@ -518,7 +568,7 @@ Echo.Client = Core.extend({
      */
     _setWaitVisible: function(visible) {
         if (visible) {
-            if (this.application && !this._waitIndicatorActive) {
+            if (!this._waitIndicatorActive) {
                 this._waitIndicatorActive = true;
                 
                 // Schedule runnable to display wait indicator.
@@ -533,6 +583,7 @@ Echo.Client = Core.extend({
                 
                 // Deactivate if already displayed.
                 this._waitIndicator.deactivate(this);
+                this.forceRedraw();
             }
         }
     },

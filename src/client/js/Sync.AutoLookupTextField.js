@@ -37,7 +37,8 @@ echopoint.internal.LookupSupport = Core.extend(
     var maxSize = tf.render( "maximumCacheSize", -1 );
     var matchOptions = tf.render( "matchOptions", 0 );
 
-    this.lookupCache = new EP.LookupCache(maxAge,maxSize,matchOptions);
+    this.lookupCache = new echopoint.model.LookupCache(
+        maxAge, maxSize, matchOptions );
 
     this.addLookupEntriesFromModel( lookupModel );
 

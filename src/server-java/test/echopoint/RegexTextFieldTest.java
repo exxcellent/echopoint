@@ -34,6 +34,14 @@ public class RegexTextFieldTest extends AbstractTest<RegexTextField>
   }
 
   @Test
+  public void defaultText()
+  {
+    final String text = "Abcdef";
+    getComponent().setDefaultText( text );
+    assertEquals( "Ensure default text set", text, getComponent().getDefaultText() );
+  }
+
+  @Test
   public void width()
   {
     final Extent size = new Extent( 100 );
@@ -86,7 +94,7 @@ public class RegexTextFieldTest extends AbstractTest<RegexTextField>
     final HtmlLabel label =  new HtmlLabel();
     label.setRenderId( "echopointUnitTestRegexTextFieldNote" );
     label.setText(
-        "Note that the field will allow only the a word starting " +
+        "Note that the field will allow only a word starting " +
       "with a capital letter.  No punctuations or other characters " +
       "are allowed by this field." );
 

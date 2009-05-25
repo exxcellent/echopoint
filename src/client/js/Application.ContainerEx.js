@@ -3,7 +3,7 @@ echopoint.constants.CONTAINEREX = "echopoint.ContainerEx";
 
 /**
  * ContainerEx is a component that can be positioned anywhere on the screen with an specified size attributes.
- * @version $ID$ 
+ * @version $Id$
  */
 echopoint.ContainerEx = Core.extend(Echo.Component,
 {

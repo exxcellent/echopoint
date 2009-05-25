@@ -276,6 +276,8 @@ echopoint.test.TestApp.StyleSheet = new Echo.StyleSheet(
     "TextComponent": {
       background: "#cfdfff",
       border: "2px groove #cfdfff",
+      foreground: "#000000",
+      disabledForeground: "#999999",
       backgroundImage: {
         url: "image/InputFieldBackground.png",
         repeat: "repeat-x",

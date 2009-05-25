@@ -2,7 +2,7 @@ echopoint.constants.TOOLTIPCONTAINER = "echopoint.TooltipContainer";
 
 /**
  * Component rendering peer: echopoint.TooltipContainer
- * @version $ID$
+ * @version $Id$
  */
 
 echopoint.TooltipContainerSync = Core.extend(Echo.Render.ComponentSync, {

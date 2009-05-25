@@ -3,7 +3,6 @@ package echopoint.style;
 import static echopoint.Anchor.PROPERTY_FOREGROUND;
 import static echopoint.Anchor.PROPERTY_TARGET;
 import static echopoint.util.ColorKit.makeColor;
-import nextapp.echo.app.Color;
 
 /**
  * The default style used for all {@link echopoint.Anchor} components.

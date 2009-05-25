@@ -3,7 +3,7 @@ echopoint.constants.DATEFIELD = "echopoint.jquery.DateField";
 /**
  * Component rendering peer: DateField.
  * @author HansH 2009-04-28
- * @version $ID$
+ * @version $Id$
  */
 echopoint.DateField = Core.extend(Echo.Render.ComponentSync, {
 
@@ -123,7 +123,7 @@ echopoint.DateField = Core.extend(Echo.Render.ComponentSync, {
                 var stylesheet = this.component.render(echopoint.DateField.CSS);
                 jQuery("head").append("<style type=\"text/css\" id=\"dateFieldCss\">"+stylesheet+"</style>");
             }
-            
+
             var foreground = this.component.render(echopoint.DateField.FOREGROUND);
             var background = this.component.render(echopoint.DateField.BACKGROUND);
             this._dateFormatPattern = this.component.render(echopoint.DateField.DATEFORMAT);

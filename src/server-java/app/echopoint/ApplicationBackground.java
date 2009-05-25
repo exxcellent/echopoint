@@ -24,7 +24,7 @@ import nextapp.echo.app.Component;
  * This component sets the background attribute for the body tag.
  * This is needed in some cases when you want a background image to cover the whole page, whatever you put into it.
  * @author MikaelS 2009-04-28
- * @version $ID$
+ * @version $Id$
  */
 public class ApplicationBackground extends Component {
      /** The image reference for the component.  This property may be styled. */

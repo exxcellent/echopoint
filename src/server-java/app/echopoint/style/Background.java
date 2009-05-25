@@ -1,7 +1,7 @@
 package echopoint.style;
 
-import nextapp.echo.app.Color;
 import static echopoint.util.ColorKit.makeColor;
+import nextapp.echo.app.Color;
 
 /**
  * A utility class used to enforce a application wide standard background

@@ -66,8 +66,10 @@ public class InfoWindowStyle extends AbstractStyle
   protected void init()
   {
     super.init();
+    
     setProperties();
     setTextProperties();
+    setOtherTextProperties();
     setTitleProperties();
   }
 

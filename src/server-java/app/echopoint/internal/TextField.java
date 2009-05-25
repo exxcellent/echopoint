@@ -24,4 +24,28 @@ package echopoint.internal;
  * @author Rakesh 2009-03-08
  * @version $Id$
  */
-public abstract class TextField extends nextapp.echo.app.TextField {}
+public abstract class TextField extends nextapp.echo.app.TextField
+{
+  /** The default text to display in the text field. */
+  public static final String PROPERTY_DEFAULT_TEXT = "defaultText";
+
+  /**
+   * Set the default text to display in the component.
+   *
+   *  @return The {@link #PROPERTY_DEFAULT_TEXT} value.
+   */
+  public String getDefaultText()
+  {
+    return (String) get( PROPERTY_DEFAULT_TEXT );
+  }
+
+  /**
+   * Set the default text value to display in the component.
+   *
+   * @param defaultText The {@link #PROPERTY_DEFAULT_TEXT} value to set.
+   */
+  public void setDefaultText( final String defaultText )
+  {
+    set( PROPERTY_DEFAULT_TEXT, defaultText );
+  }
+}

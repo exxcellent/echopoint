@@ -29,7 +29,7 @@ import echopoint.able.*;
  *
  * This component is a PaneContainer and hence can have components that implement Pane as a child.
  * @author HansH 2009-04-28
- * @version $ID$
+ * @version $Id$
  */
 public class TooltipContainer extends AbleComponent implements Alignable, PaneContainer, Positionable, Scrollable, BackgroundImageable {
 
@@ -443,7 +443,7 @@ public class TooltipContainer extends AbleComponent implements Alignable, PaneCo
     }
 
     /**
-     * Sets the tooltip-target position. this is normally the opposite part of the positionTarget 
+     * Sets the tooltip-target position. this is normally the opposite part of the positionTarget
      *
      * @param newPosition of the tooltip-target
      */

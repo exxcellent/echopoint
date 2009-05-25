@@ -3,7 +3,7 @@ echopoint.constants.APPLICATIONBACKGROUND = "echopoint.ApplicationBackground";
 /**
  * Component rendering peer: echopoint.ApplicationBackground
  * @author MikaelS 2009-04-28
- * @version $ID$
+ * @version $Id$
  */
 
 echopoint.ApplicationBackgroundSync = Core.extend(Echo.Render.ComponentSync, {
@@ -16,7 +16,7 @@ echopoint.ApplicationBackgroundSync = Core.extend(Echo.Render.ComponentSync, {
     renderAdd: function(update, parentElement) {
 
         this._body = document.getElementsByTagName('body')[0];
-        
+
         this._body.background = this.component.render( echopoint.ApplicationBackground.URL );
 
     },
@@ -30,7 +30,7 @@ echopoint.ApplicationBackgroundSync = Core.extend(Echo.Render.ComponentSync, {
     renderUpdate: function(update) {
 
         this._body = document.getElementsByTagName("body");
-        
+
         this._body.background = this.component.render( echopoint.ApplicationBackground.URL );
 
         return true;

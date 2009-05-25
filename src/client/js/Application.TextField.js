@@ -21,6 +21,12 @@ echopoint.internal.TextField = Core.extend( Echo.TextField,
 {
   $abstract: true,
 
+  /** Additional properties for the component. */
+  $static:
+  {
+    DEFAULT_TEXT: "defaultText" // default text to display
+  },
+
   $load: function()
   {
     Echo.ComponentFactory.registerType(

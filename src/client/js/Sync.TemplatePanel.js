@@ -3,7 +3,7 @@ echopoint.constants.TEMPLATEPANEL = "echopoint.TemplatePanel";
 /**
  * Component rendering peer: echopoint.TemplatePanel
  * @author MikaelS 2009-04-28
- * @version $ID$
+ * @version $Id$
  */
 
 

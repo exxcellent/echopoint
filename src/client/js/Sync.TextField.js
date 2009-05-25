@@ -40,16 +40,13 @@ echopoint.internal.TextFieldSync = Core.extend( Echo.Sync.TextField,
     /** A flag used to indicate whether {@link #doFilter} rejected or not. */
     status: true,
 
+    /** The default text for the input.  Will be cleared after first use. */
+    defaultText: null,
+
     /** The filter function implementation. Allow everything by default */
     doFilter: function( event )
     {
       return true;
-    },
-
-    /** The event handler for a "blur" event. */
-    processBlur: function( event )
-    {
-      this._textFieldProcessBlur( event );
     },
 
     /** The event handler for a mouse click event. */
@@ -61,6 +58,15 @@ echopoint.internal.TextFieldSync = Core.extend( Echo.Sync.TextField,
     /** The event listener for a focus change event. */
     processFocus: function( event )
     {
+      if ( this.input.value == this.defaultText )
+      {
+        Echo.Sync.Color.render(
+            Echo.Sync.getEffectProperty( this.component, "foreground",
+                "foreground", true ),  this.input, "color" );
+        this.input.value = "";
+        this.defaultText = null;
+      }
+
       this._textFieldProcessFocus( event );
     },
 
@@ -98,15 +104,49 @@ echopoint.internal.TextFieldSync = Core.extend( Echo.Sync.TextField,
       }
 
       return position;
+    },
+
+    /** Set the default text if applicable. */
+    setDefaultText: function()
+    {
+      this.defaultText = this.component.render(
+          echopoint.internal.TextField.DEFAULT_TEXT );
+      var value = this.component.render( "text" );
+
+      if ( this.defaultText && ( ( ! value ) || ( value == '' ) ) )
+      {
+        Echo.Sync.Color.render(
+            Echo.Sync.getEffectProperty( this.component, "foreground",
+                "disabledForeground", true ),  this.input, "color" );
+        this.input.setAttribute( "value", this.defaultText );
+      }
+      else
+      {
+        this.defaultText = null;
+      }
     }
+  },
+
+  /** Display default text if no value was input. */
+  processBlur: function( event )
+  {
+    var text = this.component.render(
+        echopoint.internal.TextField.DEFAULT_TEXT );
+    if ( text && ( this.input.value == "" ) )
+    {
+      Echo.Sync.Color.render(
+          Echo.Sync.getEffectProperty( this.component, "foreground",
+              "disabledForeground", true ),  this.input, "color" );
+      this.input.value = text;
+      this.defaultText = text;
+    }
+
+    Echo.Sync.TextField.prototype.processBlur.call( this, event );
   },
 
   $construct: function()
   {
     Echo.Sync.TextField.call( this );
-
-    this._textFieldProcessBlur = this._processBlur;
-    this._processBlur = this.processBlur;
 
     this._textFieldProcessClick = this._processClick;
     this._processClick = this.processClick;
@@ -126,6 +166,8 @@ echopoint.internal.TextFieldSync = Core.extend( Echo.Sync.TextField,
     echopoint.internal.TextFieldSync.instances.map[ this.component.renderId ] = this;
     Echo.Sync.TextField.prototype.renderAdd.call(
         this, update, parentElement );
+
+    this.setDefaultText();
     this.input.setAttribute( "onKeyPress",
         "return echopoint.internal.TextFieldSync.filter('" +
         this.component.renderId +  "',event)" );

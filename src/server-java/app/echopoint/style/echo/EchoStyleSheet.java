@@ -16,17 +16,17 @@
  * License.
  */
 
-package echopoint.style;
+package echopoint.style.echo;
 
-import echopoint.Anchor;
-import echopoint.InfoWindow;
-import echopoint.ProgressBar;
-import echopoint.TagCloud;
-import echopoint.style.google.chart.ChartStyleSheet;
+import nextapp.echo.app.MutableStyleSheet;
+import nextapp.echo.app.WindowPane;
+import nextapp.echo.app.button.AbstractButton;
+import nextapp.echo.app.list.AbstractListComponent;
+import nextapp.echo.app.text.TextComponent;
 
 /**
  * An extensible stylesheet that enforces a default look-and-feel for all
- * EchoPoint components.  Can be used as the starting point for applications
+ * Echo components.  Can be used as the starting point for applications
  * built using the framework.  We hope this promotes an object-oriented
  * management of styles for applications.
  *
@@ -39,12 +39,22 @@ import echopoint.style.google.chart.ChartStyleSheet;
  * implementation that <a href='http://sptci.com/'>SPT</a> has used as the
  * basis for building a number of Echo2/3 applications.</p>
  *
- * @author Rakesh Vidyadharan 2009-05-12
+ * @author Rakesh Vidyadharan 2009-05-24
  * @version $Id$
  */
-public class StyleSheet extends ChartStyleSheet
+public class EchoStyleSheet extends MutableStyleSheet
 {
   private static final long serialVersionUID = 1L;
+
+  /**
+   * Initialise the stylesheet.
+   *
+   * @see #init
+   */
+  public EchoStyleSheet()
+  {
+    init();
+  }
 
   /**
    * Initialises the default styles for the various components.  Sub-classes
@@ -52,46 +62,43 @@ public class StyleSheet extends ChartStyleSheet
    * to add additional styles.  Alternatively, sub-classes may over-ride the
    * various component style setting methods as appropriate.
    */
-  @Override
   protected void init()
   {
-    super.init();
-
-    addAnchorStyles();
-    addInfoWindowStyles();
-    addProgressBarStyles();
-    addTagCloudStyles();
+    addButtonStyles();
+    addListStyles();
+    addTextComponentStyles();
+    addWindowPaneStyles();
   }
 
-  /** Add styles for {@link echopoint.Anchor} components. */
-  protected void addAnchorStyles()
+  /** Add default styles for {@link nextapp.echo.app.button.AbstractButton}s */
+  protected void addButtonStyles()
   {
-    final AnchorStyle style = new AnchorStyle();
-    addStyle( Anchor.class, "", style );
-    addStyle( Anchor.class, "Default", style );
+    final AbstractButtonStyle style = new AbstractButtonStyle();
+    addStyle( AbstractButton.class, "", style );
+    addStyle( AbstractButton.class, "Default", style );
   }
 
-  /** Set the styles for {@link echopoint.InfoWindow} components. */
-  protected void addInfoWindowStyles()
+  /** Add default styles for {@link nextapp.echo.app.list.AbstractListComponent}s */
+  protected void addListStyles()
   {
-    final InfoWindowStyle style = new InfoWindowStyle();
-    addStyle( InfoWindow.class, "", style );
-    addStyle( InfoWindow.class, "Default", style );
+    final AbstractListComponentStyle style = new AbstractListComponentStyle();
+    addStyle( AbstractListComponent.class, "", style );
+    addStyle( AbstractListComponent.class, "Default", style );
   }
 
-  /** Set the styles for {@link echopoint.ProgressBar} components. */
-  protected void addProgressBarStyles()
+  /** Add default styles for {@link nextapp.echo.app.text.TextComponent}s */
+  protected void addTextComponentStyles()
   {
-    final ProgressBarStyle style = new ProgressBarStyle();
-    addStyle( ProgressBar.class, "", style );
-    addStyle( ProgressBar.class, "Default", style );
+    final TextComponentStyle style = new TextComponentStyle();
+    addStyle( TextComponent.class, "", style );
+    addStyle( TextComponent.class, "Default", style );
   }
 
-  /** Add styles for {@link echopoint.TagCloud} components. */
-  protected void addTagCloudStyles()
+  /** Add default styles for {@link nextapp.echo.app.WindowPane}s. */
+  protected void addWindowPaneStyles()
   {
-    final TagCloudStyle style = new TagCloudStyle();
-    addStyle( TagCloud.class, "", style );
-    addStyle( TagCloud.class, "Default", style );
+    final WindowPaneStyle style = new WindowPaneStyle();
+    addStyle( WindowPane.class, "", style );
+    addStyle( WindowPane.class, "Default", style );
   }
 }

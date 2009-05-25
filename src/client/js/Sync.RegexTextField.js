@@ -23,6 +23,12 @@ echopoint.RegexTextFieldSync = Core.extend( echopoint.internal.TextFieldSync,
       return this.status;
     }
 
+    // Disable paste explicitly
+    if ( ( event.metaKey || event.ctrlKey ) &&  ( charCode == 118 ) )
+    {
+      return false;
+    }
+
     var regexString = this.component.render( echopoint.RegexTextField.REGEX );
     if ( regexString )
     {

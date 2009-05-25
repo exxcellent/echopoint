@@ -1,10 +1,12 @@
 package echopoint.style;
 
-import nextapp.echo.app.MutableStyle;
+import static echopoint.util.ColorKit.makeColor;
 import static nextapp.echo.app.Component.PROPERTY_FONT;
+import static nextapp.echo.app.Component.PROPERTY_FOREGROUND;
+import nextapp.echo.app.MutableStyle;
 
-import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Abstract base class from which all style classes are derived.  Primarily
@@ -19,7 +21,7 @@ public abstract class AbstractStyle extends MutableStyle
   protected static final Logger logger = Logger.getAnonymousLogger();
 
   /** The log level to use to log missing style messages. */
-  protected Level level = Level.FINE;
+  protected final Level level = Level.FINE;
 
   /** Default constructor.  Over-ridden to invoke {@link #init}. */
   public AbstractStyle()
@@ -38,14 +40,19 @@ public abstract class AbstractStyle extends MutableStyle
   protected void init()
   {
     setFont();
+    setForeground();
   }
 
-  /**
-   * Set the default font to be used for all components.
-   */
+  /** Set the default font to be used for all components. */
   protected void setFont()
   {
     set( PROPERTY_FONT, DefaultFont.getInstance() );
+  }
+
+  /** Set the default foreground colour for all components. */
+  protected void setForeground()
+  {
+    set( PROPERTY_FOREGROUND, makeColor( "#000000" ) );
   }
 
   /**

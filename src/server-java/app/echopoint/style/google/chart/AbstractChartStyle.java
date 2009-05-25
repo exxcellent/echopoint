@@ -6,9 +6,9 @@ import static echopoint.google.chart.internal.AbstractChart.PROPERTY_FOREGROUND;
 import static echopoint.google.chart.internal.AbstractChart.PROPERTY_INSETS;
 import echopoint.style.AbstractStyle;
 import static echopoint.util.ColorKit.makeColor;
+import nextapp.echo.app.Border;
 import nextapp.echo.app.Extent;
 import nextapp.echo.app.Insets;
-import nextapp.echo.app.Border;
 
 /**
  * The default base style class for Google Chart API components.
