@@ -38,7 +38,9 @@ echopoint.test.ComponentList = Core.extend( Echo.Column,
         "VennDiagram",
         "Map",
         "Meter",
-        "QRCode"
+        "QRCode",
+        "Clock",
+        "TooltipContainer"
       )
   },
 
