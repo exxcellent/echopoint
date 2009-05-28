@@ -6,7 +6,7 @@ import echopoint.google.chart.Map;
 import echopoint.google.chart.RadarChart;
 import echopoint.google.chart.ScatterPlot;
 import echopoint.google.chart.Sparkline;
-import echopoint.style.echo.EchoStyleSheet;
+import echopoint.style.echo.extras.ExtrasStyleSheet;
 
 /**
  * An extensible stylesheet that enforces a default look-and-feel for all
@@ -26,7 +26,7 @@ import echopoint.style.echo.EchoStyleSheet;
  * @author Rakesh Vidyadharan 2009-05-24
  * @version $Id$
  */
-public class ChartStyleSheet extends EchoStyleSheet
+public class ChartStyleSheet extends ExtrasStyleSheet
 {
   private static final long serialVersionUID = 1L;
 
