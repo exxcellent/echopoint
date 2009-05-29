@@ -101,12 +101,12 @@ public class MenuBarPaneStyle extends AbstractStyle
   /** Set styles for selection of menu compnents. */
   protected void setSelectionStyles()
   {
-    set( PROPERTY_SELECTION_BACKGROUND, makeColor( "fffac1" ) );
+    set( PROPERTY_SELECTION_BACKGROUND, makeColor( "#fffac1" ) );
 
     final Extent extent = new Extent( 50, Extent.PERCENT );
     set( PROPERTY_SELECTION_BACKGROUND_IMAGE, new FillImage(
         MenuBarSelectionBackground, extent, extent, FillImage.REPEAT ) );
 
-    set( PROPERTY_SELECTION_FOREGROUND, makeColor( "000000" ) );
+    set( PROPERTY_SELECTION_FOREGROUND, makeColor( "#000000" ) );
   }
 }
