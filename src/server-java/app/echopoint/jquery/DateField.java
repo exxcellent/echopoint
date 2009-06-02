@@ -449,7 +449,7 @@ public class DateField extends Component implements Sizeable, Alignable
     }
 
     /**
-     * Sets the editable state of this component.
+     * Sets the width of the input field for the date.
      *
      * @param newValue the new width of the input field
      */
