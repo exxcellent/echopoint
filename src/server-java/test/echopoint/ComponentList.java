@@ -68,6 +68,8 @@ public class ComponentList extends Column
           "Meter",
           "QRCode",
           "TooltipContainer",
+          "DockMenu",
+          "TransitionContainer",
       };
 
   /**
