@@ -32,10 +32,10 @@ import java.util.logging.Logger;
 
 
 /**
- * <code>DateField</code> is a drop down component that contains a text field
- * and a drop down calendar. The text field is updated with the contents of the
- * DateField calendar.
+ * <code>DateField</code> is a drop down component that contains a text field and a drop down calendar.
+ * The text field is updated with the contents of the DateField calendar.
  * DateField is both a date- and time picker.
+ * If the component should be used as a time-picker the DateFormat must include an hour field, e.g. setDateFormat("dd.MM.yyyy HH:mm")
  * It is based on the jQuery plugin DynDateTime
  *
  * @author Hans Holmlund - 2009-04-03
@@ -47,10 +47,10 @@ public class DateField extends Component implements Sizeable, Alignable
     /** The logger to use to log the download progress. */
     protected static final Logger logger = Logger.getAnonymousLogger();
 
+    private static final String USETIME_PROPERTY = "useTime";
     public static final String DATE_CHANGED_PROPERTY = "date";
     public static final String PROPERTY_EDITABLE = "editable";    
     public static final String PROPERTY_DATEFORMAT = "dateFormat";
-    public static final String PROPERTY_USETIME = "useTime";
     public static final String PROPERTY_BORDER = "border";
     public static final String PROPERTY_CALENDAR_ICON = "icon";
     public static final String PROPERTY_CSS = "css";
@@ -219,10 +219,10 @@ public class DateField extends Component implements Sizeable, Alignable
         dateFormatPattern = dateFormat;
         dateFormatter = new SimpleDateFormat(dateFormatPattern);
         if (jsDateFormatPattern.contains("%H") || jsDateFormatPattern.contains("%l")) {
-            set(PROPERTY_USETIME, true);
+            set(USETIME_PROPERTY, true);
         }
         else {
-            set(PROPERTY_USETIME, false);
+            set(USETIME_PROPERTY, false);
         }
     }
 

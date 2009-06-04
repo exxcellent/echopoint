@@ -176,7 +176,6 @@ echopoint.TooltipContainerSync = Core.extend(Echo.Render.ComponentSync, {
             var child = this.component.getComponent(i);
             this._renderAddChild(update, child);
         }
-        Core.Web.Event.add(this._containerDiv, "mousedown", Core.method(this, this._processMouseDown), false);
         this._renderRequired = true;
     },
 
@@ -199,6 +198,7 @@ echopoint.TooltipContainerSync = Core.extend(Echo.Render.ComponentSync, {
             }
             else if (video) {
                 var title = content;
+                if (!content) title = " ";
                 content = '<object width="425" height="264">';
                 content += '<param name="movie" value="';
                 content += video;
@@ -249,40 +249,8 @@ echopoint.TooltipContainerSync = Core.extend(Echo.Render.ComponentSync, {
             if (!align && !style) {
                 align = "center";
             }
-            var options = {
-                position: {
-                    corner: {
-                        tooltip: tooltipPos,
-                        target: target
-                    }
-                },
-                style: {
-                    border: {
-                        color: borderCol,
-                        width: borderWidth,
-                        radius: borderRadius
-                    },
-                    title: {
-                        background: backgr,
-                        color: foregr
-                    },
-                    background: backgr,
-                    color: foregr,
-                    padding: insets,
-                    textAlign: align,
-                    tip: true, // Give it a speech bubble tip with automatic corner detection
-                    name: style // Style it according to the preset 'cream' style
-                },
-                content: content,
-                show: {
-                    effect: {
-                        type: 'grow',
-                        length: 200
-                    }
-                }
-            };
             if (video) {
-                options = {
+                var videooptions = {
                     position: {
                         corner: {
                             tooltip: tooltipPos,
@@ -294,7 +262,7 @@ echopoint.TooltipContainerSync = Core.extend(Echo.Render.ComponentSync, {
                         solo: true // ...and hide all others when its shown
                     },
                     hide: {
-                        when: 'inactive'
+                        when: 'click' // 'inactive'
                     },
                     style: {
                         width: {
@@ -325,8 +293,42 @@ echopoint.TooltipContainerSync = Core.extend(Echo.Render.ComponentSync, {
                         }
                     }
                 };
+                jQuery("#"+this._containerDiv.id.replace('.', '\\.')).qtip(videooptions);                
             }
-            if (content) {
+            else if (content) {
+                var options = {
+                    position: {
+                        corner: {
+                            tooltip: tooltipPos,
+                            target: target
+                        }
+                    },
+                    style: {
+                        border: {
+                            color: borderCol,
+                            width: borderWidth,
+                            radius: borderRadius
+                        },
+                        title: {
+                            background: backgr,
+                            color: foregr
+                        },
+                        background: backgr,
+                        color: foregr,
+                        padding: insets,
+                        textAlign: align,
+                        tip: true, // Give it a speech bubble tip with automatic corner detection
+                        name: style // Style it according to the preset 'cream' style
+                    },
+                    content: content,
+                    show: {
+                        effect: {
+                            type: 'grow',
+                            length: 250
+                        }
+                    }
+                };
+                Core.Web.Event.add(this._containerDiv, "mousedown", Core.method(this, this._processMouseDown), false);
                 jQuery("#"+this._containerDiv.id.replace('.', '\\.')).qtip(options);
             }
         }

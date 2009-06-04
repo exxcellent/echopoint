@@ -34,7 +34,11 @@ public class DateFieldTest extends AbstractTest<DateField> {
     @BeforeClass
     public static void init()
     {
-        set( new DateField() );
+        DateField dateField = new DateField();
+        dateField.setBackground(Color.YELLOW);
+        dateField.setHeight(new Extent(300));
+        dateField.setWidth(new Extent(600));
+        set(dateField);
     }
 
     @Test
@@ -48,7 +52,7 @@ public class DateFieldTest extends AbstractTest<DateField> {
     @Test
     public void alignment()
     {
-        final Alignment alignment = Alignment.ALIGN_CENTER;
+        final Alignment alignment = Alignment.ALIGN_LEFT;
         getComponent().setAlignment( alignment );
         assertEquals( "Ensuring alignment set", alignment, getComponent().getAlignment() );
     }
@@ -80,7 +84,7 @@ public class DateFieldTest extends AbstractTest<DateField> {
     @Test
     public void width()
     {
-        final Extent width = new Extent( 250 );
+        final Extent width = new Extent( 600 );
         getComponent().setWidth( width );
         assertEquals( "Ensuring width set", width, getComponent().getWidth() );
     }

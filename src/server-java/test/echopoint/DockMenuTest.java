@@ -48,9 +48,9 @@ public class DockMenuTest extends AbstractTest<DockMenu> {
         dm.setForeground(Color.RED);
 
         dm.addMenuItem("Thunderbird", "Thunderbird", 64, 64, new HttpImageReference("http://www.mozilla.com/img/thunderbird-logo-64x64.png"), null);
-        dm.addMenuItem("Firefox", "Firefox", 64, 64, new HttpImageReference("http://www.mozilla.com/img/firefox-logo-64x64.png"),  new HttpImageReference("http://www.mozilla.com/img/thunderbird-logo-64x64.png"));
-        dm.addMenuItem("Firefox", "Firefox", 64, 64, new HttpImageReference("http://www.mozilla.com/img/firefox-logo-64x64.png"),  new HttpImageReference("http://www.mozilla.com/img/thunderbird-logo-64x64.png"));
-        dm.addMenuItem("Firefox", "Firefox", 64, 64, new HttpImageReference("http://www.mozilla.com/img/firefox-logo-64x64.png"), new HttpImageReference("http://www.mozilla.com/img/thunderbird-logo-64x64.png"));
+        dm.addMenuItem("Firefox", "Firefox", 64, 64, new HttpImageReference("http://www.mozilla.com/img/firefox-logo-64x64.png"),  null);
+        dm.addMenuItem("Firefox", "Firefox", 64, 64, new HttpImageReference("http://www.mozilla.com/img/firefox-logo-64x64.png"),  null);
+        dm.addMenuItem("Firefox", "Firefox", 64, 64, new HttpImageReference("http://www.mozilla.com/img/firefox-logo-64x64.png"), null);
                
         Row r = new Row();
         r.add(new Label("Left"));

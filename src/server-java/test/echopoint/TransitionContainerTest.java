@@ -21,7 +21,7 @@ import java.util.ArrayList;
 /**
  * Created: 2009-maj-09
  */
-public class TransitionContainerTest extends AbstractTest<DockMenu> {
+public class TransitionContainerTest extends AbstractTest<TransitionContainer> {
     @BeforeClass
     public static void init() {
         set(new TransitionContainer());
@@ -40,7 +40,7 @@ public class TransitionContainerTest extends AbstractTest<DockMenu> {
         content.removeAll();
         final TransitionContainer tc = (TransitionContainer) get();
         tc.setType(TransitionContainer.TYPE_FOLD);
-        tc.setDuration(1500);
+        tc.setDuration(800);
 
         tc.add(new Label("This is just a test label."));
         ContainerEx cEx = new ContainerEx();
@@ -55,6 +55,10 @@ public class TransitionContainerTest extends AbstractTest<DockMenu> {
         b.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent actionEvent) {
+                int type = tc.getType();
+                if (type == 12) type = 2;
+                else type++;
+                tc.setType(type);
                 tc.removeAll();
                 tc.add(new Label("This is another label"));
                 ContainerEx cEx = new ContainerEx();

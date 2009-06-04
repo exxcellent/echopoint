@@ -108,7 +108,7 @@ public class TooltipContainerTest extends AbstractTest<TooltipContainer> {
 
         TooltipContainer testContainer = new TooltipContainer();
         testContainer.setWidth(new Extent(450));
-        testContainer.setHeight(new Extent(160));
+        testContainer.setHeight(new Extent(150));
         testContainer.setBackground(new Color(218, 241, 166));
         testContainer.setAlignment(new Alignment(Alignment.RIGHT, Alignment.BOTTOM));
         Label text = new Label();
@@ -123,8 +123,8 @@ public class TooltipContainerTest extends AbstractTest<TooltipContainer> {
 
         TooltipContainer testContainer2 = new TooltipContainer();
         testContainer2.setPosition(TooltipContainer.ABSOLUTE);
-        testContainer2.setLeft(new Extent(300));
-        testContainer2.setTop(new Extent(210));
+        testContainer2.setLeft(new Extent(380));
+        testContainer2.setTop(new Extent(220));
         testContainer2.setBackground(new Color(203, 233, 245));
         testContainer2.setWidth(new Extent(300));
         testContainer2.setInsets(new Insets(5,5,5,5));
@@ -137,6 +137,22 @@ public class TooltipContainerTest extends AbstractTest<TooltipContainer> {
         testContainer2.setToolTipText("1999-09-14");
         testContainer2.setTooltipStyle("light");
         cEx.add(testContainer2);
+
+        TooltipContainer testContainer4 = new TooltipContainer();
+        testContainer4.setPosition(TooltipContainer.ABSOLUTE);
+        testContainer4.setLeft(new Extent(10));
+        testContainer4.setTop(new Extent(200));
+        testContainer4.setBackground(new Color(250, 230, 251));
+        testContainer4.setWidth(new Extent(200));
+        testContainer4.setInsets(new Insets(5,5,5,5));
+        testContainer4.setHeight(new Extent(70));
+        testContainer4.setPositionTooltip(TooltipContainer.TOPMIDDLE);
+        testContainer4.setPositionTarget(TooltipContainer.BOTTOMMIDDLE);
+        testContainer4.setAlignment(new Alignment(Alignment.LEFT, Alignment.TOP));
+        testContainer4.add(new Label("Lorem ipsum dolor sit amet, consectetur adipisicing elit"));
+        testContainer4.setToolTipText("Lorem ipsum dolor");
+        testContainer4.setTooltipStyle("light");
+        cEx.add(testContainer4);
 
         TooltipContainer testContainer3 = new TooltipContainer();
         testContainer3.setPosition(TooltipContainer.ABSOLUTE);

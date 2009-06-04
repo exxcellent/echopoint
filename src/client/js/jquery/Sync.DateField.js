@@ -49,6 +49,8 @@ echopoint.DateField = Core.extend(Echo.Render.ComponentSync, {
         Echo.Sync.Insets.render(this.component.render(echopoint.DateField.INSETS), this._dateTimediv, "padding");
         Echo.Sync.Border.render(this.component.render(echopoint.DateField.BORDER), this._dateTimediv);
         Echo.Sync.Alignment.render(this.component.render(echopoint.DateField.ALIGNMENT), this._dateTimediv, true, this.component);
+        this._dateTimediv.style.overflow = "auto";
+        this._dateTimediv.style.position = "absolute";
 
         var width = this.component.render(echopoint.DateField.WIDTH);
         var height = this.component.render(echopoint.DateField.HEIGHT);
@@ -133,7 +135,7 @@ echopoint.DateField = Core.extend(Echo.Render.ComponentSync, {
                 var options = {
                     onClose: jQuery.context(this).callback(this._storeValue),
                     showsTime: useTime,
-                    eventName: "click",
+//                    eventName: "click",
                     singleClick: true,
                     //                debug: true,
                     ifFormat: this._dateFormatPattern,
@@ -141,7 +143,7 @@ echopoint.DateField = Core.extend(Echo.Render.ComponentSync, {
                 };
 
 
-                jQuery("#" + this._dateTimediv.id.replace('.', '\\.') + "dateTime").dynDateTime(options);
+                jQuery("#" + this._dateTimediv.id.replace('.', '\\.') + " input").dynDateTime(options);
             }
 
             Echo.Sync.Color.renderClear(foreground, this._dateTimediv, "color");
