@@ -33,6 +33,7 @@ public abstract class TextFieldPeer extends
   /** Register the services */
   static
   {
+    CommonResources.install();
     getServiceRegistry().add( COMPONENT_SERVICE );
   }
 
