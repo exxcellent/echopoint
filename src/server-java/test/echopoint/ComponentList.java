@@ -54,6 +54,7 @@ public class ComponentList extends Column
           "TagCloud",
           "RegexTextField",
           "NumberTextField",
+          "KeystrokeTextField",
           "BorderLayout",
           "HtmlLayout",
           "FileUploadSelector",

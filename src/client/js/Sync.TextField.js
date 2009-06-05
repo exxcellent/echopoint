@@ -33,6 +33,7 @@ echopoint.internal.TextFieldSync = Core.extend( Echo.Sync.TextField,
       if ( ! tf ) return false;
       return tf.doFilter( event );
     }
+
   },
 
   $virtual:

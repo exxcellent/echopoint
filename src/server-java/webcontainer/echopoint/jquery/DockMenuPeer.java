@@ -10,7 +10,6 @@ import nextapp.echo.app.Component;
 import nextapp.echo.app.update.ClientUpdateManager;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
-import echopoint.jquery.flotchart.FlotChart;
 import echopoint.internal.DefaultEventPeer;
 import static echopoint.internal.AbstractContainer.INPUT_ACTION;
 import static echopoint.internal.AbstractContainer.ACTION_LISTENERS_CHANGED_PROPERTY;
