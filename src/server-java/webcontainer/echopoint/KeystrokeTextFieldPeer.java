@@ -1,6 +1,7 @@
 package echopoint;
 
 import echopoint.internal.TextFieldPeer;
+import echopoint.internal.CommonResources;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.util.Context;
 import nextapp.echo.webcontainer.ServerMessage;
@@ -22,6 +23,7 @@ public class KeystrokeTextFieldPeer extends TextFieldPeer
   /** Register the services */
   static
   {
+    CommonResources.install();
     getServiceRegistry().add( COMPONENT_SERVICE );
   }
 

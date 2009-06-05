@@ -10,8 +10,6 @@ import nextapp.echo.app.Component;
 import nextapp.echo.app.update.ClientUpdateManager;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
-import echopoint.internal.DefaultEventPeer;
-import static echopoint.internal.AbstractContainer.INPUT_ACTION;
 import static echopoint.internal.AbstractContainer.ACTION_LISTENERS_CHANGED_PROPERTY;
 
 /**
@@ -26,7 +24,7 @@ public class DockMenuPeer extends JQueryAbstractPeer
   private static final String COMPONENT_NAME = DockMenu.class.getName();
 
     protected static final XStream xstream;
-    
+
   /** The JS service files to load. */
   private static final String[] SERVICE_FILES =
       {
@@ -50,7 +48,7 @@ public class DockMenuPeer extends JQueryAbstractPeer
   }
 
     public DockMenuPeer() {
-        super(); 
+        super();
         addOutputProperty(DockMenu.MODEL_CHANGED_PROPERTY);
 
         addEvent(new AbstractComponentSynchronizePeer.EventPeer("action", ACTION_LISTENERS_CHANGED_PROPERTY, String.class) {
@@ -90,7 +88,6 @@ public class DockMenuPeer extends JQueryAbstractPeer
    * {@inheritDoc}
    * @see nextapp.echo.webcontainer.AbstractComponentSynchronizePeer#getClientComponentType
    */
-  @Override
   public String getClientComponentType( final boolean shortType )
   {
     return COMPONENT_NAME;
@@ -100,7 +97,7 @@ public class DockMenuPeer extends JQueryAbstractPeer
         DockMenu menu = (DockMenu)component;
         if (DockMenu.MODEL_CHANGED_PROPERTY.equals(propertyName)) {
             return xstream.toXML(menu.getModel());
-        } 
+        }
         return super.getOutputProperty(context, component, propertyName, propertyIndex);
     }
 

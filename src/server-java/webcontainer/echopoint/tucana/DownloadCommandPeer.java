@@ -23,7 +23,7 @@ import nextapp.echo.webcontainer.AbstractCommandSynchronizePeer;
 import nextapp.echo.webcontainer.ServerMessage;
 import nextapp.echo.webcontainer.Service;
 import nextapp.echo.webcontainer.UserInstance;
-import nextapp.echo.webcontainer.WebContainerServlet;
+import static nextapp.echo.webcontainer.WebContainerServlet.getServiceRegistry;
 import nextapp.echo.webcontainer.service.JavaScriptService;
 
 import java.util.Map;
@@ -51,7 +51,7 @@ public class DownloadCommandPeer extends AbstractCommandSynchronizePeer
   {
     CommonResources.install();
     DownloadService.install();
-    WebContainerServlet.getServiceRegistry().add( DOWNLOAD_SERVICE );
+    getServiceRegistry().add( DOWNLOAD_SERVICE );
   }
 
   public DownloadCommandPeer()

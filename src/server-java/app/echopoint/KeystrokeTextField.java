@@ -36,7 +36,7 @@ public class KeystrokeTextField extends TextField
   /**
    * Create a new text field with the specified keystroke delay
    *
-   * @param regex The keystroke delay to be used in ms
+   * @param keystrokeDelay The keystroke delay to be used in ms
    */
   public KeystrokeTextField( final int keystrokeDelay )
   {
@@ -46,7 +46,7 @@ public class KeystrokeTextField extends TextField
   /**
    * Set the keystroke delay
    *
-   * @param regex The keystroke delay to be used in ms
+   * @param keystrokeDelay The keystroke delay to be used in ms
    */
   public void setKeystrokeDelay( final int keystrokeDelay )
   {
