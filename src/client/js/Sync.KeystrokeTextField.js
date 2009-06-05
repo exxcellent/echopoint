@@ -56,9 +56,13 @@ echopoint.KeystrokeTextFieldSync = Core.extend( echopoint.internal.TextFieldSync
     executeSync : function() {
           if (this.component != null)
           {
+            // Since the echo base text component stores the input value only
+            // Before processing events, we have to force it do be done here.
+            // Otherwise our doAction command will be processed without the last
+            // updates to the text field. (Usullay last character entered missing)
+            this._storeValue();
+
             var newText = this.input.value;
-            Core.Debug.consoleWrite("Execsync text is: "+newText);
-            Core.Debug.consoleWrite("Execsync input.value is: "+this.input.value);
             if (this.oldText != newText) {
                     this.oldText = newText;
                     this.component.doAction();
