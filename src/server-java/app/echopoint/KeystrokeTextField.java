@@ -21,6 +21,19 @@ package echopoint;
 import echopoint.internal.TextField;
 
 /**
+ * The {@code KeystrokeTextField} allows you to be notified about each keystroke
+ * in the text field component.
+ * This can for example be used to do a incremental filetring of a server
+ * database and then display the matching records as you type.
+ *
+ * Please use the following component with care, it creates a request for every
+ * keystroke per default. You can configure a keystrokeDelay which synchronizes
+ * only after the specified delay. So someone who is typing rapidly doesn't
+ * create lots of requests, instead the synchronization is triggered only when
+ * the user stops typing for the specified amount of time (=keystrokeDelay).
+ *
+ * @author André Schild, 299-06-05, Based on code posted in the Echo wiki
+ * @version $Id:  $
  */
 public class KeystrokeTextField extends TextField
 {
@@ -30,7 +43,12 @@ public class KeystrokeTextField extends TextField
    */
   public static final String PROPERTY_KEYSTROKE_DELAY = "keystrokeDelay";
 
-  /** Default constructor.   */
+  /**
+   * Default constructor.
+   * Uses a keystroke delay of 0ms. Not a good idea in most cases. Instead
+   * use the constructor with a keystrokeDelay of for example 250ms
+   *
+   */
   public KeystrokeTextField() {}
 
   /**
