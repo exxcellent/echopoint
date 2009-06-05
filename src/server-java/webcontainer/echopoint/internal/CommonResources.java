@@ -18,7 +18,7 @@
 
 package echopoint.internal;
 
-import nextapp.echo.webcontainer.WebContainerServlet;
+import static nextapp.echo.webcontainer.WebContainerServlet.getResourceRegistry;
 
 /**
  * Boot-strap code for loading common resources.
@@ -35,8 +35,7 @@ public class CommonResources
   {
     if ( ! installed )
     {
-      WebContainerServlet.getResourceRegistry().addPackage(
-          "echopoint", "resource/" );
+      getResourceRegistry().addPackage( "echopoint", "resource/" );
       installed = true;
     }
   }

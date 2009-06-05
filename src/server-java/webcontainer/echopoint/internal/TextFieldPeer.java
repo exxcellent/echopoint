@@ -47,6 +47,7 @@ public abstract class TextFieldPeer extends
     super.init( context, component );
     final ServerMessage serverMessage =
         (ServerMessage) context.get( ServerMessage.class );
+    serverMessage.addLibrary( CommonService.ECHOPOINT_SERVICE.getId() );
     serverMessage.addLibrary( COMPONENT_NAME );
   }
 

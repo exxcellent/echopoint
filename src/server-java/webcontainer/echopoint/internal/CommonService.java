@@ -20,7 +20,7 @@ package echopoint.internal;
 
 import nextapp.echo.webcontainer.service.JavaScriptService;
 import nextapp.echo.webcontainer.Service;
-import nextapp.echo.webcontainer.WebContainerServlet;
+import static nextapp.echo.webcontainer.WebContainerServlet.getServiceRegistry;
 
 /**
  * Register the Echopoint core library.
@@ -30,16 +30,17 @@ import nextapp.echo.webcontainer.WebContainerServlet;
  */
 public class CommonService
 {
-    /** The service for the core echopoint namespace and components. */
-    public static final Service ECHOPOINT_SERVICE =
-            JavaScriptService.forResource( "echopoint.Boot", "resource/js/Echopoint.js" );
-    public static final Service JQUERY_SERVICE = JavaScriptService.forResource("jq",
-            "resource/js/jquery/jquery-1.3.2.js");
+  /** The service for the core echopoint namespace and components. */
+  public static final Service ECHOPOINT_SERVICE =
+      JavaScriptService.forResource( "echopoint.Boot", "resource/js/Echopoint.js" );
 
-    /** Add the {@link #ECHOPOINT_SERVICE} to the service registry. */
-    static
-    {
-        WebContainerServlet.getServiceRegistry().add( ECHOPOINT_SERVICE );
-        WebContainerServlet.getServiceRegistry().add( JQUERY_SERVICE );        
-    }
+  public static final Service JQUERY_SERVICE = JavaScriptService.forResource( "jq",
+      "resource/js/jquery/jquery-1.3.2.js" );
+
+  /** Add the {@link #ECHOPOINT_SERVICE} to the service registry. */
+  static
+  {
+    getServiceRegistry().add( ECHOPOINT_SERVICE );
+    getServiceRegistry().add( JQUERY_SERVICE );
+  }
 }
