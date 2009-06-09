@@ -41,7 +41,8 @@ echopoint.TooltipContainerSync = Core.extend(Echo.Render.ComponentSync, {
         TOOLTIPALIGNMENT: "tooltipAlignment",
         TOOLTIPSTYLENAME: "tooltipStyle",
         THUMBNAIL: "thumbnail",
-        VIDEO: "video"
+        VIDEO: "video",
+        HIDEDELAY: "hideDelay"
     },
 
     $load: function()
@@ -229,6 +230,10 @@ echopoint.TooltipContainerSync = Core.extend(Echo.Render.ComponentSync, {
             if (!borderWidth && !style) {
                 borderWidth = 1;
             }
+            var hideDelay = this.component.render(echopoint.TooltipContainerSync.HIDEDELAY);
+            if (!hideDelay) {
+                hideDelay = 1000;
+            }
             var borderRadius = this.component.render(echopoint.TooltipContainerSync.TOOLTIPBORDERRADIUS);
             if (!borderRadius && !style) {
                 borderRadius = 4;
@@ -321,6 +326,10 @@ echopoint.TooltipContainerSync = Core.extend(Echo.Render.ComponentSync, {
                         name: style // Style it according to the preset 'cream' style
                     },
                     content: content,
+                    hide: {
+                        when: 'inactive',
+                        delay: hideDelay 
+                    },
                     show: {
                         effect: {
                             type: 'grow',

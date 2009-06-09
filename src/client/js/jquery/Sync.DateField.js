@@ -109,8 +109,8 @@ echopoint.DateField = Core.extend(Echo.Render.ComponentSync, {
         this._calendardiv.id = this.component.renderId + "cal";
         this._calendardiv.style.display = "none";
         this._calendardiv.style.overflow = "visible";
-        this._calendardiv.style.position = "absolute";
-        this._calendardiv.style.zIndex = 99;
+        this._calendardiv.style.position = "relative";
+//        this._calendardiv.style.zIndex = 99;
         this._calendarVisible = false;
 
         parentElement.appendChild(this._dateTimediv);
@@ -119,8 +119,14 @@ echopoint.DateField = Core.extend(Echo.Render.ComponentSync, {
 
     _processClick: function(e) {
         if (!this._calendarVisible) {
-            this._calendardiv.style.display = "block";
-            this._calendarVisible = true;
+            try {
+                this._calendardiv.style.display = "block";
+                this._calendarVisible = true;
+                jQuery("#"+this._containerDiv.id.replace('.', '\\.')).qtip("hide");
+            }
+            catch (e) {
+                // Ignore
+            }
         }
         else {
             this._calendardiv.style.display = "none";
@@ -139,6 +145,12 @@ echopoint.DateField = Core.extend(Echo.Render.ComponentSync, {
      */
     _storeValue: function(theCalendar) {
         this.component.set("date", theCalendar.date.print(this._dateFormatPattern));
+        try {
+            jQuery("#"+this._containerDiv.id.replace('.', '\\.')).qtip("hide");
+        }
+        catch (e) {
+            // Ignore
+        }
     },
 
     renderDisplay: function() {

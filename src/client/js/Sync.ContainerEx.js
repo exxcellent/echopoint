@@ -65,7 +65,7 @@ echopoint.ContainerExSync = Core.extend(Echo.Render.ComponentSync, {
         else if (postition == 8) {
                 this._containerDiv.style.position = "fixed";
             }
-            else { // if (postition == 4) {
+            else {
                 this._containerDiv.style.position = "relative";
             }
         var width = this.component.render(echopoint.ContainerExSync.WIDTH);
@@ -73,15 +73,15 @@ echopoint.ContainerExSync = Core.extend(Echo.Render.ComponentSync, {
         if (width) {
             this._containerDiv.style.width = width;
         }
-//        else {
-//            this._containerDiv.style.width = "100%";
-//        }
+        //        else {
+        //            this._containerDiv.style.width = "100%";
+        //        }
         if (height) {
             this._containerDiv.style.height = height;
         }
-//        else {
-//            this._containerDiv.style.height = "100%";
-//        }
+        //        else {
+        //            this._containerDiv.style.height = "100%";
+        //        }
         var top = this.component.render(echopoint.ContainerExSync.TOP);
         if (top) {
             this._containerDiv.style.top = top;
@@ -272,12 +272,12 @@ echopoint.ContainerExSync = Core.extend(Echo.Render.ComponentSync, {
     },
 
     stretch: function(minHeight, maxHeight) {
-		this.minHeight = parseInt(minHeight, 10);
-		this.maxHeight = parseInt(maxHeight, 10);
-		if (! isNaN(this.minHeight) && ! isNaN(this.maxHeight)) {
-			this.minHeight = Math.min(this.minHeight,this.maxHeight);
-			this.maxHeight = Math.max(this.minHeight,this.maxHeight);
-		}
+        this.minHeight = parseInt(minHeight, 10);
+        this.maxHeight = parseInt(maxHeight, 10);
+        if (! isNaN(this.minHeight) && ! isNaN(this.maxHeight)) {
+            this.minHeight = Math.min(this.minHeight,this.maxHeight);
+            this.maxHeight = Math.max(this.minHeight,this.maxHeight);
+        }
         var element = this._containerDiv;
         if (! element) {
             return;
@@ -327,9 +327,9 @@ echopoint.ContainerExSync = Core.extend(Echo.Render.ComponentSync, {
         //
         // we allow users to "customise" the desired height "before" we set it.  This do this
         // by providing a optional "stretchCallback" function
-//        if (this.stretchBeforeCallbackFunction) {
-//            newHeight = this.stretchBeforeCallbackFunction(newHeight, this.stretchBeforeCallbackContext, this);
-//        }
+        //        if (this.stretchBeforeCallbackFunction) {
+        //            newHeight = this.stretchBeforeCallbackFunction(newHeight, this.stretchBeforeCallbackContext, this);
+        //        }
         if (newHeight > 0) {
             //
             // now set the height into the element

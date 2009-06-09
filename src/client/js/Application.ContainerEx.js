@@ -12,5 +12,8 @@ echopoint.ContainerEx = Core.extend(Echo.Component,
         Echo.ComponentFactory.registerType(echopoint.constants.CONTAINEREX, this);
     },
 
-    componentType: echopoint.constants.CONTAINEREX
+    componentType: echopoint.constants.CONTAINEREX,
+
+    /** @see Echo.Component#pane */
+    pane: true
 });
