@@ -39,7 +39,9 @@ echopoint.DateField = Core.extend(Echo.Render.ComponentSync, {
      * @type Element
      */
     _dateTimediv: null,
+    _calendardiv: null,
     _dateFormatPattern: null,
+    _calendarVisible: null,
 
     /** @see Echo.Render.ComponentSync#renderAdd */
     renderAdd: function(update, parentElement) {
@@ -49,8 +51,8 @@ echopoint.DateField = Core.extend(Echo.Render.ComponentSync, {
         Echo.Sync.Insets.render(this.component.render(echopoint.DateField.INSETS), this._dateTimediv, "padding");
         Echo.Sync.Border.render(this.component.render(echopoint.DateField.BORDER), this._dateTimediv);
         Echo.Sync.Alignment.render(this.component.render(echopoint.DateField.ALIGNMENT), this._dateTimediv, true, this.component);
-        this._dateTimediv.style.overflow = "auto";
-        this._dateTimediv.style.position = "absolute";
+        this._dateTimediv.style.overflow = "visible";
+        this._dateTimediv.style.position = "relative";
 
         var width = this.component.render(echopoint.DateField.WIDTH);
         var height = this.component.render(echopoint.DateField.HEIGHT);
@@ -68,6 +70,7 @@ echopoint.DateField = Core.extend(Echo.Render.ComponentSync, {
 //        }
 
         var inputElem = document.createElement("input");
+        inputElem.style.overflow = "visible";
         inputElem.type= "text";
         if (!this.component.isRenderEnabled()) {
             inputElem.disabled = "disabled";
@@ -96,11 +99,33 @@ echopoint.DateField = Core.extend(Echo.Render.ComponentSync, {
         var imgElement = document.createElement("img");
         imgElement.id = this.component.renderId + "button";
         imgElement.style["margin"] = "0px 0px 0px 2px";
+        imgElement.style.overflow = "visible";
         Echo.Sync.ImageReference.renderImg(this.component.render(echopoint.DateField.BUTTONICON), imgElement);
+        Core.Web.Event.add(imgElement, "click", Core.method(this, this._processClick), false);
         this._dateTimediv.appendChild(imgElement);
+
+        this._calendardiv = document.createElement("div");
+        this._dateTimediv.appendChild(this._calendardiv);
+        this._calendardiv.id = this.component.renderId + "cal";
+        this._calendardiv.style.display = "none";
+        this._calendardiv.style.overflow = "visible";
+        this._calendardiv.style.position = "absolute";
+        this._calendardiv.style.zIndex = 99;
+        this._calendarVisible = false;
 
         parentElement.appendChild(this._dateTimediv);
         this._renderRequired = true;
+    },
+
+    _processClick: function(e) {
+        if (!this._calendarVisible) {
+            this._calendardiv.style.display = "block";
+            this._calendarVisible = true;
+        }
+        else {
+            this._calendardiv.style.display = "none";
+            this._calendarVisible = false;
+        }
     },
 
     /** @see Echo.Render.ComponentSync#renderDispose */
@@ -114,7 +139,6 @@ echopoint.DateField = Core.extend(Echo.Render.ComponentSync, {
      */
     _storeValue: function(theCalendar) {
         this.component.set("date", theCalendar.date.print(this._dateFormatPattern));
-        theCalendar.destroy();
     },
 
     renderDisplay: function() {
@@ -133,13 +157,14 @@ echopoint.DateField = Core.extend(Echo.Render.ComponentSync, {
             if (this.component.isRenderEnabled()) {
                 var useTime = this.component.render(echopoint.DateField.USETIME, false );
                 var options = {
-                    onClose: jQuery.context(this).callback(this._storeValue),
+                    onUpdate: jQuery.context(this).callback(this._storeValue),
                     showsTime: useTime,
 //                    eventName: "click",
-                    singleClick: true,
+//                    singleClick: true,
                     //                debug: true,
                     ifFormat: this._dateFormatPattern,
-                    button: ".next()" //next sibling
+                    flat: ".next().next()"
+//                    button: ".next()" //next sibling
                 };
 
 
