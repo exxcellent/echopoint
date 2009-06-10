@@ -171,7 +171,7 @@ echopoint.DateField = Core.extend(Echo.Render.ComponentSync, {
             if (this.component.isRenderEnabled()) {
                 var useTime = this.component.render(echopoint.DateField.USETIME, false );
                 var showWeeks= this.component.render(echopoint.DateField.SHOWWEEKS, false );
-                var firstDayOfWeekValue= this.component.render(echopoint.DateField.FIRSTDAYOFWEEK, false );
+                var firstDayOfWeekValue= this.component.render(echopoint.DateField.FIRSTDAYOFWEEK, 0 );
                 var options = {
                     onUpdate: jQuery.context(this).callback(this._storeValue),
                     showsTime: useTime,
