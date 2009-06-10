@@ -25,7 +25,9 @@ echopoint.DateField = Core.extend(Echo.Render.ComponentSync, {
         CSS: "css",
         LANGUAGE: "language",
         INPUTWIDTH: "inputWidth",
-        INPUTHEIGHT: "inputHeight"
+        INPUTHEIGHT: "inputHeight",
+        SHOWWEEKS: "showWeeks",
+        FIRSTDAYOFWEEK: "firstDayOfWeek"
     },
 
     $load: function()
@@ -168,9 +170,13 @@ echopoint.DateField = Core.extend(Echo.Render.ComponentSync, {
 
             if (this.component.isRenderEnabled()) {
                 var useTime = this.component.render(echopoint.DateField.USETIME, false );
+                var showWeeks= this.component.render(echopoint.DateField.SHOWWEEKS, false );
+                var firstDayOfWeekValue= this.component.render(echopoint.DateField.FIRSTDAYOFWEEK, false );
                 var options = {
                     onUpdate: jQuery.context(this).callback(this._storeValue),
                     showsTime: useTime,
+                    weekNumbers: showWeeks,
+                    firstDay: firstDayOfWeekValue,
 //                    eventName: "click",
 //                    singleClick: true,
                     //                debug: true,

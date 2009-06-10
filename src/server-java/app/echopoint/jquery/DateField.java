@@ -60,6 +60,8 @@ public class DateField extends Component implements Sizeable, Alignable
     public static final String cssReference = getFileAsString("resource/js/jquery/calendar-win2k-cold-2.css");
     public static final String PROPERTY_INPUT_WIDTH = "inputWidth";
     public static final String PROPERTY_INPUT_HEIGHT = "inputHeight";
+    public static final String PROPERTY_SHOW_WEEKS = "showWeeks";
+    public static final String PROPERTY_FIRST_DAY_OF_WEEK = "firstDayOfWeek";
 
 
     /**
@@ -473,5 +475,43 @@ public class DateField extends Component implements Sizeable, Alignable
      */
     public void setInputHeight(Extent newValue) {
         set(PROPERTY_INPUT_HEIGHT, newValue);
+    }
+
+    /**
+     * Returns the first day of the week
+     *
+     * @return The first day of the week. (0=Sunday, 1= Monday etc.)
+     */
+    public int getFirstDayOfWeek() {
+        return (Integer) get(PROPERTY_FIRST_DAY_OF_WEEK);
+    }
+
+    /**
+     * Sets the the first day of week. Used to calculate week numbers.
+     * Usually 0 for US (Sunday) and 1 for europe (Monday)
+     *
+     * @param newValue  (0=Sunday, 1= Monday etc.)
+     */
+    public void setFirstDayOfWeek(int newValue) {
+        set(PROPERTY_FIRST_DAY_OF_WEEK, newValue);
+    }
+
+    /**
+     * Returns the status of week number display
+     *
+     * @return The week number display mode
+     */
+    public boolean getShowWeeks() {
+        Object property = get(PROPERTY_SHOW_WEEKS);
+        return null == property ? true : ((Boolean) property).booleanValue();
+    }
+
+    /**
+     * Sets the display of week numbers
+     *
+     * @param newValue Should week numbers be displayed?
+     */
+    public void setShowWeeks(boolean newValue) {
+        set(PROPERTY_SHOW_WEEKS, newValue);
     }
 }
