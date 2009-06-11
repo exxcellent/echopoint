@@ -112,7 +112,8 @@ echopoint.DateField = Core.extend(Echo.Render.ComponentSync, {
         this._calendardiv.style.display = "none";
         this._calendardiv.style.overflow = "visible";
         this._calendardiv.style.position = "relative";
-//        this._calendardiv.style.zIndex = 99;
+        // Is enough to just get over the rest since they are relative inside the divs
+        this._calendardiv.style.zIndex = 1;
         this._calendarVisible = false;
 
         parentElement.appendChild(this._dateTimediv);
@@ -120,6 +121,10 @@ echopoint.DateField = Core.extend(Echo.Render.ComponentSync, {
     },
 
     _processClick: function(e) {
+        this._toggleCalendarVisible();
+    },
+
+    _toggleCalendarVisible: function() {
         if (!this._calendarVisible) {
             try {
                 this._calendardiv.style.display = "block";
@@ -146,6 +151,7 @@ echopoint.DateField = Core.extend(Echo.Render.ComponentSync, {
      * Stores the selected date in the <code>Echo.Component</code> instance.
      */
     _storeValue: function(theCalendar) {
+        //Core.Debug.consoleWrite("Calendar store value called");
         this.component.set("date", theCalendar.date.print(this._dateFormatPattern));
         try {
             jQuery("#"+this._containerDiv.id.replace('.', '\\.')).qtip("hide");
@@ -154,6 +160,15 @@ echopoint.DateField = Core.extend(Echo.Render.ComponentSync, {
             // Ignore
         }
     },
+
+    /**
+     * Stores the selected date and hide calendar "popup"
+     */
+    _storeValueAndHide: function(theCalendar) {
+        this._storeValue(theCalendar);
+        this._toggleCalendarVisible();
+    },
+
 
     renderDisplay: function() {
         if (this._renderRequired) {
@@ -173,13 +188,13 @@ echopoint.DateField = Core.extend(Echo.Render.ComponentSync, {
                 var showWeeks= this.component.render(echopoint.DateField.SHOWWEEKS, false );
                 var firstDayOfWeekValue= this.component.render(echopoint.DateField.FIRSTDAYOFWEEK, 0 );
                 var options = {
-                    onUpdate: jQuery.context(this).callback(this._storeValue),
+                    onUpdate: jQuery.context(this).callback(this._storeValueAndHide),
                     showsTime: useTime,
                     weekNumbers: showWeeks,
                     firstDay: firstDayOfWeekValue,
 //                    eventName: "click",
 //                    singleClick: true,
-                    //                debug: true,
+//                    debug: true,
                     ifFormat: this._dateFormatPattern,
                     flat: ".next().next()"
 //                    button: ".next()" //next sibling

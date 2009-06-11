@@ -102,7 +102,16 @@ public class DateFieldTest extends AbstractTest<DateField> {
     {
         final Component content = Application.getContent().getTestArea();
         content.removeAll();
-        content.add( get() );
+        final Column column = new Column();
+        column.add( get() );
+        // The following rows are used to test the Z-index behaviour
+        Row d1row= new Row();
+        d1row.add( new DateField() );
+        d1row.add(new Label("The following rows are used to test the Z-index behaviour"));
+        column.add( d1row );
+        column.add( new DateField() );
+        column.add( new SelectField() );
+        content.add( column );
     }
     
 }
