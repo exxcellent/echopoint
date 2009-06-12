@@ -47,7 +47,7 @@ public class DockMenuTest extends AbstractTest<DockMenu> {
         dm.setFont(new Font(Font.ARIAL, Font.PLAIN, new Extent(18)));
         dm.setForeground(Color.RED);
 
-        dm.addMenuItem("Thunderbird", "Thunderbird", 64, 64, new HttpImageReference("http://www.mozilla.com/img/thunderbird-logo-64x64.png"), null);
+        dm.addMenuItem("Thunderbird", "Thunderbird", 64, 64, new HttpImageReference("http://www.mozilla.com/img/thunderbird-logo-64x64.png"), new HttpImageReference("http://www.mozilla.com/img/firefox-logo-64x64.png"));
         dm.addMenuItem("Firefox", "Firefox", 64, 64, new HttpImageReference("http://www.mozilla.com/img/firefox-logo-64x64.png"),  null);
         dm.addMenuItem("Firefox", "Firefox", 64, 64, new HttpImageReference("http://www.mozilla.com/img/firefox-logo-64x64.png"),  null);
         dm.addMenuItem("Firefox", "Firefox", 64, 64, new HttpImageReference("http://www.mozilla.com/img/firefox-logo-64x64.png"), null);
