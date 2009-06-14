@@ -89,9 +89,9 @@ echopoint.DockMenuSync = Core.extend(Echo.Render.ComponentSync,
                     imagetag.title = text;
                 }
 
-                if (rolloverList[i] != null)
+                if (rolloverList[i] != null && rolloverList[i].uri != null)
                 {
-                    imagetag.alt = Echo.Sync.ImageReference.getUrl(rolloverList[i].uri);      
+                    imagetag.alt = Echo.Sync.ImageReference.getUrl(rolloverList[i].uri);
                 }
 
                 Echo.Sync.ImageReference.renderImg(inactiveList[i].uri, imagetag);
