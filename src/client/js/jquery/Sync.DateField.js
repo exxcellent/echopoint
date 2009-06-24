@@ -41,9 +41,8 @@ echopoint.DateField = Core.extend(Echo.Render.ComponentSync, {
      * @type Element
      */
     _dateTimediv: null,
-    _calendardiv: null,
     _dateFormatPattern: null,
-    _calendarVisible: null,
+    _calObject: null, // Holds the calendar object, needed for destroying it
 
     /** @see Echo.Render.ComponentSync#renderAdd */
     renderAdd: function(update, parentElement) {
@@ -53,98 +52,74 @@ echopoint.DateField = Core.extend(Echo.Render.ComponentSync, {
         Echo.Sync.Insets.render(this.component.render(echopoint.DateField.INSETS), this._dateTimediv, "padding");
         Echo.Sync.Border.render(this.component.render(echopoint.DateField.BORDER), this._dateTimediv);
         Echo.Sync.Alignment.render(this.component.render(echopoint.DateField.ALIGNMENT), this._dateTimediv, true, this.component);
-        this._dateTimediv.style.overflow = "visible";
-        this._dateTimediv.style.position = "relative";
+        //this._dateTimediv.style.overflow = "visible";
+        //this._dateTimediv.style.position = "relative";
 
         var width = this.component.render(echopoint.DateField.WIDTH);
         var height = this.component.render(echopoint.DateField.HEIGHT);
         if (width) {
             this._dateTimediv.style.width = width;
         }
-//        else {
-//            this._dateTimediv.style.width = "100%";
-//        }
         if (height) {
             this._dateTimediv.style.height = height;
         }
-//        else {
-//            this._dateTimediv.style.height = "100%";
-//        }
 
-        var inputElem = document.createElement("input");
-        inputElem.style.overflow = "visible";
-        inputElem.type= "text";
+        this._inputElem = document.createElement("input");
+        //this._inputElem.style.overflow = "visible";
+        this._inputElem.type= "text";
         if (!this.component.isRenderEnabled()) {
-            inputElem.disabled = "disabled";
+            this._inputElem.disabled = "disabled";
         }
         var inputWidth = this.component.render(echopoint.DateField.INPUTWIDTH);
         var inputHeight = this.component.render(echopoint.DateField.INPUTHEIGHT);
         if (inputWidth) {
-            inputElem.style.width = inputWidth;
+            this._inputElem.style.width = inputWidth;
         }
         if (inputHeight) {
-            inputElem.style.height = inputHeight;
+            this._inputElem.style.height = inputHeight;
         }
 
         var font = this.component.render(echopoint.DateField.FONT);
         if (font) {
-            Echo.Sync.Font.renderClear(font, inputElem);
+            Echo.Sync.Font.renderClear(font, this._inputElem);
         }
-        this._dateTimediv.appendChild(inputElem);
-        inputElem.id = this.component.renderId + "dateTime";
+        this._dateTimediv.appendChild(this._inputElem);
+        // jQuery does not like ID's with a dot in the name
+        this._inputElem.id = (this.component.renderId + "dateTime").replace('.', '_');
+
+
 
         var dateStr = this.component.get("date");
         if (dateStr) {
-            inputElem.value = dateStr;
+            this._inputElem.value = dateStr;
         }
 
-        var imgElement = document.createElement("img");
-        imgElement.id = this.component.renderId + "button";
-        imgElement.style["margin"] = "0px 0px 0px 2px";
-        imgElement.style.overflow = "visible";
-        Echo.Sync.ImageReference.renderImg(this.component.render(echopoint.DateField.BUTTONICON), imgElement);
-        Core.Web.Event.add(imgElement, "click", Core.method(this, this._processClick), false);
-        this._dateTimediv.appendChild(imgElement);
+        // We must also look for changes in the input field itself, if the
+        // user modifies the date via the input field
+         Core.Web.Event.add(this._inputElem, "change",
+                Core.method(this, this._processChange), false);
 
-        this._calendardiv = document.createElement("div");
-        this._dateTimediv.appendChild(this._calendardiv);
-        this._calendardiv.id = this.component.renderId + "cal";
-        this._calendardiv.style.display = "none";
-        this._calendardiv.style.overflow = "visible";
-        this._calendardiv.style.position = "relative";
-        // Is enough to just get over the rest since they are relative inside the divs
-        this._calendardiv.style.zIndex = 1;
-        this._calendarVisible = false;
+        var imgElement = document.createElement("img");
+        imgElement.id = this._inputElem.id+"Button";
+        imgElement.style["margin"] = "0px 0px 0px 2px";
+        // imgElement.style.overflow = "visible";
+        Echo.Sync.ImageReference.renderImg(this.component.render(echopoint.DateField.BUTTONICON), imgElement);
+        this._dateTimediv.appendChild(imgElement);
 
         parentElement.appendChild(this._dateTimediv);
         this._renderRequired = true;
     },
 
-    _processClick: function(e) {
-        this._toggleCalendarVisible();
-    },
-
-    _toggleCalendarVisible: function() {
-        if (!this._calendarVisible) {
-            try {
-                this._calendardiv.style.display = "block";
-                this._calendarVisible = true;
-                jQuery("#"+this._containerDiv.id.replace('.', '\\.')).qtip("hide");
-            }
-            catch (e) {
-                // Ignore
-            }
-        }
-        else {
-            this._calendardiv.style.display = "none";
-            this._calendarVisible = false;
-        }
-    },
-
     /** @see Echo.Render.ComponentSync#renderDispose */
     renderDispose: function(update) {
+        Core.Web.Event.removeAll(this._inputElem);
         this._dateTimediv = null;
         this._dateFormatPattern = null;
+        if (this._calObject != undefined)
+        {
+            // object only exists when calendar has "popped up"
+            this._calObject.destroy(); // Also remove me from dom tree
+        }
     },
 
     /**
@@ -153,22 +128,15 @@ echopoint.DateField = Core.extend(Echo.Render.ComponentSync, {
     _storeValue: function(theCalendar) {
         //Core.Debug.consoleWrite("Calendar store value called");
         this.component.set("date", theCalendar.date.print(this._dateFormatPattern));
-        try {
-            jQuery("#"+this._containerDiv.id.replace('.', '\\.')).qtip("hide");
-        }
-        catch (e) {
-            // Ignore
-        }
     },
 
     /**
-     * Stores the selected date and hide calendar "popup"
+     * User did modify the input field manually
      */
-    _storeValueAndHide: function(theCalendar) {
-        this._storeValue(theCalendar);
-        this._toggleCalendarVisible();
+    _processChange: function(theCalendar) {
+        //Core.Debug.consoleWrite("Calendar processChange called: "+this._inputElem.value);
+        this.component.set("date", this._inputElem.value);
     },
-
 
     renderDisplay: function() {
         if (this._renderRequired) {
@@ -188,20 +156,17 @@ echopoint.DateField = Core.extend(Echo.Render.ComponentSync, {
                 var showWeeks= this.component.render(echopoint.DateField.SHOWWEEKS, false );
                 var firstDayOfWeekValue= this.component.render(echopoint.DateField.FIRSTDAYOFWEEK, 0 );
                 var options = {
-                    onUpdate: jQuery.context(this).callback(this._storeValueAndHide),
+                    onUpdate: jQuery.context(this).callback(this._storeValue),
                     showsTime: useTime,
                     weekNumbers: showWeeks,
                     firstDay: firstDayOfWeekValue,
-//                    eventName: "click",
-//                    singleClick: true,
-//                    debug: true,
                     ifFormat: this._dateFormatPattern,
-                    flat: ".next().next()"
-//                    button: ".next()" //next sibling
+                    button: ".next()", // Use this as the open/close trigger (img)
+                    echoComponent: this // We need to pass ourself to the calendar
+                                        // so the forceRedraw has a handle to the client object
                 };
 
-
-                jQuery("#" + this._dateTimediv.id.replace('.', '\\.') + " input").dynDateTime(options);
+                jQuery(this._inputElem).dynDateTime(options); // Bind to image
             }
 
             Echo.Sync.Color.renderClear(foreground, this._dateTimediv, "color");
@@ -220,7 +185,12 @@ echopoint.DateField = Core.extend(Echo.Render.ComponentSync, {
             this.renderAdd(update, containerElement);
         }
         return fullRender;
+    },
+
+    /** Used to force a redraw */
+    _redrawScreen: function(myself) {
+        // this is not this object but rather the calendar object.
+        // For this reason we had to pass a pointer to ourself for the redraw
+        myself.client.forceRedraw();
     }
-
-
 });

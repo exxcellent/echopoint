@@ -22,7 +22,10 @@ import org.junit.Test;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
 import echopoint.jquery.DateField;
+import java.util.Date;
 import nextapp.echo.app.*;
+import nextapp.echo.app.event.ActionListener;
+import nextapp.echo.app.event.ActionEvent;
 
 /**
  * Test case for the {@link echopoint.jquery.DateField} component.
@@ -31,6 +34,11 @@ import nextapp.echo.app.*;
  * @version $Id$
  */
 public class DateFieldTest extends AbstractTest<DateField> {
+
+    protected static Label dateLabel;
+    protected static DateField dateField2;
+    protected static DateField dateField3;
+
     @BeforeClass
     public static void init()
     {
@@ -106,11 +114,48 @@ public class DateFieldTest extends AbstractTest<DateField> {
         column.add( get() );
         // The following rows are used to test the Z-index behaviour
         Row d1row= new Row();
-        d1row.add( new DateField() );
+        dateField2= new DateField();
+        dateField2.setDateFormat("dd.MM.yyyy");
+        dateField2.setFirstDayOfWeek(1);
+        dateField2.setInputWidth(new Extent(8, Extent.EM));
+        dateField2.setShowWeeks(true);
+        d1row.add( dateField2 );
         d1row.add(new Label("The following rows are used to test the Z-index behaviour"));
         column.add( d1row );
-        column.add( new DateField() );
+        Row d2row= new Row();
+        dateField3= new DateField();
+        dateField3.setDate(new Date());
+        d2row.add( dateField3 );
+        d2row.add(new Label("Field initialised with date"));
+        column.add(d2row);
         column.add( new SelectField() );
+
+        Row d3row= new Row();
+        PushButton pButton= new PushButton("Get Date value from second date field");
+        d3row.add(pButton);
+        pButton.addActionListener(
+                new ActionListener() {
+              private static final long serialVersionUID = 1l;
+
+              public void actionPerformed( final ActionEvent event )
+              {
+                  Date myDate= dateField2.getDate();
+                  if (myDate != null)
+                  {
+                        dateLabel.setText( myDate.toLocaleString() );
+                  }
+                  else
+                  {
+                      dateLabel.setText("Date value is null");
+                  }
+              }
+            }
+                );
+        dateLabel= new Label();
+        d3row.add(dateLabel);
+
+        column.add(d3row);
+
         content.add( column );
     }
     

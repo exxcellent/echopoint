@@ -46,7 +46,7 @@ public class DateFieldPeer extends JQueryAbstractPeer {
     /** The JS service files to load. */
     private static final String[] SERVICE_FILES =
             {
-                    "resource/js/jquery/jquery.dynDateTime.pack.js",
+                    "resource/js/jquery/jquery.dynDateTime.js",
                     "resource/js/jquery/jquery-CallbackContext.js",
                     "resource/js/jquery/lang/calendar-en.min.js",
                     "resource/js/jquery/Application.DateField.js",
