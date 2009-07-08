@@ -1502,7 +1502,10 @@ Calendar.prototype.callCloseHandler = function () {
 /** Removes the calendar object from the DOM tree and destroys it. */
 Calendar.prototype.destroy = function () {
 	var el = this.element.parentNode;
-	el.removeChild(this.element);
+        if (el != null)
+        {
+            el.removeChild(this.element);
+        }
 	Calendar._C = null;
 	window._dynarch_popupCalendar = null;
 };
