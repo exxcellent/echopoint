@@ -14,6 +14,4 @@ echopoint.ContainerEx = Core.extend(Echo.Component,
 
     componentType: echopoint.constants.CONTAINEREX,
 
-    /** @see Echo.Component#pane */
-    pane: true
 });

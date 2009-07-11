@@ -38,6 +38,7 @@ public class ComponentList extends Column
   protected static final String[] COMPONENTS =
       {
           "Anchor",
+          "CarouselContainer",
           "Clock",
           "ContainerEx",
           "DateField",
@@ -70,7 +71,7 @@ public class ComponentList extends Column
           "QRCode",
           "TooltipContainer",
           "DockMenu",
-          "TransitionContainer",
+          "TransitionContainer"
       };
 
   /**
