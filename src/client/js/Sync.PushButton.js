@@ -38,18 +38,43 @@ echopoint.PushButtonSync = Core.extend( echopoint.internal.AbstractContainerSync
   /** The input that is used to display the button. */
   _input: null,
 
+  /** The enabled status of the component. */
+  enabled: null,
+
   renderAdd: function( update, parentElement )
   {
+    this.enabled = this.component.isRenderEnabled();
     parentElement.appendChild( this._createInput() );
   },
 
-  renderDispose: function( update )
+  renderDispose: function()
   {
+    Core.Web.Event.removeAll( this._input );
     this._input = null;
   },
 
   renderUpdate: function( update )
   {
+    if ( update )
+    {
+      var property = update.getUpdatedProperty( "enabled" );
+
+      if ( property != null )
+      {
+        if ( property.newValue && ! this.enabled )
+        {
+          Core.Web.Event.add( this._input, "click",
+              Core.method( this, this._processClick ), false );
+        }
+        else
+        {
+          Core.Web.Event.removeAll( this._input );
+        }
+
+        this.enabled = property.newValue;
+      }
+    }
+
     this.renderStyle( this._input, update );
     this._setText();
     return false; // Child elements not supported: safe to return false.
@@ -60,8 +85,12 @@ echopoint.PushButtonSync = Core.extend( echopoint.internal.AbstractContainerSync
     this._input = document.createElement( "input" );
     this._input.id = this.component.renderId;
     this._input.type = "submit";
-    Core.Web.Event.add( this._input, "click",
-        Core.method( this, this._processClick ), false );
+
+    if ( this.enabled )
+    {
+      Core.Web.Event.add( this._input, "click",
+          Core.method( this, this._processClick ), false );
+    }
 
     this._setText();
     this.renderStyle( this._input );

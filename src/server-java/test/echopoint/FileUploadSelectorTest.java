@@ -31,7 +31,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Unit test suite for the {@link echopoint.tucana.FileUploadSelector}
+ * Unit test suite for the {@link FileUploadSelector}
  * component.
  *
  * @author Rakesh Vidyadharan 2008-11-4

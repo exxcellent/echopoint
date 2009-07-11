@@ -9,11 +9,13 @@ echopoint.test.PushButtonTest = Core.extend(
 {
   button: null,
   label: null,
+  select: null,
   count: 0,
 
   $construct: function( testArea )
   {
     testArea.add( this._createPushButton() );
+    testArea.add( this._createEnabled() );
     testArea.add( this._createLabel() );
   },
 
@@ -32,6 +34,22 @@ echopoint.test.PushButtonTest = Core.extend(
     return this.button;
   },
 
+  _createEnabled: function()
+  {
+    this.select = new Echo.SelectField(
+    {
+      renderId: "echopointUnitTestPushButtonSelectField",
+      style: "Default",
+      items: [ "Enabled", "Disabled"],
+      events:
+      {
+        action: Core.method( this, this._enabled )
+      }
+    });
+
+    return this.select;
+  },
+
   _createLabel: function()
   {
     this.label = new Echo.Label(
@@ -47,5 +65,17 @@ echopoint.test.PushButtonTest = Core.extend(
   _actionPerformed: function()
   {
     this.label.set( "text", "Button clicked: " + ++this.count );
+  },
+
+  _enabled: function()
+  {
+    if ( 1 == this.select.get( "selection" ) )
+    {
+      this.button.setEnabled( false );
+    }
+    else
+    {
+      this.button.setEnabled( true );
+    }
   }
 });

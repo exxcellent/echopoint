@@ -40,7 +40,7 @@
   <path id='compile.classpath'>
     <fileset  dir='${dir.lib}'>
       <include name='*.jar' />
-      <exclude name='yuicompressor-2.3.5.jar' />
+      <exclude name='yuicompressor*.jar' />
     </fileset>
     <pathelement path='${jsp.lib.jar}' />
     <pathelement path='${servlet.lib.jar}' />
@@ -53,10 +53,6 @@
       Building EchoPoint
       Version : ${version}
       Appserver : ${dir.appserver}
-
-      Libraries Used
-        Echo App        : ${echo.app.lib.jar}
-        Echo Container  : ${echo.webcontainer.lib.jar}
     </echo>
   </target>
 
@@ -129,7 +125,7 @@
   <path id='test.classpath'>
     <fileset  dir='${dir.lib}'>
       <include name='*.jar' />
-      <exclude name='yuicompressor-2.3.5.jar' />
+      <exclude name='yuicompressor*.jar' />
     </fileset>
     <pathelement path='${jsp.lib.jar}' />
     <pathelement path='${servlet.lib.jar}' />
@@ -351,7 +347,7 @@
   <path id='javadoc.classpath'>
     <fileset  dir='${dir.lib}'>
       <include name='*.jar' />
-      <exclude name='yuicompressor-2.3.5.jar' />
+      <exclude name='yuicompressor*.jar' />
     </fileset>
     <pathelement path='${jsp.lib.jar}' />
     <pathelement path='${servlet.lib.jar}' />

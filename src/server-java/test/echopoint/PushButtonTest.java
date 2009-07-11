@@ -3,6 +3,7 @@ package echopoint;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.Extent;
 import nextapp.echo.app.Label;
+import nextapp.echo.app.SelectField;
 import nextapp.echo.app.event.ActionEvent;
 import nextapp.echo.app.event.ActionListener;
 import org.junit.AfterClass;
@@ -99,6 +100,30 @@ public class PushButtonTest extends AbstractTest<PushButton>
     });
 
     content.add( get() );
+    content.add( createSelectField() );
     content.add( label );
+  }
+
+  private static SelectField createSelectField()
+  {
+    final String[] values = { "Enabled", "Disabled" };
+    final SelectField select = new SelectField( values );
+    select.addActionListener( new ActionListener()
+    {
+      public void actionPerformed( final ActionEvent event )
+      {
+        PushButton button = (PushButton) get();
+        if ( 0 == select.getSelectedIndex() )
+        {
+          button.setEnabled( true );
+        }
+        else
+        {
+          button.setEnabled( false );
+        }
+      }
+    });
+    
+    return select;
   }
 }

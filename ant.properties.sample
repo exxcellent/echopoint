@@ -25,18 +25,16 @@ dir.dist                          dist
 dir.build                         build
 dir.build.api                     ${dir.build}/api
 dir.build.resource                ${dir.build.api}/resource/js
-dir.build.images                i ${dir.build.api}/resource/images
+dir.build.images                  ${dir.build.api}/resource/images
 dir.build.test                    ${dir.build}/test
 dir.docs                          docs
 dir.docs.api                      ${dir.docs}/api
 dir.docs.api.app                  ${dir.docs.api}/app
 dir.docs.api.webcontainer         ${dir.docs.api}/webcontainer
 
-echo.app.lib.jar                  ${dir.lib}/Echo3_App.jar
-echo.webcontainer.lib.jar         ${dir.lib}/Echo3_WebContainer.jar
 jsp.lib.jar                       ${dir.appserver}/lib/jsp-api.jar
-junit.lib.jar                     ${dir.lib}/junit-4.4.jar
 servlet.lib.jar                   ${dir.appserver}/lib/servlet-api.jar
+yuicompressor.lib.jar             ${dir.lib}/yuicompressor-2.4.2.jar
 
 jarfile                           echopoint.jar
 testwarfile                       echopointtest.war
@@ -47,7 +45,6 @@ dir.echo                          ../../NextApp_Echo/v3/echo3
 dir.echo.extras                   ../../NextApp_Echo/v3/extras
 dir.src.client.test.tempdir       /tmp/out
 clienttestwarfile                 echopointclienttest.war
-yuicompressor.lib.jar             ${dir.lib}/yuicompressor-2.4.2.jar
 
 # Javadoc configuration
 javadoc.cssfile                   ${dir.docs}/javadoc.css
