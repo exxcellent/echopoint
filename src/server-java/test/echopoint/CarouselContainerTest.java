@@ -1,12 +1,11 @@
 package echopoint;
 
-import echopoint.jquery.TooltipContainer;
 import echopoint.jquery.CarouselContainer;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import nextapp.echo.app.*;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
-import nextapp.echo.app.*;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 /**
  * Test case for the {@link echopoint.jquery.TooltipContainer} component.
@@ -85,7 +84,7 @@ public class CarouselContainerTest extends AbstractTest<CarouselContainer> {
         CarouselContainer cc = new CarouselContainer();
         cEx.add(cc);
         cc.add(new Label("Test1"));
-        cc.add(new Label("Test2"));
+        cc.add(new Label("Test2"));             
         cc.add(new Label("Test3"));
         cc.add(new Label("Test4"));
         cc.add(new Label("Test5"));
@@ -106,9 +105,26 @@ public class CarouselContainerTest extends AbstractTest<CarouselContainer> {
         cc2.add(new Label("TestG"));
         cc2.add(new Label("TestH"));
         cc2.add(new Label("TestI"));
-        cc2.setLeftIcon(new HttpImageReference("http://www.freebuttons.com/freebuttons/GrabIt/GrabItDd0.gif"));
+            cc2.setLeftIcon(new HttpImageReference("http://www.freebuttons.com/freebuttons/GrabIt/GrabItDd0.gif"));
         cc2.setRightIcon(new HttpImageReference("http://www.freebuttons.com/freebuttons/GrabIt/GrabItDe0.gif"));
+            cc2.setRightMouseOverIcon(new HttpImageReference("http://www.freebuttons.com/freebuttons/GrabIt/GrabItDd0.gif"));
+        cc2.setLeftMouseOverIcon(new HttpImageReference("http://www.freebuttons.com/freebuttons/GrabIt/GrabItDe0.gif"));
         cc2.setBackground(Color.YELLOW);
+
+
+           CarouselContainer cc3 = new CarouselContainer();
+        cc3.setWidth(new Extent(500));
+        cc3.setHeight(new Extent(100));
+        cc3.setVisible(3);
+        cEx.add(cc3);
+        cc3.add(new Label("TestA"));
+        cc3.add(new Label("TestB"));
+        cc3.add(new Label("TestC"));
+            cc3.setLeftIcon(new HttpImageReference("http://www.freebuttons.com/freebuttons/GrabIt/GrabItDd0.gif"));
+        cc3.setRightIcon(new HttpImageReference("http://www.freebuttons.com/freebuttons/GrabIt/GrabItDe0.gif"));
+            cc3.setRightMouseOverIcon(new HttpImageReference("http://www.freebuttons.com/freebuttons/GrabIt/GrabItDd0.gif"));
+        cc3.setLeftMouseOverIcon(new HttpImageReference("http://www.freebuttons.com/freebuttons/GrabIt/GrabItDe0.gif"));
+        cc3.setBackground(Color.YELLOW);
     }
 
 

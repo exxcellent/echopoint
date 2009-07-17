@@ -42,11 +42,21 @@ public class DateFieldTest extends AbstractTest<DateField> {
     @BeforeClass
     public static void init()
     {
+       
+         ContainerEx containerEx = new ContainerEx();
+        containerEx.setLayoutStyle(ContainerEx.COLUMN_LAYOUT);
+        containerEx.setBackground(Color.GREEN);
+        containerEx.setHeight(new Extent(350));
+        containerEx.setWidth(new Extent(700));
         DateField dateField = new DateField();
-        dateField.setBackground(Color.YELLOW);
-        dateField.setHeight(new Extent(300));
-        dateField.setWidth(new Extent(600));
-        set(dateField);
+        dateField.setBackground(Color.LIGHTGRAY);
+        containerEx.add(dateField);
+        DateField dateField2 = new DateField();
+        dateField2.setBackground(Color.YELLOW);
+        dateField2.setHeight(new Extent(300));
+        dateField2.setWidth(new Extent(600));
+        containerEx.add(dateField2);
+        set(containerEx);
     }
 
     @Test

@@ -16,11 +16,16 @@ public class CarouselContainer extends ContainerEx {
 
     public static final String PROPERTY_LEFT_ICON = "leftIcon";
     public static final String PROPERTY_RIGHT_ICON = "rightIcon";
+    public static final String PROPERTY_LEFT_ICON_OVER = "leftIconOver";
+    public static final String PROPERTY_RIGHT_ICON_OVER = "rightIconOver";
     public static final String PROPERTY_VISIBLE = "visible";
+    public static final String PROPERTY_CIRCULAR = "circular";
 
 
     public CarouselContainer() {
         super();
+
+        set(PROPERTY_CIRCULAR, false);
     }
 
     /**
@@ -60,6 +65,42 @@ public class CarouselContainer extends ContainerEx {
     }
 
     /**
+     * Returns the left icon displayed in the button.
+     *
+     * @return the icon
+     */
+    public ImageReference getLeftMouseOverIcon() {
+        return (ImageReference) get(PROPERTY_LEFT_ICON_OVER);
+    }
+
+    /**
+     * Sets the left icon displayed in the button.
+     *
+     * @param newValue the new icon
+     */
+    public void setLeftMouseOverIcon(ImageReference newValue) {
+        set(PROPERTY_LEFT_ICON_OVER, newValue);
+    }
+
+    /**
+     * Returns the right icon displayed in the button.
+     *
+     * @return the icon
+     */
+    public ImageReference getRightMouseOverIcon() {
+        return (ImageReference) get(PROPERTY_RIGHT_ICON_OVER);
+    }
+
+    /**
+     * Sets the right icon displayed in the button.
+     *
+     * @param newValue the new icon
+     */
+    public void setRightMouseOverIcon(ImageReference newValue) {
+        set(PROPERTY_RIGHT_ICON_OVER, newValue);
+    }
+
+    /**
      * Returns the number of visible items
      * @return
      */
@@ -73,5 +114,22 @@ public class CarouselContainer extends ContainerEx {
      */
     public void setVisible(int newVisible) {
         set(PROPERTY_VISIBLE, newVisible);
+    }
+
+
+    /**
+     * Returns true if the carousel is circular
+     * @return
+     */
+    public boolean isCircular() {
+        return get(PROPERTY_CIRCULAR, false);
+    }
+
+    /**
+     * Sets whether the carousel should be circular or not
+     * @param isCircular
+     */
+    public void setCircular(boolean isCircular) {
+        set(PROPERTY_CIRCULAR, isCircular);
     }
 }

@@ -1,21 +1,13 @@
 package echopoint;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import echopoint.jquery.DockMenu;
+import nextapp.echo.app.*;
+import nextapp.echo.app.event.ActionEvent;
+import nextapp.echo.app.event.ActionListener;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
-import nextapp.echo.app.*;
-import nextapp.echo.app.layout.ColumnLayoutData;
-import nextapp.echo.app.event.ActionListener;
-import nextapp.echo.app.event.ActionEvent;
-import nextapp.echo.extras.app.menu.DefaultMenuModel;
-import nextapp.echo.extras.app.menu.ItemModel;
-import echopoint.jquery.DockMenu;
-
-import java.util.Map;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ArrayList;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 /**
  * Created: 2009-maj-09
@@ -48,9 +40,9 @@ public class DockMenuTest extends AbstractTest<DockMenu> {
         dm.setForeground(Color.RED);
 
         dm.addMenuItem("Thunderbird", "Thunderbird", 64, 64, new HttpImageReference("http://www.mozilla.com/img/thunderbird-logo-64x64.png"), new HttpImageReference("http://www.mozilla.com/img/firefox-logo-64x64.png"));
-        dm.addMenuItem("Firefox", "Firefox", 64, 64, new HttpImageReference("http://www.mozilla.com/img/firefox-logo-64x64.png"),  null);
-        dm.addMenuItem("Firefox", "Firefox", 64, 64, new HttpImageReference("http://www.mozilla.com/img/firefox-logo-64x64.png"),  null);
-        dm.addMenuItem("Firefox", "Firefox", 64, 64, new HttpImageReference("http://www.mozilla.com/img/firefox-logo-64x64.png"), null);
+        dm.addMenuItem("Firefox", "Firefox1", 64, 64, new HttpImageReference("http://www.mozilla.com/img/firefox-logo-64x64.png"),  null);
+        dm.addMenuItem("Firefox", "Firefox2", 64, 64, new HttpImageReference("http://www.mozilla.com/img/firefox-logo-64x64.png"),  null);
+        dm.addMenuItem("Firefox", "Firefox3", 64, 64, new HttpImageReference("http://www.mozilla.com/img/firefox-logo-64x64.png"), null);
                
         Row r = new Row();
         r.add(new Label("Left"));

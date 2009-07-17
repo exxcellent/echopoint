@@ -25,10 +25,11 @@ echopoint.DockMenuSync = Core.extend(Echo.Render.ComponentSync,
             // if a parent (2nd parameter) was passed in, then use that to
             // build the message. Message includes i (the object's property name)
             // then the object's property value on a new line
+            var msg;
             if (parent) {
-                var msg = parent + "." + i + "\n" + obj[i];
+                msg = parent + "." + i + "\n" + obj[i];
             } else {
-                var msg = i + "\n" + obj[i];
+                msg = i + "\n" + obj[i];
             }
             // Display the message. If the user clicks "OK", then continue. If they
             // click "CANCEL" then quit this level of recursion
@@ -163,6 +164,7 @@ echopoint.DockMenuSync = Core.extend(Echo.Render.ComponentSync,
         else el.appendChild(document.createTextNode(css));// others
         pa.appendChild(el);
 
+        this._redrawScreen();
 
     },
 
@@ -208,20 +210,31 @@ echopoint.DockMenuSync = Core.extend(Echo.Render.ComponentSync,
             });
 
         }
+
     },
 
     renderUpdate: function(update)
     {
-        var modelUpdate = update.getUpdatedProperty("model");
-        if (modelUpdate) {
-            this.menuModel = modelUpdate.newValue;
-        }
+        if (!update.isUpdatedPropertySetIn({itemid: true}))
+        {
+            var modelUpdate = update.getUpdatedProperty("model");
+            if (modelUpdate) {
+                this.menuModel = modelUpdate.newValue;
+            }
 
-        var element = this._maindiv;
-        var containerElement = element.parentNode;
-        Echo.Render.renderComponentDispose(update, update.parent);
-        containerElement.removeChild(element);
-        this.renderAdd(update, containerElement);
+            var element = this._maindiv;
+            var containerElement = element.parentNode;
+            Echo.Render.renderComponentDispose(update, update.parent);
+            containerElement.removeChild(element);
+            this.renderAdd(update, containerElement);
+
+        }
+        
         return true;
+    },
+
+    /** Used to force a redraw */
+    _redrawScreen: function() {
+        this.client.forceRedraw();
     }
 });

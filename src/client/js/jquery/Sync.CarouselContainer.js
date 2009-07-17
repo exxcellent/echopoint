@@ -35,13 +35,16 @@ echopoint.CarouselContainerSync = Core.extend(Echo.Render.ComponentSync, {
         MAXHEIGHTSTRETCHED: "maximumStretchedHeight",
         LEFTICON: "leftIcon",
         RIGHTICON: "rightIcon",
-        VISIBLE: "visible"
+        LEFTICONOVER: "leftIconOver",
+        RIGHTICONOVER: "rightIconOver",
+        VISIBLE: "visible",
+        CIRCULAR: "circular"
     },
 
     $load: function()
     {
 
-        Echo.Render.registerPeer( echopoint.constants.CAROUSELCONTAINER, this );
+        Echo.Render.registerPeer(echopoint.constants.CAROUSELCONTAINER, this);
     },
 
     /**
@@ -50,6 +53,11 @@ echopoint.CarouselContainerSync = Core.extend(Echo.Render.ComponentSync, {
      */
     _containerDiv: null,
     _containerUl: null,
+    leftIconUrl: null,
+    leftIconOverUrl: null,
+    rightIconUrl: null,
+    rightIconOverUrl: null,
+    componentCounter: 0,
 
 
     /** @see Echo.Render.ComponentSync#renderAdd */
@@ -57,7 +65,7 @@ echopoint.CarouselContainerSync = Core.extend(Echo.Render.ComponentSync, {
         this._containerDiv = document.createElement("div");
         this._containerDiv.style.outlineStyle = "none";
 
-//        this._containerDiv.id = this.component.renderId;
+        //        this._containerDiv.id = this.component.renderId;
         var i, postition = this.component.render(echopoint.CarouselContainerSync.POSITION);
         if (postition == 1) {
             this._containerDiv.style.position = "static";
@@ -169,17 +177,19 @@ echopoint.CarouselContainerSync = Core.extend(Echo.Render.ComponentSync, {
         Echo.Sync.Alignment.render(this.component.render(echopoint.CarouselContainerSync.ALIGNMENT), childTd1, false, this.component);
         containerTr.appendChild(childTd1);
 
-        var buttonLeft = document.createElement("button");
-        buttonLeft.id = this.component.renderId + "left";
-        childTd1.appendChild(buttonLeft);
 
         var leftIcon = this.component.render(echopoint.CarouselContainerSync.LEFTICON);
         if (leftIcon) {
             this.imgElement = document.createElement("img");
+            this.imgElement.id = this.component.renderId + "left";
             Echo.Sync.ImageReference.renderImg(leftIcon, this.imgElement);
-            buttonLeft.appendChild(this.imgElement);
+            childTd1.appendChild(this.imgElement);
+            this.leftIconUrl = Echo.Sync.ImageReference.getUrl(leftIcon);
         }
         else {
+            var buttonLeft = document.createElement("button");
+            buttonLeft.id = this.component.renderId + "left";
+            childTd1.appendChild(buttonLeft);
             buttonLeft.appendChild(document.createTextNode("<<"));
         }
 
@@ -206,17 +216,19 @@ echopoint.CarouselContainerSync = Core.extend(Echo.Render.ComponentSync, {
         Echo.Sync.Alignment.render(this.component.render(echopoint.CarouselContainerSync.ALIGNMENT), childTd3, false, this.component);
         containerTr.appendChild(childTd3);
 
-        var buttonRight = document.createElement("button");
-        buttonRight.id = this.component.renderId + "right";
-        childTd3.appendChild(buttonRight);
 
         var rightIcon = this.component.render(echopoint.CarouselContainerSync.RIGHTICON);
         if (rightIcon) {
             this.imgElement = document.createElement("img");
+            this.imgElement.id = this.component.renderId + "right";
             Echo.Sync.ImageReference.renderImg(rightIcon, this.imgElement);
-            buttonRight.appendChild(this.imgElement);
+            childTd3.appendChild(this.imgElement);
+            this.rightIconUrl = Echo.Sync.ImageReference.getUrl(rightIcon);
         }
         else {
+            var buttonRight = document.createElement("button");
+            buttonRight.id = this.component.renderId + "right";
+            childTd3.appendChild(buttonRight);
             buttonRight.appendChild(document.createTextNode(">>"));
         }
 
@@ -224,6 +236,18 @@ echopoint.CarouselContainerSync = Core.extend(Echo.Render.ComponentSync, {
         for (i = 0; i < componentCount; ++i) {
             var child = this.component.getComponent(i);
             this._renderAddChild(update, child);
+        }
+
+        var leftIconOver = this.component.render(echopoint.CarouselContainerSync.LEFTICONOVER);
+        if (leftIconOver)
+        {
+            this.leftIconOverUrl = Echo.Sync.ImageReference.getUrl(leftIconOver);
+        }
+
+        var rightIconOver = this.component.render(echopoint.CarouselContainerSync.RIGHTICONOVER);
+        if (rightIconOver)
+        {
+            this.rightIconOverUrl = Echo.Sync.ImageReference.getUrl(rightIconOver);
         }
 
         this._renderRequired = true;
@@ -235,9 +259,9 @@ echopoint.CarouselContainerSync = Core.extend(Echo.Render.ComponentSync, {
 
     renderDisplay: function() {
         if (this._renderRequired) {
-//            alert("CarouselContainer");
+            //            alert("CarouselContainer");
             this._renderRequired = false;
-            var heightStretched = this.component.render(echopoint.CarouselContainerSync.HEIGHTSTRETCHED, false );
+            var heightStretched = this.component.render(echopoint.CarouselContainerSync.HEIGHTSTRETCHED, false);
             if (heightStretched) {
                 var minHeight = this.component.render(echopoint.CarouselContainerSync.MINHEIGHTSTRETCHED);
                 var maxHeight = this.component.render(echopoint.CarouselContainerSync.MAXHEIGHTSTRETCHED);
@@ -247,35 +271,67 @@ echopoint.CarouselContainerSync = Core.extend(Echo.Render.ComponentSync, {
             if (!visible) {
                 visible = 3;
             }
+                                                                                
+            var circular = this.component.render(echopoint.CarouselContainerSync.CIRCULAR);
 
-//            jQuery(document).ready(function() {
-//                alert("CarouselContainer2");
-                jQuery("#"+this.component.renderId.replace('.', '\\.')).jCarouselLite({
-                    btnNext: "#"+this.component.renderId.replace('.', '\\.')+"right",
-                    btnPrev: "#"+this.component.renderId.replace('.', '\\.')+"left",
-                    visible: visible
-                });
-//            });
+            if (this.leftIconOverUrl)
+            {
+                jQuery("#" + this.component.renderId.replace('.', '\\.') + "left").hover(
+                    jQuery.context(this).callback(function() { jQuery("#" + this.component.renderId.replace('.', '\\.') + "left").attr( 'src', this.leftIconOverUrl ); }),
+                    jQuery.context(this).callback(function() { jQuery("#" + this.component.renderId.replace('.', '\\.') + "left").attr( 'src', this.leftIconUrl ); })
+                );
+
+                if (this.componentCounter <= visible)
+                    jQuery("#" + this.component.renderId.replace('.', '\\.') + "left").hide();
+                else
+                    jQuery("#" + this.component.renderId.replace('.', '\\.') + "left").show();
+            }
+
+            if (this.rightIconOverUrl)
+            {
+                jQuery("#" + this.component.renderId.replace('.', '\\.') + "right").hover(
+                    jQuery.context(this).callback(function() { jQuery("#" + this.component.renderId.replace('.', '\\.') + "right").attr( 'src', this.rightIconOverUrl ); }),
+                    jQuery.context(this).callback(function() { jQuery("#" + this.component.renderId.replace('.', '\\.') + "right").attr( 'src', this.rightIconUrl ); })
+                );
+
+
+                if (this.componentCounter <= visible)
+                    jQuery("#" + this.component.renderId.replace('.', '\\.') + "right").hide();
+                else
+                    jQuery("#" + this.component.renderId.replace('.', '\\.') + "right").show();
+            }
+
+            //            jQuery(document).ready(function() {
+            //                alert("CarouselContainer2");
+            jQuery("#" + this.component.renderId.replace('.', '\\.')).jCarouselLite({
+                btnNext: "#" + this.component.renderId.replace('.', '\\.') + "right",   
+                btnPrev: "#" + this.component.renderId.replace('.', '\\.') + "left",
+                visible: visible,
+                circular: circular
+            });
+            //            });
         }
     },
 
 
     /**
      * Renders the addition of a child component.
-     *
-     * @param {Echo.Update.ComponentUpdate} the update
+     *date
+     * @param {Echo.Update.ComponentUpdate} update
      * @param {Echo.Component} child the child component to
      * add
      */
     _renderAddChild: function(update, child) {
-            var childListItem = document.createElement("li");
-            Echo.Render.renderComponentAdd(update, child, childListItem);
-            this._containerUl.appendChild(childListItem);
+        var childListItem = document.createElement("li");
+        Echo.Render.renderComponentAdd(update, child, childListItem);
+        this._containerUl.appendChild(childListItem);
+        this.componentCounter++;
     },
 
     /** @see Echo.Render.ComponentSync#renderDispose */
     renderDispose: function(update) {
         this._containerDiv = null;
+        this.componentCounter = 0;
     },
 
     /** @see Echo.Render.ComponentSync#renderUpdate */
@@ -291,6 +347,7 @@ echopoint.CarouselContainerSync = Core.extend(Echo.Render.ComponentSync, {
             }
             var addedChildren = update.getAddedChildren();
             if (addedChildren && !fullRender) {
+                this.componentCounter = 0;
                 //  Add children.
                 for (i = 0; i < addedChildren.length; ++i) {
                     this._renderAddChild(update, addedChildren[i], this.component.indexOf(addedChildren[i]));
@@ -330,8 +387,8 @@ echopoint.CarouselContainerSync = Core.extend(Echo.Render.ComponentSync, {
         this.minHeight = parseInt(minHeight, 10);
         this.maxHeight = parseInt(maxHeight, 10);
         if (! isNaN(this.minHeight) && ! isNaN(this.maxHeight)) {
-            this.minHeight = Math.min(this.minHeight,this.maxHeight);
-            this.maxHeight = Math.max(this.minHeight,this.maxHeight);
+            this.minHeight = Math.min(this.minHeight, this.maxHeight);
+            this.maxHeight = Math.max(this.minHeight, this.maxHeight);
         }
         var element = this._containerDiv;
         if (! element) {

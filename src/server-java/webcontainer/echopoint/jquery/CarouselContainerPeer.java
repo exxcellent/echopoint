@@ -1,12 +1,11 @@
 package echopoint.jquery;
 
-import echopoint.internal.AbstractPeer;
+import nextapp.echo.app.Component;
+import nextapp.echo.app.util.Context;
+import nextapp.echo.webcontainer.ServerMessage;
 import nextapp.echo.webcontainer.Service;
 import nextapp.echo.webcontainer.WebContainerServlet;
-import nextapp.echo.webcontainer.ServerMessage;
 import nextapp.echo.webcontainer.service.JavaScriptService;
-import nextapp.echo.app.util.Context;
-import nextapp.echo.app.Component;
 
 /**
  * Rendering peer for the {@link echopoint.jquery.CarouselContainer} component.
@@ -25,6 +24,7 @@ public class CarouselContainerPeer extends JQueryAbstractPeer {
     private static final String[] SERVICE_FILES =
             {
                     "resource/js/jquery/jcarousellite_1.0.1.min.js",
+                    "resource/js/jquery/jquery-CallbackContext.js",
                     "resource/js/jquery/Application.CarouselContainer.js",
                     "resource/js/jquery/Sync.CarouselContainer.js"
             };
