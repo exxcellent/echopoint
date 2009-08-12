@@ -395,7 +395,7 @@ public class DateField extends Component implements Sizeable, Alignable
     public void setDate(Date newValue) {
         Date oldValue = date;
         date = newValue;
-        firePropertyChange(DATE_CHANGED_PROPERTY, (oldValue != null ? dateFormatter.format(oldValue) : null), dateFormatter.format(newValue));
+        firePropertyChange(DATE_CHANGED_PROPERTY, (oldValue != null ? dateFormatter.format(oldValue) : null), (newValue != null ? dateFormatter.format(newValue) : null));
     }
 
     /**
