@@ -70,6 +70,7 @@ echopoint.PushButtonSync = Core.extend( echopoint.internal.AbstractContainerSync
         {
           Core.Web.Event.removeAll( this._input );
         }
+        this._input.disabled= !this.enabled; // Visual feedback of enabled/disabled
 
         this.enabled = property.newValue;
       }
@@ -91,6 +92,7 @@ echopoint.PushButtonSync = Core.extend( echopoint.internal.AbstractContainerSync
       Core.Web.Event.add( this._input, "click",
           Core.method( this, this._processClick ), false );
     }
+    this._input.disabled= !this.enabled; // Visual feedback of enabled/disabled
 
     this._setText();
     this.renderStyle( this._input );
