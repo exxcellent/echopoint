@@ -99,12 +99,15 @@ echopoint.DateField = Core.extend(Echo.Render.ComponentSync, {
          Core.Web.Event.add(this._inputElem, "change",
                 Core.method(this, this._processChange), false);
 
-        var imgElement = document.createElement("img");
-        imgElement.id = this._inputElem.id+"Button";
-        imgElement.style["margin"] = "0px 0px 0px 2px";
-        // imgElement.style.overflow = "visible";
-        Echo.Sync.ImageReference.renderImg(this.component.render(echopoint.DateField.BUTTONICON), imgElement);
-        this._dateTimediv.appendChild(imgElement);
+        if (this.component.isRenderEnabled())
+        {   // Only render img when component enabled
+            var imgElement = document.createElement("img");
+            imgElement.id = this._inputElem.id+"Button";
+            imgElement.style["margin"] = "0px 0px 0px 2px";
+            // imgElement.style.overflow = "visible";
+            Echo.Sync.ImageReference.renderImg(this.component.render(echopoint.DateField.BUTTONICON), imgElement);
+            this._dateTimediv.appendChild(imgElement);
+        }
 
         parentElement.appendChild(this._dateTimediv);
         this._renderRequired = true;
