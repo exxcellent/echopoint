@@ -366,6 +366,7 @@ public class DateField extends Component implements Sizeable, Alignable
     /**
      * @see nextapp.echo.app.Component#processInput(java.lang.String, java.lang.Object)
      */
+    @Override
     public void processInput(String inputName, Object inputValue) {
         if (DATE_CHANGED_PROPERTY.equals(inputName)) {
             if (inputValue != null) {
@@ -374,6 +375,10 @@ public class DateField extends Component implements Sizeable, Alignable
                 } catch (ParseException e) {
                     // todo
                 }
+            }
+            else
+            {
+                setDate(null); // Set date to null when empty string returned from client side
             }
         }
     }
