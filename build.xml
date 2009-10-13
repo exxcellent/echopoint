@@ -153,6 +153,7 @@
       <lib file='${dir.dist}/echopointtest.jar' />
       <lib dir='${dir.lib}' />
       <fileset dir='${dir.src.client.test}/' includes='image/' />
+      <fileset dir='${dir.src.server.test}/fckeditor.src/' includes='fckeditor/' />
     </war>
 
     <delete file='${dir.dist}/echopointtest.jar' />
