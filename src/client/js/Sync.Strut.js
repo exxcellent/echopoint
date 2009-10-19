@@ -26,7 +26,7 @@ echopoint.StrutSync = Core.extend( echopoint.internal.AbstractContainerSync,
     parentElement.appendChild( this._createImage() );
   },
 
-  renderDispose: function( update )
+  renderDispose: function()
   {
     this._image = null;
   },

@@ -2,7 +2,6 @@ package echopoint.style;
 
 import static echopoint.InfoWindow.*;
 import static echopoint.util.ColorKit.makeColor;
-import static nextapp.echo.app.Alignment.ALIGN_CENTER;
 import static nextapp.echo.app.Alignment.ALIGN_LEFT;
 import nextapp.echo.app.Extent;
 import nextapp.echo.app.Insets;
@@ -76,7 +75,6 @@ public class InfoWindowStyle extends AbstractStyle
   /** Set general style properties for the content in info window itself. */
   protected void setProperties()
   {
-    set( PROPERTY_ALIGNMENT, ALIGN_CENTER );
     set( PROPERTY_BACKGROUND, makeColor( BACKGROUND ) );
     set( PROPERTY_FOREGROUND, makeColor( FOREGROUND ) );
     set( PROPERTY_INSETS, new Insets( new Extent( 10 ) ) );

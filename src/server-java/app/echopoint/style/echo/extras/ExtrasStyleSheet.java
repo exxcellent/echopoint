@@ -22,6 +22,7 @@ import echopoint.style.echo.EchoStyleSheet;
 import nextapp.echo.extras.app.CalendarSelect;
 import nextapp.echo.extras.app.AccordionPane;
 import nextapp.echo.extras.app.MenuBarPane;
+import nextapp.echo.extras.app.ContextMenu;
 
 /**
  * {@inheritDoc}
@@ -42,6 +43,7 @@ public class ExtrasStyleSheet extends EchoStyleSheet
     addAccordionPaneStyles();
     addCalendarSelectStyles();
     addMenuBarPaneStyles();
+    addContextMenuStyles();
   }
 
   /** Add default styles for {@link nextapp.echo.extras.app.AccordionPane}. */
@@ -66,5 +68,13 @@ public class ExtrasStyleSheet extends EchoStyleSheet
     final MenuBarPaneStyle style = new MenuBarPaneStyle();
     addStyle( MenuBarPane.class, "", style );
     addStyle( MenuBarPane.class, "Default", style );
+  }
+
+  /** Add default styles for {@link nextapp.echo.extras.app.ContextMenu}. */
+  protected void addContextMenuStyles()
+  {
+    final ContextMenuStyle style = new ContextMenuStyle();
+    addStyle( ContextMenu.class, "", style );
+    addStyle( ContextMenu.class, "Default", style );
   }
 }

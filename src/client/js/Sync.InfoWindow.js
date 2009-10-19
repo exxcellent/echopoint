@@ -79,10 +79,10 @@ echopoint.InfoWindowSync = Core.extend( Echo.Render.ComponentSync,
 
     this._span.appendChild( this._createText() );
 
-    prefix = this.component.render( echopoint.InfoWindow.POSTFIX );
-    if ( prefix )
+    var postfix = this.component.render( echopoint.InfoWindow.POSTFIX );
+    if ( postfix )
     {
-      this._span.appendChild( document.createTextNode( prefix ) );
+      this._span.appendChild( document.createTextNode( postfix ) );
     }
 
     Core.Web.Event.add( this._text, "mouseover",
@@ -112,6 +112,7 @@ echopoint.InfoWindowSync = Core.extend( Echo.Render.ComponentSync,
   {
     this._infoWindow = document.createElement( "div" );
     this._infoWindow.id = this.component.renderId;
+    this._infoWindow.style.overflow = "scroll";
 
     this._infoWindow.appendChild( this._createTop() );
     this._infoWindow.appendChild( this._createTitleBar() );
@@ -220,6 +221,7 @@ echopoint.InfoWindowSync = Core.extend( Echo.Render.ComponentSync,
   _renderContentStyle: function( update )
   {
     this._content.style.display = "block";
+    this._content.style.overflow = "auto";
     this._renderFont( this._content, echopoint.InfoWindow.FONT, update );
     Echo.Sync.Color.renderFB( this.component,  this._content );
     this._renderInsets( this._content, echopoint.InfoWindow.INSETS, update );

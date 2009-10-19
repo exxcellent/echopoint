@@ -111,4 +111,23 @@ public class DefaultTreeModel extends AbstractTreeModel
   {
     return ( (TreeNode) node ).isLeaf();
   }
+
+  public void addChild( final DefaultMutableTreeNode parent,
+      DefaultMutableTreeNode child )
+  {
+    parent.add( child );
+    fireTreeNodesInserted( parent, parent.getPath(),
+        new int[] { parent.getIndex( child ) }, new Object[] { child } );
+  }
+
+  public void removeChild( final DefaultMutableTreeNode parent,
+      DefaultMutableTreeNode child )
+  {
+    final int index = parent.getIndex( child );
+    if ( index == -1 ) return;
+
+    parent.remove( child );
+    fireTreeNodesRemoved( parent, parent.getPath(),
+        new int[] { index }, new Object[] { child } );
+  }
 }

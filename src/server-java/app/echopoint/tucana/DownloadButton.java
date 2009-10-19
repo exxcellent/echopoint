@@ -25,6 +25,7 @@ import nextapp.echo.app.event.ActionEvent;
 import nextapp.echo.app.event.ActionListener;
 
 import java.io.File;
+import java.io.InputStream;
 
 /**
  * A convenience component to display a {@link DownloadCommand} as a button
@@ -86,6 +87,17 @@ public class DownloadButton extends Button
   public DownloadButton( final File file )
   {
     this( new FileDownloadProvider( file ) );
+  }
+
+  /**
+   * Create a new instance using the input stream to feed a {@link
+   * InputStreamDownloadProvider}.
+   *
+   * @param stream The input stream to use as the data source.
+   */
+  public DownloadButton( final InputStream stream )
+  {
+    this( new InputStreamDownloadProvider( stream ) );
   }
 
   /**

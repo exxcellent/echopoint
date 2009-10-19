@@ -50,4 +50,14 @@ public final class ResourceImages
   public static final ImageReference MenuBarSelectionBackground =
       new ResourceImageReference(
           "resource/images/extras/BeigeLightedBackground.png" );
+
+  /** The background image for drop-down menu components. */
+  public static final ImageReference LightBlueLine =
+      new ResourceImageReference(
+          "resource/images/extras/LightBlueLine.png" );
+
+  /** The background image for selected items in drop-down menu. */
+  public static final ImageReference BlueGrey =
+      new ResourceImageReference(
+          "resource/images/extras/BlueGrey.png" );
 }

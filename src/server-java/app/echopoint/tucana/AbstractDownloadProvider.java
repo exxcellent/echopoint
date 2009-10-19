@@ -51,6 +51,17 @@ public abstract class AbstractDownloadProvider
     return fileName;
   }
 
+  /**
+   * Set the file name for the downloaded content.  Specify if you wish
+   * to over-ride the default name.
+   *
+   * @param fileName The file name to send to client.
+   */
+  public void setFileName( final String fileName )
+  {
+    this.fileName = fileName;
+  }
+
   /** {@inheritDoc} */
   public long getSize()
   {
