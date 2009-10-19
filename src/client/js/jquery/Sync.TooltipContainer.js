@@ -42,7 +42,8 @@ echopoint.TooltipContainerSync = Core.extend(Echo.Render.ComponentSync, {
         TOOLTIPSTYLENAME: "tooltipStyle",
         THUMBNAIL: "thumbnail",
         VIDEO: "video",
-        HIDEDELAY: "hideDelay"
+        HIDEDELAY: "hideDelay",
+        SOLO: "solo"
     },
 
     $load: function()
@@ -234,6 +235,10 @@ echopoint.TooltipContainerSync = Core.extend(Echo.Render.ComponentSync, {
             if (!hideDelay) {
                 hideDelay = 1000;
             }
+            var soloTip = this.component.render(echopoint.TooltipContainerSync.SOLO);
+            if (!soloTip) {
+                solo = false;
+            }
             var borderRadius = this.component.render(echopoint.TooltipContainerSync.TOOLTIPBORDERRADIUS);
             if (!borderRadius && !style) {
                 borderRadius = 4;
@@ -331,6 +336,7 @@ echopoint.TooltipContainerSync = Core.extend(Echo.Render.ComponentSync, {
                         delay: hideDelay 
                     },
                     show: {
+                    	solo: soloTip,
                         effect: {
                             type: 'grow',
                             length: 250

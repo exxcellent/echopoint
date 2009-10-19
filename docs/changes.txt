@@ -1,3 +1,6 @@
+2009.10.19 | ASchild    | Applied solo-patch for Tooltip Container from
+                          tanktarta (Issue #9)
+2009.10.19 | sptrakesh  | Added InputStreamDownloadProvider for FileDownload
 2009.10.19 | ASchild    | Beta 4 releases (Note: There is no beta 3 release)
 2009.10.13 | ASchild    | Added Fckeditor component
 2009.09.29 | ASchild    | DateField correctly handles empty field as NULL date

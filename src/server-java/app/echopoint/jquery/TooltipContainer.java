@@ -46,6 +46,7 @@ public class TooltipContainer extends AbleComponent implements Alignable, PaneCo
     public static final String PROPERTY_TOOLTIP_STYLENAME = "tooltipStyle";
     public static final String PROPERTY_TOOLTIP_THUMBNAIL = "thumbnail";
     public static final String PROPERTY_TOOLTIP_VIDEO = "video";
+    public static final String PROPERTY_SOLO = "solo";
     public static final String PROPERTY_HIDE_DELAY = "hideDelay";
 
     public static final String TOPLEFT = "topLeft";
@@ -412,6 +413,24 @@ public class TooltipContainer extends AbleComponent implements Alignable, PaneCo
      */
     public void setHideDelay(int hideDelay) {
         set(PROPERTY_HIDE_DELAY, hideDelay);
+    }
+
+    /**
+     * Sets whether or not the tooltip will be shown in conjunction with other tooltips or on its own.
+     * Does not apply when {@link #getVideoURL()} is in use.
+     * @return solo
+     */
+    public boolean getSolo() {
+        return (Boolean) get(PROPERTY_SOLO);
+    }
+
+    /**
+     * Returns whether or not the tooltip will be shown in conjunction with other tooltips or on its own.
+     * Does not apply when {@link #getVideoURL()} is in use.
+     * @param solo
+     */
+    public void setSolo(boolean solo) {
+        set(PROPERTY_SOLO, solo);
     }
 
     /**
