@@ -26,6 +26,9 @@ public class ProgressBarTest extends AbstractTest<ProgressBar>
   public static void init()
   {
     set( new ProgressBar() );
+    ProgressBar bar = (ProgressBar) get();
+    bar.setPercentage(45); // Set initial value to 45%
+    bar.setText("Initial 45%");
   }
 
   @Test

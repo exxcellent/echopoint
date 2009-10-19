@@ -150,26 +150,9 @@ echopoint.ProgressBarSync = Core.extend( echopoint.internal.AbstractContainerSyn
   /** Render updates to the text and percentage in the bar. */
   _renderBar: function( update )
   {
-    if ( update )
-    {
-      var property = update.getUpdatedProperty( echopoint.ProgressBar.TEXT );
-      if ( property )
-      {
-        this._setText( property.newValue );
-      }
-
-      property = update.getUpdatedProperty( echopoint.ProgressBar.PERCENTAGE );
-      if ( property )
-      {
-        this._setPercentage( property.newValue );
-      }
-    }
-    else
-    {
       this._setPercentage(
           this.component.get( echopoint.ProgressBar.PERCENTAGE ) );
       this._setText( this.component.get( echopoint.ProgressBar.TEXT ) );
-    }
   },
 
   _setText: function( value )

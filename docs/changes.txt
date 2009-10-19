@@ -1,3 +1,5 @@
+2009.10.19 | ASchild    | ProgressBar now does display initial values correctly
+                          (Issue #8)
 2009.10.19 | ASchild    | Applied solo-patch for Tooltip Container from
                           tanktarta (Issue #9)
 2009.10.19 | sptrakesh  | Added InputStreamDownloadProvider for FileDownload
