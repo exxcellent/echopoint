@@ -72,6 +72,7 @@ public class ComponentList extends Column
           "TooltipContainer",
           "TransitionContainer",
           "VennDiagram",
+          "AutoLookupSelectField",
       };
 
   /**
