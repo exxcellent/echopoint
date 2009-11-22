@@ -32,8 +32,8 @@ echopoint.AutoLookupSelectFieldSync = Core.extend( echopoint.internal.TextFieldS
 		echopoint.internal.TextFieldSync.prototype.renderAdd.call(this, update, parentElement);
 		
 		var searchBarSearchingIcon 			= this.component.render('searchBarSearchingIcon', null);
-		var searchBarSearchingText 			= this.component.render('searchBarSearchingText', 'Buscando...');
-		var noMatchingOptionText	 		= this.component.render('noMatchingOptionText', 'No se encontraron resultados');
+		var searchBarSearchingText 			= this.component.render('searchBarSearchingText', 'Searching...');
+		var noMatchingOptionText	 		= this.component.render('noMatchingOptionText', 'No results found');
 	
 		// create drop down div
 		this._popupDivE = document.createElement('div');
