@@ -18,18 +18,24 @@
 
 package echopoint.style.echo.extras;
 
-import echopoint.style.AbstractStyle;
-import static echopoint.style.echo.extras.ResourceImages.AccordionPaneTabRollover;
-import static echopoint.style.echo.extras.ResourceImages.AccordionPaneTabBackground;
-import static echopoint.util.ColorKit.makeColor;
+import nextapp.echo.app.Border;
+import static nextapp.echo.app.Border.STYLE_SOLID;
+import nextapp.echo.app.Border.Side;
+import nextapp.echo.app.FillImage;
+import static nextapp.echo.app.FillImage.REPEAT;
 import static nextapp.echo.extras.app.AccordionPane.PROPERTY_TAB_BACKGROUND;
 import static nextapp.echo.extras.app.AccordionPane.PROPERTY_TAB_BACKGROUND_IMAGE;
 import static nextapp.echo.extras.app.AccordionPane.PROPERTY_TAB_BORDER;
+import static nextapp.echo.extras.app.AccordionPane.PROPERTY_TAB_FOREGROUND;
 import static nextapp.echo.extras.app.AccordionPane.PROPERTY_TAB_ROLLOVER_BACKGROUND;
 import static nextapp.echo.extras.app.AccordionPane.PROPERTY_TAB_ROLLOVER_BACKGROUND_IMAGE;
 import static nextapp.echo.extras.app.AccordionPane.PROPERTY_TAB_ROLLOVER_ENABLED;
-import nextapp.echo.app.Border;
-import nextapp.echo.app.FillImage;
+
+import echopoint.style.AbstractStyle;
+import static echopoint.style.echo.extras.ResourceImages.BlueGrey;
+import static echopoint.style.echo.extras.ResourceImages.BlueGreyHighlight;
+import static echopoint.util.ColorKit.makeColor;
+import static echopoint.util.ExtentKit.makeExtent;
 
 /**
  * The default style to apply to {@link nextapp.echo.extras.app.AccordionPane}
@@ -50,13 +56,31 @@ public class AccordionPaneStyle extends AbstractStyle
 
     set( PROPERTY_TAB_BACKGROUND, makeColor( "#514f58" ) );
     set( PROPERTY_TAB_BACKGROUND_IMAGE,
-        new FillImage( AccordionPaneTabBackground ) );
-    set( PROPERTY_TAB_BORDER,
-        new Border( 1, makeColor( "#272727" ), Border.STYLE_OUTSET ) );
+        new FillImage( BlueGrey, makeExtent( "0px" ), makeExtent( "50%" ), REPEAT ) );
+    set( PROPERTY_TAB_FOREGROUND, makeColor( "#ffffff" ) );
 
+    setBorder();
+    setRollover();
+  }
+
+  protected void setRollover()
+  {
     set( PROPERTY_TAB_ROLLOVER_BACKGROUND, makeColor( "#86899a" ) );
     set( PROPERTY_TAB_ROLLOVER_BACKGROUND_IMAGE,
-        new FillImage( AccordionPaneTabRollover ) );
+        new FillImage( BlueGreyHighlight, makeExtent( "0px" ),
+            makeExtent( "50%" ), REPEAT ) );
     set( PROPERTY_TAB_ROLLOVER_ENABLED, true );
+  }
+
+  /** Set the tab border style. */
+  protected void setBorder()
+  {
+    set( PROPERTY_TAB_BORDER, new Border( new Side[]
+        {
+            new Side( 1, makeColor( "#817f88" ), STYLE_SOLID ),
+            new Side( 0, makeColor( "#817f88" ), STYLE_SOLID ),
+            new Side( 1, makeColor( "#312f38" ), STYLE_SOLID ),
+            new Side( 0, makeColor( "#312f38" ), STYLE_SOLID )
+        } ) );
   }
 }

@@ -18,11 +18,13 @@
 
 package echopoint.style.echo.extras;
 
-import echopoint.style.echo.EchoStyleSheet;
-import nextapp.echo.extras.app.CalendarSelect;
 import nextapp.echo.extras.app.AccordionPane;
-import nextapp.echo.extras.app.MenuBarPane;
+import nextapp.echo.extras.app.CalendarSelect;
 import nextapp.echo.extras.app.ContextMenu;
+import nextapp.echo.extras.app.MenuBarPane;
+import nextapp.echo.extras.app.TabPane;
+
+import echopoint.style.echo.EchoStyleSheet;
 
 /**
  * {@inheritDoc}
@@ -30,9 +32,10 @@ import nextapp.echo.extras.app.ContextMenu;
  * @author Rakesh Vidyadharan 2009-05-26
  * @version $Id$
  */
+@SuppressWarnings( { "ClassNamePrefixedWithPackageName" } )
 public class ExtrasStyleSheet extends EchoStyleSheet
 {
-  private static final long serialVersionUID = 1l;
+  private static final long serialVersionUID = 1L;
 
   /** {@inheritDoc} */
   @Override
@@ -44,6 +47,7 @@ public class ExtrasStyleSheet extends EchoStyleSheet
     addCalendarSelectStyles();
     addMenuBarPaneStyles();
     addContextMenuStyles();
+    addTabPaneStyles();
   }
 
   /** Add default styles for {@link nextapp.echo.extras.app.AccordionPane}. */
@@ -76,5 +80,13 @@ public class ExtrasStyleSheet extends EchoStyleSheet
     final ContextMenuStyle style = new ContextMenuStyle();
     addStyle( ContextMenu.class, "", style );
     addStyle( ContextMenu.class, "Default", style );
+  }
+
+  /** Add default styles for {@link nextapp.echo.extras.app.TabPane}. */
+  protected void addTabPaneStyles()
+  {
+    final TabPaneStyle style = new TabPaneStyle();
+    addStyle( TabPane.class, "", style );
+    addStyle( TabPane.class, "Default", style );
   }
 }

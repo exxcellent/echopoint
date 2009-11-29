@@ -10,6 +10,7 @@ import nextapp.echo.app.ResourceImageReference;
  * @author Rakesh Vidyadharan 2009-05-24
  * @version $Id$
  */
+@SuppressWarnings( { "ClassWithTooManyFields" } )
 public final class ResourceImages
 {
   /** The image used as background for input fields. */
@@ -28,49 +29,70 @@ public final class ResourceImages
           "resource/images/InputFieldBackgroundHighlight.png" );
 
   /** The background image for the title bar of window pane. */
-  public static final ImageReference WindowPaneHeader =
+  public static final ImageReference Header =
       new ResourceImageReference(
           "resource/images/window/Header.png" );
 
   /** The top left border image for window pane. */
-  public static final ImageReference WindowPaneTopLeft =
+  public static final ImageReference BorderTopLeft =
       new ResourceImageReference(
           "resource/images/window/BorderTopLeft.png" );
 
   /** The top border image for window pane. */
-  public static final ImageReference WindowPaneTop =
+  public static final ImageReference BorderTop =
       new ResourceImageReference(
           "resource/images/window/BorderTop.png" );
 
   /** The top right border image for window pane. */
-  public static final ImageReference WindowPaneTopRight =
+  public static final ImageReference BorderTopRight =
       new ResourceImageReference(
           "resource/images/window/BorderTopRight.png" );
 
   /** The left border image for window pane. */
-  public static final ImageReference WindowPaneLeft =
+  public static final ImageReference BorderLeft =
       new ResourceImageReference(
           "resource/images/window/BorderLeft.png" );
 
   /** The right border image for window pane. */
-  public static final ImageReference WindowPaneRight =
+  public static final ImageReference BorderRight =
       new ResourceImageReference(
           "resource/images/window/BorderRight.png" );
 
   /** The bottom left border image for window pane. */
-  public static final ImageReference WindowPaneBottomLeft =
+  public static final ImageReference BorderBottomLeft =
       new ResourceImageReference(
           "resource/images/window/BorderBottomLeft.png" );
 
   /** The bottom border image for window pane. */
-  public static final ImageReference WindowPaneBottom =
+  public static final ImageReference BorderBottom =
       new ResourceImageReference(
           "resource/images/window/BorderBottom.png" );
 
   /** The bottom right border image for window pane. */
-  public static final ImageReference WindowPaneBottomRight =
+  public static final ImageReference BorderBottomRight =
       new ResourceImageReference(
           "resource/images/window/BorderBottomRight.png" );
+
+  /** The tab close icon image. */
+  public static final ImageReference TabCloseIcon =
+      new ResourceImageReference(
+          "resource/images/icon/Icon16TabClose.png" );
+
+  /** The tab close rollover icon image. */
+  public static final ImageReference TabCloseRolloverIcon =
+      new ResourceImageReference(
+          "resource/images/icon/Icon16TabCloseRollover.png" );
+
+  /** The tab rollover background image. */
+  public static final ImageReference GradientBlue =
+      new ResourceImageReference(
+          "resource/images/fill/GradientBlue.png" );
+
+  /** The tab inactive background image. */
+  public static final ImageReference LightedSilver =
+      new ResourceImageReference(
+          "resource/images/fill/LightedSilver.png" );
+
 
 //  /** The close icon image for window pane. */
 //  public static final ImageReference WindowPaneCloseIcon =
@@ -101,4 +123,6 @@ public final class ResourceImages
 //  public static final ImageReference WindowPaneMinimiseRollover =
 //      new ResourceImageReference(
 //          "resource/images/window/ControlMinimizeRollover.png" );
+
+  private ResourceImages() {}
 }
