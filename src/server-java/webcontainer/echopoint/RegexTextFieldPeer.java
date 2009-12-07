@@ -1,6 +1,7 @@
 package echopoint;
 
 import echopoint.internal.TextFieldPeer;
+import echopoint.RegexTextField;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.util.Context;
 import nextapp.echo.webcontainer.ServerMessage;
@@ -28,6 +29,12 @@ public class RegexTextFieldPeer extends TextFieldPeer
   static
   {
     getServiceRegistry().add( COMPONENT_SERVICE );
+  }
+
+  public RegexTextFieldPeer()
+  {
+    super();
+    addOutputProperty(RegexTextField.PROPERTY_REGEX);
   }
 
   /**
@@ -60,5 +67,14 @@ public class RegexTextFieldPeer extends TextFieldPeer
   public String getClientComponentType( final boolean shortType )
   {
     return COMPONENT_NAME;
+  }
+
+  @Override
+  public Object getOutputProperty(Context context, Component component, String propertyName, int propertyIndex) 
+  {
+    if( propertyName.equals(RegexTextField.PROPERTY_REGEX) ) 
+      return ((RegexTextField)component).getRegex();
+    else 
+      return super.getOutputProperty(context, component, propertyName, propertyIndex);
   }
 }

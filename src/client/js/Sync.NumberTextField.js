@@ -16,24 +16,37 @@ echopoint.NumberTextFieldSync = Core.extend( echopoint.RegexTextFieldSync,
     echopoint.RegexTextFieldSync.call( this );
   },
 
+  _initRegexpFilter: function( precision )
+  {
+    if( precision )
+    {
+      var str = echopoint.NumberTextField.FRACTION_REGEX + precision + "}$";
+      this.regexp_filter = new RegExp(str);
+      this.component.set( echopoint.RegexTextField.REGEX, str );
+    }
+    else
+    {
+      this.regexp_filter = new RegExp( echopoint.NumberTextField.NUMBER_REGEX );
+      this.component.set( echopoint.RegexTextField.REGEX, echopoint.NumberTextField.NUMBER_REGEX );
+    }
+  },
+
+  // Override the RegexTextField method
   renderAdd: function( update, parentElement )
   {
     echopoint.RegexTextFieldSync.prototype.renderAdd.call(
         this, update, parentElement );
 
-    var precision = this.component.render( echopoint.NumberTextField.PRECISION );
-    if ( precision )
-    {
-      var str = echopoint.NumberTextField.FRACTION_REGEX + precision + "}$";
-      this.component.set( echopoint.RegexTextField.REGEX, str );
-    }
-    else
-    {
-      this.component.set( echopoint.RegexTextField.REGEX,
-          echopoint.NumberTextField.NUMBER_REGEX );
-    }
+    this._initRegexpFilter( this.component.render( echopoint.NumberTextField.PRECISION ) );
+  },
+
+  // Override the RegexTextField method
+  renderUpdate: function(update) 
+  {
+    var rv   = echopoint.RegexTextFieldSync.prototype.renderUpdate.call(this, update);
+    var prec = update.getUpdatedProperty( echopoint.NumberTextField.PRECISION );
+    if(prec)
+      this._initRegexpFilter(prec.newValue);
+    return rv;
   }
 });
-
-
-

@@ -39,7 +39,7 @@ package echopoint;
  */
 public class NumberTextField extends RegexTextField
 {
-  private static final long serialVersionUID = 1l;
+  private static final long serialVersionUID = 1L;
 
   public static final String PROPERTY_PRECISION = "precision";
 
@@ -66,7 +66,7 @@ public class NumberTextField extends RegexTextField
   {
     int precision = -1;
 
-    Object value = get( PROPERTY_PRECISION );
+    final Object value = get( PROPERTY_PRECISION );
     if ( value != null )
     {
       precision = (Integer) value;
@@ -82,7 +82,9 @@ public class NumberTextField extends RegexTextField
    */
   public void setPrecision( final int precision )
   {
+    final int old_prec  = getPrecision();
     set( PROPERTY_PRECISION, precision );
+    firePropertyChange(PROPERTY_REGEX, old_prec, precision);
   }
 
   /**

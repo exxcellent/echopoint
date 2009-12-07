@@ -14,45 +14,16 @@ echopoint.internal.TextFieldSync = Core.extend( Echo.Sync.TextField,
     Echo.Render.registerPeer( echopoint.constants.TEXT_FIELD, this );
   },
 
-  $static:
-  {
-    /** A map of rendering peer instances used to dereference by renderId. */
-    instances: new Core.Arrays.LargeMap(),
-
-    /**
-     * Static function to filter the key event on the specified text field
-     * instance.
-     *
-     * @param renderId The renderId with which the instance is mapped in the
-     *   instances static map.
-     * @param event The key event to filter.
-     */
-    filter: function( renderId, event )
-    {
-      var tf = echopoint.internal.TextFieldSync.instances.map[renderId];
-      if ( ! tf ) return false;
-      return tf.doFilter( event );
-    }
-
-  },
-
   $virtual:
   {
-    /** A flag used to indicate whether {@link #doFilter} rejected or not. */
-    status: true,
-
     /** The default text for the input.  Will be cleared after first use. */
     defaultText: null,
-
-    /** The filter function implementation. Allow everything by default */
-    doFilter: function( event )
-    {
-      return true;
-    },
 
     /** The event handler for a mouse click event. */
     processClick: function( event )
     {
+      this.input.value = "";
+      this.defaultText = null;
       this._textFieldProcessClick( event );
     },
 
@@ -67,20 +38,23 @@ echopoint.internal.TextFieldSync = Core.extend( Echo.Sync.TextField,
         this.input.value = "";
         this.defaultText = null;
       }
-
-      this._textFieldProcessFocus( event );
+      return Echo.Sync.TextField.prototype.processFocus.call( this, event );
     },
-
-    /** The event handler for a key press event. */
-    processKeyPress: function( event )
+  
+    /** Display default text if no value was input. */
+    processBlur: function( event )
     {
-      if ( this.status ) this._textFieldProcessKeyPress( event );
-    },
-
-    /** The event handler for a key up event on the text component. */
-    processKeyUp: function( event )
-    {
-      if ( this.status ) this._textFieldProcessKeyUp( event );
+      var text = this.component.render(
+          echopoint.internal.TextField.DEFAULT_TEXT );
+      if ( text && ( this.input.value == "" ) )
+      {
+        Echo.Sync.Color.render(
+            Echo.Sync.getEffectProperty( this.component, "foreground",
+                "disabledForeground", true ),  this.input, "color" );
+        this.input.value = text;
+        this.defaultText = text;
+      }
+      return Echo.Sync.TextField.prototype.processBlur.call( this, event );
     },
 
     /** Return the caret position in the text field component. */
@@ -128,56 +102,19 @@ echopoint.internal.TextFieldSync = Core.extend( Echo.Sync.TextField,
     }
   },
 
-  /** Display default text if no value was input. */
-  processBlur: function( event )
-  {
-    var text = this.component.render(
-        echopoint.internal.TextField.DEFAULT_TEXT );
-    if ( text && ( this.input.value == "" ) )
-    {
-      Echo.Sync.Color.render(
-          Echo.Sync.getEffectProperty( this.component, "foreground",
-              "disabledForeground", true ),  this.input, "color" );
-      this.input.value = text;
-      this.defaultText = text;
-    }
-
-    Echo.Sync.TextField.prototype.processBlur.call( this, event );
-  },
-
   $construct: function()
   {
     Echo.Sync.TextField.call( this );
 
     this._textFieldProcessClick = this._processClick;
     this._processClick = this.processClick;
-
-    this._textFieldProcessFocus = this._processFocus;
-    this._processFocus = this.processFocus;
-
-    this._textFieldProcessKeyPress = this._processKeyPress;
-    this._processKeyPress = this.processKeyPress;
-
-    this._textFieldProcessKeyUp = this._processKeyUp;
-    this._processKeyUp = this.processKeyUp;
   },
 
   renderAdd: function( update, parentElement )
   {
-    echopoint.internal.TextFieldSync.instances.map[ this.component.renderId ] = this;
     Echo.Sync.TextField.prototype.renderAdd.call(
         this, update, parentElement );
 
     this.setDefaultText();
-    this.input.setAttribute( "onKeyPress",
-        "return echopoint.internal.TextFieldSync.filter('" +
-        this.component.renderId +  "',event)" );
-  },
-
-  renderDispose: function( update )
-  {
-    echopoint.internal.TextFieldSync.instances.remove( this.component.renderId );
-    Echo.Sync.TextField.prototype.renderDispose.call(
-        this, update );
   }
 });

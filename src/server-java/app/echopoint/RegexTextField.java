@@ -119,6 +119,8 @@ public class RegexTextField extends TextField
    */
   public void setRegex( final String regex )
   {
+    final String old_regex = getRegex();
     set( PROPERTY_REGEX, regex );
+    firePropertyChange(PROPERTY_REGEX, old_regex, regex);
   }
 }

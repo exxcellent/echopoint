@@ -44,7 +44,7 @@ public class AutoLookupSelectFieldPeer extends TextFieldPeer {
         if (propertyName.equals(AutoLookupSelectField.PROPERTY_KEY)) {
             AutoLookupSelectField alSelectField = (AutoLookupSelectField) component;
             return alSelectField.getKey();
-        } else if (propertyName.equals(AutoLookupSelectField.PROPERTY_KEY)) {
+        } else if (propertyName.equals(AutoLookupSelectField.PROPERTY_SEARCH_VAL)) {
             AutoLookupSelectField alSelectField = (AutoLookupSelectField) component;
             return alSelectField.getSearchVal();
         }else{
