@@ -30,6 +30,7 @@ echopoint.AutoLookupTextField = Core.extend( echopoint.RegexTextField,
   componentType: echopoint.constants.AUTO_LOOKUP_TEXT_FIELD
 });
 
+/** The local cache is currently not implemented */
 
 /**
  * LookupCacheEntry is the object that is stored inside a LookupCache.
