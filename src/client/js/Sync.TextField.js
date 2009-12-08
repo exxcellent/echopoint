@@ -22,7 +22,14 @@ echopoint.internal.TextFieldSync = Core.extend( Echo.Sync.TextField,
     /** The event handler for a mouse click event. */
     processClick: function( event )
     {
-      this.input.value = "";
+      if ( this.input.value == this.defaultText )
+      {
+        Echo.Sync.Color.render(
+            Echo.Sync.getEffectProperty( this.component, "foreground",
+                "foreground", true ),  this.input, "color" );
+        this.input.value = "";
+      }
+      
       this.defaultText = null;
       this._textFieldProcessClick( event );
     },
