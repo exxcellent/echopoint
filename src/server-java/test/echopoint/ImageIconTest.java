@@ -22,10 +22,14 @@ import nextapp.echo.app.Extent;
 import nextapp.echo.app.Label;
 import nextapp.echo.app.event.ActionEvent;
 import nextapp.echo.app.event.ActionListener;
+
+import echopoint.model.Cursor;
+
 import org.junit.AfterClass;
-import static org.junit.Assert.assertEquals;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Unit test case for the {@link echopoint.ImageIcon} component.
@@ -60,6 +64,30 @@ public class ImageIconTest extends AbstractTest<ImageIcon>
     getComponent().setActionCommand( command );
     assertEquals( "Ensuring action command set", command,
         getComponent().getActionCommand() );
+  }
+
+  @Test
+  public void cursor()
+  {
+    final Cursor cursor = Cursor.crosshair;
+    getComponent().setCursor( cursor );
+    assertEquals( "Ensuring cursor set", cursor, getComponent().getCursor() );
+  }
+
+  @Test
+  public void text()
+  {
+    final String text = "Image Icon";
+    getComponent().setText( text );
+    assertEquals( "Ensuring text set", text, getComponent().getText() );
+  }
+
+  @Test
+  public void toolTipText()
+  {
+    final String text = "Image Icon";
+    getComponent().setToolTipText( text );
+    assertEquals( "Ensuring tool-tip text set", text, getComponent().getToolTipText() );
   }
 
   @Test

@@ -4,7 +4,7 @@
  * @author Rakesh 2008-10-16
  * @version $Id$
  */
-echopoint.ImageMapSync = Core.extend( echopoint.internal.AbstractContainerSync,
+echopoint.ImageMapSync = Core.extend( echopoint.internal.AbstractImageSync,
 {
   $load: function()
   {
@@ -35,9 +35,6 @@ echopoint.ImageMapSync = Core.extend( echopoint.internal.AbstractContainerSync,
     instances: new Core.Arrays.LargeMap()
   },
 
-  /** The image that is to be treated as a clickable map. */
-  _image: null,
-
   /** The map built on top of the image. */
   _map: null,
 
@@ -47,14 +44,14 @@ echopoint.ImageMapSync = Core.extend( echopoint.internal.AbstractContainerSync,
   renderAdd: function( update, parentElement )
   {
     echopoint.ImageMapSync.instances.map[ this.component.renderId ] = this;
-    parentElement.appendChild( this._createImage() );
+    parentElement.appendChild( this.createImage() );
     parentElement.appendChild( this._createMap() );
     this._createAreas();
   },
 
   renderDispose: function( update )
   {
-    this._image = null;
+    this.image = null;
     this._map = null;
     this._sections = null;
     echopoint.ImageMapSync.instances.remove( this.component.renderId );
@@ -62,19 +59,21 @@ echopoint.ImageMapSync = Core.extend( echopoint.internal.AbstractContainerSync,
 
   renderUpdate: function( update )
   {
-    var property = update.getUpdatedProperty( echopoint.ImageMap.URL );
+    var property = update.getUpdatedProperty( echopoint.internal.AbstractImage.URL );
     if ( property )
     {
-      Echo.Sync.ImageReference.renderImg( property.newValue, this._image );
+      Echo.Sync.ImageReference.renderImg( property.newValue, this.image );
 
       var parentElement = this._image.parentNode;
-      parentElement.removeChild( this._image );
+      parentElement.removeChild( this.image );
       parentElement.removeChild( this._map );
-      parentElement.appendChild( this._image );
+
+      parentElement.appendChild( this.image );
       parentElement.appendChild( this._map );
     }
 
-    this.renderStyle( this._image, update );
+    this.renderStyle( this.image, update );
+    this.renderImageStyle( update );
     this._createAreas( update );
     return false; // Child elements not supported: safe to return false.n false.
   },
@@ -87,26 +86,14 @@ echopoint.ImageMapSync = Core.extend( echopoint.internal.AbstractContainerSync,
    */
   doHandleClick: function( actionCommand )
   {
-    this.component.set( echopoint.ImageMap.ACTION_COMMAND, actionCommand );
+    this.component.set( echopoint.internal.AbstractImage.ACTION_COMMAND, actionCommand );
     this.component.doAction();
-  },
-
-  /** Function used to create the image element. */
-  _createImage: function()
-  {
-    this._image = document.createElement( "img" );
-    this._image.id = this.component.renderId;
-    Echo.Sync.ImageReference.renderImg(
-        this.component.render( echopoint.ImageMap.URL ), this._image );
-    this._image.useMap = "#" + this._getName();
-
-    this.renderStyle( this._image );
-    return this._image;
   },
 
   /** Function used to create the map element. */
   _createMap: function()
   {
+    this.image.useMap = "#" + this._getName();
     this._map = document.createElement( "map" );
     this._map.id = this._getName(); // For IE
     this._map.name = this._getName();

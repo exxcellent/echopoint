@@ -8,28 +8,11 @@ echopoint.constants.IMAGE_ICON = "echopoint.ImageIcon";
  * @author Rakesh 2008-10-20
  * @version $Id$
  */
-echopoint.ImageIcon = Core.extend( echopoint.internal.AbstractContainer,
+echopoint.ImageIcon = Core.extend( echopoint.internal.AbstractImage,
 {
   $load: function()
   {
     Echo.ComponentFactory.registerType( echopoint.constants.IMAGE_ICON, this );
-  },
-
-  /** Properties defined for this component. */
-  $static:
-  {
-    ACTION_COMPLETE: "action",
-    ACTION_COMMAND: "actionCommand",
-    // The property that holds the URI for the image.
-    URL: "url"
-  },
-
-  /** Programmatically performs an event on the image. */
-  doAction: function()
-  {
-    var ac = this.get( echopoint.ImageIcon.ACTION_COMMAND );
-    this.fireEvent( { type: echopoint.ImageIcon.ACTION_COMPLETE, source: this,
-      actionCommand: ac } );
   },
 
   componentType: echopoint.constants.IMAGE_ICON

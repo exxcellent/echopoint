@@ -17,27 +17,30 @@
  */
 package echopoint;
 
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
-import static echopoint.ImageMap.PROPERTY_SECTIONS;
-import static echopoint.internal.AbstractContainer.ACTION_COMMAND_PROPERTY;
-import static echopoint.internal.AbstractContainer.ACTION_LISTENERS_CHANGED_PROPERTY;
-import static echopoint.internal.AbstractContainer.INPUT_ACTION;
-import echopoint.internal.AbstractContainerPeer;
-import echopoint.internal.DefaultEventPeer;
-import echopoint.model.CircleSection;
-import echopoint.model.MapSection;
-import echopoint.model.PolygonSection;
-import echopoint.model.RectangleSection;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.update.ClientUpdateManager;
 import nextapp.echo.app.util.Context;
 import nextapp.echo.webcontainer.ServerMessage;
 import nextapp.echo.webcontainer.Service;
-import nextapp.echo.webcontainer.WebContainerServlet;
-import nextapp.echo.webcontainer.service.JavaScriptService;
+
+import echopoint.internal.AbstractImagePeer;
+import echopoint.internal.DefaultEventPeer;
+import echopoint.model.CircleSection;
+import echopoint.model.MapSection;
+import echopoint.model.PolygonSection;
+import echopoint.model.RectangleSection;
+
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
 
 import java.util.LinkedHashMap;
+
+import static echopoint.ImageMap.PROPERTY_SECTIONS;
+import static echopoint.internal.AbstractContainer.ACTION_COMMAND_PROPERTY;
+import static echopoint.internal.AbstractContainer.ACTION_LISTENERS_CHANGED_PROPERTY;
+import static echopoint.internal.AbstractContainer.INPUT_ACTION;
+import static nextapp.echo.webcontainer.WebContainerServlet.getServiceRegistry;
+import static nextapp.echo.webcontainer.service.JavaScriptService.forResources;
 
 /**
  * Component rendering peer for the {@link echopoint.ImageMap} component.
@@ -49,7 +52,7 @@ import java.util.LinkedHashMap;
  * @author Rakesh Vidyadharan 2008-10-19
  * @version $Id$
  */
-public class ImageMapPeer extends AbstractContainerPeer
+public class ImageMapPeer extends AbstractImagePeer
 {
   /** The component name for which this class is a peer. */
   private static final String COMPONENT_NAME = ImageMap.class.getName();
@@ -69,12 +72,12 @@ public class ImageMapPeer extends AbstractContainerPeer
 
   /** The service for the client side peer for this component. */
   private static final Service COMPONENT_SERVICE =
-      JavaScriptService.forResources( COMPONENT_NAME, SERVICE_FILES );
+      forResources( COMPONENT_NAME, SERVICE_FILES );
 
   /** Register the services and resources. */
   static
   {
-    WebContainerServlet.getServiceRegistry().add( COMPONENT_SERVICE );
+    getServiceRegistry().add( COMPONENT_SERVICE );
 
     xstream = new XStream( new JsonHierarchicalStreamDriver() );
     xstream.processAnnotations( MapSection.class );

@@ -17,23 +17,27 @@
  */
 package echopoint;
 
-import echopoint.model.CircleSection;
-import echopoint.model.MapSection;
-import echopoint.model.Point;
-import echopoint.model.PolygonSection;
-import echopoint.model.RectangleSection;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.Extent;
 import nextapp.echo.app.Label;
 import nextapp.echo.app.event.ActionEvent;
 import nextapp.echo.app.event.ActionListener;
+
+import echopoint.model.CircleSection;
+import echopoint.model.Cursor;
+import echopoint.model.MapSection;
+import echopoint.model.Point;
+import echopoint.model.PolygonSection;
+import echopoint.model.RectangleSection;
+
 import org.junit.AfterClass;
-import static org.junit.Assert.assertEquals;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Collection;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Unit test suite for the {@link echopoint.ImageMap} component.
@@ -57,6 +61,30 @@ public class ImageMapTest extends AbstractTest<ImageMap>
     getComponent().setRenderId( renderId );
     assertEquals( "Ensuring renderId set", renderId,
         getComponent().getRenderId() );
+  }
+
+  @Test
+  public void cursor()
+  {
+    final Cursor cursor = Cursor.crosshair;
+    getComponent().setCursor( cursor );
+    assertEquals( "Ensuring cursor set", cursor, getComponent().getCursor() );
+  }
+
+  @Test
+  public void text()
+  {
+    final String text = "Image Map";
+    getComponent().setText( text );
+    assertEquals( "Ensuring text set", text, getComponent().getText() );
+  }
+
+  @Test
+  public void toolTipText()
+  {
+    final String text = "Image Map";
+    getComponent().setToolTipText( text );
+    assertEquals( "Ensuring tool-tip text set", text, getComponent().getToolTipText() );
   }
 
   @Test

@@ -15,13 +15,13 @@
  * for the specific language governing rights and limitations under the
  * License.
  */
+
 package echopoint;
 
-import echopoint.internal.AbstractContainer;
 import nextapp.echo.app.HttpImageReference;
 import nextapp.echo.app.ImageReference;
-import nextapp.echo.app.event.ActionEvent;
-import nextapp.echo.app.event.ActionListener;
+
+import echopoint.internal.AbstractImage;
 
 /**
  * The <code>ImageIcon</code> class provides an component
@@ -54,18 +54,9 @@ import nextapp.echo.app.event.ActionListener;
  * @author Rakesh Vidyadharan 2008-10-20
  * @version $Id$
  */
-public class ImageIcon extends AbstractContainer
+public class ImageIcon extends AbstractImage
 {
   private static final long serialVersionUID = 1l;
-
-  /**
-   * The property for storing the action command associated with an
-   * action event for the image.
-   */
-  public static final String PROPERTY_ACTION_COMMAND = "actionCommand";
-
-  /** The image reference for the component.  This property may be styled. */
-  public static final String PROPERTY_ICON = "url";
 
   /** Default constructor. */
   public ImageIcon() {}
@@ -91,79 +82,26 @@ public class ImageIcon extends AbstractContainer
   }
 
   /**
-   * Return the value of {@link #PROPERTY_ACTION_COMMAND} property.
+   * Return the value of {@link #PROPERTY_IMAGE} property.
    *
-   * @return The action command value.
-   */
-  public String getActionCommand()
-  {
-    return (String) get( PROPERTY_ACTION_COMMAND );
-  }
-
-  /**
-   * Set the value of {@link #PROPERTY_ACTION_COMMAND} property.
-   *
-   * @param command The action command value to set.
-   */
-  public void setActionCommand( final String command )
-  {
-    set( PROPERTY_ACTION_COMMAND, command );
-  }
-
-  /**
-   * Return the value of {@link #PROPERTY_ICON} property.
-   *
+   * @deprecated Use {@link #getImage} instead.
    * @return The image reference for the icon.
    */
+  @Deprecated
   public ImageReference getIcon()
   {
-    return (ImageReference) get( PROPERTY_ICON );
+    return getImage();
   }
 
   /**
-   * Set the value of {@link #PROPERTY_ICON} property.
+   * Set the value of {@link #PROPERTY_IMAGE} property.
    *
+   * @deprecated Use {@link #setImage} instead.
    * @param icon The image reference to set.
    */
+  @Deprecated
   public void setIcon( final ImageReference icon )
   {
-    set( PROPERTY_ICON, icon );
-  }
-
-  /**
-   * {@inheritDoc}
-   * @see #fireActionPerformed()
-   */
-  @Override
-  public void processInput( final String inputName, final Object inputValue )
-  {
-    super.processInput( inputName, inputValue );
-    fireActionPerformed();
-  }
-
-  /** {@inheritDoc} */
-  @Override
-  public void addActionListener( final ActionListener listener )
-  {
-    super.addActionListener( listener );
-  }
-
-  /** Notifies all listeners that have registered for this event type. */
-  protected void fireActionPerformed()
-  {
-    fireActionPerformed( new ActionEvent( this, getActionCommand() ) );
-  }
-
-  /** {@inheritDoc} */
-  @Override
-  public void removeActionListener( final ActionListener listener )
-  {
-    super.removeActionListener( listener );
-  }
-
-  /** {@inheritDoc} */
-  public boolean hasActionListeners()
-  {
-    return super.hasActionListeners();
+    setImage( icon );
   }
 }

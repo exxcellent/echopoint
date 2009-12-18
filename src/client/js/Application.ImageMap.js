@@ -11,7 +11,7 @@ echopoint.constants.IMAGE_MAP = "echopoint.ImageMap";
  * @author Rakesh 2008-10-16
  * @version $Id$
  */
-echopoint.ImageMap = Core.extend( echopoint.internal.AbstractContainer,
+echopoint.ImageMap = Core.extend( echopoint.internal.AbstractImage,
 {
   $load: function()
   {
@@ -21,10 +21,6 @@ echopoint.ImageMap = Core.extend( echopoint.internal.AbstractContainer,
   /** Properties defined for this component. */
   $static:
   {
-    ACTION_COMPLETE: "action",
-    ACTION_COMMAND: "actionCommand",
-    // The property that holds the URI for the image.
-    URL: "url",
     // The property that holds the map of sections keyed by their action
     // command values.  Do not specify directly, instead use the methods
     // to add/remove sections.
@@ -33,14 +29,6 @@ echopoint.ImageMap = Core.extend( echopoint.internal.AbstractContainer,
 
   $virtual:
   {
-    /** Programmatically performs a map section click action. */
-    doAction: function()
-    {
-      var ac = this.get( echopoint.ImageMap.ACTION_COMMAND );
-      this.fireEvent( { type: echopoint.ImageMap.ACTION_COMPLETE, source: this,
-        actionCommand: ac } );
-    },
-
     /**
      * Add a new section to the map of sections keyed by the action command
      * in the section specified.

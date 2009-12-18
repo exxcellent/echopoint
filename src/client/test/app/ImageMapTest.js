@@ -24,6 +24,9 @@ echopoint.test.ImageMapTest = Core.extend(
       url: "image/imagemap.gif",
       height: 300,
       width: 500,
+      text: "Image Map",
+      toolTipText: "Image Map",
+      cursor: "crosshair",
       events:
       {
         action: Core.method( this, this._actionPerformed )

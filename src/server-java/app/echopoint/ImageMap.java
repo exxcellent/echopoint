@@ -17,13 +17,11 @@
  */
 package echopoint;
 
-import com.thoughtworks.xstream.XStream;
-import echopoint.internal.AbstractContainer;
-import echopoint.model.MapSection;
-import nextapp.echo.app.HttpImageReference;
 import nextapp.echo.app.ImageReference;
 import nextapp.echo.app.event.ActionEvent;
-import nextapp.echo.app.event.ActionListener;
+
+import echopoint.internal.AbstractImage;
+import echopoint.model.MapSection;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -73,16 +71,12 @@ import java.util.Map;
  * @author Rakesh 2008-10-19, Brad Baker (originally for EPNG)
  * @version $Id$
  */
-public class ImageMap extends AbstractContainer
+public class ImageMap extends AbstractImage
 {
   private static final long serialVersionUID = 1l;
-  protected static XStream xstream;
-
-  /** The image that is to be used as the map region. */
-  public static final String PROPERTY_IMAGE = "url";
 
   /**
-   * The JSON representation of the map of {@link echopoint.model.MapSection}
+   * The map of {@link echopoint.model.MapSection}
    * instances that represents the clickable sections in the map.  Note that
    * this property is to be treated as read-only.
    */
@@ -112,36 +106,6 @@ public class ImageMap extends AbstractContainer
   public ImageMap( final String url )
   {
     setImage( url );
-  }
-
-  /**
-   * Return the value of the {@link #PROPERTY_IMAGE} property.
-   *
-   * @return The image that is being used as the map region.
-   */
-  public ImageReference getImage()
-  {
-    return (ImageReference) get( PROPERTY_IMAGE );
-  }
-
-  /**
-   * Set the value of the {@link #PROPERTY_IMAGE} property.
-   *
-   * @param image The image to use as the map region.
-   */
-  public void setImage( final ImageReference image )
-  {
-    set( PROPERTY_IMAGE, image );
-  }
-
-  /**
-   * Set the value of the {@link #PROPERTY_IMAGE} property.
-   *
-   * @param url The URL for the image to use as the map region.
-   */
-  public void setImage( final String url )
-  {
-    setImage( new HttpImageReference( url ) );
   }
 
   /**
@@ -234,38 +198,6 @@ public class ImageMap extends AbstractContainer
   public void removeAllSections()
   {
     setSections( new LinkedHashMap<String,MapSection>() );
-  }
-
-  /**
-   * Over-ridden to be a {@code noop} since image map does not support a
-   * background image.
-   *
-   * @param backgroundImage The backgroundImage to apply.
-   */
-  @Override
-  public void setBackgroundImage( final ImageReference backgroundImage )
-  {
-    // noop
-  }
-
-  /** {@inheritDoc} */
-  @Override
-  public void addActionListener( final ActionListener listener )
-  {
-    super.addActionListener( listener );
-  }
-
-  /** {@inheritDoc} */
-  public void removeActionListener( final ActionListener listener )
-  {
-    super.removeActionListener( listener );
-  }
-
-  /** {@inheritDoc}. */
-  @Override
-  public boolean hasActionListeners()
-  {
-    return super.hasActionListeners();
   }
 
   /** {@inheritDoc} */

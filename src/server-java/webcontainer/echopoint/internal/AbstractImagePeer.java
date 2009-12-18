@@ -15,43 +15,50 @@
  * for the specific language governing rights and limitations under the
  * License.
  */
-package echopoint;
+package echopoint.internal;
 
 import nextapp.echo.app.Component;
 import nextapp.echo.app.util.Context;
 import nextapp.echo.webcontainer.ServerMessage;
 import nextapp.echo.webcontainer.Service;
-import nextapp.echo.webcontainer.WebContainerServlet;
-import nextapp.echo.webcontainer.service.JavaScriptService;
 
-import echopoint.internal.AbstractImagePeer;
+import static echopoint.internal.AbstractContainer.ACTION_LISTENERS_CHANGED_PROPERTY;
+import static echopoint.internal.AbstractContainer.INPUT_ACTION;
+import static nextapp.echo.webcontainer.WebContainerServlet.getServiceRegistry;
+import static nextapp.echo.webcontainer.service.JavaScriptService.forResources;
 
 /**
- * Component rendering peer for the {@link echopoint.ImageIcon} component.
+ * Component rendering peer for the {@link echopoint.internal.AbstractImage} component.
  *
- * @author Rakesh Vidyadharan 2008-10-20
+ * @author Rakesh Vidyadharan 2009-12-18
  * @version $Id$
  */
-public class ImageIconPeer extends AbstractImagePeer
+public class AbstractImagePeer extends AbstractContainerPeer
 {
   /** The component name for which this class is a peer. */
-  private static final String COMPONENT_NAME = ImageIcon.class.getName();
+  private static final String COMPONENT_NAME = AbstractImage.class.getName();
 
   /** The JS service files to load. */
   private static final String[] SERVICE_FILES =
       {
-          "resource/js/Application.ImageIcon.js",
-          "resource/js/Sync.ImageIcon.js"
+          "resource/js/Application.AbstractImage.js",
+          "resource/js/Sync.AbstractImage.js"
       };
 
   /** The service for the client side peer for this component. */
   private static final Service COMPONENT_SERVICE =
-      JavaScriptService.forResources( COMPONENT_NAME, SERVICE_FILES );
+      forResources( COMPONENT_NAME, SERVICE_FILES );
 
   /** Register the services and resources. */
   static
   {
-    WebContainerServlet.getServiceRegistry().add( COMPONENT_SERVICE );
+    getServiceRegistry().add( COMPONENT_SERVICE );
+  }
+
+  public AbstractImagePeer()
+  {
+    addEvent( new DefaultEventPeer(
+        INPUT_ACTION, ACTION_LISTENERS_CHANGED_PROPERTY ) );
   }
 
   /**
@@ -74,7 +81,7 @@ public class ImageIconPeer extends AbstractImagePeer
   @Override
   public Class getComponentClass()
   {
-    return ImageIcon.class;
+    return AbstractImage.class;
   }
 
   /**
@@ -85,5 +92,23 @@ public class ImageIconPeer extends AbstractImagePeer
   public String getClientComponentType( final boolean shortType )
   {
     return COMPONENT_NAME;
+  }
+
+  /**
+   * Over-ridden to handle requests for the {@link echopoint.model.Cursor}
+   * property associated with the image.
+   * 
+   * {@inheritDoc}
+   */
+  @Override
+  public Object getOutputProperty( final Context context,
+      final Component component, final String propertyName, final int propertyIndex )
+  {
+    if ( AbstractImage.PROPERTY_CURSOR.equals( propertyName ) )
+    {
+      return component.get( propertyName ).toString();
+    }
+    
+    return super.getOutputProperty( context, component, propertyName, propertyIndex );
   }
 }

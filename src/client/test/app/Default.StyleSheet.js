@@ -363,7 +363,9 @@ echopoint.test.TestApp.StyleSheet = new Echo.StyleSheet(
       border: "2px groove #cfdfff",
       url: "image/imagemap.gif",
       width: "500px",
-      height: "300px"
+      height: "300px",
+      toolTipText: "Image Map",
+      cursor: "crosshair"
     },
     "echopoint.InfoWindow":
     {

@@ -224,6 +224,8 @@
         <file name='Sync.HtmlLayout.js'/>
         <file name='Application.HttpPane.js'/>
         <file name='Sync.HttpPane.js'/>
+        <file name='Application.AbstractImage.js'/>
+        <file name='Sync.AbstractImage.js'/>
         <file name='Application.ImageIcon.js'/>
         <file name='Sync.ImageIcon.js'/>
         <file name='Application.ImageMap.js'/>
