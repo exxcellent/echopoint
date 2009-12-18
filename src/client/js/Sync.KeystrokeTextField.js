@@ -82,8 +82,9 @@ echopoint.KeystrokeTextFieldSync = Core.extend( echopoint.internal.TextFieldSync
   },
 
   // Cancel any pending syncs on dispose
-  renderDispose : function() 
+  renderDispose : function(update) 
   {
     this.cancelPendingSync();
+    echopoint.internal.TextFieldSync.prototype.renderDispose.call(this, update);
   }
 });
