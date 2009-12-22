@@ -4,6 +4,8 @@ import java.util.ResourceBundle;
 
 import echopoint.internal.TextField;
 import echopoint.model.AutoLookupSelectModel;
+import nextapp.echo.app.ImageReference;
+
 
 public class AutoLookupSelectField extends TextField {
 
@@ -12,6 +14,7 @@ public class AutoLookupSelectField extends TextField {
 	protected ResourceBundle resourceBundle;
 	private String key;
 	private String searchVal;
+	private boolean opt_visible = false;
 	public static final String PROPERTY_KEY = "key";
 	public static final String PROPERTY_SEARCH_VAL = "searchVal";
 
@@ -46,8 +49,30 @@ public class AutoLookupSelectField extends TextField {
 	public static final String PROPERTY_SEARCH_BAR_SHOWN = "searchBarShown";
 	public static final String PROPERTY_SEARCH_BAR_SEARCHING_TEXT = "searchBarSearchingText";
 	public static final String PROPERTY_NO_MATCHING_OPTION_TEXT = "noMatchingOptionText";
+  public static final String PROPERTY_OPTIONS_VISIBLE = "optionsVisible";
 
 	
+  public void setSearchBarSearchingIcon( ImageReference icon ) { set(PROPERTY_SEARCH_BAR_SEARCHING_ICON, icon); } 
+  public ImageReference getSearchBarSearchingIcon() { return (ImageReference )get(PROPERTY_SEARCH_BAR_SEARCHING_ICON); } 
+  
+  public void setNoMatchingOptionText( String txt ) { set(PROPERTY_NO_MATCHING_OPTION_TEXT, txt); } 
+  public String getNoMatchingOptionText() { return (String)get(PROPERTY_NO_MATCHING_OPTION_TEXT ); } 
+
+  public void setSearchBarSearchingText( String txt ) { set(PROPERTY_SEARCH_BAR_SEARCHING_TEXT, txt); } 
+  public String getSearchBarSearchingText() { return (String)get(PROPERTY_SEARCH_BAR_SEARCHING_TEXT); } 
+
+  public boolean isOptionsVisible() { return opt_visible; } 
+
+  public void setOptionsVisible(boolean b) 
+  { 
+    boolean opt_visible_old = opt_visible;
+    if( opt_visible_old != b )
+    {          
+      opt_visible = b;
+      firePropertyChange( PROPERTY_OPTIONS_VISIBLE, Boolean.valueOf(opt_visible_old), Boolean.valueOf(b) );
+    }
+  }
+
 	public AutoLookupSelectModel getAutoLookupModel() {
 		return (AutoLookupSelectModel) get(PROPERTY_AUTO_LOOKUP_MODEL);
 	}
@@ -83,10 +108,15 @@ public class AutoLookupSelectField extends TextField {
 	@Override
 	public void processInput(String inputName, Object inputValue) {
 	    super.processInput(inputName, inputValue);
-        if (PROPERTY_KEY.equals(inputName)) {
-            setKey((String)inputValue);
-        }else if (PROPERTY_SEARCH_VAL.equals(inputName)) {
-        	setSearchVal((String)inputValue);
-        }
+      if (PROPERTY_KEY.equals(inputName)) 
+        setKey((String)inputValue);
+      else 
+      if (PROPERTY_SEARCH_VAL.equals(inputName))
+        setSearchVal((String)inputValue);
+      else 
+      if (PROPERTY_OPTIONS_VISIBLE.equals(inputName))
+      {
+        setOptionsVisible( ( (Boolean)inputValue ).booleanValue() );
+      }
     }
 }

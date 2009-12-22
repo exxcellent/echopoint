@@ -28,6 +28,7 @@ public class AutoLookupSelectFieldPeer extends TextFieldPeer {
 		super();
 		addOutputProperty(AutoLookupSelectField.PROPERTY_KEY);
 		addOutputProperty(AutoLookupSelectField.PROPERTY_SEARCH_VAL);
+    addOutputProperty(AutoLookupSelectField.PROPERTY_OPTIONS_VISIBLE);
 	}
 	
 	@Override
@@ -39,40 +40,41 @@ public class AutoLookupSelectFieldPeer extends TextFieldPeer {
 	}
 	
 	@Override
-	public Object getOutputProperty(Context context, Component component, 
-            String propertyName, int propertyIndex) {
-        if (propertyName.equals(AutoLookupSelectField.PROPERTY_KEY)) {
-            AutoLookupSelectField alSelectField = (AutoLookupSelectField) component;
-            return alSelectField.getKey();
-        } else if (propertyName.equals(AutoLookupSelectField.PROPERTY_SEARCH_VAL)) {
-            AutoLookupSelectField alSelectField = (AutoLookupSelectField) component;
-            return alSelectField.getSearchVal();
-        }else{
-            return super.getOutputProperty(context, component, propertyName, propertyIndex);
-        }
-    }
-	
+	public Object getOutputProperty(Context context, Component component, String propertyName, int propertyIndex) 
+  {
+    if (propertyName.equals(AutoLookupSelectField.PROPERTY_KEY)) 
+      return ( (AutoLookupSelectField) component).getKey();
+    else 
+    if (propertyName.equals(AutoLookupSelectField.PROPERTY_SEARCH_VAL)) 
+      return ( (AutoLookupSelectField) component).getSearchVal();
+    else 
+    if( propertyName.equals(AutoLookupSelectField.PROPERTY_OPTIONS_VISIBLE) ) 
+      return ( (AutoLookupSelectField) component).isOptionsVisible();
+    else
+      return super.getOutputProperty(context, component, propertyName, propertyIndex);
+  }
 	
 	@Override
-	public Class getInputPropertyClass(String propertyName) {
-		Class ipc;
-		if(propertyName.equals(AutoLookupSelectField.PROPERTY_KEY) || propertyName.equals(AutoLookupSelectField.PROPERTY_SEARCH_VAL)){
-			ipc = String.class;
-		}else{
-			ipc = super.getInputPropertyClass(propertyName);	
-		}
-		return ipc;
+	public Class getInputPropertyClass(String propertyName) 
+  {
+		if(propertyName.equals(AutoLookupSelectField.PROPERTY_KEY) || propertyName.equals(AutoLookupSelectField.PROPERTY_SEARCH_VAL))
+			return String.class;
+    else 
+    if( propertyName.equals(AutoLookupSelectField.PROPERTY_OPTIONS_VISIBLE) ) 
+      return Boolean.class;      
+    else
+			return super.getInputPropertyClass(propertyName);	
 	}
 
 	@Override
 	public void storeInputProperty(Context context, Component component, 
             String propertyName, int propertyIndex, Object newValue) {
-		if (propertyName.equals(AutoLookupSelectField.PROPERTY_KEY) || propertyName.equals(AutoLookupSelectField.PROPERTY_SEARCH_VAL)) {
-            ClientUpdateManager clientUpdateManager = 
-                    (ClientUpdateManager) context.get(ClientUpdateManager.class);
-            clientUpdateManager.setComponentProperty(component, 
-                    propertyName, newValue);
-        }
+		if( propertyName.equals(AutoLookupSelectField.PROPERTY_KEY) || propertyName.equals(AutoLookupSelectField.PROPERTY_SEARCH_VAL) || 
+        propertyName.equals(AutoLookupSelectField.PROPERTY_OPTIONS_VISIBLE ) ) 
+    {
+      ClientUpdateManager clientUpdateManager =  (ClientUpdateManager) context.get(ClientUpdateManager.class);
+      clientUpdateManager.setComponentProperty(component, propertyName, newValue);
+    }
 
 		super.storeInputProperty(context, component, propertyName, propertyIndex, newValue);
 	}

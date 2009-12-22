@@ -13,9 +13,9 @@ echopoint.AutoLookupSelectFieldSync = Core.extend( echopoint.internal.TextFieldS
 	_iframeE: null,
 	_searchEntries: null,
 	_selectedOptionE: null,
-	_docClickHandler: null,
+  _docClickHandler: null,
 	_bodyE: null,
-	
+ 	
 	$load: function() {
 		Echo.Render.registerPeer( echopoint.constants.AUTO_LOOKUP_SELECT_FIELD, this );
 	},
@@ -23,6 +23,15 @@ echopoint.AutoLookupSelectFieldSync = Core.extend( echopoint.internal.TextFieldS
 	$construct: function() {
 		echopoint.internal.TextFieldSync.call( this );		
 	},
+
+  renderUpdate: function(update) 
+  {
+    var status = echopoint.internal.TextFieldSync.prototype.renderUpdate.call(this, update);
+    var opt_visible = update.getUpdatedProperty("optionsVisible");
+    if( opt_visible && opt_visible.newValue )
+      this._makeAjaxCall();
+    return status;
+  },
 	
 	/**
 	 * Echo life cycle method (on creation)
@@ -37,7 +46,7 @@ echopoint.AutoLookupSelectFieldSync = Core.extend( echopoint.internal.TextFieldS
 	
 		// create drop down div
 		this._popupDivE = document.createElement('div');
-	    this._popupDivE.id = this.elementId;
+	  this._popupDivE.id = this.elementId;
 		this._popupDivE.style.position = 'absolute';
 		this._popupDivE.style.visibility = 'hidden';
 		this._popupDivE.style.background = '#fff';
@@ -58,7 +67,7 @@ echopoint.AutoLookupSelectFieldSync = Core.extend( echopoint.internal.TextFieldS
 		this._searchingStatusDivE = document.createElement('div');
 		this._searchingStatusDivE.id = this.component.renderId + '_SearchingStatus';
 		var xhtml = '<table cellpadding=0 cellspacing=0 border=0><tbody><tr>';
-		if ( this._searchBarSearchingIcon ) {
+		if ( searchBarSearchingIcon ) {
 			xhtml += '<td><img src="' + searchBarSearchingIcon + '"/></td>';
  		}
 		xhtml += '<td>' + searchBarSearchingText + '</td></tr></tbody></table>';
@@ -75,111 +84,106 @@ echopoint.AutoLookupSelectFieldSync = Core.extend( echopoint.internal.TextFieldS
 	    // append the popup to the main body
 		this._bodyE = document.getElementsByTagName('body')[0];
 		this._bodyE.appendChild(this._popupDivE);
-		if (this._iframeE) {
+		if(this._iframeE)
 			this._bodyE.appendChild(this._iframeE);
-		}
-
-	    Core.Web.Event.add( this.input, "keypress", Core.method( this, this._processKeyPress ), false );
-	    Core.Web.Event.add( this.input, "keyup", Core.method( this, this._processKeyUp2 ), false );
 	}, 
 	
 	 /** @see Echo.Render.ComponentSync#getFocusFlags */
-	getFocusFlags: function() {
-		if ( this._popupDivE.style.visibility == 'hidden' ) {
-			//normal focus behaviour
-			return Echo.Render.ComponentSync.FOCUS_PERMIT_ARROW_UP | Echo.Render.ComponentSync.FOCUS_PERMIT_ARROW_DOWN;			
-		} else {
-			//prevent that up/down keys change the focus to another component
-			//scroll instead up/down in the popup entry list
-	        return 0;  
-		}
-    },
+	getFocusFlags: function() 
+  {
+		if( this._popupDivE.style.visibility == 'hidden' ) 
+			return Echo.Render.ComponentSync.FOCUS_PERMIT_ARROW_UP | Echo.Render.ComponentSync.FOCUS_PERMIT_ARROW_DOWN; //normal focus behaviour
+    else 
+      return 0; //prevent that up/down keys change the focus to another component scroll instead up/down in the popup entry list  
+  },
 
-	/**
-	 * Overriding the TextField method 
-	 */
-	_processKeyPress: function( echoEvent ) {
-		if (echoEvent.keyCode == 13) { // ENTER
-			if (this._selectedOptionE) {
-				var optionValue = this._selectedOptionE.getAttribute('optionValue');
-				this.input.value = optionValue;
-				var optionKey = this._selectedOptionE.getAttribute('optionKey');;
-				var optionSearchVal = this._selectedOptionE.getAttribute('optionSearchVal');;
-			}
-			this.component.set("key", optionKey);
-			this.component.set("searchVal", optionSearchVal);
-		}	
-  	},
-  	
 	/**
 	 * Echo life cycle method (on deletion)
 	 */
-	renderDispose: function( update ) {
-		this._removeOptions();
+	renderDispose: function( update ) 
+  {
+    this._cancelAnyAjaxCall();
+    this._removeOptions();
 		this._popupDivE.parentNode.removeChild(this._popupDivE);
-		if ( this._iframeE )	{
+		if ( this._iframeE )
 			this._iframeE.parentNode.removeChild(this._iframeE);
-		}		
-		Core.Web.Event.remove( this._bodyE, "mousedown", this._docClickHandler, true );
-		Core.Web.Event.removeAll( this.input );
-		this.input = null;
+    echopoint.internal.TextFieldSync.prototype.renderDispose.call(this, update);
 	},
 
-    /** The event handler for a "blur" event. */
-    processBlur: function( event ) {
-    	this._actionOption();
-		//this.component.doAction();  //fire action event
-    },
-    
-	/** This method overrides the super processKeyUp(e) method. */
-	_processKeyUp2: function(echoEvent){
-		echoEvent = (echoEvent) ? echoEvent : window.event;
-		var key = echoEvent.keyCode;
-		
-	 	// ignore function keys
-		if ( key >= 112 && key <= 123 ) return;
+  /** The event handler for a "blur" event. */
+  processBlur: function( event ) 
+  {
+    this._actionOption();
+    this._focused = false;
+    return true;
+  },
 
-		switch ( key ) {
-			// none of these affect the text field content so ignore
-			case 16: //shift
-			case 17: //ctrl
-			case 18: //alt
-			case 19: //pause
-			case 20: //caps lock
-			case 35: //end
-			case 36: //home
-			case 37: //left arrow
-			case 39: //right arrow
-			case 44: //print screen
-			case 45: //insert
-			case 144: //num lock
-			case 145: //scroll lock
-			case 33: //page up
-			case 34: //page down
-				break;
-			// list box navigation keys
-			case 9://tab
-			case 13: //enter
-			case 27: //esc
-			case 38: //up arrow
-			case 40: //down arrow
-				this._handleNavKeys(echoEvent);
-				break;
-			// all other keys
-			default:
-				this._makeAjaxCall();
-				break;
-		}		
+  _storeTextFieldValue : function ()
+  {
+    this._storeSelection();
+    this.sanitizeInput();
+    this.component.set("text", this.input.value, true);
+    this._lastProcessedValue = this.input.value;
+  }, 
+
+	clientKeyUp : function( event )
+  {
+    event = event ? event : window.event;
+    var key = event.keyCode;
+    if( key < 112 || key > 123 ) // ignore function keys 
+    {
+		  switch ( key ) 
+      {
+			  // none of these affect the text field content so ignore
+			  case 16: //shift
+			  case 17: //ctrl
+			  case 18: //alt
+			  case 19: //pause
+			  case 20: //caps lock
+			  case 35: //end
+			  case 36: //home
+			  case 37: //left arrow
+			  case 39: //right arrow
+			  case 44: //print screen
+			  case 45: //insert
+			  case 144: //num lock
+			  case 145: //scroll lock
+			  case 33: //page up
+			  case 34: //page down
+				  break;
+			  // list box navigation keys
+        case 13: // Enter
+          this._actionOption();
+          break;
+        case 27: // ESC
+        case 9 : // TAB
+          this._closeDropDown();
+          break;
+        case 38:  // UP ARROW
+          this._incrementOption(forward = false);
+          break;
+        case 40: // DOWN ARROW
+          this._incrementOption(forward = true);
+          break;
+			  // all other keys
+			  default:
+          this._storeTextFieldValue();
+          if( this.input.value )
+				    this._makeAjaxCall();
+          else
+            this._closeDropDown();
+				  break;
+		  }
+    }	
 		return true;
 	},
 
 	/**
 	 * Show or hide the 'Searching' status
 	 */	
-	_updateSearchUI: function( isSearching ) {
-		if (isSearching) {
-			this._notFoundStatusDivE.style.display = 'none';
-		}
+	_updateSearchUI: function( isSearching ) 
+  {
+		if(isSearching) this._notFoundStatusDivE.style.display = 'none';
 		this._searchingStatusDivE.style.display = isSearching ? 'block' : 'none';
 	},
 	
@@ -212,10 +216,12 @@ echopoint.AutoLookupSelectFieldSync = Core.extend( echopoint.internal.TextFieldS
 	/**
 	 * Add the entries to the popup
 	 */
-	_addOptions: function() {
+	_addOptions: function() 
+  {
 		// now add the new ones as mouseoverable divs with xhtml
 		this._selectOption(null);
-		for ( var i = 0; i < this._searchEntries.length; i++ ) {
+		for( var i = 0; i < this._searchEntries.length; i++ ) 
+    {
 			var entry = this._searchEntries[i];
 			var entryDiv = document.createElement('div');  
 			this._popupDivE.insertBefore(entryDiv, this._searchingStatusDivE); // we always have the statusbar div as a reference point
@@ -227,46 +233,43 @@ echopoint.AutoLookupSelectFieldSync = Core.extend( echopoint.internal.TextFieldS
 			entryDiv.setAttribute('optionKey', entry["key"]);
 			entryDiv.setAttribute('optionSearchVal', entry["searchVal"]);
 			entryDiv.style.cursor = 'default';
-		    Core.Web.Event.add( entryDiv, "click", Core.method( this, this._onclick ), false );
-		    Core.Web.Event.add( entryDiv, "mouseover", Core.method( this, this._onmouseover ), false );
+		  Core.Web.Event.add( entryDiv, "click", Core.method( this, this._onclick ), false );
+		  Core.Web.Event.add( entryDiv, "mouseover", Core.method( this, this._onmouseover ), false );
 
-			if ( i == 0 ) { // first is auto selected when adding
+			if( i == 0 ) // first is auto selected when adding
 				this._selectOption(entryDiv);
-			}
 		}
 		// if we have no matching options then show some text indicating this
-		if ( this._searchEntries.length == 0 ) {
-			this._notFoundStatusDivE.style.display = 'block';
-		} else {
-			this._notFoundStatusDivE.style.display = 'none';
-		}
+    this._notFoundStatusDivE.style.display = this._searchEntries.length == 0 ? 'block' : 'none';
 		this._resizeThings();
 	},
 	
 	/**
 	 * Called to select a specific option as the current one
 	 */
-	_selectOption: function( newSelectedOptionE ) {
+	_selectOption: function( newSelectedOptionE ) 
+  {
 		// de-hilight to previous selected item
-	    if ( this._selectedOptionE ) {
-			this._selectedOptionE.style.background = '#fff';  //unselected
-		}
+    if( this._selectedOptionE )
+      this._selectedOptionE.style.background = '#fff';  //unselected
+
 		this._selectedOptionE = newSelectedOptionE;
-		if ( this._selectedOptionE ) {
+		if( this._selectedOptionE )
 			this._selectedOptionE.style.background = '#ccc';  //selected
-    	}
 	},
-	
-	_showDropDown: function() {
-		if ( this._popupDivE.style.visibility != 'hidden' ) {
+
+	_showDropDown: function() 
+  {
+		if( this._popupDivE.style.visibility != 'hidden' )
 			return;
-    	}
+
 		var cellBounds = new Core.Web.Measure.Bounds(this.input);
 		this._popupDivE.style.left = cellBounds.left + 'px';
 		this._popupDivE.style.top = (cellBounds.top + cellBounds.height) + 'px';
 		this._popupDivE.style.minWidth = cellBounds.width + 'px';
 		this._popupDivE.style.zIndex = 1001;  //zIndex + 2;
-		if ( this._iframeE ) {
+		if( this._iframeE ) 
+    {
 			this._iframeE.style.zIndex = 1000;
 			this._iframeE.style.left = cellBounds.left + 'px';
 			this._iframeE.style.top = (cellBounds.top + cellBounds.height) + 'px';
@@ -274,66 +277,54 @@ echopoint.AutoLookupSelectFieldSync = Core.extend( echopoint.internal.TextFieldS
 			this._iframeE.style.visibility = 'visible';
 		}
 		this._popupDivE.style.visibility = 'visible';
-		
-		// attach document listener so we can know about outside clicks
-		var that = this;
-		this._docClickHandler = function( echoEvent ) {
-			var targetE = echoEvent.target;
-			if ( Core.Web.DOM.isAncestorOf(that._popupDivE, targetE) || Core.Web.DOM.isAncestorOf(that.input, targetE) ) {
-		        // its on us so safe to ignore
-        		return;
-		    }
-		     // they have clicked outside the popup or text field so hide it
-	      	that._closeDropDown();
-    	};
-	    Core.Web.Event.add(this._bodyE, "mousedown", this._docClickHandler, true );		
-  	},
-  	
-  	_hideDropDown: function() {
+    // attach document listener so we can know about outside clicks
+    var that = this;
+    this._docClickHandler = function( event ) 
+    {
+      event = event ? event : window.event;
+      var target = Core.Web.DOM.getEventTarget(event);
+      if( !Core.Web.DOM.isAncestorOf(that._popupDivE, target) && !Core.Web.DOM.isAncestorOf(that.input, target) )
+        that._selectOption(null); // they have clicked outside the popup or text field so clear the selection
+      return false;
+    };
+	  Core.Web.Event.add(this._bodyE, "mousedown", this._docClickHandler, true );
+    this.component.set("optionsVisible", true);
+  },
+  
+  _hideDropDown: function() 
+  {
 		this._popupDivE.style.visibility = 'hidden';
-		if ( this._iframeE )	{
+		if( this._iframeE )
 			this._iframeE.style.visibility = 'hidden';
-		}
 		Core.Web.Event.remove( this._bodyE, "mousedown", this._docClickHandler, true );
 	},
-  	
 	
 	/**
 	 * Called when the user presses the search button.	We AJAX back to the server to get some
 	 * new entries based on the current value
 	 */
-	_makeAjaxCall: function() {
+	_makeAjaxCall: function() 
+  {
 		// if we have an outstanding AJAX call in progress then we should cancell it.It may
 		// complete but we dont care for its results any more.
-		if ( this._outstandingAjaxCall ) {
-			this._outstandingAjaxCall.cancelled = true;
-			this._outstandingAjaxCall = null;
-		}
-		
-		this._storeValue();		
-		var partialSearchValue = this.input.value;
-		if ( !partialSearchValue ) {
-			// update the search UI so that it not longer has "Searching...." as its text
-			this._closeDropDown();
-			return; // nothing to search for
-		}
+	  this._cancelAnyAjaxCall();
 		// show the 'Searching status'
 		this._showDropDown();
 		this._updateSearchUI(true);
-
 		// Make an AJAX call to search for new values
-		var uri = "?sid=echopoint.AutoLookupSelectService&elementId=" + this.component.renderId + "&searchValue=" + encodeURI(partialSearchValue);
-	    this._outstandingAjaxCall = new Core.Web.HttpConnection(uri, "GET", null, "text/xml" );
-	    this._outstandingAjaxCall.addResponseListener( Core.method( this, this._ajaxResponse ) );
+		var uri = "?sid=echopoint.AutoLookupSelectService&elementId=" + this.component.renderId + "&searchValue=" + encodeURI(this.input.value);
+	  this._outstandingAjaxCall = new Core.Web.HttpConnection(uri, "GET", null, "text/xml" );
+	  this._outstandingAjaxCall.addResponseListener( Core.method( this, this._ajaxResponse ) );
 		this._outstandingAjaxCall.connect();
 	},
-	
-	_cancelAnyAjaxCalls: function() {
-		this._outstandingAjaxCall = null;
-	    if ( this._outstandingAjaxCall ) {
-			this._outstandingAjaxCall.cancelled = true;
-			this._outstandingAjaxCall = null;
-		}
+
+	_cancelAnyAjaxCall: function() 
+  {
+	  if( this._outstandingAjaxCall ) 
+    {
+	    this._outstandingAjaxCall.cancelled = true;
+	    this._outstandingAjaxCall = null;
+    }
 	},
 
 	/**
@@ -387,21 +378,25 @@ echopoint.AutoLookupSelectFieldSync = Core.extend( echopoint.internal.TextFieldS
 	  * This not only hides the drop down but it cancels any AJAX calls and
 	  * removes options as well.
 	  */
-	_closeDropDown: function() {
-		this._cancelAnyAjaxCalls();
+	_closeDropDown: function() 
+  {
+  	this._cancelAnyAjaxCall();
+    this._selectOption(null);
 		this._hideDropDown();
-		this._removeOptions();		
+		this._removeOptions();
+    this.component.set("optionsVisible", false);
 	},
 	
 	/**
 	 * Move the selection one forward or backward
 	 */
-	_incrementOption: function( forward ) {
-		if ( this._selectedOptionE ) {
+	_incrementOption: function( forward ) 
+  {
+		if( this._selectedOptionE ) 
+    {
 			var newSelectionE = (forward ? this._selectedOptionE.nextSibling : this._selectedOptionE.previousSibling);
-			if ( newSelectionE && newSelectionE != this._searchingStatusDivE ) {
+			if( newSelectionE && newSelectionE != this._searchingStatusDivE )
 				this._selectOption(newSelectionE);
-			}
 		}
 	},
 
@@ -409,10 +404,12 @@ echopoint.AutoLookupSelectFieldSync = Core.extend( echopoint.internal.TextFieldS
 	 * One entry has been selected (by click or by enter key)
 	 * Set the appropiate text and close the popup
 	 */
-	_actionOption: function() {
-		if ( this._selectedOptionE ) {
-			var optionValue = this._selectedOptionE.getAttribute('optionValue');
-			this.input.value = optionValue;
+	_actionOption: function() 
+  {
+		if( this._selectedOptionE ) 
+    {
+			this.input.value = this._selectedOptionE.getAttribute('optionValue');
+      this._storeTextFieldValue();
 			var optionKey = this._selectedOptionE.getAttribute('optionKey');
 			var optionSearchVal = this._selectedOptionE.getAttribute('optionSearchVal');
 			this.component.set("key",  optionKey);
@@ -426,39 +423,22 @@ echopoint.AutoLookupSelectFieldSync = Core.extend( echopoint.internal.TextFieldS
 	/**
 	 * Action listener (when the user clicks on an entry)
 	 */
-	_onclick: function( echoEvent ) {
-		this._selectOption(echoEvent.target);
-		//this._actionOption();
+	_onclick: function( event ) 
+  {
+    event = event ? event : window.event;
+		this._selectOption( Core.Web.DOM.getEventTarget(event) );
 		// we never want focus on the popup
 		this.input.focus();
+    return true;
 	},
 
 	/**
 	 * Mouse listener (creates rollover-effect)
 	 */
-	_onmouseover: function( echoEvent ) {
-		this._selectOption(echoEvent.target);
-	},
-
-	/**
-	 * 
-	 */	
-	_handleNavKeys: function( echoEvent ) {
-		switch ( echoEvent.keyCode ) {
-			case 13: // Enter
-				this._actionOption();
-				break;
-			case 27: // ESC
-			case 9 : // TAB
-				this._closeDropDown();
-				break;
-			case 38:	// UP ARROW
-				this._incrementOption(forward = false);
-				break;
-			case 40: // DOWN ARROW
-				this._incrementOption(forward = true);
-				break;
-		}
+	_onmouseover: function( event ) 
+  {
+    event = event ? event : window.event;
+		this._selectOption( Core.Web.DOM.getEventTarget(event) );
+    return true;
 	}
-	
 });
