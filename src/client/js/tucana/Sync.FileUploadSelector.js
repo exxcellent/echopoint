@@ -710,6 +710,11 @@ echopoint.tucana.FileUploadSelectorSync.Table = Core.extend(
         echopoint.tucana.FileUploadSelector.BUTTON_DISPLAY,
         echopoint.tucana.FileUploadSelector.DEFAULT_BUTTON_DISPLAY );
 
+    // Chrome does not seem to post file when triggered via button.
+    // Temporary fix until resolved properly
+    if ( Core.Web.Env.BROWSER_CHROME ) display = "none";
+
+
     if ( display != "none" )
     {
       this._submit = new echopoint.tucana.FileUploadSelectorSync.Button( this.peer );
@@ -947,6 +952,7 @@ echopoint.tucana.FileUploadSelectorSync.Button = Core.extend(
     {
       displayType = ( Core.Web.Env.BROWSER_SAFARI ) ? "left" : "right";
     }
+
 
     Core.Web.DOM.removeAllChildren( parentElement );
 
