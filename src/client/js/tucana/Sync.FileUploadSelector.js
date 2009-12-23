@@ -84,7 +84,7 @@ echopoint.tucana.FileUploadSelectorSync = Core.extend( echopoint.internal.Abstra
     if ( progress )
     {
       var progressElement = progress.peer._div ;
-      Core.Web.DOM.removeNode( progressElement );
+      if ( progressElement ) Core.Web.DOM.removeNode( progressElement );
     }
 
     this._getBody().removeChild( this._hidden );
