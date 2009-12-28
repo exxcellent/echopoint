@@ -1,12 +1,11 @@
 package echopoint;
 
-import nextapp.echo.webcontainer.ServerMessage;
-import nextapp.echo.webcontainer.Service;
 import static nextapp.echo.webcontainer.WebContainerServlet.getServiceRegistry;
 import static nextapp.echo.webcontainer.service.JavaScriptService.forResources;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.util.Context;
-
+import nextapp.echo.webcontainer.ServerMessage;
+import nextapp.echo.webcontainer.Service;
 import echopoint.internal.TextFieldPeer;
 
 /**

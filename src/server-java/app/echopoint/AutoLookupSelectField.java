@@ -1,17 +1,14 @@
 package echopoint;
 
-import java.util.ResourceBundle;
-
-import echopoint.internal.TextField;
-import echopoint.model.AutoLookupSelectModel;
 import nextapp.echo.app.ImageReference;
+import echopoint.internal.TextField;
+import echopoint.model.AutoLookupSelectFieldModel;
+import echopoint.model.AutoLookupSelectModel;
 
 
 public class AutoLookupSelectField extends TextField {
 
 	private static final long serialVersionUID = 1L;
-
-	protected ResourceBundle resourceBundle;
 	private String key;
 	private String searchVal;
 	private boolean opt_visible = false;
@@ -50,10 +47,18 @@ public class AutoLookupSelectField extends TextField {
 	public static final String PROPERTY_SEARCH_BAR_SEARCHING_TEXT = "searchBarSearchingText";
 	public static final String PROPERTY_NO_MATCHING_OPTION_TEXT = "noMatchingOptionText";
   public static final String PROPERTY_OPTIONS_VISIBLE = "optionsVisible";
+  public static final String PROPERTY_AUTO_SELECT = "autoSelect";
+  public static final String PROPERTY_POPUP_ICON = "popupIcon";
 
+  // true - aways auto selected first option
+  public void setAutoSelect(boolean b) { set(PROPERTY_AUTO_SELECT, b); } 
+  public boolean getAutoSelect() { return ( (Boolean)get(PROPERTY_AUTO_SELECT) ).booleanValue(); } 
 	
+  public void setPopupIcon( ImageReference icon ) { set(PROPERTY_POPUP_ICON, icon); } 
+  public ImageReference getPopupIcon() { return (ImageReference)get(PROPERTY_POPUP_ICON); } 
+
   public void setSearchBarSearchingIcon( ImageReference icon ) { set(PROPERTY_SEARCH_BAR_SEARCHING_ICON, icon); } 
-  public ImageReference getSearchBarSearchingIcon() { return (ImageReference )get(PROPERTY_SEARCH_BAR_SEARCHING_ICON); } 
+  public ImageReference getSearchBarSearchingIcon() { return (ImageReference)get(PROPERTY_SEARCH_BAR_SEARCHING_ICON); } 
   
   public void setNoMatchingOptionText( String txt ) { set(PROPERTY_NO_MATCHING_OPTION_TEXT, txt); } 
   public String getNoMatchingOptionText() { return (String)get(PROPERTY_NO_MATCHING_OPTION_TEXT ); } 
@@ -73,14 +78,11 @@ public class AutoLookupSelectField extends TextField {
     }
   }
 
-	public AutoLookupSelectModel getAutoLookupModel() {
-		return (AutoLookupSelectModel) get(PROPERTY_AUTO_LOOKUP_MODEL);
-	}
+	public AutoLookupSelectModel getAutoLookupModel() { return (AutoLookupSelectModel)get(PROPERTY_AUTO_LOOKUP_MODEL); }
 
-	public void setAutoLookupModel(AutoLookupSelectModel autoLookupModel) {
-		set(PROPERTY_AUTO_LOOKUP_MODEL, autoLookupModel);
-	}
+  public AutoLookupSelectFieldModel getAutoLookupFieldModel() { return (AutoLookupSelectFieldModel)get(PROPERTY_AUTO_LOOKUP_MODEL); }
 
+	public void setAutoLookupFieldModel(AutoLookupSelectFieldModel autoLookupModel) { set(PROPERTY_AUTO_LOOKUP_MODEL, autoLookupModel); }
 
 	public void setKey(String key) {
 		String oldValue = this.key;
@@ -115,8 +117,6 @@ public class AutoLookupSelectField extends TextField {
         setSearchVal((String)inputValue);
       else 
       if (PROPERTY_OPTIONS_VISIBLE.equals(inputName))
-      {
         setOptionsVisible( ( (Boolean)inputValue ).booleanValue() );
-      }
     }
 }

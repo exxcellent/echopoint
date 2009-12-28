@@ -16,7 +16,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import echopoint.model.AutoLookupSelectModel;
+import echopoint.model.AutoLookupSelectFieldModel;
 
 /***
  * Unit test for the {@link AutoLookupSelectField} component
@@ -24,7 +24,7 @@ import echopoint.model.AutoLookupSelectModel;
  *
  */
 public class AutoLookupSelectFieldTest extends AbstractTest<AutoLookupSelectField> {
-	public static class AutoLookupSelectModelTest implements AutoLookupSelectModel{
+	public static class AutoLookupSelectModelTest implements AutoLookupSelectFieldModel{
 		public HashMap<String, EntryTest> entries;
 		
 		public static class EntryTest implements EntrySelect{
@@ -74,6 +74,11 @@ public class AutoLookupSelectFieldTest extends AbstractTest<AutoLookupSelectFiel
 			}
 			return result;
 		}
+		
+		@Override
+		public List<EntrySelect> getAllEntries() {
+			return new ArrayList<EntrySelect>(entries.values());
+		}
 	}
 	
 	
@@ -81,7 +86,7 @@ public class AutoLookupSelectFieldTest extends AbstractTest<AutoLookupSelectFiel
 	@BeforeClass
 	public static void init(){
 		AutoLookupSelectField autoLookupSelectField = new AutoLookupSelectField();
-		autoLookupSelectField.setAutoLookupModel(new AutoLookupSelectModelTest());
+		autoLookupSelectField.setAutoLookupFieldModel(new AutoLookupSelectModelTest());
 		set(autoLookupSelectField);
 	}
 	

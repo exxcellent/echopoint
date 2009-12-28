@@ -1,28 +1,28 @@
 package echopoint;
 
-import nextapp.echo.webcontainer.Service;
-import nextapp.echo.webcontainer.SynchronizationException;
-import nextapp.echo.webcontainer.ContentType;
-import nextapp.echo.webcontainer.WebContainerServlet;
-import nextapp.echo.webcontainer.Connection;
-import nextapp.echo.webcontainer.service.WindowHtmlService;
-import nextapp.echo.app.util.DomUtil;
-
-import echopoint.model.AutoLookupModel.Entry;
-import echopoint.model.AutoLookupModel;
-
-import org.xml.sax.SAXException;
-import org.w3c.dom.Element;
-import org.w3c.dom.Document;
-
-import javax.xml.transform.OutputKeys;
-import javax.servlet.http.HttpServletRequest;
-
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Properties;
 import java.util.Map;
-import java.io.IOException;
+import java.util.Properties;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.xml.transform.OutputKeys;
+
+import nextapp.echo.app.util.DomUtil;
+import nextapp.echo.webcontainer.Connection;
+import nextapp.echo.webcontainer.ContentType;
+import nextapp.echo.webcontainer.Service;
+import nextapp.echo.webcontainer.SynchronizationException;
+import nextapp.echo.webcontainer.WebContainerServlet;
+import nextapp.echo.webcontainer.service.WindowHtmlService;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
+
+import echopoint.model.AutoLookupModel;
+import echopoint.model.AutoLookupModel.Entry;
 
 /**
  * The service to look for matching entries in the auto lookup model.
