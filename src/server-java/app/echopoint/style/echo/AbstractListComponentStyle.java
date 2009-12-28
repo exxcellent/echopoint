@@ -1,10 +1,10 @@
 package echopoint.style.echo;
 
-import echopoint.style.AbstractStyle;
 import static echopoint.util.ColorKit.makeColor;
-import nextapp.echo.app.Border;
-import static nextapp.echo.app.list.AbstractListComponent.PROPERTY_BACKGROUND;
+import static nextapp.echo.app.Component.PROPERTY_BACKGROUND;
 import static nextapp.echo.app.list.AbstractListComponent.PROPERTY_BORDER;
+import nextapp.echo.app.Border;
+import echopoint.style.AbstractStyle;
 
 /**
  * The default style to associate with list components.

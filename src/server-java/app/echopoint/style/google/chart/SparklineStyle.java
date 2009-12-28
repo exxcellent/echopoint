@@ -1,6 +1,6 @@
 package echopoint.style.google.chart;
 
-import static echopoint.google.chart.Sparkline.PROPERTY_AXIS_STYLES;
+import static echopoint.google.chart.internal.AdvancedChart.PROPERTY_AXIS_STYLES;
 
 /**
  * A default style class for the {@link echopoint.google.chart.Sparkline}

@@ -1,16 +1,17 @@
 package echopoint.jquery;
 
-import nextapp.echo.webcontainer.Service;
-import nextapp.echo.webcontainer.ServerMessage;
-import nextapp.echo.webcontainer.AbstractComponentSynchronizePeer;
+import static echopoint.internal.AbstractContainer.ACTION_LISTENERS_CHANGED_PROPERTY;
 import static nextapp.echo.webcontainer.WebContainerServlet.getServiceRegistry;
-import nextapp.echo.webcontainer.service.JavaScriptService;
-import nextapp.echo.app.util.Context;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.update.ClientUpdateManager;
+import nextapp.echo.app.util.Context;
+import nextapp.echo.webcontainer.AbstractComponentSynchronizePeer;
+import nextapp.echo.webcontainer.ServerMessage;
+import nextapp.echo.webcontainer.Service;
+import nextapp.echo.webcontainer.service.JavaScriptService;
+
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
-import static echopoint.internal.AbstractContainer.ACTION_LISTENERS_CHANGED_PROPERTY;
 
 /**
  * Rendering peer for the {@link DockMenu} component.

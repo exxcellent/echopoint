@@ -1,13 +1,12 @@
 package echopoint;
 
-import echopoint.internal.TextFieldPeer;
-import echopoint.RegexTextField;
+import static nextapp.echo.webcontainer.WebContainerServlet.getServiceRegistry;
+import static nextapp.echo.webcontainer.service.JavaScriptService.forResource;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.util.Context;
 import nextapp.echo.webcontainer.ServerMessage;
 import nextapp.echo.webcontainer.Service;
-import static nextapp.echo.webcontainer.WebContainerServlet.getServiceRegistry;
-import static nextapp.echo.webcontainer.service.JavaScriptService.forResource;
+import echopoint.internal.TextFieldPeer;
 
 /**
  * <p>&copy; Copyright 2009 <a href='http://sptci.com/' target='_top'>Sans

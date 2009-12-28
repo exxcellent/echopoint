@@ -18,13 +18,13 @@
 
 package echopoint.google.chart;
 
-import echopoint.google.chart.internal.SimpleChartPeer;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.util.Context;
 import nextapp.echo.webcontainer.ServerMessage;
 import nextapp.echo.webcontainer.Service;
 import nextapp.echo.webcontainer.WebContainerServlet;
 import nextapp.echo.webcontainer.service.JavaScriptService;
+import echopoint.google.chart.internal.SimpleChartPeer;
 
 /**
  * Rendering peer for the {@link echopoint.google.chart.VennDiagram} component.

@@ -17,9 +17,9 @@
  */
 package echopoint.tucana.event;
 
-import echopoint.tucana.FileUploadSelector;
-
 import java.util.EventObject;
+
+import echopoint.tucana.FileUploadSelector;
 
 /**
  * A base class that represents an upload event.

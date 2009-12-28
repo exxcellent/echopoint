@@ -18,13 +18,13 @@
 
 package echopoint;
 
-import echopoint.internal.AbstractContainer;
-import nextapp.echo.app.Component;
-import nextapp.echo.app.IllegalChildException;
-
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import nextapp.echo.app.Component;
+import nextapp.echo.app.IllegalChildException;
+import echopoint.internal.AbstractContainer;
 
 /**
  * An implementation of {@link java.awt.BorderLayout} using a HTML table with

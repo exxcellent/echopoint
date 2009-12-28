@@ -1,18 +1,20 @@
 package echopoint.tucana;
 
-import echopoint.tucana.event.DownloadFailEvent;
-import echopoint.tucana.event.DownloadFinishEvent;
-import echopoint.tucana.event.DownloadStartEvent;
 import static nextapp.echo.webcontainer.ClientProperties.BROWSER_INTERNET_EXPLORER;
+
+import java.io.IOException;
+import java.io.OutputStream;
+
+import javax.servlet.http.HttpServletResponse;
+
 import nextapp.echo.webcontainer.Connection;
 import nextapp.echo.webcontainer.ContentType;
 import nextapp.echo.webcontainer.Service;
 import nextapp.echo.webcontainer.UserInstance;
 import nextapp.echo.webcontainer.WebContainerServlet;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.OutputStream;
+import echopoint.tucana.event.DownloadFailEvent;
+import echopoint.tucana.event.DownloadFinishEvent;
+import echopoint.tucana.event.DownloadStartEvent;
 
 /**
  * Services requests to download files.

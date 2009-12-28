@@ -22,7 +22,6 @@ import nextapp.echo.app.HttpImageReference;
 import nextapp.echo.app.ImageReference;
 import nextapp.echo.app.event.ActionEvent;
 import nextapp.echo.app.event.ActionListener;
-
 import echopoint.model.Cursor;
 
 /**

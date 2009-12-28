@@ -17,15 +17,14 @@
  */
 package echopoint.internal;
 
-import nextapp.echo.app.Component;
-import nextapp.echo.app.util.Context;
-import nextapp.echo.webcontainer.ServerMessage;
-import nextapp.echo.webcontainer.Service;
-
 import static echopoint.internal.AbstractContainer.ACTION_LISTENERS_CHANGED_PROPERTY;
 import static echopoint.internal.AbstractContainer.INPUT_ACTION;
 import static nextapp.echo.webcontainer.WebContainerServlet.getServiceRegistry;
 import static nextapp.echo.webcontainer.service.JavaScriptService.forResources;
+import nextapp.echo.app.Component;
+import nextapp.echo.app.util.Context;
+import nextapp.echo.webcontainer.ServerMessage;
+import nextapp.echo.webcontainer.Service;
 
 /**
  * Component rendering peer for the {@link echopoint.internal.AbstractImage} component.

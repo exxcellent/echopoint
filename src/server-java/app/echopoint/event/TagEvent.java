@@ -18,9 +18,9 @@
 
 package echopoint.event;
 
+import nextapp.echo.app.event.ActionEvent;
 import echopoint.TagCloud;
 import echopoint.model.Tag;
-import nextapp.echo.app.event.ActionEvent;
 
 /**
  * An action event that is raised when a user clicks on a {@link

@@ -22,7 +22,6 @@ import nextapp.echo.app.Column;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.ContentPane;
 import nextapp.echo.app.Extent;
-import nextapp.echo.app.Label;
 import nextapp.echo.app.SplitPane;
 
 /**

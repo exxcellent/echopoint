@@ -1,8 +1,21 @@
 package echopoint.style;
 
-import static echopoint.InfoWindow.*;
+import static echopoint.InfoWindow.PROPERTY_INSETS;
+import static echopoint.InfoWindow.PROPERTY_OTHER_TEXT_FOREGROUND;
+import static echopoint.InfoWindow.PROPERTY_OTHER_TEXT_INSETS;
+import static echopoint.InfoWindow.PROPERTY_TEXT_BACKGROUND;
+import static echopoint.InfoWindow.PROPERTY_TEXT_FONT;
+import static echopoint.InfoWindow.PROPERTY_TEXT_FOREGROUND;
+import static echopoint.InfoWindow.PROPERTY_TEXT_INSETS;
+import static echopoint.InfoWindow.PROPERTY_TITLE_ALIGNMENT;
+import static echopoint.InfoWindow.PROPERTY_TITLE_BACKGROUND;
+import static echopoint.InfoWindow.PROPERTY_TITLE_FONT;
+import static echopoint.InfoWindow.PROPERTY_TITLE_FOREGROUND;
+import static echopoint.InfoWindow.PROPERTY_WIDTH;
 import static echopoint.util.ColorKit.makeColor;
 import static nextapp.echo.app.Alignment.ALIGN_LEFT;
+import static nextapp.echo.app.Component.PROPERTY_BACKGROUND;
+import static nextapp.echo.app.Component.PROPERTY_FOREGROUND;
 import nextapp.echo.app.Extent;
 import nextapp.echo.app.Insets;
 

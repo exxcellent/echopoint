@@ -1,16 +1,12 @@
 package echopoint;
 
-import echopoint.tucana.ButtonMode;
-import echopoint.tucana.DownloadButton;
-import echopoint.tucana.FileUploadSelector;
-import echopoint.tucana.ProgressBar;
-import echopoint.tucana.ButtonDisplay;
-import echopoint.tucana.event.DefaultUploadCallback;
-import echopoint.tucana.event.DownloadCallbackAdapter;
-import echopoint.tucana.event.InvalidContentTypeEvent;
-import echopoint.tucana.event.UploadCancelEvent;
-import echopoint.tucana.event.UploadFailEvent;
-import echopoint.tucana.event.UploadFinishEvent;
+import static org.junit.Assert.assertEquals;
+
+import java.io.File;
+import java.util.HashSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import nextapp.echo.app.Border;
 import nextapp.echo.app.Color;
 import nextapp.echo.app.Component;
@@ -20,15 +16,22 @@ import nextapp.echo.app.Insets;
 import nextapp.echo.app.Row;
 import nextapp.echo.app.event.ActionEvent;
 import nextapp.echo.app.event.ActionListener;
+
 import org.junit.AfterClass;
-import static org.junit.Assert.assertEquals;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.io.File;
-import java.util.HashSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import echopoint.tucana.ButtonDisplay;
+import echopoint.tucana.ButtonMode;
+import echopoint.tucana.DownloadButton;
+import echopoint.tucana.FileUploadSelector;
+import echopoint.tucana.ProgressBar;
+import echopoint.tucana.event.DefaultUploadCallback;
+import echopoint.tucana.event.DownloadCallbackAdapter;
+import echopoint.tucana.event.InvalidContentTypeEvent;
+import echopoint.tucana.event.UploadCancelEvent;
+import echopoint.tucana.event.UploadFailEvent;
+import echopoint.tucana.event.UploadFinishEvent;
 
 /**
  * Unit test suite for the {@link FileUploadSelector}

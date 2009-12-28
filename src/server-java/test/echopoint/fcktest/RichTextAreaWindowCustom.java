@@ -30,6 +30,7 @@ package echopoint.fcktest;
 
 
 import java.util.Properties;
+
 import nextapp.echo.app.Alignment;
 import nextapp.echo.app.Button;
 import nextapp.echo.app.Column;

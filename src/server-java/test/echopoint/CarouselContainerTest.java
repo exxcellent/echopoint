@@ -1,11 +1,20 @@
 package echopoint;
 
-import echopoint.jquery.CarouselContainer;
-import nextapp.echo.app.*;
-import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
+import nextapp.echo.app.Alignment;
+import nextapp.echo.app.Color;
+import nextapp.echo.app.Component;
+import nextapp.echo.app.Extent;
+import nextapp.echo.app.Font;
+import nextapp.echo.app.HttpImageReference;
+import nextapp.echo.app.Insets;
+import nextapp.echo.app.Label;
+
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import echopoint.jquery.CarouselContainer;
 
 /**
  * Test case for the {@link echopoint.jquery.TooltipContainer} component.

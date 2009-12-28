@@ -28,10 +28,10 @@
  */
 package echopoint.template.ui;
 
-import echopoint.util.StringPeerFactory;
-
 import java.util.Map;
 import java.util.WeakHashMap;
+
+import echopoint.util.StringPeerFactory;
 
 
 /**

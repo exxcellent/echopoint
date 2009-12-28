@@ -17,17 +17,20 @@
  */
 package echopoint.tucana;
 
-import echopoint.tucana.event.UploadCallback;
-import echopoint.tucana.event.UploadCancelEvent;
-import echopoint.tucana.event.UploadFailEvent;
+import java.io.IOException;
+
+import javax.servlet.http.HttpServletRequest;
+
 import nextapp.echo.app.ApplicationInstance;
 import nextapp.echo.webcontainer.Connection;
 import nextapp.echo.webcontainer.Service;
 import nextapp.echo.webcontainer.WebContainerServlet;
+
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
+import echopoint.tucana.event.UploadCallback;
+import echopoint.tucana.event.UploadCancelEvent;
+import echopoint.tucana.event.UploadFailEvent;
 
 /**
  * Processes a file upload HTTP request from the client.

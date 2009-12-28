@@ -17,18 +17,17 @@
  */
 package echopoint.jquery;
 
-import nextapp.echo.webcontainer.*;
-import nextapp.echo.webcontainer.service.JavaScriptService;
-import nextapp.echo.extras.webcontainer.service.CommonService;
-import nextapp.echo.app.util.Context;
+import java.util.HashMap;
+import java.util.Map;
+
 import nextapp.echo.app.Component;
 import nextapp.echo.app.update.ClientUpdateManager;
-
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Locale;
-
-import echopoint.internal.AbstractPeer;
+import nextapp.echo.app.util.Context;
+import nextapp.echo.extras.webcontainer.service.CommonService;
+import nextapp.echo.webcontainer.ServerMessage;
+import nextapp.echo.webcontainer.Service;
+import nextapp.echo.webcontainer.WebContainerServlet;
+import nextapp.echo.webcontainer.service.JavaScriptService;
 
 /**
  * Rendering peer for the {@link echopoint.jquery.DateField} component.

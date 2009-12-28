@@ -31,7 +31,12 @@ package echopoint;
 import nextapp.echo.app.Border;
 import nextapp.echo.app.Extent;
 import nextapp.echo.app.Insets;
-import echopoint.able.*;
+import echopoint.able.AccessKeyable;
+import echopoint.able.Borderable;
+import echopoint.able.Insetable;
+import echopoint.able.MouseCursorable;
+import echopoint.able.Sizeable;
+import echopoint.able.ToolTipable;
 
 /** 
  * <code>AbleComponent</code> is an abstract Component that implements

@@ -20,7 +20,6 @@ package echopoint;
 
 import nextapp.echo.app.HttpImageReference;
 import nextapp.echo.app.ImageReference;
-
 import echopoint.internal.AbstractImage;
 
 /**

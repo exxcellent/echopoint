@@ -18,8 +18,12 @@
 
 package echopoint;
 
+import nextapp.echo.app.Color;
+import nextapp.echo.app.Extent;
+import nextapp.echo.app.Insets;
+import nextapp.echo.app.MutableStyle;
+import nextapp.echo.app.Style;
 import echopoint.able.Insetable;
-import nextapp.echo.app.*;
 
 /**
  * The <code>Separator</code> class is a <code>Component</code>

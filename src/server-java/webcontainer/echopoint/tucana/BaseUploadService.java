@@ -17,14 +17,15 @@
  */
 package echopoint.tucana;
 
+import java.io.IOException;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import nextapp.echo.webcontainer.Connection;
 import nextapp.echo.webcontainer.ContentType;
 import nextapp.echo.webcontainer.Service;
 import nextapp.echo.webcontainer.UserInstance;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 /**
  * Base service for file uploads.

@@ -18,12 +18,12 @@
 
 package echopoint.internal;
 
+import static nextapp.echo.webcontainer.WebContainerServlet.getServiceRegistry;
+import static nextapp.echo.webcontainer.service.JavaScriptService.forResources;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.util.Context;
 import nextapp.echo.webcontainer.ServerMessage;
 import nextapp.echo.webcontainer.Service;
-import static nextapp.echo.webcontainer.WebContainerServlet.getServiceRegistry;
-import static nextapp.echo.webcontainer.service.JavaScriptService.forResources;
 
 /**
  * Base component rendering peer for the text field extension components.

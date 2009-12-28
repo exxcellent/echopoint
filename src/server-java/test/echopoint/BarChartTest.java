@@ -18,6 +18,21 @@
 
 package echopoint;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+
+import nextapp.echo.app.Component;
+
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
 import echopoint.google.chart.BarChart;
 import echopoint.google.chart.model.BarChartSize;
 import echopoint.google.chart.model.ChartData;
@@ -26,18 +41,6 @@ import echopoint.google.chart.model.Range;
 import echopoint.google.chart.model.RangeMarker;
 import echopoint.google.chart.model.ShapeMarker;
 import echopoint.google.chart.model.Title;
-import nextapp.echo.app.Component;
-import org.junit.AfterClass;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
 
 /**
  * Component wrapper for the {@link echopoint.google.chart.BarChart} component

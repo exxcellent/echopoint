@@ -1,8 +1,19 @@
 package echopoint.jquery;
 
-import nextapp.echo.app.*;
+import nextapp.echo.app.Alignment;
+import nextapp.echo.app.Border;
+import nextapp.echo.app.Color;
+import nextapp.echo.app.Extent;
+import nextapp.echo.app.FillImage;
+import nextapp.echo.app.ImageReference;
+import nextapp.echo.app.Insets;
+import nextapp.echo.app.PaneContainer;
 import echopoint.AbleComponent;
-import echopoint.able.*;
+import echopoint.able.Alignable;
+import echopoint.able.BackgroundImageable;
+import echopoint.able.Positionable;
+import echopoint.able.ScrollBarProperties;
+import echopoint.able.Scrollable;
 
 /**
  * <code>SlidingMenu</code> consists of three parts, a button and two containers.

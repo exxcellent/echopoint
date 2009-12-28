@@ -1,14 +1,16 @@
 package echopoint;
 
-import echopoint.layout.HtmlLayoutData;
+import static org.junit.Assert.assertEquals;
 import nextapp.echo.app.Button;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.Extent;
 import nextapp.echo.app.Label;
+
 import org.junit.AfterClass;
-import static org.junit.Assert.assertEquals;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import echopoint.layout.HtmlLayoutData;
 
 /**
  * Unit test suite for the {@link HtmlLayout} container component.

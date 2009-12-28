@@ -1,11 +1,11 @@
 package echopoint.jquery;
 
+import nextapp.echo.app.Component;
+import nextapp.echo.app.util.Context;
+import nextapp.echo.webcontainer.ServerMessage;
 import nextapp.echo.webcontainer.Service;
 import nextapp.echo.webcontainer.WebContainerServlet;
-import nextapp.echo.webcontainer.ServerMessage;
 import nextapp.echo.webcontainer.service.JavaScriptService;
-import nextapp.echo.app.util.Context;
-import nextapp.echo.app.Component;
 
 /**
  * Rendering peer for the {@link echopoint.jquery.TooltipContainerPeer} component.

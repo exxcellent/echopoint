@@ -18,18 +18,18 @@
 
 package echopoint;
 
-import echopoint.event.TagEvent;
-import echopoint.internal.AbstractContainer;
-import echopoint.model.Tag;
-import nextapp.echo.app.Color;
-import nextapp.echo.app.Component;
-import nextapp.echo.app.event.ActionListener;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import nextapp.echo.app.Color;
+import nextapp.echo.app.Component;
+import nextapp.echo.app.event.ActionListener;
+import echopoint.event.TagEvent;
+import echopoint.internal.AbstractContainer;
+import echopoint.model.Tag;
 
 /**
  * A <a href='http://en.wikipedia.org/wiki/Tag_cloud'>tag cloud</a> component

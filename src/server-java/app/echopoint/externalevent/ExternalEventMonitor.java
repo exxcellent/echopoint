@@ -27,10 +27,10 @@ package echopoint.externalevent;
  * the provisions above, a recipient may use your version of this file under
  * the terms of any one of the MPL, the GPL or the LGPL.
  */
+import java.util.EventListener;
+
 import nextapp.echo.app.Component;
 import nextapp.echo.app.event.EventListenerList;
-
-import java.util.EventListener;
 
 
 /**

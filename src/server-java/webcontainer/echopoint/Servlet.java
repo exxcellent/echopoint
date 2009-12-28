@@ -23,13 +23,13 @@ import static echopoint.style.Background.setBackground;
 import static echopoint.style.DefaultFont.SIZE_KEY;
 import static echopoint.style.DefaultFont.STYLE_KEY;
 import static echopoint.style.DefaultFont.TYPEFACE_KEY;
-import static echopoint.style.DefaultFont.setTypeFace;
-import static echopoint.style.DefaultFont.setStyle;
 import static echopoint.style.DefaultFont.setSize;
-
-import nextapp.echo.webcontainer.WebContainerServlet;
+import static echopoint.style.DefaultFont.setStyle;
+import static echopoint.style.DefaultFont.setTypeFace;
 
 import javax.servlet.ServletException;
+
+import nextapp.echo.webcontainer.WebContainerServlet;
 
 /**
  * A servlet class that can be used to set up the default font properties

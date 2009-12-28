@@ -17,9 +17,11 @@
  */
 package echopoint.tucana;
 
-import echopoint.tucana.event.UploadStartEvent;
+import java.util.Set;
+
 import nextapp.echo.app.ApplicationInstance;
 import nextapp.echo.webcontainer.Connection;
+
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
@@ -30,7 +32,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 
-import java.util.Set;
+import echopoint.tucana.event.UploadStartEvent;
 
 /**
  * {@link UploadSPI} implementation that uses the

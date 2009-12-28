@@ -1,12 +1,12 @@
 package echopoint;
 
-import echopoint.internal.AbstractPeer;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.util.Context;
 import nextapp.echo.webcontainer.ServerMessage;
 import nextapp.echo.webcontainer.Service;
 import nextapp.echo.webcontainer.WebContainerServlet;
 import nextapp.echo.webcontainer.service.JavaScriptService;
+import echopoint.internal.AbstractPeer;
 
 /**
  * Component rendering peer for the {@link echopoint.InfoWindow} component.

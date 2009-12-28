@@ -17,11 +17,23 @@
  */
 package echopoint;
 
+import static echopoint.ImageMap.PROPERTY_SECTIONS;
+import static echopoint.internal.AbstractContainer.ACTION_COMMAND_PROPERTY;
+import static echopoint.internal.AbstractContainer.ACTION_LISTENERS_CHANGED_PROPERTY;
+import static echopoint.internal.AbstractContainer.INPUT_ACTION;
+import static nextapp.echo.webcontainer.WebContainerServlet.getServiceRegistry;
+import static nextapp.echo.webcontainer.service.JavaScriptService.forResources;
+
+import java.util.LinkedHashMap;
+
 import nextapp.echo.app.Component;
 import nextapp.echo.app.update.ClientUpdateManager;
 import nextapp.echo.app.util.Context;
 import nextapp.echo.webcontainer.ServerMessage;
 import nextapp.echo.webcontainer.Service;
+
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
 
 import echopoint.internal.AbstractImagePeer;
 import echopoint.internal.DefaultEventPeer;
@@ -29,18 +41,6 @@ import echopoint.model.CircleSection;
 import echopoint.model.MapSection;
 import echopoint.model.PolygonSection;
 import echopoint.model.RectangleSection;
-
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
-
-import java.util.LinkedHashMap;
-
-import static echopoint.ImageMap.PROPERTY_SECTIONS;
-import static echopoint.internal.AbstractContainer.ACTION_COMMAND_PROPERTY;
-import static echopoint.internal.AbstractContainer.ACTION_LISTENERS_CHANGED_PROPERTY;
-import static echopoint.internal.AbstractContainer.INPUT_ACTION;
-import static nextapp.echo.webcontainer.WebContainerServlet.getServiceRegistry;
-import static nextapp.echo.webcontainer.service.JavaScriptService.forResources;
 
 /**
  * Component rendering peer for the {@link echopoint.ImageMap} component.

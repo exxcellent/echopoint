@@ -17,10 +17,10 @@
  */
 package echopoint.tucana.event;
 
-import echopoint.tucana.FileUploadSelector;
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import echopoint.tucana.FileUploadSelector;
 
 /**
  * An adapter class for the {@link UploadCallback} interface.

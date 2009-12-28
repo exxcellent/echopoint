@@ -17,10 +17,10 @@
  */
 package echopoint.tucana;
 
-import nextapp.echo.webcontainer.RenderState;
-
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import nextapp.echo.webcontainer.RenderState;
 
 /**
  * <code>RenderState</code> implementation for <code>UploadSelect</code>

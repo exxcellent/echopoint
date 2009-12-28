@@ -18,15 +18,11 @@
 
 package echopoint.style.echo.extras;
 
-import echopoint.style.AbstractStyle;
 import static echopoint.style.echo.extras.ResourceImages.CalendarSelectBackground;
 import static echopoint.style.echo.extras.ResourceImages.CalendarSelectHeader;
 import static echopoint.style.echo.extras.ResourceImages.CalendarSelectSelectedDate;
 import static echopoint.util.ColorKit.makeColor;
-import nextapp.echo.app.FillImage;
-import nextapp.echo.app.Extent;
-import nextapp.echo.app.Border;
-import static nextapp.echo.extras.app.CalendarSelect.PROPERTY_BACKGROUND;
+import static nextapp.echo.app.Component.PROPERTY_BACKGROUND;
 import static nextapp.echo.extras.app.CalendarSelect.PROPERTY_DATE_BACKGROUND;
 import static nextapp.echo.extras.app.CalendarSelect.PROPERTY_DATE_BACKGROUND_IMAGE;
 import static nextapp.echo.extras.app.CalendarSelect.PROPERTY_HEADER_BACKGROUND_IMAGE;
@@ -35,6 +31,10 @@ import static nextapp.echo.extras.app.CalendarSelect.PROPERTY_ROLLOVER_DATE_BACK
 import static nextapp.echo.extras.app.CalendarSelect.PROPERTY_SELECTED_DATE_BACKGROUND;
 import static nextapp.echo.extras.app.CalendarSelect.PROPERTY_SELECTED_DATE_BACKGROUND_IMAGE;
 import static nextapp.echo.extras.app.CalendarSelect.PROPERTY_SELECTED_DATE_BORDER;
+import nextapp.echo.app.Border;
+import nextapp.echo.app.Extent;
+import nextapp.echo.app.FillImage;
+import echopoint.style.AbstractStyle;
 
 /**
  * The default style class for use with {@link

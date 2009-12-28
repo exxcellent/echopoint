@@ -1,7 +1,8 @@
 package echopoint.tucana;
 
-import echopoint.tucana.event.UploadFinishEvent;
 import org.apache.commons.fileupload.FileItem;
+
+import echopoint.tucana.event.UploadFinishEvent;
 
 /**
  * A runnable used to execute the upload finish event call back handler.

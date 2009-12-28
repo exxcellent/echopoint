@@ -17,19 +17,18 @@
  */
 package echopoint;
 
+import java.util.Map;
+
 import nextapp.echo.app.Component;
 import nextapp.echo.app.util.Context;
 import nextapp.echo.webcontainer.ServerMessage;
 import nextapp.echo.webcontainer.Service;
 import nextapp.echo.webcontainer.WebContainerServlet;
 import nextapp.echo.webcontainer.service.JavaScriptService;
-
-import java.util.Map;
-
 import echopoint.internal.AbstractPeer;
 import echopoint.template.TemplateDataSource;
-import echopoint.template.ui.TemplateCompilerLoader;
 import echopoint.template.ui.TemplateCompiler;
+import echopoint.template.ui.TemplateCompilerLoader;
 
 /**
  * <code>TemplatePanelPeer</code> is a peer for <code>TemplatePanel</code>

@@ -18,21 +18,6 @@
 
 package echopoint.style.echo;
 
-import nextapp.echo.app.Extent;
-import nextapp.echo.app.FillImage;
-import nextapp.echo.app.FillImageBorder;
-import nextapp.echo.app.Insets;
-import static nextapp.echo.app.WindowPane.PROPERTY_BACKGROUND;
-import static nextapp.echo.app.WindowPane.PROPERTY_BORDER;
-import static nextapp.echo.app.WindowPane.PROPERTY_CONTROLS_INSETS;
-import static nextapp.echo.app.WindowPane.PROPERTY_MAXIMIZE_ENABLED;
-import static nextapp.echo.app.WindowPane.PROPERTY_TITLE_BACKGROUND;
-import static nextapp.echo.app.WindowPane.PROPERTY_TITLE_BACKGROUND_IMAGE;
-import static nextapp.echo.app.WindowPane.PROPERTY_TITLE_FONT;
-import static nextapp.echo.app.WindowPane.PROPERTY_TITLE_FOREGROUND;
-import static nextapp.echo.app.WindowPane.PROPERTY_TITLE_INSETS;
-
-import echopoint.style.AbstractStyle;
 import static echopoint.style.DefaultFont.fontWithStyle;
 import static echopoint.style.echo.ResourceImages.BorderBottom;
 import static echopoint.style.echo.ResourceImages.BorderBottomLeft;
@@ -44,6 +29,20 @@ import static echopoint.style.echo.ResourceImages.BorderTopLeft;
 import static echopoint.style.echo.ResourceImages.BorderTopRight;
 import static echopoint.style.echo.ResourceImages.Header;
 import static echopoint.util.ColorKit.makeColor;
+import static nextapp.echo.app.Component.PROPERTY_BACKGROUND;
+import static nextapp.echo.app.WindowPane.PROPERTY_BORDER;
+import static nextapp.echo.app.WindowPane.PROPERTY_CONTROLS_INSETS;
+import static nextapp.echo.app.WindowPane.PROPERTY_MAXIMIZE_ENABLED;
+import static nextapp.echo.app.WindowPane.PROPERTY_TITLE_BACKGROUND;
+import static nextapp.echo.app.WindowPane.PROPERTY_TITLE_BACKGROUND_IMAGE;
+import static nextapp.echo.app.WindowPane.PROPERTY_TITLE_FONT;
+import static nextapp.echo.app.WindowPane.PROPERTY_TITLE_FOREGROUND;
+import static nextapp.echo.app.WindowPane.PROPERTY_TITLE_INSETS;
+import nextapp.echo.app.Extent;
+import nextapp.echo.app.FillImage;
+import nextapp.echo.app.FillImageBorder;
+import nextapp.echo.app.Insets;
+import echopoint.style.AbstractStyle;
 
 /**
  * The default style to apply to {@link nextapp.echo.app.WindowPane}

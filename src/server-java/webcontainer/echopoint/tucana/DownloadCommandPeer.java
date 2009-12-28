@@ -17,20 +17,20 @@
  */
 package echopoint.tucana;
 
+import static nextapp.echo.webcontainer.WebContainerServlet.getServiceRegistry;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 import nextapp.echo.app.Command;
 import nextapp.echo.app.util.Context;
 import nextapp.echo.webcontainer.AbstractCommandSynchronizePeer;
 import nextapp.echo.webcontainer.ServerMessage;
 import nextapp.echo.webcontainer.Service;
 import nextapp.echo.webcontainer.UserInstance;
-import static nextapp.echo.webcontainer.WebContainerServlet.getServiceRegistry;
 import nextapp.echo.webcontainer.service.JavaScriptService;
-
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import echopoint.internal.CommonService;
 import echopoint.internal.CommonResources;
+import echopoint.internal.CommonService;
 
 /**
  * Synchronisation peer for the {@link echopoint.tucana.DownloadCommand} command.

@@ -1,7 +1,7 @@
 package echopoint.jquery;
 
-import echopoint.ContainerEx;
 import nextapp.echo.app.ImageReference;
+import echopoint.ContainerEx;
 
 /**
  * CarouselContainer is a component that can be positioned anywhere on the screen with an specified size attributes.

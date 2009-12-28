@@ -18,9 +18,13 @@
 
 package echopoint.jquery;
 
-import nextapp.echo.app.*;
-import echopoint.able.Sizeable;
+import nextapp.echo.app.Alignment;
+import nextapp.echo.app.Border;
+import nextapp.echo.app.Component;
+import nextapp.echo.app.Extent;
+import nextapp.echo.app.Insets;
 import echopoint.able.Alignable;
+import echopoint.able.Sizeable;
 
 /**
  * The <code>Clock</code> class is a <code>Component</code>

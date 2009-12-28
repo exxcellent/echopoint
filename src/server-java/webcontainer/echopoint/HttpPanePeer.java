@@ -18,13 +18,13 @@
 
 package echopoint;
 
-import echopoint.internal.AbstractContainerPeer;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.util.Context;
 import nextapp.echo.webcontainer.ServerMessage;
 import nextapp.echo.webcontainer.Service;
 import nextapp.echo.webcontainer.WebContainerServlet;
 import nextapp.echo.webcontainer.service.JavaScriptService;
+import echopoint.internal.AbstractContainerPeer;
 
 /**
  * Rendering peer for the {@link echopoint.HttpPane} class.

@@ -1,13 +1,13 @@
 package echopoint;
 
+import nextapp.echo.app.Component;
+import nextapp.echo.app.util.Context;
+import nextapp.echo.webcontainer.ServerMessage;
 import nextapp.echo.webcontainer.Service;
 import nextapp.echo.webcontainer.WebContainerServlet;
-import nextapp.echo.webcontainer.ServerMessage;
 import nextapp.echo.webcontainer.service.JavaScriptService;
-import nextapp.echo.app.util.Context;
-import nextapp.echo.app.Component;
-import echopoint.internal.AbstractPeer;
 import echopoint.externalevent.ExternalEventMonitor;
+import echopoint.internal.AbstractPeer;
 
 /**
  * Created: 2009-apr-14

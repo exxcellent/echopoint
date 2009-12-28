@@ -17,8 +17,8 @@
  */
 package echopoint.tucana.event;
 
-import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * An adapter class that logs the progress of a download command.

@@ -18,15 +18,13 @@
 
 package echopoint.style.echo.extras;
 
-import echopoint.style.AbstractStyle;
 import static echopoint.style.echo.extras.ResourceImages.MenuBarBackground;
 import static echopoint.style.echo.extras.ResourceImages.MenuBarMenuBackground;
 import static echopoint.style.echo.extras.ResourceImages.MenuBarSelectionBackground;
 import static echopoint.util.ColorKit.makeColor;
-import static nextapp.echo.extras.app.MenuBarPane.PROPERTY_ANIMATION_TIME;
+import static nextapp.echo.app.Component.PROPERTY_FOREGROUND;
 import static nextapp.echo.extras.app.MenuBarPane.PROPERTY_BACKGROUND_IMAGE;
 import static nextapp.echo.extras.app.MenuBarPane.PROPERTY_BORDER;
-import static nextapp.echo.extras.app.MenuBarPane.PROPERTY_FOREGROUND;
 import static nextapp.echo.extras.app.MenuBarPane.PROPERTY_MENU_BACKGROUND;
 import static nextapp.echo.extras.app.MenuBarPane.PROPERTY_MENU_BACKGROUND_IMAGE;
 import static nextapp.echo.extras.app.MenuBarPane.PROPERTY_MENU_BORDER;
@@ -34,10 +32,11 @@ import static nextapp.echo.extras.app.MenuBarPane.PROPERTY_MENU_OPACITY;
 import static nextapp.echo.extras.app.MenuBarPane.PROPERTY_SELECTION_BACKGROUND;
 import static nextapp.echo.extras.app.MenuBarPane.PROPERTY_SELECTION_BACKGROUND_IMAGE;
 import static nextapp.echo.extras.app.MenuBarPane.PROPERTY_SELECTION_FOREGROUND;
+import static nextapp.echo.extras.app.menu.AbstractMenuComponent.PROPERTY_ANIMATION_TIME;
 import nextapp.echo.app.Border;
-import nextapp.echo.app.ResourceImageReference;
-import nextapp.echo.app.FillImage;
 import nextapp.echo.app.Extent;
+import nextapp.echo.app.FillImage;
+import echopoint.style.AbstractStyle;
 
 /**
  * The default style to apply for {@link nextapp.echo.extras.app.MenuBarPane}

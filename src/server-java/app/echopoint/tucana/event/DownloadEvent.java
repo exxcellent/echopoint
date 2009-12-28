@@ -17,9 +17,9 @@
  */
 package echopoint.tucana.event;
 
-import echopoint.tucana.DownloadCommand;
-
 import java.util.EventObject;
+
+import echopoint.tucana.DownloadCommand;
 
 /**
  * A base download event class used to indicate a file/content download

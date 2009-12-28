@@ -1,12 +1,12 @@
 package echopoint.style;
 
-import static echopoint.ProgressBar.PROPERTY_BACKGROUND;
 import static echopoint.ProgressBar.PROPERTY_BAR_BACKGROUND;
-import static echopoint.ProgressBar.PROPERTY_BORDER;
-import static echopoint.ProgressBar.PROPERTY_FOREGROUND;
-import static echopoint.ProgressBar.PROPERTY_HEIGHT;
-import static echopoint.ProgressBar.PROPERTY_INSETS;
+import static echopoint.internal.AbstractContainer.PROPERTY_BORDER;
+import static echopoint.internal.AbstractContainer.PROPERTY_HEIGHT;
+import static echopoint.internal.AbstractContainer.PROPERTY_INSETS;
 import static echopoint.util.ColorKit.makeColor;
+import static nextapp.echo.app.Component.PROPERTY_BACKGROUND;
+import static nextapp.echo.app.Component.PROPERTY_FOREGROUND;
 import nextapp.echo.app.Border;
 import nextapp.echo.app.Extent;
 import nextapp.echo.app.Insets;

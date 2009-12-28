@@ -35,7 +35,6 @@ import java.util.Map;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.Extent;
 import nextapp.echo.app.Font;
-
 import echopoint.util.collections.ConcurrentReaderHashMap;
 
 /**

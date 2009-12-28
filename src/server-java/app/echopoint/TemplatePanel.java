@@ -17,12 +17,11 @@
  */
 package echopoint;
 
-import nextapp.echo.app.PaneContainer;
-import nextapp.echo.app.Component;
-
 import java.util.HashMap;
 import java.util.Map;
 
+import nextapp.echo.app.Component;
+import nextapp.echo.app.PaneContainer;
 import echopoint.template.TemplateDataSource;
 
 /**

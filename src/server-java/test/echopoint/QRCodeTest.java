@@ -18,16 +18,18 @@
 
 package echopoint;
 
-import echopoint.google.chart.QRCode;
-import echopoint.google.chart.model.Title;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.Extent;
 import nextapp.echo.app.Insets;
+
 import org.junit.AfterClass;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import echopoint.google.chart.QRCode;
+import echopoint.google.chart.model.Title;
 
 /**
  * Unit test suite for the {@link echopoint.google.chart.QRCode} component

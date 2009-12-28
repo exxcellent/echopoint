@@ -17,9 +17,9 @@
  */
 package echopoint.model;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-
 import java.io.Serializable;
+
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 /**
  * A model object that represents a point in cartesian co-ordinate system.

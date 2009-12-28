@@ -17,18 +17,24 @@
  */
 package echopoint.jquery;
 
-import nextapp.echo.app.*;
-
-import java.util.Date;
-import java.util.Calendar;
-import java.text.SimpleDateFormat;
-import java.text.ParseException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import echopoint.able.Sizeable;
-import echopoint.able.Alignable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import nextapp.echo.app.Alignment;
+import nextapp.echo.app.Border;
+import nextapp.echo.app.Component;
+import nextapp.echo.app.Extent;
+import nextapp.echo.app.ImageReference;
+import nextapp.echo.app.Insets;
+import nextapp.echo.app.ResourceImageReference;
+import echopoint.able.Alignable;
+import echopoint.able.Sizeable;
 
 
 /**

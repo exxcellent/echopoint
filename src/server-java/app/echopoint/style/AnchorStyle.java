@@ -1,8 +1,8 @@
 package echopoint.style;
 
-import static echopoint.Anchor.PROPERTY_FOREGROUND;
 import static echopoint.Anchor.PROPERTY_TARGET;
 import static echopoint.util.ColorKit.makeColor;
+import static nextapp.echo.app.Component.PROPERTY_FOREGROUND;
 
 /**
  * The default style used for all {@link echopoint.Anchor} components.

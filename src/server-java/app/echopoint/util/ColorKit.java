@@ -27,12 +27,11 @@ package echopoint.util;
  * the provisions above, a recipient may use your version of this file under
  * the terms of any one of the MPL, the GPL or the LGPL.
  */
-import echopoint.util.collections.ConcurrentReaderHashMap;
-
 import java.util.Map;
 
 import nextapp.echo.app.Color;
 import nextapp.echo.app.Component;
+import echopoint.util.collections.ConcurrentReaderHashMap;
 
 /**
  * A utility to class to help with Color manipulation

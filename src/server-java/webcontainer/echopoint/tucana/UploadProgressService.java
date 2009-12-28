@@ -17,13 +17,13 @@
  */
 package echopoint.tucana;
 
-import echopoint.tucana.event.UploadProgressEvent;
+import java.io.IOException;
+
 import nextapp.echo.webcontainer.Connection;
 import nextapp.echo.webcontainer.ContentType;
 import nextapp.echo.webcontainer.Service;
 import nextapp.echo.webcontainer.WebContainerServlet;
-
-import java.io.IOException;
+import echopoint.tucana.event.UploadProgressEvent;
 
 /**
  * Provides information about file upload progress.

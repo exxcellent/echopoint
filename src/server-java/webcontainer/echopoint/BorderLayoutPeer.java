@@ -18,9 +18,8 @@
 
 package echopoint;
 
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
-import echopoint.internal.AbstractContainerPeer;
+import java.util.LinkedHashMap;
+
 import nextapp.echo.app.Component;
 import nextapp.echo.app.util.Context;
 import nextapp.echo.webcontainer.ServerMessage;
@@ -28,7 +27,10 @@ import nextapp.echo.webcontainer.Service;
 import nextapp.echo.webcontainer.WebContainerServlet;
 import nextapp.echo.webcontainer.service.JavaScriptService;
 
-import java.util.LinkedHashMap;
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
+
+import echopoint.internal.AbstractContainerPeer;
 
 /**
  * Component rendering peer for {@link echopoint.BorderLayout}.

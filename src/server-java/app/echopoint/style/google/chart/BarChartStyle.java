@@ -1,8 +1,8 @@
 package echopoint.style.google.chart;
 
-import static echopoint.google.chart.BarChart.PROPERTY_HEIGHT;
 import static echopoint.google.chart.BarChart.PROPERTY_SIZE;
-import static echopoint.google.chart.BarChart.PROPERTY_WIDTH;
+import static echopoint.internal.AbstractContainer.PROPERTY_HEIGHT;
+import static echopoint.internal.AbstractContainer.PROPERTY_WIDTH;
 
 /**
  * A default style class for the {@link echopoint.google.chart.BarChart}

@@ -23,7 +23,6 @@ import nextapp.echo.webcontainer.ServerMessage;
 import nextapp.echo.webcontainer.Service;
 import nextapp.echo.webcontainer.WebContainerServlet;
 import nextapp.echo.webcontainer.service.JavaScriptService;
-
 import echopoint.internal.AbstractImagePeer;
 
 /**

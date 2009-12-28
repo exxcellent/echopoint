@@ -2,7 +2,7 @@ package echopoint.style.google.chart;
 
 import static echopoint.google.chart.internal.AdvancedChart.PROPERTY_AXIS_TYPE;
 import static echopoint.google.chart.internal.AdvancedChart.PROPERTY_GRID_LINES;
-import static echopoint.google.chart.internal.AdvancedChart.PROPERTY_LEGEND_POSITION;
+import static echopoint.google.chart.internal.SimpleChart.PROPERTY_LEGEND_POSITION;
 
 /**
  * A base style class for {@link echopoint.google.chart.internal.AdvancedChart}

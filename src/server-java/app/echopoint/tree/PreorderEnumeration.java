@@ -1,9 +1,9 @@
 package echopoint.tree;
 
+import java.io.Serializable;
 import java.util.Enumeration;
 import java.util.Stack;
 import java.util.Vector;
-import java.io.Serializable;
 
 /**
  * An enumeration used to traverse the subtree rooted at

@@ -17,12 +17,12 @@
  */
 package echopoint;
 
-import nextapp.echo.app.Component;
-import nextapp.echo.app.Font;
-import nextapp.echo.app.Color;
-import nextapp.echo.app.Insets;
-import nextapp.echo.app.Extent;
 import nextapp.echo.app.Alignment;
+import nextapp.echo.app.Color;
+import nextapp.echo.app.Component;
+import nextapp.echo.app.Extent;
+import nextapp.echo.app.Font;
+import nextapp.echo.app.Insets;
 
 /**
  * A component that displays a floating information window when hovering over

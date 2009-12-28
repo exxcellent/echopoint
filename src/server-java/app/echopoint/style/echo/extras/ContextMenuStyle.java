@@ -18,20 +18,19 @@
 
 package echopoint.style.echo.extras;
 
-import nextapp.echo.app.Border;
+import static echopoint.style.echo.extras.ResourceImages.BlueGrey;
+import static echopoint.style.echo.extras.ResourceImages.LightBlueLine;
+import static echopoint.util.ColorKit.makeColor;
 import static nextapp.echo.app.Border.STYLE_SOLID;
-import nextapp.echo.app.Border.Side;
-import nextapp.echo.app.FillImage;
-import static nextapp.echo.extras.app.ContextMenu.PROPERTY_ANIMATION_TIME;
 import static nextapp.echo.extras.app.ContextMenu.PROPERTY_BACKGROUND_IMAGE;
 import static nextapp.echo.extras.app.ContextMenu.PROPERTY_BORDER;
 import static nextapp.echo.extras.app.ContextMenu.PROPERTY_DISABLED_BACKGROUND_IMAGE;
 import static nextapp.echo.extras.app.ContextMenu.PROPERTY_SELECTION_BACKGROUND_IMAGE;
-
+import static nextapp.echo.extras.app.menu.AbstractMenuComponent.PROPERTY_ANIMATION_TIME;
+import nextapp.echo.app.Border;
+import nextapp.echo.app.FillImage;
+import nextapp.echo.app.Border.Side;
 import echopoint.style.AbstractStyle;
-import static echopoint.style.echo.extras.ResourceImages.BlueGrey;
-import static echopoint.style.echo.extras.ResourceImages.LightBlueLine;
-import static echopoint.util.ColorKit.makeColor;
 
 /**
  * The default style to apply to {@link nextapp.echo.extras.app.ContextMenu}

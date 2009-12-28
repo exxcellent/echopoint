@@ -1,6 +1,6 @@
 package echopoint.style.google.chart;
 
-import static echopoint.google.chart.RadarChart.PROPERTY_AXIS_TYPE;
+import static echopoint.google.chart.internal.AdvancedChart.PROPERTY_AXIS_TYPE;
 
 /**
  * The default style class for {@link echopoint.google.chart.RadarChart}

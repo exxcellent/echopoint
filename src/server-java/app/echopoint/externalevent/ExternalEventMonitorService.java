@@ -17,10 +17,6 @@
  */
 package echopoint.externalevent;
 
-import nextapp.echo.webcontainer.*;
-import nextapp.echo.app.ApplicationInstance;
-import nextapp.echo.app.TaskQueueHandle;
-
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -31,6 +27,14 @@ import java.util.WeakHashMap;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
+
+import nextapp.echo.app.ApplicationInstance;
+import nextapp.echo.app.TaskQueueHandle;
+import nextapp.echo.webcontainer.Connection;
+import nextapp.echo.webcontainer.Service;
+import nextapp.echo.webcontainer.ServiceRegistry;
+import nextapp.echo.webcontainer.UserInstance;
+import nextapp.echo.webcontainer.WebContainerServlet;
 
 /**
  * This service is used to listen for external events that come in when

@@ -17,8 +17,8 @@
  */
 package echopoint;
 
-import echopoint.internal.AbstractContainer;
 import nextapp.echo.app.Component;
+import echopoint.internal.AbstractContainer;
 
 /**
  * A component that uses a <code>iframe</code> to dislay the contents of a

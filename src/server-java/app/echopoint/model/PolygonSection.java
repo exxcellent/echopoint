@@ -17,11 +17,11 @@
  */
 package echopoint.model;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 /**
  * A model object that represents a clickable polygon section in an {@link

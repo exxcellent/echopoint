@@ -17,6 +17,16 @@
  */
 package echopoint.tucana;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
+import nextapp.echo.app.ApplicationInstance;
+import nextapp.echo.app.Component;
+import nextapp.echo.app.ImageReference;
+import nextapp.echo.app.TaskQueueHandle;
+import nextapp.echo.app.event.ActionEvent;
+import nextapp.echo.app.event.ActionListener;
 import echopoint.ProgressBar;
 import echopoint.internal.AbstractContainer;
 import echopoint.tucana.event.DefaultUploadListener;
@@ -28,16 +38,6 @@ import echopoint.tucana.event.UploadFailEvent;
 import echopoint.tucana.event.UploadFinishEvent;
 import echopoint.tucana.event.UploadProgressEvent;
 import echopoint.tucana.event.UploadStartEvent;
-import nextapp.echo.app.ApplicationInstance;
-import nextapp.echo.app.Component;
-import nextapp.echo.app.ImageReference;
-import nextapp.echo.app.TaskQueueHandle;
-import nextapp.echo.app.event.ActionEvent;
-import nextapp.echo.app.event.ActionListener;
-
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * The file upload selector component.  This component is a re-implementation

@@ -17,10 +17,11 @@
  */
 package echopoint.tucana;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Base {@link UploadSPI} implementation.

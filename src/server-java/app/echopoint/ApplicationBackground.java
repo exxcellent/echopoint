@@ -17,8 +17,8 @@
  */
 package echopoint;
 
-import nextapp.echo.app.ImageReference;
 import nextapp.echo.app.Component;
+import nextapp.echo.app.ImageReference;
 
 /**
  * This component sets the background attribute for the body tag.

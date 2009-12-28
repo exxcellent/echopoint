@@ -19,13 +19,14 @@
 package echopoint.tucana;
 
 import static eu.medsea.util.MimeUtil.getMimeType;
-import org.apache.commons.io.IOUtils;
 
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+
+import org.apache.commons.io.IOUtils;
 
 /**
  * A download provider for sending files to the client.

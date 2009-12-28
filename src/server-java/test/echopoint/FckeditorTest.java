@@ -18,13 +18,11 @@
 
 package echopoint;
 
+import static org.junit.Assert.assertEquals;
 import nextapp.echo.app.Border;
 import nextapp.echo.app.Color;
 import nextapp.echo.app.Extent;
-import nextapp.echo.app.Label;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 

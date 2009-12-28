@@ -17,6 +17,8 @@
  */
 package echopoint.internal;
 
+import java.util.EventListener;
+
 import nextapp.echo.app.Alignment;
 import nextapp.echo.app.Border;
 import nextapp.echo.app.Component;
@@ -25,8 +27,6 @@ import nextapp.echo.app.ImageReference;
 import nextapp.echo.app.Insets;
 import nextapp.echo.app.event.ActionEvent;
 import nextapp.echo.app.event.ActionListener;
-
-import java.util.EventListener;
 
 /**
  * An abstract super class for container components.  Defines the standard

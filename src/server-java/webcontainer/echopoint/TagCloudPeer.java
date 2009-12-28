@@ -18,19 +18,21 @@
 
 package echopoint;
 
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
 import static echopoint.internal.AbstractContainer.ACTION_LISTENERS_CHANGED_PROPERTY;
 import static echopoint.internal.AbstractContainer.INPUT_ACTION;
-import echopoint.internal.AbstractContainerPeer;
-import echopoint.internal.DefaultEventPeer;
-import echopoint.model.Tag;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.util.Context;
 import nextapp.echo.webcontainer.ServerMessage;
 import nextapp.echo.webcontainer.Service;
 import nextapp.echo.webcontainer.WebContainerServlet;
 import nextapp.echo.webcontainer.service.JavaScriptService;
+
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
+
+import echopoint.internal.AbstractContainerPeer;
+import echopoint.internal.DefaultEventPeer;
+import echopoint.model.Tag;
 
 /**
  * Component rendering peer for {@link echopoint.TagCloud}.

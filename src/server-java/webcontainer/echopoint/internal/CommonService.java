@@ -18,9 +18,9 @@
 
 package echopoint.internal;
 
-import nextapp.echo.webcontainer.service.JavaScriptService;
-import nextapp.echo.webcontainer.Service;
 import static nextapp.echo.webcontainer.WebContainerServlet.getServiceRegistry;
+import nextapp.echo.webcontainer.Service;
+import nextapp.echo.webcontainer.service.JavaScriptService;
 
 /**
  * Register the Echopoint core library.

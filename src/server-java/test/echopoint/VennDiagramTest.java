@@ -18,16 +18,18 @@
 
 package echopoint;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import nextapp.echo.app.Component;
+import nextapp.echo.app.Extent;
+
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
 import echopoint.google.chart.VennDiagram;
 import echopoint.google.chart.model.Title;
 import echopoint.google.chart.model.VennDiagramModel;
-import nextapp.echo.app.Component;
-import nextapp.echo.app.Extent;
-import org.junit.AfterClass;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 /**
  * Unit test suite for the {@link echopoint.google.chart.VennDiagram} component

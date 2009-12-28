@@ -18,13 +18,13 @@
 
 package echopoint;
 
-import echopoint.internal.AbstractHtmlComponent;
-import nextapp.echo.app.Component;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+
+import nextapp.echo.app.Component;
+import echopoint.internal.AbstractHtmlComponent;
 
 /**
  * A container component that uses user specified XHTML layout to render

@@ -17,17 +17,16 @@
  */
 package echopoint.tucana;
 
+import java.io.Serializable;
+
 import nextapp.echo.app.ApplicationInstance;
 import nextapp.echo.app.Command;
 import nextapp.echo.app.RenderIdSupport;
-
-import java.io.Serializable;
-
-import echopoint.tucana.event.DownloadEvent;
-import echopoint.tucana.event.DownloadStartEvent;
-import echopoint.tucana.event.DownloadFailEvent;
 import echopoint.tucana.event.DownloadCallback;
+import echopoint.tucana.event.DownloadEvent;
+import echopoint.tucana.event.DownloadFailEvent;
 import echopoint.tucana.event.DownloadFinishEvent;
+import echopoint.tucana.event.DownloadStartEvent;
 
 /**
  * A command used to enqueue a file (or similar) to the client for downlaoding

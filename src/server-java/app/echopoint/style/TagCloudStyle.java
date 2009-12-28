@@ -1,9 +1,9 @@
 package echopoint.style;
 
-import static echopoint.TagCloud.PROPERTY_INSETS;
 import static echopoint.TagCloud.PROPERTY_ROLLOVER_BACKGROUND;
 import static echopoint.TagCloud.PROPERTY_ROLLOVER_ENABLED;
 import static echopoint.TagCloud.PROPERTY_ROLLOVER_FOREGROUND;
+import static echopoint.internal.AbstractContainer.PROPERTY_INSETS;
 import static echopoint.util.ColorKit.makeColor;
 import nextapp.echo.app.Extent;
 import nextapp.echo.app.Insets;

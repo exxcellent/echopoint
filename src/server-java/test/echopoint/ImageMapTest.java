@@ -17,11 +17,20 @@
  */
 package echopoint;
 
+import static org.junit.Assert.assertEquals;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
 import nextapp.echo.app.Component;
 import nextapp.echo.app.Extent;
 import nextapp.echo.app.Label;
 import nextapp.echo.app.event.ActionEvent;
 import nextapp.echo.app.event.ActionListener;
+
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import echopoint.model.CircleSection;
 import echopoint.model.Cursor;
@@ -29,15 +38,6 @@ import echopoint.model.MapSection;
 import echopoint.model.Point;
 import echopoint.model.PolygonSection;
 import echopoint.model.RectangleSection;
-
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.Collection;
-
-import static org.junit.Assert.assertEquals;
 
 /**
  * Unit test suite for the {@link echopoint.ImageMap} component.

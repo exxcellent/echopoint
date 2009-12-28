@@ -28,8 +28,6 @@ package echopoint.util.throwable;
  * the terms of any one of the MPL, the GPL or the LGPL.
  */
 
-import echopoint.util.ReflectionKit;
-
 import java.io.BufferedReader;
 import java.io.CharArrayWriter;
 import java.io.IOException;
@@ -44,6 +42,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import echopoint.util.ReflectionKit;
 
 
 /**

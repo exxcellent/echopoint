@@ -19,9 +19,9 @@
 package echopoint.tree;
 
 import java.util.Enumeration;
-import java.util.Vector;
-import java.util.Queue;
 import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Vector;
 
 /**
  * An enumeration that traverses the subtree rooted at

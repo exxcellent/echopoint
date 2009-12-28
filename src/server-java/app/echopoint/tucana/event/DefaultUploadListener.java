@@ -1,9 +1,9 @@
 package echopoint.tucana.event;
 
-import echopoint.tucana.FileUploadSelector;
 import nextapp.echo.app.ApplicationInstance;
 import nextapp.echo.app.event.ActionEvent;
 import nextapp.echo.app.event.ActionListener;
+import echopoint.tucana.FileUploadSelector;
 
 /**
  * A default action listener to associate with the {@link

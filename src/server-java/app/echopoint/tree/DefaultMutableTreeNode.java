@@ -19,8 +19,8 @@
 package echopoint.tree;
 
 import java.util.Enumeration;
-import java.util.Vector;
 import java.util.NoSuchElementException;
+import java.util.Vector;
 
 /**
  * A {@code DefaultMutableTreeNode} is a general-purpose node in a tree

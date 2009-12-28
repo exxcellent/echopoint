@@ -33,8 +33,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
 
-import nextapp.echo.app.Component;
 import nextapp.echo.app.ApplicationInstance;
+import nextapp.echo.app.Component;
 import nextapp.echo.app.Window;
 
 /**

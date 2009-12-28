@@ -17,13 +17,13 @@
  */
 package echopoint.tucana.event;
 
-import org.apache.commons.io.IOUtils;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+
+import org.apache.commons.io.IOUtils;
 
 /**
  * A default implementation of an {@link UploadCallback} that saves the

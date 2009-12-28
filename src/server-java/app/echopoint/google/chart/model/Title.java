@@ -18,11 +18,11 @@
 
 package echopoint.google.chart.model;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.ArrayList;
+import java.util.Collection;
+
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 /**
  * A model object used to represent the title of a chart.

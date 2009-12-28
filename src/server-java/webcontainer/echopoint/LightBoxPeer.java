@@ -18,15 +18,15 @@
 
 package echopoint;
 
-import echopoint.internal.AbstractPeer;
-import nextapp.echo.app.Component;
-import nextapp.echo.app.util.Context;
 import static nextapp.echo.webcontainer.ContentType.IMAGE_PNG;
-import nextapp.echo.webcontainer.ServerMessage;
-import nextapp.echo.webcontainer.Service;
 import static nextapp.echo.webcontainer.WebContainerServlet.getResourceRegistry;
 import static nextapp.echo.webcontainer.WebContainerServlet.getServiceRegistry;
 import static nextapp.echo.webcontainer.service.JavaScriptService.forResources;
+import nextapp.echo.app.Component;
+import nextapp.echo.app.util.Context;
+import nextapp.echo.webcontainer.ServerMessage;
+import nextapp.echo.webcontainer.Service;
+import echopoint.internal.AbstractPeer;
 
 /**
  * Component rendering peer for the {@link echopoint.LightBox} component.

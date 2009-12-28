@@ -1,15 +1,24 @@
 package echopoint.style.echo;
 
-import echopoint.style.AbstractStyle;
 import static echopoint.style.echo.ResourceImages.InputFieldBackground;
 import static echopoint.style.echo.ResourceImages.InputFieldBackgroundHightlight;
 import static echopoint.style.echo.ResourceImages.InputFieldBackgroundPressed;
 import static echopoint.util.ColorKit.makeColor;
+import static nextapp.echo.app.button.AbstractButton.PROPERTY_BACKGROUND_IMAGE;
+import static nextapp.echo.app.button.AbstractButton.PROPERTY_BORDER;
+import static nextapp.echo.app.button.AbstractButton.PROPERTY_DISABLED_FOREGROUND;
+import static nextapp.echo.app.button.AbstractButton.PROPERTY_INSETS;
+import static nextapp.echo.app.button.AbstractButton.PROPERTY_PRESSED_BACKGROUND_IMAGE;
+import static nextapp.echo.app.button.AbstractButton.PROPERTY_PRESSED_BORDER;
+import static nextapp.echo.app.button.AbstractButton.PROPERTY_PRESSED_ENABLED;
+import static nextapp.echo.app.button.AbstractButton.PROPERTY_ROLLOVER_BACKGROUND_IMAGE;
+import static nextapp.echo.app.button.AbstractButton.PROPERTY_ROLLOVER_BORDER;
+import static nextapp.echo.app.button.AbstractButton.PROPERTY_ROLLOVER_ENABLED;
 import nextapp.echo.app.Border;
 import nextapp.echo.app.Extent;
 import nextapp.echo.app.FillImage;
 import nextapp.echo.app.Insets;
-import static nextapp.echo.app.button.AbstractButton.*;
+import echopoint.style.AbstractStyle;
 
 /**
  * The default style to associate with button components.

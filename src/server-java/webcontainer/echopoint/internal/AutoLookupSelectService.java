@@ -21,6 +21,7 @@ import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
 import echopoint.AutoLookupSelectField;
+import echopoint.model.AutoLookupSelectFieldModel;
 import echopoint.model.AutoLookupSelectModel;
 import echopoint.model.AutoLookupSelectModel.EntrySelect;
 
@@ -68,26 +69,25 @@ public class AutoLookupSelectService implements Service {
 	@Override
 	public void service(Connection conn) throws IOException {
 		HttpServletRequest request = conn.getRequest();
-        request.setCharacterEncoding("utf-8");
+    request.setCharacterEncoding("utf-8");
 
 		String elementId = request.getParameter("elementId");
 		String searchValue =  request.getParameter("searchValue");
-       
+
 		AutoLookupSelectField textFieldEx = (AutoLookupSelectField) interestedParties.get(elementId);
 		if (textFieldEx == null) {
 			System.out.println(interestedParties);
 			throw new IllegalStateException("El AutolookupSelectField " + elementId + " no pudo ser encontrado.");
 		}
 		AutoLookupSelectModel autoLookupModel = textFieldEx.getAutoLookupModel();
-		if (autoLookupModel == null) {
+		if (autoLookupModel == null)
 			return; // nothing to do
-		}
 
-        Document doc = DomUtil.createDocument("xml", null, null, null);
+    Document doc = DomUtil.createDocument("xml", null, null, null);
  		Element dataElement = doc.getDocumentElement();
 		Element autoLookupModelE = doc.createElement("autoLookupModel");
 
-		List<EntrySelect> entries = autoLookupModel.searchEntries(searchValue);
+		List<EntrySelect> entries = searchValue == null ? autoLookupModel.getAllEntries() : ( (AutoLookupSelectFieldModel)autoLookupModel ).searchEntries(searchValue);
 		if (entries != null) {
 			for (EntrySelect entry : entries) {
 				Element entryE = doc.createElement("entry");

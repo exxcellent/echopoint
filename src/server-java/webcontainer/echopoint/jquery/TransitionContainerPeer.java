@@ -1,14 +1,11 @@
 package echopoint.jquery;
 
-import nextapp.echo.webcontainer.AbstractComponentSynchronizePeer;
+import nextapp.echo.app.Component;
+import nextapp.echo.app.util.Context;
+import nextapp.echo.webcontainer.ServerMessage;
 import nextapp.echo.webcontainer.Service;
 import nextapp.echo.webcontainer.WebContainerServlet;
-import nextapp.echo.webcontainer.ServerMessage;
 import nextapp.echo.webcontainer.service.JavaScriptService;
-import nextapp.echo.extras.app.ToolTipContainer;
-import nextapp.echo.extras.webcontainer.service.CommonService;
-import nextapp.echo.app.util.Context;
-import nextapp.echo.app.Component;
 
 /**
  * Rendering peer for the {@link TransitionContainer} component.

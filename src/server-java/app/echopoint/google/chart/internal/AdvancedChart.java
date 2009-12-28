@@ -18,12 +18,12 @@
 
 package echopoint.google.chart.internal;
 
+import java.util.Collection;
+
 import echopoint.google.chart.model.FillArea;
 import echopoint.google.chart.model.LineStyle;
 import echopoint.google.chart.model.Range;
 import echopoint.google.chart.model.RangeMarker;
-
-import java.util.Collection;
 
 /**
  * An abstract base class for charts that support most of the configuration

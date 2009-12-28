@@ -17,15 +17,23 @@
  */
 package echopoint;
 
+import java.util.Date;
+
+import nextapp.echo.app.Color;
+import nextapp.echo.app.Column;
+import nextapp.echo.app.Component;
+import nextapp.echo.app.Extent;
+import nextapp.echo.app.Label;
+import nextapp.echo.app.Row;
+import nextapp.echo.app.SelectField;
+import nextapp.echo.app.event.ActionEvent;
+import nextapp.echo.app.event.ActionListener;
+
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.AfterClass;
-import static org.junit.Assert.assertEquals;
+
 import echopoint.jquery.DateField;
-import java.util.Date;
-import nextapp.echo.app.*;
-import nextapp.echo.app.event.ActionListener;
-import nextapp.echo.app.event.ActionEvent;
 
 /**
  * Test case for the {@link echopoint.jquery.DateField} component.

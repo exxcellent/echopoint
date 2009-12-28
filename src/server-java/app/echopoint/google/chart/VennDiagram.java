@@ -18,11 +18,11 @@
 
 package echopoint.google.chart;
 
-import echopoint.google.chart.internal.SimpleChart;
-import echopoint.google.chart.model.VennDiagramModel;
-import echopoint.google.chart.model.ChartData;
-
 import java.util.ArrayList;
+
+import echopoint.google.chart.internal.SimpleChart;
+import echopoint.google.chart.model.ChartData;
+import echopoint.google.chart.model.VennDiagramModel;
 
 /**
  * Component wrapper for a

@@ -1,22 +1,19 @@
 package echopoint;
 
+import static org.junit.Assert.assertEquals;
+import nextapp.echo.app.Button;
+import nextapp.echo.app.Color;
+import nextapp.echo.app.Component;
+import nextapp.echo.app.Extent;
+import nextapp.echo.app.Label;
+import nextapp.echo.app.event.ActionEvent;
+import nextapp.echo.app.event.ActionListener;
+
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.AfterClass;
-import static org.junit.Assert.assertEquals;
-import nextapp.echo.app.*;
-import nextapp.echo.app.layout.ColumnLayoutData;
-import nextapp.echo.app.event.ActionListener;
-import nextapp.echo.app.event.ActionEvent;
-import nextapp.echo.extras.app.menu.DefaultMenuModel;
-import nextapp.echo.extras.app.menu.ItemModel;
-import echopoint.jquery.DockMenu;
-import echopoint.jquery.TransitionContainer;
 
-import java.util.Map;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ArrayList;
+import echopoint.jquery.TransitionContainer;
 
 /**
  * Created: 2009-maj-09

@@ -18,16 +18,18 @@
 
 package echopoint.google.chart.internal;
 
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
-import echopoint.google.chart.model.Title;
-import echopoint.internal.AbstractContainerPeer;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.util.Context;
 import nextapp.echo.webcontainer.ServerMessage;
 import nextapp.echo.webcontainer.Service;
 import nextapp.echo.webcontainer.WebContainerServlet;
 import nextapp.echo.webcontainer.service.JavaScriptService;
+
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
+
+import echopoint.google.chart.model.Title;
+import echopoint.internal.AbstractContainerPeer;
 
 /**
  * Rendering peer for the {@link echopoint.google.chart.internal.AbstractChart}

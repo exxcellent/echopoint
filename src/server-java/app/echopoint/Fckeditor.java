@@ -29,6 +29,7 @@
 package echopoint;
 
 import java.util.Properties;
+
 import nextapp.echo.app.Component;
 import nextapp.echo.app.Extent;
 

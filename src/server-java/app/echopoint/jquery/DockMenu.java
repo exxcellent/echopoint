@@ -1,13 +1,13 @@
 package echopoint.jquery;
 
 
-import echopoint.internal.AbstractContainer;
+import java.util.ArrayList;
+import java.util.List;
+
 import nextapp.echo.app.ImageReference;
 import nextapp.echo.app.event.ActionEvent;
 import nextapp.echo.app.event.ActionListener;
-
-import java.util.ArrayList;
-import java.util.List;
+import echopoint.internal.AbstractContainer;
 
 /**
  *  A component to display a Mac-style dock menu (fisheye menu).

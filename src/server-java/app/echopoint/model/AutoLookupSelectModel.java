@@ -12,9 +12,7 @@ public interface AutoLookupSelectModel
   }
 
   /**
-    * Returns a list by a parameter 'searchString'.
-    *
-    * @param searchString  - if is empty we have a request for full entry list, otherwise we have a request for sub entry list
+    * Returns a full list.
     */
-  List<EntrySelect> searchEntries( String searchString );
+  List<EntrySelect> getAllEntries();
 }

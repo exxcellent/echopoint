@@ -17,16 +17,15 @@
  */
 package echopoint;
 
-import nextapp.echo.app.ImageReference;
-import nextapp.echo.app.event.ActionEvent;
-
-import echopoint.internal.AbstractImage;
-import echopoint.model.MapSection;
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import nextapp.echo.app.ImageReference;
+import nextapp.echo.app.event.ActionEvent;
+import echopoint.internal.AbstractImage;
+import echopoint.model.MapSection;
 
 /**
  * The <code>ImageMap</code> class provides a {@link nextapp.echo.app.Component}

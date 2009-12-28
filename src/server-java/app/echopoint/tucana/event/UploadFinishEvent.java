@@ -17,8 +17,9 @@
  */
 package echopoint.tucana.event;
 
-import echopoint.tucana.FileUploadSelector;
 import org.apache.commons.fileupload.FileItem;
+
+import echopoint.tucana.FileUploadSelector;
 
 /**
  * An event indicating that a file upload has finished.

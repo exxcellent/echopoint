@@ -1,15 +1,15 @@
 package echopoint.style.echo;
 
-import echopoint.style.AbstractStyle;
 import static echopoint.style.echo.ResourceImages.InputFieldBackground;
 import static echopoint.util.ColorKit.makeColor;
-import nextapp.echo.app.Border;
-import nextapp.echo.app.Extent;
-import nextapp.echo.app.FillImage;
-import static nextapp.echo.app.text.TextComponent.PROPERTY_BACKGROUND;
+import static nextapp.echo.app.Component.PROPERTY_BACKGROUND;
 import static nextapp.echo.app.text.TextComponent.PROPERTY_BACKGROUND_IMAGE;
 import static nextapp.echo.app.text.TextComponent.PROPERTY_BORDER;
 import static nextapp.echo.app.text.TextComponent.PROPERTY_DISABLED_FOREGROUND;
+import nextapp.echo.app.Border;
+import nextapp.echo.app.Extent;
+import nextapp.echo.app.FillImage;
+import echopoint.style.AbstractStyle;
 
 /**
  * A default style to apply to {@link nextapp.echo.app.text.TextComponent}

@@ -18,11 +18,21 @@
 
 package echopoint.style.echo.extras;
 
-import nextapp.echo.app.Extent;
-import nextapp.echo.app.FillImage;
-import nextapp.echo.app.FillImageBorder;
-import nextapp.echo.app.Insets;
-import static nextapp.echo.extras.app.TabPane.PROPERTY_BACKGROUND;
+import static echopoint.style.echo.ResourceImages.BorderBottom;
+import static echopoint.style.echo.ResourceImages.BorderBottomLeft;
+import static echopoint.style.echo.ResourceImages.BorderBottomRight;
+import static echopoint.style.echo.ResourceImages.BorderLeft;
+import static echopoint.style.echo.ResourceImages.BorderRight;
+import static echopoint.style.echo.ResourceImages.BorderTop;
+import static echopoint.style.echo.ResourceImages.BorderTopLeft;
+import static echopoint.style.echo.ResourceImages.BorderTopRight;
+import static echopoint.style.echo.ResourceImages.GradientBlue;
+import static echopoint.style.echo.ResourceImages.LightedSilver;
+import static echopoint.style.echo.ResourceImages.TabCloseIcon;
+import static echopoint.style.echo.ResourceImages.TabCloseRolloverIcon;
+import static echopoint.util.ColorKit.makeColor;
+import static echopoint.util.ExtentKit.makeExtent;
+import static nextapp.echo.app.Component.PROPERTY_BACKGROUND;
 import static nextapp.echo.extras.app.TabPane.PROPERTY_IMAGE_BORDER;
 import static nextapp.echo.extras.app.TabPane.PROPERTY_INSETS;
 import static nextapp.echo.extras.app.TabPane.PROPERTY_TAB_ACTIVE_BACKGROUND;
@@ -40,22 +50,11 @@ import static nextapp.echo.extras.app.TabPane.PROPERTY_TAB_ROLLOVER_BACKGROUND_I
 import static nextapp.echo.extras.app.TabPane.PROPERTY_TAB_ROLLOVER_CLOSE_ICON;
 import static nextapp.echo.extras.app.TabPane.PROPERTY_TAB_ROLLOVER_ENABLED;
 import static nextapp.echo.extras.app.TabPane.PROPERTY_TAB_ROLLOVER_FOREGROUND;
-
+import nextapp.echo.app.Extent;
+import nextapp.echo.app.FillImage;
+import nextapp.echo.app.FillImageBorder;
+import nextapp.echo.app.Insets;
 import echopoint.style.AbstractStyle;
-import static echopoint.style.echo.ResourceImages.BorderBottom;
-import static echopoint.style.echo.ResourceImages.BorderBottomLeft;
-import static echopoint.style.echo.ResourceImages.BorderBottomRight;
-import static echopoint.style.echo.ResourceImages.BorderLeft;
-import static echopoint.style.echo.ResourceImages.BorderRight;
-import static echopoint.style.echo.ResourceImages.BorderTop;
-import static echopoint.style.echo.ResourceImages.BorderTopLeft;
-import static echopoint.style.echo.ResourceImages.BorderTopRight;
-import static echopoint.style.echo.ResourceImages.GradientBlue;
-import static echopoint.style.echo.ResourceImages.LightedSilver;
-import static echopoint.style.echo.ResourceImages.TabCloseIcon;
-import static echopoint.style.echo.ResourceImages.TabCloseRolloverIcon;
-import static echopoint.util.ColorKit.makeColor;
-import static echopoint.util.ExtentKit.makeExtent;
 
 /**
  * The default style to use for {@link nextapp.echo.extras.app.TabPane}

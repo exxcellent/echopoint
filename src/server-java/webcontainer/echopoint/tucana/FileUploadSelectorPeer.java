@@ -17,10 +17,7 @@
  */
 package echopoint.tucana;
 
-import echopoint.ProgressBar;
-import echopoint.internal.AbstractContainerPeer;
-import echopoint.internal.DefaultEventPeer;
-import static echopoint.tucana.FileUploadSelector.ACTION_LISTENERS_CHANGED_PROPERTY;
+import static echopoint.internal.AbstractContainer.ACTION_LISTENERS_CHANGED_PROPERTY;
 import static echopoint.tucana.FileUploadSelector.COMPLETE_ACTION;
 import static echopoint.tucana.FileUploadSelector.START_ACTION;
 import nextapp.echo.app.Component;
@@ -32,6 +29,9 @@ import nextapp.echo.webcontainer.Service;
 import nextapp.echo.webcontainer.UserInstance;
 import nextapp.echo.webcontainer.WebContainerServlet;
 import nextapp.echo.webcontainer.service.JavaScriptService;
+import echopoint.ProgressBar;
+import echopoint.internal.AbstractContainerPeer;
+import echopoint.internal.DefaultEventPeer;
 
 /**
  * Rendering peer for the {@link echopoint.tucana.FileUploadSelector}

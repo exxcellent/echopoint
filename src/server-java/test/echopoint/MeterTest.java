@@ -18,20 +18,23 @@
 
 package echopoint;
 
-import echopoint.google.chart.Meter;
-import echopoint.google.chart.model.ChartData;
-import echopoint.google.chart.model.Title;
-import nextapp.echo.app.Component;
-import nextapp.echo.app.Extent;
-import nextapp.echo.app.Insets;
-import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import nextapp.echo.app.Component;
+import nextapp.echo.app.Extent;
+import nextapp.echo.app.Insets;
+
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import echopoint.google.chart.Meter;
+import echopoint.google.chart.model.ChartData;
+import echopoint.google.chart.model.Title;
 
 /**
  * Unit test suite for the {@link echopoint.google.chart.Meter} component

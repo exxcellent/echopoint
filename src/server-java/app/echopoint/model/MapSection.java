@@ -17,9 +17,9 @@
  */
 package echopoint.model;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-
 import java.io.Serializable;
+
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 /**
  * An asbtract base class for model objects that represent the clickable

@@ -18,11 +18,11 @@
 
 package echopoint.tree;
 
-import java.util.Enumeration;
-import java.util.Stack;
-import java.util.EmptyStackException;
-import java.util.NoSuchElementException;
 import java.io.Serializable;
+import java.util.EmptyStackException;
+import java.util.Enumeration;
+import java.util.NoSuchElementException;
+import java.util.Stack;
 
 /**
  * An enumeration that follows the path from {@code ancestor} to the node.

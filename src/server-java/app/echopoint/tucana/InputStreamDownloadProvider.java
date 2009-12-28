@@ -18,12 +18,13 @@
 
 package echopoint.tucana;
 
-import org.apache.commons.io.IOUtils;
+import static java.util.UUID.randomUUID;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import static java.util.UUID.randomUUID;
+
+import org.apache.commons.io.IOUtils;
 
 /**
  * A download provider implementation that streams the contents of the

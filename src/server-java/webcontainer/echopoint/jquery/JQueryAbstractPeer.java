@@ -1,12 +1,11 @@
 package echopoint.jquery;
 
-import nextapp.echo.webcontainer.AbstractComponentSynchronizePeer;
-import nextapp.echo.webcontainer.ServerMessage;
-import nextapp.echo.app.util.Context;
 import nextapp.echo.app.Component;
+import nextapp.echo.app.util.Context;
+import nextapp.echo.webcontainer.ServerMessage;
+import echopoint.internal.AbstractPeer;
 import echopoint.internal.CommonResources;
 import echopoint.internal.CommonService;
-import echopoint.internal.AbstractPeer;
 
 /**
  * An abstract peer that may be used as the base class for all jQuery peers. Ensures

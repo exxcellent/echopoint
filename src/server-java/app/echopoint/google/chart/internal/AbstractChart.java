@@ -18,13 +18,13 @@
 
 package echopoint.google.chart.internal;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
+import nextapp.echo.app.Component;
 import echopoint.google.chart.model.ChartData;
 import echopoint.google.chart.model.Title;
 import echopoint.internal.AbstractContainer;
-import nextapp.echo.app.Component;
-
-import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * The abstract base class for the components that wrap the charts provided

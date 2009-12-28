@@ -17,13 +17,13 @@
  */
 package echopoint.command;
 
+import nextapp.echo.app.Command;
+import nextapp.echo.app.util.Context;
 import nextapp.echo.webcontainer.AbstractCommandSynchronizePeer;
+import nextapp.echo.webcontainer.ServerMessage;
 import nextapp.echo.webcontainer.Service;
 import nextapp.echo.webcontainer.WebContainerServlet;
-import nextapp.echo.webcontainer.ServerMessage;
 import nextapp.echo.webcontainer.service.JavaScriptService;
-import nextapp.echo.app.util.Context;
-import nextapp.echo.app.Command;
 
 /**
  * A <code>CommandSynchronizePeer</code> implementation for the {@link JavaScriptEval} command.

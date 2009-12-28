@@ -1,7 +1,7 @@
 package echopoint;
 
-import echopoint.google.chart.model.ChartData;
 import nextapp.echo.app.Component;
+import echopoint.google.chart.model.ChartData;
 
 /**
  * <p>&copy; Copyright 2008 <a href='http://sptci.com/' target='_top'>Sans

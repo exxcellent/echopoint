@@ -18,9 +18,9 @@
 
 package echopoint;
 
-import echopoint.internal.AbstractContainer;
-import nextapp.echo.app.Extent;
 import nextapp.echo.app.Component;
+import nextapp.echo.app.Extent;
+import echopoint.internal.AbstractContainer;
 
 /**
  * <b>Strut</b> is a very simple component that can have a fixed width and height. It

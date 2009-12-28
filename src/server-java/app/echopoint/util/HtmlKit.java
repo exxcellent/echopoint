@@ -66,8 +66,6 @@ package echopoint.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import nextapp.echo.app.ImageReference;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 

@@ -18,9 +18,9 @@
 
 package echopoint.google.chart;
 
-import echopoint.google.chart.internal.SimpleChart;
-
 import java.util.Collection;
+
+import echopoint.google.chart.internal.SimpleChart;
 
 /**
  * Component wrapper for a

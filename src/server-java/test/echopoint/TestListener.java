@@ -18,18 +18,19 @@
 
 package echopoint;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import nextapp.echo.app.Component;
 import nextapp.echo.app.FloatingPane;
 import nextapp.echo.app.Label;
 import nextapp.echo.app.event.ActionEvent;
 import nextapp.echo.app.event.ActionListener;
+
 import org.junit.runner.Description;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * The action listener to invoke when a test control button is pressed.

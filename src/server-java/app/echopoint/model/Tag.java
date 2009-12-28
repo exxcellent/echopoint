@@ -18,9 +18,9 @@
 
 package echopoint.model;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-
 import java.io.Serializable;
+
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 /**
  * The model object for use in the {@link echopoint.TagCloud} component.

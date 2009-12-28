@@ -17,12 +17,20 @@
  */
 package echopoint;
 
-import echopoint.jquery.TooltipContainer;
+import static org.junit.Assert.assertEquals;
+import nextapp.echo.app.Alignment;
+import nextapp.echo.app.Color;
+import nextapp.echo.app.Component;
+import nextapp.echo.app.Extent;
+import nextapp.echo.app.Font;
+import nextapp.echo.app.Insets;
+import nextapp.echo.app.Label;
+
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.AfterClass;
-import static org.junit.Assert.assertEquals;
-import nextapp.echo.app.*;
+
+import echopoint.jquery.TooltipContainer;
 
 /**
  * Test case for the {@link echopoint.ContainerEx} component.

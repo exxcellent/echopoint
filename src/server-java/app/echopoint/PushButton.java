@@ -18,11 +18,11 @@
 
 package echopoint;
 
-import echopoint.internal.AbstractContainer;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.ImageReference;
 import nextapp.echo.app.event.ActionEvent;
 import nextapp.echo.app.event.ActionListener;
+import echopoint.internal.AbstractContainer;
 
 /**
  * A button component that by default appears like the system and browser

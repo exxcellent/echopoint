@@ -17,13 +17,19 @@
  */
 package echopoint;
 
+import static org.junit.Assert.assertEquals;
+import nextapp.echo.app.Alignment;
+import nextapp.echo.app.Color;
+import nextapp.echo.app.Component;
+import nextapp.echo.app.Extent;
+import nextapp.echo.app.Font;
+import nextapp.echo.app.Insets;
+
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.AfterClass;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+
 import echopoint.jquery.Clock;
-import nextapp.echo.app.*;
 
 /**
  * Test case for the {@link Clock} component.

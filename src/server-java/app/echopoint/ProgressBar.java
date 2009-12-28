@@ -17,8 +17,8 @@
  */
 package echopoint;
 
-import echopoint.internal.AbstractContainer;
 import nextapp.echo.app.Color;
+import echopoint.internal.AbstractContainer;
 
 /**
  * A simple colour based progress bar component.  Unlike the original EPNG

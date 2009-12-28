@@ -17,15 +17,15 @@
  */
 package echopoint.tucana;
 
-import echopoint.tucana.event.DownloadCallback;
-import echopoint.tucana.event.DownloadCallbackAdapter;
+import java.io.File;
+import java.io.InputStream;
+
 import nextapp.echo.app.ApplicationInstance;
 import nextapp.echo.app.Button;
 import nextapp.echo.app.event.ActionEvent;
 import nextapp.echo.app.event.ActionListener;
-
-import java.io.File;
-import java.io.InputStream;
+import echopoint.tucana.event.DownloadCallback;
+import echopoint.tucana.event.DownloadCallbackAdapter;
 
 /**
  * A convenience component to display a {@link DownloadCommand} as a button

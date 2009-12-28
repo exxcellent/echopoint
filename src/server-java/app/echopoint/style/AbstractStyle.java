@@ -3,10 +3,11 @@ package echopoint.style;
 import static echopoint.util.ColorKit.makeColor;
 import static nextapp.echo.app.Component.PROPERTY_FONT;
 import static nextapp.echo.app.Component.PROPERTY_FOREGROUND;
-import nextapp.echo.app.MutableStyle;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import nextapp.echo.app.MutableStyle;
 
 /**
  * Abstract base class from which all style classes are derived.  Primarily
