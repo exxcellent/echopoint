@@ -69,6 +69,7 @@ public class ComponentList extends Column
           "Sparkline",
           "Strut",
           "TagCloud",
+          "TextArea",
           "TooltipContainer",
           "TransitionContainer",
           "VennDiagram",

@@ -17,6 +17,9 @@ echopoint.constants.REGEX_TEXT_FIELD = "echopoint.RegexTextField";
 /** The name of the KeystrokeTextField component. */
 echopoint.constants.KEYSTROKE_TEXT_FIELD = "echopoint.KeystrokeTextField";
 
+/** The name of the TextArea component. */
+echopoint.constants.TEXT_AREA = "echopoint.TextArea";
+
 /**
  * Place holder base class for all text field extensions.
  */
@@ -98,4 +101,20 @@ echopoint.KeystrokeTextField = Core.extend( echopoint.internal.TextField,
   },
 
   componentType: echopoint.constants.KEYSTROKE_TEXT_FIELD
+}),
+
+/**
+ * Component that uses a regex to pre-filter out invalid characters (or
+ * patterns) from being input into a text field.
+ */
+echopoint.TextArea = Core.extend( Echo.TextArea,
+{
+  $load: function()
+  {
+    Echo.ComponentFactory.registerType(
+        echopoint.constants.TEXT_AREA, this );
+  },
+
+  componentType: echopoint.constants.TEXT_AREA
 });
+

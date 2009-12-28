@@ -75,7 +75,12 @@ Aar.Fckeditor.Sync = Core.extend(Echo.Render.ComponentSync, {
                 }
                 if (this._conn.getStatus() != 200)
                 {
-                    alert("Failed loading fckeditor.js with http status <"+this._conn.getStatus()+">\nURL to fckeditor wrong, or not set?");
+                    // We should not use the private _rul member of the
+                    // connection object, but....
+                    alert("Failed loading fckeditor.js with http status <"+this._conn.getStatus()
+                        +">\nURL to fckeditor wrong, or not set?\n"+
+                        this._conn._url
+                    );
                 }
                 this._jscontent = this._conn.getResponseText();
                 eval(this._jscontent);  // Execute script

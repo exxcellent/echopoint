@@ -42,6 +42,15 @@
       </init-param>
     </servlet>
 
+    <servlet>
+      <servlet-name>CktestServlet</servlet-name>
+      <servlet-class>echopoint.cktest.Application</servlet-class>
+      <init-param>
+        <param-name>echo.debug</param-name>
+        <param-value>true</param-value>
+      </init-param>
+    </servlet>
+    
     <servlet-mapping>
       <servlet-name>Servlet</servlet-name>
       <url-pattern>/index.html</url-pattern>
@@ -52,4 +61,8 @@
       <url-pattern>/fcktest</url-pattern>
     </servlet-mapping>
 
+    <servlet-mapping>
+      <servlet-name>CktestServlet</servlet-name>
+      <url-pattern>/cktest</url-pattern>
+    </servlet-mapping>
 </web-app>
