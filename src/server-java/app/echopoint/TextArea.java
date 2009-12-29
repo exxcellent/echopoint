@@ -93,14 +93,7 @@ public class TextArea extends TextField
      * @param newValue the new wrap state
      */
     public void setAutoResize(boolean newValue) {
-        if (newValue)
-        {
-            set(PROPERTY_AUTO_RESIZE, "true");
-        }
-        else
-        {
-            set(PROPERTY_AUTO_RESIZE, "false");
-        }
+        set(PROPERTY_AUTO_RESIZE, newValue);
     }
 }
 

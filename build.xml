@@ -281,7 +281,7 @@
         <file name='jquery.jclock-1.2.0.js'/>
         <file name='Application.TooltipContainer.js'/>
         <file name='Sync.TooltipContainer.js'/>
-        <!-- <file name='jquery.qtip-1.0.0-beta4.min.js'/> -->
+        <file name='jquery.qtip-1.0.0-rc3.js'/> <!-- the .min.js file gives compression errors -->
       </filelist>
       <filelist dir='${dir.src.client.test}/app'>
         <file name='TestAppDeploy.js'/>

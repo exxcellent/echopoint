@@ -22,6 +22,8 @@ echopoint.internal.TextAreaSync = Core.extend( Echo.Sync.TextArea,
     initialHeight: null,
     /** Don't print out debug stuff for this component */
     doDebug: false,
+    /** Default to false */
+    autoResize: false,
 
     /** Set the default text if applicable. */
     setDefaultText: function()
@@ -56,6 +58,14 @@ echopoint.internal.TextAreaSync = Core.extend( Echo.Sync.TextArea,
         this, update, parentElement );
     if (this.component.get("wrap"))
         this.input.setAttribute("wrap", this.component.get("wrap"));
+    if (this.component.get("autoResize"))
+    {
+        if (this.doDebug)
+        {
+            Core.Debug.consoleWrite("Has autoResize property, is: "+this.component.get("autoResize"));
+        }
+        this.autoResize= this.component.get("autoResize");
+    }
 
     this.setDefaultText();
 
@@ -64,8 +74,7 @@ echopoint.internal.TextAreaSync = Core.extend( Echo.Sync.TextArea,
   /** The keyUp function implementation. */
   clientKeyUp : function( event )
   {
-    var doResize= this.component.render( "autoResize" );
-    if (doResize && doResize == "true")
+    if (this.autoResize )
     {
         if (this.doDebug)
         {

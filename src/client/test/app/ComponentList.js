@@ -41,7 +41,7 @@ echopoint.test.ComponentList = Core.extend( Echo.Column,
         "Strut",
         "TagCloud",
         "TextArea",
-        //"TooltipContainer",
+        "TooltipContainer",
         "VennDiagram"
       )
   },

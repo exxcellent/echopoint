@@ -73,13 +73,13 @@ public class TextAreaTest extends AbstractTest<TextArea>
     tf2.setWrap(true);
     tf2.setWidth(new Extent(40, Extent.EM));
     content.add(tf2);
-    content.add( new Label("Textarea with autoresize = ON and wrap = on") );
+    content.add( new Label("Textarea with autoResize = ON and wrap = on") );
     final TextArea tf3 = new TextArea();
     tf3.setAutoResize(false);
     tf3.setWrap(true);
     tf3.setWidth(new Extent(40, Extent.EM));
     content.add(tf3);
-    content.add( new Label("Textarea with autoresize = OFF and wrap = on") );
+    content.add( new Label("Textarea with autoResize = OFF and wrap = on") );
   }
 
   private static Component createLabel()
