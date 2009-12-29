@@ -31,14 +31,10 @@
  */
 Extras.RichTextArea = Core.extend(Echo.Component, {
 
-    $static: {
-        DEFAULT_BORDER: "1px inset #7f7f7f"
-    },
-
     $load: function() {
         Echo.ComponentFactory.registerType("Extras.RichTextArea", this);
     },
-
+    
     /** @see Echo.Component#componentType */
     componentType: "Extras.RichTextArea",
 
@@ -53,12 +49,21 @@ Extras.RichTextArea = Core.extend(Echo.Component, {
     },
     
     /**
-     * Inserts HTML within the text area at the current cursor location.
+     * Executes a rich-text editing command.
      * 
+     * @param {String} commandName the command name
+     * @param {String} value the (optional) value to send
+     */
+    execCommand: function(commandName, value) {
+        this.fireEvent({type: "execCommand", source: this, commandName: commandName, value: value });
+    },
+    
+    /**
+     * Inserts HTML within the text area at the current cursor location.
+     *
      * @param {String} html the HTML to be inserted 
      */
     insertHtml: function(html) {
-        this.fireEvent({type: "insertHtml", source: this, html: html}); 
+        this.execCommand("insertHtml", html);
     }
 });
-

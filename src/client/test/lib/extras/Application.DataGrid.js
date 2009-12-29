@@ -10,8 +10,10 @@
  * any purpose other than testing it.
  * 
  * @cp {Extras.DataGrid.Model} model the data model
- * @cp {Number} rowIndex displayed origin row index
- * @cp {Number} columnIndex displayed origin column index
+ * @cp {Number} columnIndex displayed column index (indicates leftmost (leading) column in scrollable area)
+ * @cp {Number} rowIndex displayed row index (indicates topmost column in scrollabel area)
+ * @cp {Number} columnScroll displayed column percent, a value between 0 and 100
+ * @cp {Number} rowScroll displayed row percent, a value between 0 and 100
  * @cp {Border} cellBorder default cell border
  * @sp {Number} fixedRowsTop the number of rows at the top which should not
  *     scroll
@@ -69,5 +71,22 @@ Extras.DataGrid.Model = Core.extend({
          * @type Number
          */
         getRowCount: function() { }
+    },
+    
+    $virtual: {
+        
+        /**
+         * Invoked to notify model of a region of data which should be made available for display.
+         * 
+         * @param {Function} callback function which should be invoked by implementation when prefetching has completed
+         *        this function may be invoked asynchronously, i.e., as a result of an event that is fired some time after the
+         *        prefetch method has returned
+         * @param {Number} firstColumn the first column to retrieve (inclusive)
+         * @param {Number} firstRow the first row to retrieve (inclusive)
+         * @param {Number} lastColumn the last column to retrieve (inclusive)
+         * @param {Number} lastRow the last row to retrieve (inclusive)
+         */
+        prefetch: null
     }
 });
+

@@ -62,11 +62,31 @@ Echo.Render = {
      *        specified component (if false, it will only be invoked on child components)
      */
     _doRenderDisplay: function(component, includeSelf) {
+        // Ensure component is visible.
+        var i, testComponent = component;
+        var testParent = testComponent.parent;
+        while (testParent) {
+            if (testParent.peer.isChildVisible && !testParent.peer.isChildVisible(testComponent)) {
+                // Do nothing for components that are not visible. 
+                return;
+            }
+            testComponent = testParent;
+            testParent = testParent.parent;
+        }
+        
         if (includeSelf) {
             Echo.Render._doRenderDisplayImpl(component);
         } else {
-            for (var i = 0; i < component.children.length; ++i) {
-                Echo.Render._doRenderDisplayImpl(component.children[i]);
+            if (component.peer.isChildVisible) {
+                for (i = 0; i < component.children.length; ++i) {
+                    if (component.peer.isChildVisible(component.children[i])) {
+                        Echo.Render._doRenderDisplayImpl(component.children[i]);
+                    }
+                }
+            } else {
+                for (i = 0; i < component.children.length; ++i) {
+                    Echo.Render._doRenderDisplayImpl(component.children[i]);
+                }
             }
         }
     },
@@ -350,7 +370,9 @@ Echo.Render = {
         if (!component.parent || !component.parent.peer || !component.parent.peer.client) {
             throw new Error("Cannot find reference to the Client with which this component should be associated: " +
                     "cannot load peer.  This is due to the component's parent's peer not being associated with a Client. " +
-                    "Component = " + component);
+                    "Component = " + component + ", Parent = " + component.parent + ", Parent Peer = " + 
+                    (component.parent ? component.parent.peer : "N/A") + ", Parent Peer Client = " + 
+                    ((component.parent && component.parent.peer) ? component.parent.peer.client : "N/A"));
         }
     
         Echo.Render._loadPeer(component.parent.peer.client, component);
@@ -406,6 +428,8 @@ Echo.Render = {
     /**
      * Notifies a child component and its descendants that it is about to be removed from the DOM or otherwise hidden from view.
      * The <code>renderHide()</code> methods of the peers of the specified child component and its descendants will be invoked.
+     * <strong>It is absolutely critical that this method be invoked before the component's rendered state is removed from the DOM 
+     * hierarchy.</strong>
      * 
      * @param {Echo.Component} component the child component being hidden
      */
@@ -473,9 +497,12 @@ Echo.Render = {
         if (focusedComponent && focusedComponent.peer) {
             if (!focusedComponent.peer.renderFocus) {
                 throw new Error("Cannot focus component: " + focusedComponent + 
-                        ", peer does not provide renderFocus() implemnetation."); 
+                        ", peer does not provide renderFocus() implementation."); 
             }
             focusedComponent.peer.renderFocus();
+        } else {
+            // Cancel any runnable created by Core.Web.DOM.focusElement if no focused component specified.
+            Core.Web.DOM.focusElement(null);
         }
     }
 };
@@ -634,27 +661,38 @@ Echo.Render.ComponentSync = Core.extend({
     
     $virtual: {
     
-        //FIXME Experimental.
         /**
          * (Optional) Processes a key down event received by the client's key listeners.  
          * Invoked by client based on current focused component of application.
          * 
+         * @function
          * @param e the key event, containing (processed) keyCode property
          * @return true if higher-level containers should be allowed to process the key event as well
          * @type Boolean
          */
         clientKeyDown: null,
 
-        //FIXME Experimental.
         /**
          * (Optional) Processes a key press event received by the client's key listeners.  
          * Invoked by client based on current focused component of application.
          * 
+         * @function
          * @param e the key event, containing (processed) charCode and keyCode properties
          * @return true if higher-level containers should be allowed to process the key event as well
          * @type Boolean
          */
         clientKeyPress: null,
+        
+        /**
+         * (Optional) Processes a key up event received by the client's key listeners.  
+         * Invoked by client based on current focused component of application.
+         * 
+         * @function
+         * @param e the key event, containing (processed) charCode and keyCode properties
+         * @return true if higher-level containers should be allowed to process the key event as well
+         * @type Boolean
+         */
+        clientKeyUp: null,
         
         /**
          * Returns the focus flags for the component, one or more of the following values, ORed together.
@@ -671,6 +709,7 @@ Echo.Render.ComponentSync = Core.extend({
          *   any arrow key is pressed (this is a shorthand for up, left, down, and right ORed together).</li>
          * </ul>
          * 
+         * @function
          * @return the focus flags
          * @type Number
          */
@@ -682,6 +721,7 @@ Echo.Render.ComponentSync = Core.extend({
          * the space provided to the child component.  If implemented, this method should return
          * an object containing height and/or width properties specifying integer pixel values.
          * 
+         * @function
          * @param dimension the dimension to be calculated, one of the following values, or null
          *        to specify that all dimensions should be calculated:
          *        <ul>
@@ -697,6 +737,7 @@ Echo.Render.ComponentSync = Core.extend({
          * should return true if the specified child component is on-screen and should have its <code>renderDisplay()</code>
          * method invoked when required, or false if the component is off-screen.
          * 
+         * @function
          * @param component the child component
          * @return true if the component should have its renderDisplay() method invoked
          * @type Boolean
@@ -705,6 +746,8 @@ Echo.Render.ComponentSync = Core.extend({
         
         /**
          * (Optional) Invoked when component is rendered focused.
+         * 
+         * @function
          */
         renderFocus: null,
         
@@ -715,6 +758,8 @@ Echo.Render.ComponentSync = Core.extend({
          * The renderDisplay() method will be invoked the when/if the component is displayed again.
          * This method may be invoked on components which are already in a hidden state.
          * This method will not necessarily be invoked prior to disposal.
+         * 
+         * @function
          */
         renderHide: null,
         
@@ -722,6 +767,8 @@ Echo.Render.ComponentSync = Core.extend({
          * (Optional) Invoked when the component has been added (or-readded) to the hierarchy and first appears
          * on screen, and when ancestors of the component (or the containing window) have
          * resized.
+         * 
+         * @function
          */
         renderDisplay: null
     }
@@ -766,7 +813,10 @@ Echo.Render.RootSync = Core.extend(Echo.Render.ComponentSync, {
 
         if (update.fullRefresh || update.hasAddedChildren() || update.hasRemovedChildren()) {
             Echo.Sync.renderComponentDefaults(this.component, this.client.domainElement);
-            document.title = this.component.render("title", "");
+            var title = this.component.render("title");
+            if (title) {
+                document.title = title;
+            }
             this._renderContent(update);
             fullRender = true;
         } else {

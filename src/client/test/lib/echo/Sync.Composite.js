@@ -36,7 +36,8 @@ Echo.Sync.Composite = Core.extend(Echo.Render.ComponentSync, {
     },
     
     /** @see Echo.Render.ComponentSync#renderDispose */
-    renderDispose: function(update) { 
+    renderDispose: function(update) {
+        this.contentDiv = null;
         this.div = null;
     },
     
@@ -106,6 +107,7 @@ Echo.Sync.Panel = Core.extend(Echo.Sync.Composite, {
         if (!child || !child.pane) {
             Echo.Sync.Insets.render(this.component.render("insets"), this.contentDiv, "padding");
         }
+        Echo.Sync.Alignment.render(this.component.render("alignment"), this.contentDiv, true, this.component);
         Echo.Sync.FillImage.render(this.component.render("backgroundImage"), this.contentDiv);
         Echo.Sync.Extent.render(width, this.div, "width", true, true);
         Echo.Sync.Extent.render(height, this.div, "height", false, false);

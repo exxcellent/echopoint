@@ -205,7 +205,7 @@ Echo.Serial = {
                     indexValues[index] = value;
                 }
             } else {
-                // Property has property name: invoke set(Indexed)Property.
+                // Property has property name: invoke set(Index).
                 if (index == null) {
                     object.set(name, value);
                 } else {
@@ -248,7 +248,7 @@ Echo.Serial = {
                         }
                         sChild = sChild.nextSibling;
                     }
-                    styleSheet.setStyle(ssChild.getAttribute("n"), ssChild.getAttribute("t"), style);
+                    styleSheet.setStyle(ssChild.getAttribute("n") || "", ssChild.getAttribute("t"), style);
                 }
             }
             ssChild = ssChild.nextSibling;

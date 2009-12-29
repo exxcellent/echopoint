@@ -206,6 +206,8 @@
         <file name='Sync.ColorSelect.js'/>
         <file name='Application.RichTextArea.js'/>
         <file name='Sync.RichTextArea.js'/>
+        <file name='Application.RichTextInput.js'/>
+        <file name='Sync.RichTextInput.js'/>
         <file name='Application.ToolTipContainer.js'/>
         <file name='Sync.ToolTipContainer.js'/>
       </filelist>
@@ -246,6 +248,7 @@
         <file name='Sync.NumberTextField.js'/>
         <file name='Application.TagCloud.js'/>
         <file name='Sync.TagCloud.js'/>
+        <file name='Sync.TextArea.js'/>
       </filelist>
       <filelist dir='${dir.src.client.app}/tucana'>
         <file name='Application.FileUploadSelector.js'/>
@@ -268,6 +271,18 @@
         <file name='Sync.Meter.js'/>
         <file name='Sync.QRCode.js'/>
       </filelist>
+      <filelist dir='${dir.src.client.app}/jquery'>
+        <file name='jquery-1.3.2.js'/>
+        <file name='jquery-CallbackContext.js'/>
+        <file name='jquery-ui-1.7.1.core.min.js'/>
+        <file name='jquery-ui-1.7.1.effects.min.js'/>
+        <file name='Application.Clock.js'/>
+        <file name='Sync.Clock.js'/>
+        <file name='jquery.jclock-1.2.0.js'/>
+        <file name='Application.TooltipContainer.js'/>
+        <file name='Sync.TooltipContainer.js'/>
+        <!-- <file name='jquery.qtip-1.0.0-beta4.min.js'/> -->
+      </filelist>
       <filelist dir='${dir.src.client.test}/app'>
         <file name='TestAppDeploy.js'/>
         <file name='Default.StyleSheet.js'/>
@@ -275,31 +290,34 @@
         <file name='ComponentList.js'/>
         <file name='Button.js'/>
         <file name='AnchorTest.js'/>
+        <file name='BarChartTest.js'/>
+        <file name='BorderLayoutTest.js'/>
+        <file name='ClockTest.js'/>
         <file name='DirectHtmlTest.js'/>
         <file name='HtmlLabelTest.js'/>
+        <file name='HtmlLayoutTest.js'/>
         <file name='HttpPaneTest.js'/>
         <file name='ImageIconTest.js'/>
         <file name='ImageMapTest.js'/>
         <file name='InfoWindowTest.js'/>
         <file name='LightBoxTest.js'/>
-        <file name='ProgressBarTest.js'/>
-        <file name='PushButtonTest.js'/>
-        <file name='StrutTest.js'/>
-        <file name='TagCloudTest.js'/>
-        <file name='NumberTextFieldTest.js'/>
-        <file name='RegexTextFieldTest.js'/>
-        <file name='BorderLayoutTest.js'/>
-        <file name='HtmlLayoutTest.js'/>
-        <file name='BarChartTest.js'/>
         <file name='LineChartTest.js'/>
-        <file name='SparklineTest.js'/>
-        <file name='ScatterPlotTest.js'/>
-        <file name='RadarChartTest.js'/>
-        <file name='PieChartTest.js'/>
-        <file name='VennDiagramTest.js'/>
         <file name='MapTest.js'/>
         <file name='MeterTest.js'/>
+        <file name='NumberTextFieldTest.js'/>
+        <file name='PieChartTest.js'/>
+        <file name='ProgressBarTest.js'/>
+        <file name='PushButtonTest.js'/>
         <file name='QRCodeTest.js'/>
+        <file name='RadarChartTest.js'/>
+        <file name='RegexTextFieldTest.js'/>
+        <file name='ScatterPlotTest.js'/>
+        <file name='SparklineTest.js'/>
+        <file name='StrutTest.js'/>
+        <file name='TagCloudTest.js'/>
+        <file name='TextAreaTest.js'/>
+        <file name='TooltipContainerTest.js'/>
+        <file name='VennDiagramTest.js'/>
       </filelist>
     </concat>
 

@@ -201,7 +201,7 @@ Echo.Sync.Border = {
      * Supports omission of any term, or empty strings.
      * @type RegExp
      */
-    _PARSER: new RegExp("^(-?\\d+(?:px|pt|pc|cm|mm|in|em|ex))?(?:^|$|(?= )) ?(none|hidden|dotted|dashed|solid|" +
+    _PARSER: new RegExp("^(-?\\d+(?:\\.\\d*)?(?:px|pt|pc|cm|mm|in|em|ex))?(?:^|$|(?= )) ?(none|hidden|dotted|dashed|solid|" +
             "double|groove|ridge|inset|outset)?(?:^|$|(?= )) ?(#[0-9a-fA-F]{6})?$"),
             
     /** 
@@ -330,7 +330,7 @@ Echo.Sync.Border = {
      * @param {#Border} border the border
      * @param {String} sideName, the border side name, "left", "right", "bottom", or "top" (defaults to "top" if omitted)
      * @return the border size in pixels
-     * @type {Number}
+     * @type Number
      */
     getPixelSize: function(border, sideName) {
         if (!border) {
@@ -584,6 +584,7 @@ Echo.Sync.Extent = {
      * 
      * @param {#Extent} extent the Extent
      * @param {Boolean} horizontal flag indicating whether the value is being rendered horizontally
+     * @return the pixel value
      * @type Number
      */
     toPixels: function(extent, horizontal) {
@@ -1285,7 +1286,7 @@ Echo.Sync.Insets = {
     /**
      * Renders an insets property to an element as absolute position coordinates (i.e., top/right/bottom/left values).
      * 
-     * @param {#Insts} insets the insets propert
+     * @param {#Instes} insets the insets property
      * @param {Element} element the target element
      */
     renderPosition: function(insets, element) {

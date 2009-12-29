@@ -35,7 +35,7 @@ Core.Web = {
     /**
      * Initializes the Web Core.  This method must be executed prior to using any Web Core capabilities.
      */
-    init: function() { 
+    init: function() {
         if (Core.Web.initialized) {
             // Already initialized.
             return;
@@ -49,8 +49,9 @@ Core.Web = {
             Core.Web.VirtualPosition._init();
         }
     
-        if (Core.Web.Env.BROWSER_INTERNET_EXPLORER) {
+        if (Core.Web.Env.ENGINE_MSHTML) {
             Core.Web.DOM.addEventListener(document, "selectstart", Core.Web._selectStartListener, false);
+            Core.Web.DOM.addEventListener(document, "dragstart", Core.Web._selectStartListener, false);
         }
         
         Core.Web.initialized = true;
@@ -79,7 +80,7 @@ Core.Web.DOM = {
      * Temporary storage for the element about to be focused (for clients that require 'delayed' focusing).
      */
     _focusPendingElement: null,
-    
+
     /**
      * Runnable to invoke focus implementation (lazily created).
      * @type Core.Web.Scheduler.Runnable
@@ -150,38 +151,58 @@ Core.Web.DOM = {
      * The focus operation may be placed in the scheduler if the browser requires the focus
      * operation to be performed outside of current JavaScript context (i.e., in the case
      * where the element to be focused was just rendered in this context).
+     * Passing a null element argument will cancel any scheduler runnable attempting to 
+     * set the focus.
      * 
      * @param {Element} element the DOM element to focus
      */
     focusElement: function(element) {
-        if (Core.Web.Env.QUIRK_DELAYED_FOCUS_REQUIRED) {
-            if (!this._focusRunnable) {
-                this._focusRunnable = new Core.Web.Scheduler.MethodRunnable(this._focusElementImpl);
-            }
-            Core.Web.DOM._focusPendingElement = element;
-            Core.Web.Scheduler.add(this._focusRunnable);
-        } else {
-            this._focusElementImpl(element);
+        if (!this._focusRunnable) {
+            this._focusRunnable = new (Core.extend(Core.Web.Scheduler.Runnable, {
+                
+                repeat: true,
+                
+                attempt: 0,
+                
+                timeInterval: 25,
+            
+                run: function() {
+                    element = Core.Web.DOM._focusPendingElement;
+                    Core.Debug.consoleWrite("Focus:" + element + "/" + element.id + "/" + Core.Web.DOM.isDisplayed(element));
+                    
+                    var done = false;
+                    if (Core.Web.DOM.isDisplayed(element)) {
+                        done = true;
+                        try {
+                            element.focus();
+                        } catch (ex) {
+                            // Silently digest IE focus exceptions.
+                        }
+                    }
+                    
+                    done |= this.attempt > 25;
+                    
+                    ++this.attempt;
+                    
+                    if (done) {
+                        Core.Web.DOM._focusPendingElement = null;
+                        Core.Web.Scheduler.remove(this);
+                    }
+                }
+            }))();
         }
-    },
-    
-    /**
-     * Focus element implementation.
-     * 
-     * @param {Element} element the DOM element to focus
-     */
-    _focusElementImpl: function(element) {
-        if (!element) {
-            element = Core.Web.DOM._focusPendingElement;
+
+        if (!(element && element.focus && Core.Web.DOM.isAncestorOf(document.body, element))) {
+            // Cancel and return.
             Core.Web.DOM._focusPendingElement = null;
+            Core.Web.Scheduler.remove(this._focusRunnable);
+            return;
         }
-        if (element && element.focus) {
-            try {
-                element.focus();
-            } catch (ex) {
-                // Silently digest IE focus exceptions.
-            }
-        }
+        
+        this._focusPendingElement = element;
+        
+        this._focusRunnable.attempt = 0;
+        Core.Web.Scheduler.add(this._focusRunnable);
     },
     
     /**
@@ -283,11 +304,46 @@ Core.Web.DOM = {
      */
     isAncestorOf: function(ancestorNode, descendantNode) {
         var testNode = descendantNode;
-        while (testNode !== null) {
+        while (testNode != null) {
             if (testNode == ancestorNode) {
                 return true;
             }
             testNode = testNode.parentNode;
+        }
+        return false;
+    },
+    
+    /**
+     * Determines if the given node is theoretically dispalyed within the document.
+     * The following conditions are verified:
+     * <ul>
+     *  <li><code>node</code> must be a descendant of <code>document.body</code></li>
+     *  <li><code>node</code>'s element ancestry must not contain a element whose CSS <code>visibility</code> state is 
+     *    <code>hidden</code></li>
+     *  <li><code>node</code>'s element ancestry must not contain a element whose CSS <code>display</code> state is 
+     *    <code>none</code></li>
+     * </ul>
+     * 
+     * @param {Node} node to analyze
+     * @return true if the node is displayed 
+     */
+    isDisplayed: function(node) {
+        while (node != null) {
+            if (node.nodeType == 1) {
+                if (node.style) {
+                    if (node.style.visibility == "hidden") {
+                        return false;
+                    }
+                    if (node.style.display == "none") {
+                        return false;
+                    }
+                }
+            }
+            
+            if (node == document.body) {
+                return true;
+            }
+            node = node.parentNode;
         }
         return false;
     },
@@ -524,6 +580,19 @@ Core.Web.Env = {
      * @type Boolean
      */
     NOT_SUPPORTED_RELATIVE_COLUMN_WIDTHS: null,
+    
+    /**
+     * Flag indicating that selectionStart/selectionEnd/setSelectionRange() are not
+     * supported on text field INPUT elements and TEXTAREA elements.
+     * @type Boolean
+     */
+    NOT_SUPPORTED_INPUT_SELECTION: null,
+    
+    /**
+     * Flag indicating complete lack of support for W3C DOM range API. 
+     * @type Boolean
+     */
+    NOT_SUPPORTED_RANGE: null,
 
     /**
      * Flag indicating support for "mouseenter" and "mouseleave" events. This is
@@ -553,6 +622,12 @@ Core.Web.Env = {
      * @type Boolean
      */
     PROPRIETARY_IE_PNG_ALPHA_FILTER_REQUIRED: null,
+    
+    /**
+     * Flag indicating support for the IE text range API.
+     * @type Boolean
+     */
+    PROPRIETARY_IE_RANGE: null,
     
     /**
      * Flag indicating that keypress events will place charCode value in keyCode property.
@@ -618,12 +693,6 @@ Core.Web.Env = {
     QUIRK_IE_HAS_LAYOUT: null,
 
     /**
-     * Flag indicating multiple keydown events will be fired when a key is held down.
-     * @type Boolean
-     */
-    QUIRK_IE_KEY_DOWN_EVENT_REPEAT: null,
-
-    /**
      * Flag indicating DOM updates to SELECT elements may result in their
      * appearance being changed, i.e., listboxes will become select fields.
      * @type Boolean
@@ -686,10 +755,10 @@ Core.Web.Env = {
 
     /**
      * Flag indicating XML documents being sent via XMLHttpRequest must have
-     * text content manually escaped due to bugs in the Safari browser.
+     * text content manually escaped due to bugs in the Webkit render engine.
      * @type Boolean
      */
-    QUIRK_SAFARI_DOM_TEXT_ESCAPE: null,
+    QUIRK_WEBKIT_DOM_TEXT_ESCAPE: null,
 
     /**
      * Flag indicating that table cell widths do not include padding value.
@@ -805,22 +874,24 @@ Core.Web.Env = {
             this.CSS_FLOAT = "styleFloat";
             this.QUIRK_KEY_CODE_IS_CHAR_CODE = true;
             this.QUIRK_IE_SECURE_ITEMS = true;
+            this.NOT_SUPPORTED_RANGE = true;
+            this.NOT_SUPPORTED_INPUT_SELECTION = true;
+            this.PROPRIETARY_IE_RANGE = true;
             this.PROPRIETARY_EVENT_MOUSE_ENTER_LEAVE_SUPPORTED = true;
             this.PROPRIETARY_EVENT_SELECT_START_SUPPORTED = true;
-            this.QUIRK_IE_KEY_DOWN_EVENT_REPEAT = true;
             this.QUIRK_DELAYED_FOCUS_REQUIRED = true;
             this.QUIRK_UNLOADED_IMAGE_HAS_SIZE = true;
             this.MEASURE_OFFSET_EXCLUDES_BORDER = true;
             this.QUIRK_IE_BLANK_SCREEN = true;
             this.QUIRK_IE_HAS_LAYOUT = true;
+            this.NOT_SUPPORTED_CSS_OPACITY = true;
+            this.PROPRIETARY_IE_OPACITY_FILTER_REQUIRED = true;
             
             if (this.BROWSER_VERSION_MAJOR < 8) {
                 // Internet Explorer 6 and 7 Flags.
                 this.QUIRK_TABLE_CELL_WIDTH_EXCLUDES_PADDING = true;
                 this.NOT_SUPPORTED_RELATIVE_COLUMN_WIDTHS = true;
                 this.QUIRK_CSS_BORDER_COLLAPSE_INSIDE = true;
-                this.NOT_SUPPORTED_CSS_OPACITY = true;
-                this.PROPRIETARY_IE_OPACITY_FILTER_REQUIRED = true;
                 this.QUIRK_IE_TABLE_PERCENT_WIDTH_SCROLLBAR_ERROR = true;
                 this.QUIRK_IE_SELECT_PERCENT_WIDTH = true;
                 
@@ -855,7 +926,9 @@ Core.Web.Env = {
             this.NOT_SUPPORTED_RELATIVE_COLUMN_WIDTHS = true;
         } else if (this.ENGINE_WEBKIT) {
             this.MEASURE_OFFSET_EXCLUDES_BORDER = true;
-            this.QUIRK_SAFARI_DOM_TEXT_ESCAPE = true;
+            if (this.ENGINE_VERSION_MAJOR < 526 || (this.ENGINE_VERSION_MAJOR == 526 && this.ENGINE_VERSION_MINOR < 8)) {
+                this.QUIRK_WEBKIT_DOM_TEXT_ESCAPE = true; //https://bugs.webkit.org/show_bug.cgi?id=18421, fixed in 526.8
+            }
         }
     },
     
@@ -912,15 +985,48 @@ Core.Web.Env = {
 };
 
 /**
- * Event Processing System namespace.
- * The static methods in this object provide a standard framework for handling
- * DOM events across incompatible browser platforms.
+ * Event Processing System namespace. The static methods in this object provide
+ * a standard framework for handling DOM events across often-incompatible
+ * browser platforms.
  * <p>
- * <b>Capturing/Bubbling Listeners:</b>
- * This implementation additionally allows for the registration of capturing and bubbling event 
- * listeners that work even on Internet Explorer platforms, where they are not natively supported.
- * This implementation relies on the fact that all event listeners will be registered
- * through it.
+ * <b>Event Propagation:</b> Capturing listeners are notified of events first,
+ * followed by bubbling listeners. During the capturing phase of event firing,
+ * listeners on higher-level DOM elements are notified before the lower-level
+ * DOM elements. During the bubbling phase of event firing, lower-level DOM
+ * elements are notified before higher-level DOM elements.
+ * <p>
+ * For example, given the DOM hierarchy
+ * <code>&lt;body&gt;&lt;div&gt;&lt;span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/body&gt;</code>,
+ * with click listeners registered for both capturing and bubbling phases on all
+ * elements, the listener notification order for a click on the
+ * <code>&lt;span&gt;</code> element would be as folows:
+ * <ol>
+ * <li>Notify capturing listener of <code>&lt;body&gt;</code> element.</li>
+ * <li>Notify capturing listener of <code>&lt;div&gt;</code> element.</li>
+ * <li>Notify capturing listener of <code>&lt;span&gt;</code> element.</li>
+ * <li>Notify bubbling listener of <code>&lt;span&gt;</code> element.</li>
+ * <li>Notify bubbling listener of <code>&lt;div&gt;</code> element.</li>
+ * <li>Notify bubbling listener of <code>&lt;body&gt;</code> element.</li>
+ * </ol>
+ * <b>Listener Return Values:</b> Listeners should return a value of true if
+ * they wish to continue to allow propogation of an event, and false if they do
+ * not.
+ * <p>
+ * <b>Capturing/Bubbling Listeners:</b> This implementation allows for the
+ * registration of both capturing and bubbling event listeners on all browser
+ * platforms, including Internet Explorer, even though Internet Explorer does
+ * not inhererntly support such listeners. This is accomplished by the Event
+ * system adding a layer of abstraction between event registration and the
+ * browser, and then invoking event listeners itself.
+ * <p>
+ * This implementation relies on the fact that all event listeners will be 
+ * registered through it.  The implementation is in fact internally registering only
+ * bubbling-phase event listeners on the DOM.  Thus, if other event listeners are 
+ * registered directly on the DOM, scenarios may occur such as a direct-registered
+ * bubbling listener receiving an event before a Core.Web.Event-registered capturing
+ * listener.  This is not necessarily a critical issue, but the developer should
+ * be aware of it. 
+ * 
  * @class
  */
 Core.Web.Event = {
@@ -1263,8 +1369,8 @@ Core.Web.HttpConnection = Core.extend({
         this._url = url;
         this._contentType = contentType;
         this._method = method;
-        if (Core.Web.Env.QUIRK_SAFARI_DOM_TEXT_ESCAPE && messageObject instanceof Document) {
-            this._preprocessSafariDOM(messageObject.documentElement);
+        if (Core.Web.Env.QUIRK_WEBKIT_DOM_TEXT_ESCAPE && messageObject instanceof Document) {
+            this._preprocessWebkitDOM(messageObject.documentElement);
         }
         
         this._messageObject = messageObject;
@@ -1272,14 +1378,14 @@ Core.Web.HttpConnection = Core.extend({
     },
     
     /**
-     * Preprocesses outgoing requests to Safari (invoked when appropriate quirk is detected).
-     * All less than, greater than, and ampersands are replaced with escaped values, as this browser
-     * is broken in this regard and will otherwise fail.  Recursively invoked on nodes, starting with
+     * Preprocesses outgoing requests to Webkit (invoked when appropriate quirk is detected).
+     * All less than, greater than, and ampersands are replaced with escaped values, as this render engine
+     * is broken in this regard and will otherwise fail. Recursively invoked on nodes, starting with
      * document element.
      * 
      * @param {Node} node the node to process
      */
-    _preprocessSafariDOM: function(node) {
+    _preprocessWebkitDOM: function(node) {
         if (node.nodeType == 3) {
             var value = node.data;
             value = value.replace(/&/g, "&amp;");
@@ -1289,7 +1395,7 @@ Core.Web.HttpConnection = Core.extend({
         } else {
             var child = node.firstChild;
             while (child) {
-                this._preprocessSafariDOM(child);
+                this._preprocessWebkitDOM(child);
                 child = child.nextSibling;
             }
         }
@@ -1475,6 +1581,11 @@ Core.Web.HttpConnection = Core.extend({
 Core.Web.Image = {
     
     /**
+     * Expiration time, after which an image monitor will give up.
+     */
+    _EXPIRE_TIME: 5000,
+    
+    /**
      * Work object for monitorImageLoading() method.
      */
     _Monitor: Core.extend({
@@ -1483,16 +1594,22 @@ Core.Web.Image = {
         _processImageLoadRef: null,
         
         /** Currently enqueued runnable. */
-        _queuedRunnable: null,
+        _runnable: null,
         
         /** Listener to notify of successful image loadings. */
         _listener: null,
         
-        /** Minimum Listener callback interval. */
-        _interval: null,
+        /** Images with remaining load listeners. */
+        _images: null,
         
         /** The number of images to be loaded. */
         _count: 0,
+        
+        /** Expiration time.  When system time is greater than this value, monitor will give up. */
+        _expiration: null,
+        
+        /** Flag indicating whether one or more images have been loaded since last update. */ 
+        _imagesLoadedSinceUpdate: false,
         
         /**
          * Creates a new image monitor.
@@ -1503,15 +1620,25 @@ Core.Web.Image = {
          */
         $construct: function(element, listener, interval) {
             this._listener = listener;
-            this._interval = interval || 250;
             this._processImageLoadRef = Core.method(this, this._processImageLoad);
-            var imgs = element.getElementsByTagName("img");
-            this._count = imgs.length;
-            for (var i = 0; i < this._count; ++i) {
-                if (!imgs[i].complete && (Core.Web.Env.QUIRK_UNLOADED_IMAGE_HAS_SIZE || 
-                        (!imgs[i].height && !imgs[i].style.height))) {
-                    Core.Web.DOM.addEventListener(imgs[i], "load", this._processImageLoadRef, false);
+            
+            this._runnable = new Core.Web.Scheduler.MethodRunnable(Core.method(this, this._updateProgress), interval || 250, true);
+            
+            // Find all images beneath element, register load listeners on all which are not yet loaded.
+            var nodeList = element.getElementsByTagName("img");
+            this._images = [];
+            for (var i = 0; i < nodeList.length; ++i) {
+                if (!nodeList[i].complete && (Core.Web.Env.QUIRK_UNLOADED_IMAGE_HAS_SIZE || 
+                        (!nodeList[i].height && !nodeList[i].style.height))) {
+                    this._images.push(nodeList[i]);
+                    Core.Web.Event.add(nodeList[i], "load", this._processImageLoadRef, false);
                 }
+            }
+            
+            this._count = this._images.length;
+            if (this._count > 0) {
+                this._expiration = new Date().getTime() + Core.Web.Image._EXPIRE_TIME;
+                Core.Web.Scheduler.add(this._runnable);
             }
         },
         
@@ -1522,19 +1649,71 @@ Core.Web.Image = {
          */
         _processImageLoad: function(e) {
             e = e ? e : window.event;
-            Core.Web.DOM.removeEventListener(Core.Web.DOM.getEventTarget(e), "load", this._processImageLoadRef, false);
+            var image = Core.Web.DOM.getEventTarget(e);
+            
+            this._imagesLoadedSinceUpdate = true;
+            
+            // Remove listener.
+            Core.Web.Event.remove(image, "load", this._processImageLoadRef, false);
+            
+            // Remove image from list of images to be loaded.
+            Core.Arrays.remove(this._images, image);
+            
+            // Decrement remaining image count.
             --this._count;
             
-            if (this._queuedRunnable && this._count === 0) {
-                Core.Web.Scheduler.remove(this._queuedRunnable);
-                this._queuedRunnable = null;
+            // If runnable is enqueued and no more images now remain to be loaded,
+            // remove the enqueued runnable, perform immediate notification.
+            if (this._count === 0) {
+                this._stop();
+                this._notify();
+            }
+        },
+        
+        /**
+         * Notifies the listener of images having been loaded or expiration of the monitor. 
+         */
+        _notify: function() {
+            Core.Web.Scheduler.run(Core.method(this, function() {
+                this._listener({
+                    source: this,
+                    type: "imageLoad",
+                    expired: this._expired,
+                    complete: this._expired || this._count === 0
+                });
+            }));
+        },
+        
+        /**
+         * Stops monitoring.
+         */
+        _stop: function() {
+            // Remove runnable.
+            Core.Web.Scheduler.remove(this._runnable);
+            this._runnable = null;
+            
+            // Disconnect listeners from images.
+            for (var i = 0; i < this._images.length; ++i) {
+                Core.Web.Event.remove(this._images[i], "load", this._processImageLoadRef, false);
+            }
+        },
+        
+        /**
+         * Scheduled method invoked at intervals to monitor progress.
+         */
+        _updateProgress: function() {
+            // Stop if beyond expiration time.
+            if (new Date().getTime() > this._expiration) {
+                this._expired = true;
+                this._stop();
+                this._notify();
+                return;
             }
             
-            if (!this._queuedRunnable) {
-                this._queuedRunnable = Core.Web.Scheduler.run(Core.method(this, function() {
-                    this._queuedRunnable = null;
-                    this._listener();
-                }), this._count === 0 ? 0 : this._interval);
+            // Perform notification if new images have loaded.
+            if (this._imagesLoadedSinceUpdate) {
+                this._imagesLoadedSinceUpdate = false;
+                this._notify();
             }
         }
     }),
@@ -1549,9 +1728,11 @@ Core.Web.Image = {
      * @param {Function} l the method to invoke when images are loaded.
      * @param {Number} interval the maximum time interval at which the listener should be invoked (default value is 50ms, 
      *        the listener will be invoked immediately once all images have loaded)
+     * @return true if images are waiting to be loaded
      */
     monitor: function(element, l, interval) {
         var monitor = new Core.Web.Image._Monitor(element, l, interval);
+        return monitor._count > 0;
     }
 };
 
@@ -1630,6 +1811,17 @@ Core.Web.Library = {
      * been retrieved.  Installation will be done in the order in which the add() method was
      * invoked to add libraries to the group (without regard for the order in which the 
      * HTTP server returns the library code).
+     * 
+     * A "load" event will be fired (listeners registered via <code>addLoadListener()</code>) when the group
+     * has completed loading and the libraries have been installed.  The "success" property of the fired event
+     * will be set to true in the event that all libraries were successfully loaded, and false otherwise.
+     * In the event of a library loading failure, the following properties will be available in the event:
+     * <ul>
+     *  <li><code>url</code>: the URL of the failed library.</li>
+     *  <li><code>ex</code>: the exception which occurred when attempting to load the library.</li>
+     *  <li><code>cancel</code>: a boolean flag, initially set to false, which may be set to true to avoid
+     *   having the library loader throw an exception for the failure.  If unset, the exception will be thrown.</li>
+     * </ul>
      */
     Group: Core.extend({
     
@@ -1683,13 +1875,6 @@ Core.Web.Library = {
         },
         
         /**
-         * Notifies listeners of completed library loading.
-         */
-        _fireLoadEvent: function() {
-            this._listenerList.fireEvent({type: "load", source: this});
-        },
-        
-        /**
          * Determines if this library group contains any new (not previously loaded)
          * libraries.
          * 
@@ -1711,10 +1896,24 @@ Core.Web.Library = {
                 try {
                     this._libraries[i]._install();
                 } catch (ex) {
-                    throw new Error("Exception installing library \"" + this._libraries[i]._url + "\"; " + ex);
+                    var e = {
+                        type: "load", 
+                        source: this, 
+                        success: false, 
+                        ex: ex, 
+                        url: this._libraries[i]._url,
+                        cancel: false
+                    };
+                    try {
+                        this._listenerList.fireEvent(e);
+                    } finally {
+                        if (!e.cancel) {
+                            throw new Error("Exception installing library \"" + this._libraries[i]._url + "\"; " + ex);
+                        }
+                    }
                 }
             }
-            this._fireLoadEvent();
+            this._listenerList.fireEvent({type: "load", source: this, success: true});
         },
         
         /**

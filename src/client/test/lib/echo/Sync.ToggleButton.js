@@ -163,23 +163,11 @@ Echo.Sync.ToggleButton = Core.extend(Echo.Sync.Button, {
         
         return stateElement;
     },
-
-    /** @see Echo.Sync.Button#setPressedState */
-    setPressedState: function(pressedState) {
-        Echo.Sync.Button.prototype.setPressedState.call(this, pressedState);
-        var stateIcon = this.getStateIcon(false, pressedState);
-        if (stateIcon) {
-            var url = Echo.Sync.ImageReference.getUrl(stateIcon);
-            if (this._stateElement.src != url) {
-                this._stateElement.src = url;
-            }
-        }
-    },
     
-    /** @see Echo.Sync.Button#setRolloverState */
-    setRolloverState: function(rolloverState) {
-        Echo.Sync.Button.prototype.setRolloverState.call(this, rolloverState);
-        var stateIcon = this.getStateIcon(rolloverState, false);
+    /** @see Echo.Sync.Button#setHighlightState */
+    setHighlightState: function(rollover, pressed) {
+        Echo.Sync.Button.prototype.setHighlightState.call(this, rollover, pressed);
+        var stateIcon = this.getStateIcon(rollover, pressed);
         if (stateIcon) {
             var url = Echo.Sync.ImageReference.getUrl(stateIcon);
             if (this._stateElement.src != url) {
@@ -370,7 +358,7 @@ Echo.Sync.RadioButton.Group = Core.extend({
      * Returns the number of buttons contained by this button group.
      * 
      * @return the number of buttons
-     * @type {Number}
+     * @type Number
      */
     size: function() {
         return this._buttons.length;
