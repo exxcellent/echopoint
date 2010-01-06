@@ -1,12 +1,5 @@
 package echopoint;
 
-import static org.junit.Assert.assertEquals;
-
-import java.io.File;
-import java.util.HashSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import nextapp.echo.app.Border;
 import nextapp.echo.app.Color;
 import nextapp.echo.app.Component;
@@ -16,10 +9,6 @@ import nextapp.echo.app.Insets;
 import nextapp.echo.app.Row;
 import nextapp.echo.app.event.ActionEvent;
 import nextapp.echo.app.event.ActionListener;
-
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 import echopoint.tucana.ButtonDisplay;
 import echopoint.tucana.ButtonMode;
@@ -32,6 +21,17 @@ import echopoint.tucana.event.InvalidContentTypeEvent;
 import echopoint.tucana.event.UploadCancelEvent;
 import echopoint.tucana.event.UploadFailEvent;
 import echopoint.tucana.event.UploadFinishEvent;
+
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import java.io.File;
+import java.util.HashSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Unit test suite for the {@link FileUploadSelector}
@@ -57,7 +57,7 @@ public class FileUploadSelectorTest extends AbstractTest<FileUploadSelector>
         getComponent().getButtonMode() );
   }
 
-  @Test
+  //@Test
   public void buttonDisplay()
   {
     final ButtonDisplay display = ButtonDisplay.none;

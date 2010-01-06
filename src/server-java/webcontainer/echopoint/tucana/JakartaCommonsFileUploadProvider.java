@@ -17,10 +17,10 @@
  */
 package echopoint.tucana;
 
-import java.util.Set;
-
 import nextapp.echo.app.ApplicationInstance;
 import nextapp.echo.webcontainer.Connection;
+
+import echopoint.tucana.event.UploadStartEvent;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemIterator;
@@ -32,7 +32,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 
-import echopoint.tucana.event.UploadStartEvent;
+import java.util.Set;
 
 /**
  * {@link UploadSPI} implementation that uses the
@@ -48,13 +48,14 @@ public class JakartaCommonsFileUploadProvider extends AbstractFileUploadProvider
    * @see UploadSPI#handleUpload(nextapp.echo.webcontainer.Connection ,
    *      FileUploadSelector, String, UploadProgress)
    */
+  @SuppressWarnings( { "ThrowableInstanceNeverThrown" } )
   public void handleUpload( final Connection conn,
       final FileUploadSelector uploadSelect, final String uploadIndex,
       final UploadProgress progress ) throws Exception
   {
     final ApplicationInstance app = conn.getUserInstance().getApplicationInstance();
 
-    DiskFileItemFactory itemFactory = new DiskFileItemFactory();
+    final DiskFileItemFactory itemFactory = new DiskFileItemFactory();
     itemFactory.setRepository( getDiskCacheLocation() );
     itemFactory.setSizeThreshold( getMemoryCacheThreshold() );
 
@@ -64,7 +65,7 @@ public class JakartaCommonsFileUploadProvider extends AbstractFileUploadProvider
       encoding = "UTF-8";
     }
 
-    ServletFileUpload upload = new ServletFileUpload( itemFactory );
+    final ServletFileUpload upload = new ServletFileUpload( itemFactory );
     upload.setHeaderEncoding( encoding );
     upload.setProgressListener( new UploadProgressListener( progress ) );
 
@@ -77,10 +78,10 @@ public class JakartaCommonsFileUploadProvider extends AbstractFileUploadProvider
 
     try
     {
-      FileItemIterator iter = upload.getItemIterator( conn.getRequest() );
+      final FileItemIterator iter = upload.getItemIterator( conn.getRequest() );
       if ( iter.hasNext() )
       {
-        FileItemStream stream = iter.next();
+        final FileItemStream stream = iter.next();
 
         if ( !stream.isFormField() )
         {

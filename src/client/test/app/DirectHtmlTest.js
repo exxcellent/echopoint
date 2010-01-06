@@ -68,7 +68,7 @@ echopoint.test.DirectHtmlTest = Core.extend(
       text: "Save",
       events:
       {
-        action: function( event )
+        action: function()
         {
           component.set( "text", rta.get( "text" ) );
         }

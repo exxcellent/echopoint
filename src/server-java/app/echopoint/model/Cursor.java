@@ -20,9 +20,6 @@ public enum Cursor
   /** The right pointing arrow cursor. */
   east { public String toString() { return "e-resize"; } },
 
-  /** The hand cursor. */
-  hand,
-
   /** The question mark cursor */
   help,
 
@@ -37,6 +34,12 @@ public enum Cursor
 
   /** The north-west pointing cursor */
   northWest { public String toString() { return "nw-resize"; } },
+
+  /** The hand/pointer cursor. */
+  pointer,
+
+  /** A cursor indicating that an activity is in progress. */
+  progress,
 
   /** The south pointing cursor */
   south { public String toString() { return "s-resize"; } },

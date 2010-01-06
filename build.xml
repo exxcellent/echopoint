@@ -204,6 +204,8 @@
         <file name='Sync.TabPane.js'/>
         <file name='Application.ColorSelect.js'/>
         <file name='Sync.ColorSelect.js'/>
+        <file name='Application.RichTextInput.js'/>
+        <file name='Sync.RichTextInput.js'/>
         <file name='Application.RichTextArea.js'/>
         <file name='Sync.RichTextArea.js'/>
         <file name='Application.RichTextInput.js'/>
@@ -512,6 +514,8 @@
         <file name='Sync.TabPane.js'/>
         <file name='Application.ColorSelect.js'/>
         <file name='Sync.ColorSelect.js'/>
+        <file name='Application.RichTextInput.js'/>
+        <file name='Sync.RichTextInput.js'/>
         <file name='Application.RichTextArea.js'/>
         <file name='Sync.RichTextArea.js'/>
         <file name='Application.ToolTipContainer.js'/>

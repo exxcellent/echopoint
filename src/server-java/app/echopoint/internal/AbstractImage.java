@@ -22,12 +22,13 @@ import nextapp.echo.app.HttpImageReference;
 import nextapp.echo.app.ImageReference;
 import nextapp.echo.app.event.ActionEvent;
 import nextapp.echo.app.event.ActionListener;
+
 import echopoint.model.Cursor;
 
 /**
  * An abstract base class for components that render images.
  *
- * @author Rakesh Vidyadharan 2009-12-18
+ * @author Rakesh 2009-12-18
  * @version $Id$
  */
 public abstract class AbstractImage extends AbstractContainer

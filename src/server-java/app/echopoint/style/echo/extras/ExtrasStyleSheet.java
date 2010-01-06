@@ -23,10 +23,11 @@ import nextapp.echo.extras.app.CalendarSelect;
 import nextapp.echo.extras.app.ContextMenu;
 import nextapp.echo.extras.app.MenuBarPane;
 import nextapp.echo.extras.app.TabPane;
+
 import echopoint.style.echo.EchoStyleSheet;
 
 /**
- * {@inheritDoc}
+ * A style sheet that includes default styles for Echo Extras components.
  *
  * @author Rakesh Vidyadharan 2009-05-26
  * @version $Id$
