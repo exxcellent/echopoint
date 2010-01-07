@@ -124,13 +124,11 @@ Echo.Sync.Button = Core.extend(Echo.Render.ComponentSync, {
         /**
          * Enables/disables pressed appearance of button.
          * 
+         * @param {Boolean} focused the new focused state
          * @param {Boolean} rollover the new pressed state
          * @param {Boolean} pressed the new pressed state
          */
-        setHighlightState: function(rollover, pressed) {
-            var focused = this.component && this.component.application && 
-                    this.component.application.getFocusedComponent() == this.component;
-            
+        setHighlightState: function(focused, rollover, pressed) {
             // Determine effect property name.  Priorities are 1: pressed, 2: rollover: 3: focused.
             var ep = pressed ? "pressed" : (rollover ? "rollover" : "focused");
             var state = focused || pressed || rollover;
@@ -250,7 +248,7 @@ Echo.Sync.Button = Core.extend(Echo.Render.ComponentSync, {
         
     /** Processes a focus blur event. */
     _processBlur: function(e) {
-        this.setHighlightState(false, false);
+        this.setHighlightState(false, false, false);
     },
     
     /** Processes a mouse click event. */
@@ -268,7 +266,6 @@ Echo.Sync.Button = Core.extend(Echo.Render.ComponentSync, {
             return true;
         }
         this.client.application.setFocusedComponent(this.component);
-        this.setHighlightState(false, false);
     },
     
     /**
@@ -296,7 +293,7 @@ Echo.Sync.Button = Core.extend(Echo.Render.ComponentSync, {
             return true;
         }
         Core.Web.DOM.preventEventDefault(e);
-        this.setHighlightState(false, true);
+        this.setHighlightState(false, false, true);
     },
     
     /** Processes a mouse button release event on the button, displaying the button's normal appearance. */
@@ -304,7 +301,7 @@ Echo.Sync.Button = Core.extend(Echo.Render.ComponentSync, {
         if (!this.client) {
             return true;
         }
-        this.setHighlightState(false, false);
+        this.setHighlightState(false, false, false);
     },
     
     /** Processes a mouse roll over event, displaying the button's rollover appearance. */
@@ -313,7 +310,7 @@ Echo.Sync.Button = Core.extend(Echo.Render.ComponentSync, {
             return true;
         }
         this.client.application.addListener("focus", this._processRolloverExitRef);
-        this.setHighlightState(true, false);
+        this.setHighlightState(false, true, false);
         return true;
     },
     
@@ -325,7 +322,7 @@ Echo.Sync.Button = Core.extend(Echo.Render.ComponentSync, {
         if (this._processRolloverExitRef) {
             this.client.application.removeListener("focus", this._processRolloverExitRef);
         }
-        this.setHighlightState(false, false);
+        this.setHighlightState(false, false, false);
         return true;
     },
     
@@ -443,6 +440,7 @@ Echo.Sync.Button = Core.extend(Echo.Render.ComponentSync, {
             return;
         }
 
+        this.setHighlightState(true, false, false);
         Core.Web.DOM.focusElement(this.div);
     },
     

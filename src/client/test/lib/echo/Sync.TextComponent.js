@@ -456,8 +456,6 @@ Echo.Sync.TextArea = Core.extend(Echo.Sync.TextComponent, {
         }
         this._renderStyle(this.input);
         this.input.style.overflow = "auto";
-        if (this.component.get("wrap"))
-            this.input.setAttribute("wrap", this.component.get("wrap"));
         this._addEventHandlers(this.input);
         if (this.component.get("text")) {
             this.input.value = this.component.get("text");

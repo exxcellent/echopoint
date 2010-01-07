@@ -59,7 +59,7 @@ echopoint.KeystrokeTextFieldSync = Core.extend( echopoint.internal.TextFieldSync
       // Since the echo base text component stores the input value only
       // Before processing events, we have to force it do be done here.
       // Otherwise our doAction command will be processed without the last
-      // updates to the text field. (Usullay last character entered missing)
+      // updates to the text field. (Usually last character entered missing)
       var newText = this.input.value;
       var oldText = this._lastProcessedValue;
     

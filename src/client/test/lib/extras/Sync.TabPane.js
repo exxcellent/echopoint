@@ -1032,9 +1032,7 @@ Extras.Sync.TabPane = Core.extend(Echo.Render.ComponentSync, {
         } else {
             if (this._rolloverTabId == tabId) {
                 this._rolloverTabId = null;
-                if (rolloverTab) {
-                    rolloverTab.setRollover(false, false);
-                }
+                rolloverTab.setRollover(false, false);
             } else {
                 // Tab state is already non-rollover, do nothing.
             }

@@ -338,8 +338,8 @@ echopoint.tucana.FileUploadSelectorSync.Frame = Core.extend(
     {
       parentElement.innerHTML = "<iframe id=\"" + frameId
           + "\" name=\"" + frameId + "\" src=\"" + srcUrl + "\" "
-          + "scrolling=\"no\" width=\"0\" height=\"0\"></iframe>";
-      //Core.Debug.consoleWrite( "frame: " + iframeSrc );
+          + "frameborder='0' style='width:0px;height:0px;border:0;visibility:hidden;'"
+          + "scrolling=\"no\"></iframe>";
       this._frameElement = parentElement.firstChild;
       //Core.Web.Event.add( this._frameElement, "load", processLoad, false );
     }
@@ -350,8 +350,7 @@ echopoint.tucana.FileUploadSelectorSync.Frame = Core.extend(
       this._frameElement.name = frameId;
       this._frameElement.src = srcUrl;
       this._frameElement.scrolling = "no";
-      this._frameElement.style.width = "0px";
-      this._frameElement.style.height = "0px";
+      this._frameElement.setAttribute( "style", "width:0px;height:0px;border:0;visibility:hidden;" );
       //this._frameElement.onload = processLoad;
       parentElement.appendChild( this._frameElement );
     }
@@ -371,9 +370,9 @@ echopoint.tucana.FileUploadSelectorSync.Frame = Core.extend(
       this.peer._table._submit._renderButton( true, this.peer._table );
     }
 
-    if ( !Core.Web.Env.BROWSER_SAFARI )
+    if ( !Core.Web.Env.BROWSER_SAFARI && !Core.Web.Env.BROWSER_CHROME )
     {
-      // Safari refuses to upload when file element is disabled
+      // WebKit browsers refuses to upload when file element is disabled
       this.peer._table._input.disabled = true;
     }
 
@@ -709,11 +708,6 @@ echopoint.tucana.FileUploadSelectorSync.Table = Core.extend(
     var display = this.component.render(
         echopoint.tucana.FileUploadSelector.BUTTON_DISPLAY,
         echopoint.tucana.FileUploadSelector.DEFAULT_BUTTON_DISPLAY );
-
-    // Chrome does not seem to post file when triggered via button.
-    // Temporary fix until resolved properly
-    if ( Core.Web.Env.BROWSER_CHROME ) display = "none";
-
 
     if ( display != "none" )
     {
