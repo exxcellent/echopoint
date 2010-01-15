@@ -73,3 +73,69 @@ echopoint.RegexTextFieldSync = Core.extend( echopoint.internal.TextFieldSync,
     echopoint.internal.TextFieldSync.call( this );
   }
 });
+
+/**
+ * Remote regex text field component.
+ */
+echopoint.RemoteRegexTextField = Core.extend(echopoint.RegexTextField, {
+
+    /** @see Echo.Component#componentType */
+    componentType: "RxRTF",
+    
+    $load: function() {
+        Echo.ComponentFactory.registerType("RxRTF", this);
+    }
+});
+
+/**
+ * Remote regex text field component synchronization peer.
+ */
+echopoint.RemoteRegexTextField.Sync = Core.extend(echopoint.RegexTextFieldSync, {
+    
+    $load: function() {
+        Echo.Render.registerPeer("RxRTF", this);
+    },
+    
+    $include: [ Echo.Sync.RemoteTextComponent._SyncMixins],
+    
+    /** Constructor. */
+    $construct: function() {
+        this._remoteInit();
+    },
+    
+    /** @see Echo.Sync.TextComponent#getSupportedPartialProperties */
+    getSupportedPartialProperties: function() {
+        return this._remoteGetSupportedPartialProperties(
+                echopoint.RegexTextFieldSync.prototype.getSupportedPartialProperties.call(this));
+    },
+    
+    /** @see Echo.Sync.TextComponent#processBlur */
+    processBlur: function(e) {
+    	echopoint.RegexTextFieldSync.prototype.processBlur.call(this, e);
+        this._remoteBlur();
+    },
+    
+    /** @see Echo.Sync.TextComponent#processFocus */
+    processFocus: function(e) {
+    	echopoint.RegexTextFieldSync.prototype.processFocus.call(this, e);
+        this._remoteFocus();
+    },
+    
+    /** @see Echo.Render.ComponentSync#renderAdd */
+    renderAdd: function(update, parentElement) {
+        echopoint.RegexTextFieldSync.prototype.renderAdd.call(this, update, parentElement);
+        this._remoteAdd();
+    },
+    
+    /** @see Echo.Render.ComponentSync#renderDispose */
+    renderDispose: function(update) {
+        this._remoteDispose();
+        echopoint.RegexTextFieldSync.prototype.renderDispose.call(this, update);
+    },
+    
+    /** @see Echo.Render.ComponentSync#renderUpdate */
+    renderUpdate: function(update) {
+        this._remoteUpdate();
+        echopoint.RegexTextFieldSync.prototype.renderUpdate.call(this, update);
+    }
+});

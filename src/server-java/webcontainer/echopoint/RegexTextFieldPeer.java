@@ -65,7 +65,7 @@ public class RegexTextFieldPeer extends TextFieldPeer
    */
   public String getClientComponentType( final boolean shortType )
   {
-    return COMPONENT_NAME;
+    return shortType ? "RxRTF" : COMPONENT_NAME;
   }
 
   @Override
