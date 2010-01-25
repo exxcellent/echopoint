@@ -8,7 +8,15 @@ Echo.RemoteClient.CommandExec.CloseBrowser = Core.extend(Echo.RemoteClient.Comma
     /** @see Echo.RemoteClient.CommandExecProcessor#execute */
     execute: function(client, commandData) 
     {
-      if( !window.closed ) window.close();
+      if( !window.closed )
+      { 
+        window.close();
+        if( navigator.appName == "Netscape" )
+        {
+          if( !window.closed ) 
+            alert( "CloseBrowser command failed. It works with FireFox if you set the variable dom.allow_scripts_to_close_windows=true in your config (about:config)!" );
+        }
+      }
     }
   },
   
