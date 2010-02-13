@@ -1,6 +1,7 @@
 package echopoint;
 
 import static nextapp.echo.webcontainer.WebContainerServlet.getServiceRegistry;
+import nextapp.echo.app.Color;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.update.ClientUpdateManager;
 import nextapp.echo.app.util.Context;
@@ -29,6 +30,11 @@ public class AutoLookupSelectFieldPeer extends TextFieldPeer {
 		addOutputProperty(AutoLookupSelectField.PROPERTY_KEY);
 		addOutputProperty(AutoLookupSelectField.PROPERTY_SEARCH_VAL);
     addOutputProperty(AutoLookupSelectField.PROPERTY_OPTIONS_VISIBLE);
+    addOutputProperty(AutoLookupSelectField.PROPERTY_OPTIONS_MENU_BGCOLOR);
+    addOutputProperty(AutoLookupSelectField.PROPERTY_OPTIONS_MENU_BORDER);
+    addOutputProperty(AutoLookupSelectField.PROPERTY_SELECTED_BG);
+    addOutputProperty(ComboBox.PROPERTY_COMBO_LIST_CHANGED);
+    addOutputProperty(ComboBox.PROPERTY_ACTION_CLICK);
 	}
 	
 	@Override
@@ -50,6 +56,15 @@ public class AutoLookupSelectFieldPeer extends TextFieldPeer {
     else 
     if( propertyName.equals(AutoLookupSelectField.PROPERTY_OPTIONS_VISIBLE) ) 
       return ( (AutoLookupSelectField) component).isOptionsVisible();
+    else
+    if( propertyName.equals(AutoLookupSelectField.PROPERTY_OPTIONS_MENU_BGCOLOR) ) 
+      return ( (AutoLookupSelectField) component).getOptionsMenuBackground();
+    else
+    if( propertyName.equals(AutoLookupSelectField.PROPERTY_OPTIONS_MENU_BORDER) ) 
+      return ( (AutoLookupSelectField) component).getOptionsMenuBorder();
+    else
+    if( propertyName.equals(AutoLookupSelectField.PROPERTY_SELECTED_BG) ) 
+      return ( (AutoLookupSelectField) component).getSelectedOptionBackground();
     else
       return super.getOutputProperty(context, component, propertyName, propertyIndex);
   }
@@ -75,7 +90,6 @@ public class AutoLookupSelectFieldPeer extends TextFieldPeer {
       ClientUpdateManager clientUpdateManager =  (ClientUpdateManager) context.get(ClientUpdateManager.class);
       clientUpdateManager.setComponentProperty(component, propertyName, newValue);
     }
-
 		super.storeInputProperty(context, component, propertyName, propertyIndex, newValue);
 	}
 

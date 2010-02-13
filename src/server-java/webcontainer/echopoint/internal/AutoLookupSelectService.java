@@ -104,10 +104,6 @@ public class AutoLookupSelectService implements Service {
 				Element searchE = doc.createElement("searchVal");
 				searchE.setTextContent(entry.getSearchVal());
 				entryE.appendChild(searchE);
-				
-				Element xhtmlE = doc.createElement("xhtml");
-				xhtmlE.setTextContent(entry.getValue());  
-				entryE.appendChild(xhtmlE);
 			}
 		}
 		dataElement.appendChild(autoLookupModelE);

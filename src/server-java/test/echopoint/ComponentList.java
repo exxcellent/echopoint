@@ -74,6 +74,7 @@ public class ComponentList extends Column
           "TransitionContainer",
           "VennDiagram",
           "AutoLookupSelectField",
+          "ComboBox"
       };
 
   /**
