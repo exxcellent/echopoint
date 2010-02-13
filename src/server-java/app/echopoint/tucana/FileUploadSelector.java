@@ -17,16 +17,13 @@
  */
 package echopoint.tucana;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-
 import nextapp.echo.app.ApplicationInstance;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.ImageReference;
 import nextapp.echo.app.TaskQueueHandle;
 import nextapp.echo.app.event.ActionEvent;
 import nextapp.echo.app.event.ActionListener;
+
 import echopoint.ProgressBar;
 import echopoint.internal.AbstractContainer;
 import echopoint.tucana.event.DefaultUploadListener;
@@ -38,6 +35,10 @@ import echopoint.tucana.event.UploadFailEvent;
 import echopoint.tucana.event.UploadFinishEvent;
 import echopoint.tucana.event.UploadProgressEvent;
 import echopoint.tucana.event.UploadStartEvent;
+
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * The file upload selector component.  This component is a re-implementation
@@ -232,6 +233,7 @@ import echopoint.tucana.event.UploadStartEvent;
  * @author jvolkman (Echo2), Rakesh 2008-11-2
  * @version $Id$
  */
+@SuppressWarnings( { "ClassWithTooManyMethods" } )
 public class FileUploadSelector extends AbstractContainer
 {
   private static final long serialVersionUID = 1l;
@@ -298,7 +300,7 @@ public class FileUploadSelector extends AbstractContainer
    * The allowed content-type(s) for the upload.  Uploads of other types of
    * files will be rejected.
    */
-  private Set<String> contentTypeFilter = new HashSet<String>();
+  private final Set<String> contentTypeFilter = new HashSet<String>();
 
   /**
    * A task queue that may be used to perform UI updates from call back
@@ -312,7 +314,18 @@ public class FileUploadSelector extends AbstractContainer
    */
   public FileUploadSelector()
   {
-    addActionListener( new DefaultUploadListener() );
+    this( new DefaultUploadListener() );
+  }
+
+  /**
+   * Create an upload selector component with the specified upload
+   * listener instance.
+   *
+   * @param listener The upload listener to use with the selector.
+   */
+  public FileUploadSelector( final DefaultUploadListener listener )
+  {
+    addActionListener( listener );
   }
 
   /**
@@ -639,7 +652,7 @@ public class FileUploadSelector extends AbstractContainer
   @Override
   public boolean isValidChild( final Component child )
   {
-    boolean result = ( child instanceof ProgressBar );
+    final boolean result = ( child instanceof ProgressBar );
     return result && ( getComponentCount() < 2 );
   }
 
@@ -734,7 +747,7 @@ public class FileUploadSelector extends AbstractContainer
    * @see nextapp.echo.app.Component#processInput(String, Object)
    */
   @Override
-  public void processInput( String name, Object value )
+  public void processInput( final String name, final Object value )
   {
     super.processInput( name, value );
 
