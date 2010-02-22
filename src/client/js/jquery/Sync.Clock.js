@@ -19,12 +19,13 @@ echopoint.ClockSync = Core.extend(Echo.Render.ComponentSync, {
         BORDER: "border",
         BACKGROUND: "background",
         FOREGROUND: "foreground",
-        FONT: "font"
+        FONT: "font",
+        FORMAT: "format",
+        DEFAULT_FORMAT: "%H:%M:%S"
     },
 
     $load: function()
     {
-
         Echo.Render.registerPeer( echopoint.constants.CLOCK, this );
     },
 
@@ -55,7 +56,6 @@ echopoint.ClockSync = Core.extend(Echo.Render.ComponentSync, {
             this._clockdiv.style.height = "100%";
         }
         Echo.Sync.Alignment.render(this.component.render(echopoint.ClockSync.ALIGNMENT), this._clockdiv, true, this.component);
-
         Echo.Sync.Insets.render(this.component.render(echopoint.ClockSync.INSETS), this._clockdiv, "padding");
         Echo.Sync.Border.render(this.component.render(echopoint.ClockSync.BORDER), this._clockdiv);
         parentElement.appendChild(this._clockdiv);
@@ -70,23 +70,22 @@ echopoint.ClockSync = Core.extend(Echo.Render.ComponentSync, {
     renderDisplay: function() {
         if (this._renderRequired) {
             this._renderRequired = false;
-            var foreground = this.component.render(echopoint.ClockSync.FOREGROUND);
-            var background = this.component.render(echopoint.ClockSync.BACKGROUND);
+            var options = { format: echopoint.ClockSync.DEFAULT_FORMAT };
+            options.format = this.component.render('format', echopoint.ClockSync.DEFAULT_FORMAT);
+            jQuery("#"+this._clockdiv.id.replace('.', '\\.')).jclock(options);
 
-            jQuery("#"+this._clockdiv.id.replace('.', '\\.')).jclock();
-
-            var font = this.component.render(echopoint.ClockSync.FONT);
-            Echo.Sync.Color.renderClear(foreground, this._clockdiv, "color");
-            Echo.Sync.Color.renderClear(background, this._clockdiv, "backgroundColor");
-            Echo.Sync.Font.renderClear(font, this._clockdiv);
+            Echo.Sync.Color.renderClear( this.component.render(echopoint.ClockSync.FOREGROUND), this._clockdiv, "color");
+            Echo.Sync.Color.renderClear( this.component.render(echopoint.ClockSync.BACKGROUND), this._clockdiv, "backgroundColor");
+            Echo.Sync.Font.renderClear( this.component.render(echopoint.ClockSync.FONT), this._clockdiv);
         }
     },
 
     /** @see Echo.Render.ComponentSync#renderUpdate */
     renderUpdate: function(update) {
-        var containerElement = this._clockdiv.parentNode;
-        Echo.Render.renderComponentDispose(update, update.parent);
-        containerElement.removeChild(this._clockdiv);
+        var element = this._clockdiv;
+        var containerElement = element.parentNode;
+        this.renderDispose(update);
+        containerElement.removeChild(element);
         this.renderAdd(update, containerElement);
         return true;
     }

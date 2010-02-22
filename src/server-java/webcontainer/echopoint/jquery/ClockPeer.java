@@ -42,7 +42,7 @@ public class ClockPeer extends JQueryAbstractPeer {
      */
     private static final String[] SERVICE_FILES =
             {
-                    "resource/js/jquery/jquery.jclock-1.2.0.js",
+                    "resource/js/jquery/jquery.jclock.js",
                     "resource/js/jquery/Application.Clock.js",
                     "resource/js/jquery/Sync.Clock.js"
             };

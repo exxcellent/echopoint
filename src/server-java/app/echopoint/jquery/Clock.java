@@ -38,6 +38,7 @@ public class Clock extends Component implements Sizeable, Alignable {
 
     public static final String PROPERTY_INSETS = "insets";
     public static final String PROPERTY_BORDER = "border";
+    public static final String PROPERTY_FORMAT = "format";
 
     /**
      * Returns the <code>Border</code> that encloses the entire <code>Clock</code>.
@@ -114,7 +115,7 @@ public class Clock extends Component implements Sizeable, Alignable {
         return (Extent) get(PROPERTY_HEIGHT);
     }
 
-        /**
+    /**
      * Returns the alignment of the Clock component.
      *
      * @return the alignment
@@ -130,5 +131,38 @@ public class Clock extends Component implements Sizeable, Alignable {
      */
     public void setAlignment(Alignment newValue) {
         set(PROPERTY_ALIGNMENT, newValue);
+    }
+
+
+    /**
+     * Returns the display format of the Clock component.
+     *
+     * @return the format
+     */
+    public String getFormat() {
+        return (String) get(PROPERTY_FORMAT);
+    }
+
+    /**
+     * Sets the display format of the Clock component (default value: %H:%M:%S).
+     *  %a - day names,
+     *  %A - full day names,
+     *  %b - month names,
+     *  %B - full month names,
+     *  %d - day: range 01 to 31,
+     *  %H - hour as a decimal number using a 24-hour clock (range 00 to 23),
+     *  %I - hour as a decimal number using a 12-hour clock (range 01 to 12), 
+     *  %m - month number,
+     *  %M - minute as a decimal number,
+     *  %p - either `am' or `pm' according to the given time value,
+     *  %P - either `AM' or `PM' according to the given time value,
+     *  %S - second as a decimal number,
+     *  %y - two-digit year,
+     *  %Y - full year.
+     *
+     * @param newValue the new format
+     */
+    public void setFormat(String newValue) {
+        set(PROPERTY_FORMAT, newValue);
     }
 }
