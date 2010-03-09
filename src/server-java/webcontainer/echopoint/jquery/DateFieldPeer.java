@@ -67,6 +67,16 @@ public class DateFieldPeer extends JQueryAbstractPeer {
     public DateFieldPeer() {
         super();
         addOutputProperty(DateField.DATE_CHANGED_PROPERTY);
+        addEvent(new EventPeer(DateField.INPUT_ACTION,
+        						DateField.ACTION_LISTENERS_CHANGED_PROPERTY){
+        		@Override
+        		public boolean hasListeners(
+        				Context context, Component c) {
+        			return ((DateField)c).hasActionListeners();
+        		}
+        }
+        
+        );
     }
 
     /**

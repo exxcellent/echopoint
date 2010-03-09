@@ -11,6 +11,10 @@ echopoint.DATEFIELD = Core.extend(Echo.Component,
     {
         Echo.ComponentFactory.registerType(echopoint.constants.DATEFIELD, this);
     },
+    
+    doAction: function() {
+        this.fireEvent({type: "action", source: this, actionCommand: this.get("actionCommand")});
+    },
 
     componentType: echopoint.constants.DATEFIELD
 });

@@ -131,6 +131,7 @@ echopoint.DateField = Core.extend(Echo.Render.ComponentSync, {
     _storeValue: function(theCalendar) {
         //Core.Debug.consoleWrite("Calendar store value called");
         this.component.set("date", theCalendar.date.print(this._dateFormatPattern));
+        this.component.doAction();
     },
 
     /**
@@ -139,7 +140,9 @@ echopoint.DateField = Core.extend(Echo.Render.ComponentSync, {
     _processChange: function(theCalendar) {
         //Core.Debug.consoleWrite("Calendar processChange called: "+this._inputElem.value);
         this.component.set("date", this._inputElem.value);
+        this.component.doAction();
     },
+
 
     renderDisplay: function() {
         if (this._renderRequired) {
