@@ -56,6 +56,7 @@ public class AbstractImagePeer extends AbstractContainerPeer
 
   public AbstractImagePeer()
   {
+    addOutputProperty(AbstractImage.PROPERTY_IMAGE);
     addEvent( new DefaultEventPeer(
         INPUT_ACTION, ACTION_LISTENERS_CHANGED_PROPERTY ) );
   }
@@ -103,11 +104,12 @@ public class AbstractImagePeer extends AbstractContainerPeer
   public Object getOutputProperty( final Context context,
       final Component component, final String propertyName, final int propertyIndex )
   {
-    if ( AbstractImage.PROPERTY_CURSOR.equals( propertyName ) )
-    {
+    if( AbstractImage.PROPERTY_CURSOR.equals( propertyName ) )
       return component.get( propertyName ).toString();
-    }
-    
-    return super.getOutputProperty( context, component, propertyName, propertyIndex );
+    else
+    if( AbstractImage.PROPERTY_IMAGE.equals( propertyName ) )
+      return ((AbstractImage)component).getImage();
+    else  
+      return super.getOutputProperty( context, component, propertyName, propertyIndex );
   }
 }

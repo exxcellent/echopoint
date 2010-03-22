@@ -23,8 +23,11 @@ echopoint.ImageIconSync = Core.extend( echopoint.internal.AbstractImageSync,
 
   renderUpdate: function( update )
   {
-    this.renderStyle( this._image, update );
-    this.renderImageStyle( update );
+    var element = this.image;
+    var containerElement = element.parentNode;
+    this.renderDispose(update);
+    containerElement.removeChild(element);
+    this.renderAdd(update, containerElement);
     return false; // Child elements not supported: safe to return false.
   }
 });
