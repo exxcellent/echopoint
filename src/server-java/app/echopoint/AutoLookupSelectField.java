@@ -34,13 +34,23 @@ public class AutoLookupSelectField extends TextField {
   public static final String PROPERTY_OPTIONS_MENU_BGCOLOR = "optMenuBG";
   public static final String PROPERTY_OPTIONS_MENU_BORDER = "optMenuBorder";
   public static final String PROPERTY_SELECTED_BG = "selectedBG";
+  public static final String PROPERTY_ACTION_CLICK = "actionClick";
 
 
   /**
    * Creates a new <code>AutoLookupSelectField</code>.
    */
-  public AutoLookupSelectField() { super(); }
+  public AutoLookupSelectField() { 
+	  super(); 
+	  this.set( PROPERTY_ACTION_CLICK, Boolean.TRUE );
+  }
  
+
+  /**
+   * If ActionClick is true, then after click on the option from list, action event will be started.
+   */
+  public void setActionClick(boolean b) { set( PROPERTY_ACTION_CLICK, Boolean.valueOf(b) ); }
+  
   /**
    * Sets auto selected first option mode. 
    */

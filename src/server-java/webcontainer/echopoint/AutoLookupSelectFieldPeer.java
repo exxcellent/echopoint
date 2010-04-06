@@ -34,7 +34,7 @@ public class AutoLookupSelectFieldPeer extends TextFieldPeer {
     addOutputProperty(AutoLookupSelectField.PROPERTY_OPTIONS_MENU_BORDER);
     addOutputProperty(AutoLookupSelectField.PROPERTY_SELECTED_BG);
     addOutputProperty(ComboBox.PROPERTY_COMBO_LIST_CHANGED);
-    addOutputProperty(ComboBox.PROPERTY_ACTION_CLICK);
+    addOutputProperty(AutoLookupSelectField.PROPERTY_ACTION_CLICK);
 	}
 	
 	@Override

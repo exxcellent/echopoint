@@ -10,7 +10,6 @@ public class ComboBox extends AutoLookupSelectField
 	private static final long serialVersionUID = 22091226L;
   protected static final String PROPERTY_COMBO_LIST_CHANGED = "comboListChanged";
   private static final String PROPERTY_COMBOBOX_MODE = "comboboxMode";
-  public static final String PROPERTY_ACTION_CLICK = "actionClick";
   public static final ResourceImageReference default_popup_icon = new ResourceImageReference( "/resource/images/Decrement.gif" );
 
   private class ComboBoxModelListner implements ComboBoxModel.Listener
@@ -35,7 +34,6 @@ public class ComboBox extends AutoLookupSelectField
     this.setNoMatchingOptionText("");
     this.setSearchBarSearchingText("");
     this.set(PROPERTY_COMBOBOX_MODE, Boolean.TRUE);
-    this.set( PROPERTY_ACTION_CLICK, Boolean.FALSE );
   }
 	
 	public ComboBoxModel getComboBoxModel() { return (ComboBoxModel) get(PROPERTY_AUTO_LOOKUP_MODEL); }
@@ -50,11 +48,6 @@ public class ComboBox extends AutoLookupSelectField
 
   public AutoLookupSelectFieldModel getAutoLookupFieldModel() {  throw new UnsupportedOperationException("Not supported for ComboBox: use getComboBoxModel()."); }
   public void setAutoLookupFieldModel(AutoLookupSelectFieldModel autoLookupModel) {  throw new UnsupportedOperationException("Not supported for ComboBox: use setComboBoxModel(...).");  }
-
-  /**
-   * If ActionClick is true, then after click on the option from list, action event will be started.
-   */
-  public void setActionClick(boolean b) { set( PROPERTY_ACTION_CLICK, Boolean.valueOf(b) ); }
 
   public void init() 
   { 
