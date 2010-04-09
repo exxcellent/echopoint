@@ -4,7 +4,7 @@
  * @author Rakesh 2009-03-29
  * @version: $Id: Sync.AutoLookupSelectField.js 208 2009-05-25 02:40:35Z sptrakesh $
  */
-echopoint.AutoLookupSelectFieldSync = Core.extend( echopoint.internal.TextFieldSync, {
+echopoint.AutoLookupSelectFieldSync = Core.extend( echopoint.RegexTextFieldSync, {
 	
 	_outstandingAjaxCall : null,
 	_searchingStatusDivE : null,
@@ -38,7 +38,7 @@ echopoint.AutoLookupSelectFieldSync = Core.extend( echopoint.internal.TextFieldS
 
   getSupportedPartialProperties: function() 
   {
-    var v = echopoint.internal.TextFieldSync.prototype.getSupportedPartialProperties.call(this);
+	var v = echopoint.RegexTextFieldSync.prototype.getSupportedPartialProperties.call(this);
     v[v.length] = "actionClick";
     v[v.length] = "comboListChanged";
     v[v.length] = "optionsVisible";
@@ -52,7 +52,7 @@ echopoint.AutoLookupSelectFieldSync = Core.extend( echopoint.internal.TextFieldS
 
   renderUpdate: function(update) 
   {
-    var status = echopoint.internal.TextFieldSync.prototype.renderUpdate.call(this, update);
+	  var status = echopoint.RegexTextFieldSync.prototype.renderUpdate.call(this, update);
   
     var selected_bg = update.getUpdatedProperty("selectedBG");
     if( selected_bg ) this._selected_bg = selected_bg.newValue;
@@ -72,7 +72,7 @@ echopoint.AutoLookupSelectFieldSync = Core.extend( echopoint.internal.TextFieldS
     if( update.getUpdatedProperty("comboListChanged") )
       this._loadComboListFromServer( this._isDropDownVisible() || opt_visible );
     else
-    if( opt_visible )
+    if( opt_visible && !this._isDropDownVisible())
       this._showOptionsMenu(null);
     return status;
   },
@@ -87,7 +87,7 @@ echopoint.AutoLookupSelectFieldSync = Core.extend( echopoint.internal.TextFieldS
     this.renderAddToParent      = this._renderAddToParent;
 
 		//call super method
-		echopoint.internal.TextFieldSync.prototype.renderAdd.call(this, update, parentElement);
+    echopoint.RegexTextFieldSync.prototype.renderAdd.call(this, update, parentElement);
 
 		var searchBarSearchingIcon = this.component.render('searchBarSearchingIcon', null);
 		var searchBarSearchingText = this.component.render('searchBarSearchingText', 'Searching...');
@@ -98,16 +98,19 @@ echopoint.AutoLookupSelectFieldSync = Core.extend( echopoint.internal.TextFieldS
     this._actionClick          = this.component.render('actionClick', false);
     this._service_uri          = "?sid=echopoint.AutoLookupSelectService&elementId=" + this.component.renderId;
 
-		// create drop down div
-		this._popupDivE = document.createElement('div');
-	  this._popupDivE.id = this.elementId;
-		this._popupDivE.style.position   = 'absolute';
+        // create drop down div
+        this._popupDivE = document.createElement('div');
+    	  this._popupDivE.id = this.component.renderId + '_DropDownMenu';
+        this._popupDivE.style.position   = 'fixed';
 		this._popupDivE.style.visibility = 'hidden';
     this._popupDivE.style.overflow   = 'auto';
-
+        this._popupDivE.style.maxHeight  = '160px';
+        this._popupDivE.style.zIndex     = 1001;  //zIndex + 2;
+    
     Echo.Sync.Color.render( this.component.render( 'optMenuBG', echopoint.AutoLookupSelectFieldSync.DEFAULT_OPTIONS_MENU_BACKGROUND ), this._popupDivE, "backgroundColor" );
     Echo.Sync.Border.render( this.component.render( 'optMenuBorder', echopoint.AutoLookupSelectFieldSync.DEFAULT_OPTIONS_MENU_BORDER ), this._popupDivE );
-  
+    this._bodyE = document.getElementsByTagName('body')[0];
+    this._bodyE.appendChild(this._popupDivE);
 		// we need the iframe trick if its IE
 //		if (document.all) {
 //			this._iframeE = document.createElement('iframe');
@@ -117,6 +120,9 @@ echopoint.AutoLookupSelectFieldSync = Core.extend( echopoint.internal.TextFieldS
 //			this._iframeE.style.position = 'absolute';
 //			this._iframeE.style.margin = this._popupDivE.style.margin;
 //			this._iframeE.style.visibility = 'hidden';
+    //      this._iframeE.style.maxHeight = '160px';
+    //      this._popupDivE.style.zIndex    = 1000;
+    //      this._bodyE.appendChild(this._iframeE);
 //		}
 
 	  // searching status bar
@@ -137,11 +143,6 @@ echopoint.AutoLookupSelectFieldSync = Core.extend( echopoint.internal.TextFieldS
 		this._notFoundStatusDivE.style.display = 'none';
  		this._popupDivE.appendChild(this._notFoundStatusDivE);
     
-	  // append the popup to the main body
-		this._bodyE = document.getElementsByTagName('body')[0];
-		this._bodyE.appendChild(this._popupDivE);
-
-		if(this._iframeE)   this._bodyE.appendChild(this._iframeE);
     if(this._comboMode) 
     {
       var opt_visible = update.getUpdatedProperty("optionsVisible");
@@ -150,35 +151,12 @@ echopoint.AutoLookupSelectFieldSync = Core.extend( echopoint.internal.TextFieldS
     }
 	}, 
 
-  /** @see echopoint.internal.TextFieldSync#renderDisplay */
-  renderDisplay: function() 
-  {
-    //call super method
-    echopoint.internal.TextFieldSync.prototype.renderDisplay.call(this);
-
-    var cellBounds = new Core.Web.Measure.Bounds(this.input);
-    this._popupDivE.style.left      = cellBounds.left + 'px';
-    this._popupDivE.style.top       = (cellBounds.top + cellBounds.height) + 'px';
-    this._popupDivE.style.minWidth  = cellBounds.width - 2 + 'px';
-    this._popupDivE.style.maxHeight = '250px';
-    this._popupDivE.style.zIndex    = 1001;  //zIndex + 2;
-    this._popupDivE.style.width     = this._popupDivE.style.minWidth;
-
-    if( this._iframeE ) 
-    {
-      this._iframeE.style.zIndex   = 1000;
-      this._iframeE.style.left     = cellBounds.left + 'px';
-      this._iframeE.style.top      = (cellBounds.top + cellBounds.height) + 'px';
-      this._iframeE.style.minWidth = cellBounds.width + 'px';
-    }
-  },
-
   _renderAddToParent: function(parentElement) 
   {
     var popup_icon = this.component.render('popupIcon', null);
     if( popup_icon != null )
     {
-      var img      = document.createElement("img");
+      var img = document.createElement("img");
       Echo.Sync.ImageReference.renderImg(popup_icon, img);
 
       this._popupButton = document.createElement('span');
@@ -196,11 +174,9 @@ echopoint.AutoLookupSelectFieldSync = Core.extend( echopoint.internal.TextFieldS
             that._showOptionsMenu(null);
           that.input.focus();  // we never want focus on the popup
         }
-        return false;
       };
-      Core.Web.Event.add(this._popupButton, "mousedown", this._popupButtonClickHandler, true);
-
-      this.container = document.createElement("div");
+      Core.Web.Event.add(this._popupButton, "click", this._popupButtonClickHandler, false);
+      this.container  = document.createElement("div");
       this.container.appendChild(this.input);
       this.container.appendChild(this._popupButton);
       parentElement.appendChild(this.container);
@@ -230,7 +206,7 @@ echopoint.AutoLookupSelectFieldSync = Core.extend( echopoint.internal.TextFieldS
     this._removeOptions();
 		this._popupDivE.parentNode.removeChild(this._popupDivE);
 		if( this._iframeE ) this._iframeE.parentNode.removeChild(this._iframeE);
-    echopoint.internal.TextFieldSync.prototype.renderDispose.call(this, update);
+		echopoint.RegexTextFieldSync.prototype.renderDispose.call(this, update);
 	},
 
   /** The event handler for a "blur" event. */
@@ -256,8 +232,8 @@ echopoint.AutoLookupSelectFieldSync = Core.extend( echopoint.internal.TextFieldS
     return true;
   },
     
-  clientKeyPress: function(e) 
-  {
+  clientKeyPressAccepted: function(e)
+    { 
     if( this.client && this.component.isActive() && !this.component.doKeyPress(e.keyCode, e.charCode) )
       Core.Web.DOM.preventEventDefault(e.domEvent);
     return true;
@@ -472,7 +448,20 @@ echopoint.AutoLookupSelectFieldSync = Core.extend( echopoint.internal.TextFieldS
   {
 		if( this._isDropDownVisible() ) return;
 
-		if( this._iframeE ) this._iframeE.style.visibility = 'visible';
+		var cellBounds = new Core.Web.Measure.Bounds(this.input);
+		this._popupDivE.style.left      = cellBounds.left + 'px';
+		this._popupDivE.style.top       = (cellBounds.top + cellBounds.height) + 'px';
+		this._popupDivE.style.minWidth  = cellBounds.width - 2 + 'px';
+		this._popupDivE.style.width     = this._popupDivE.style.minWidth;
+		
+		if( this._iframeE ) 
+		{
+			this._iframeE.style.left     = cellBounds.left + 'px';
+			this._iframeE.style.top      = (cellBounds.top + cellBounds.height) + 'px';
+			this._iframeE.style.minWidth = cellBounds.width + 'px';
+			this._iframeE.style.visibility = 'visible';
+		}
+		
 		this._popupDivE.style.visibility = 'visible';
     // attach document listener so we can know about outside clicks
     var that = this;
@@ -480,11 +469,14 @@ echopoint.AutoLookupSelectFieldSync = Core.extend( echopoint.internal.TextFieldS
     {
       event = event ? event : window.event;
       var target = Core.Web.DOM.getEventTarget(event);
-      if( Core.Web.DOM.isAncestorOf(that.input, target) || !Core.Web.DOM.isAncestorOf(that._popupDivE, target) ) // they have clicked outside the popup or text field so close popup
+      if( Core.Web.DOM.isAncestorOf(that.input, target) || 
+    	( !Core.Web.DOM.isAncestorOf(that._popupDivE, target) && ( that._popupButton == null || !Core.Web.DOM.isAncestorOf(that._popupButton, target) ) ) )
+     {
         that._closeDropDown();
       return false;
+     }
     };
-    Core.Web.Event.add(this._bodyE, "mousedown", this._docClickHandler, false);
+    Core.Web.Event.add(this._bodyE, "mousedown", this._docClickHandler, true);
     this.component.set("optionsVisible", true);
   },
   
@@ -492,7 +484,7 @@ echopoint.AutoLookupSelectFieldSync = Core.extend( echopoint.internal.TextFieldS
   {
 		this._popupDivE.style.visibility = 'hidden';
 		if( this._iframeE ) this._iframeE.style.visibility = 'hidden';
-		Core.Web.Event.remove(this._bodyE, "mousedown", this._docClickHandler, false);
+		Core.Web.Event.remove(this._bodyE, "mousedown", this._docClickHandler, true);
 	},
 	
 	/**

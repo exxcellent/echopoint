@@ -3,6 +3,7 @@ package echopoint;
 import nextapp.echo.app.ResourceImageReference;
 import echopoint.model.AutoLookupSelectFieldModel;
 import echopoint.model.ComboBoxModel;
+import echopoint.model.DefaultComboBoxModel;
 
 
 public class ComboBox extends AutoLookupSelectField 
@@ -14,28 +15,36 @@ public class ComboBox extends AutoLookupSelectField
 
   private class ComboBoxModelListner implements ComboBoxModel.Listener
   {
-    private boolean b = true;
+
     public void entriesListChanged()
     {
-      b = !b;
-      set( PROPERTY_COMBO_LIST_CHANGED, Boolean.valueOf(b) );
+    	firePropertyChange(PROPERTY_COMBO_LIST_CHANGED, null, null);
     }
   }
   
   private final ComboBoxModelListner combo_model_listener = new ComboBoxModelListner();
 
 	/**
-	 * Creates a new <code>ComboBox</code>.
+	 * Creates a new <code>ComboBox</code> with the specified model.
 	 */
-	public ComboBox() 
+  public ComboBox(ComboBoxModel model)  
   { 
     super(); 
+    this.setComboBoxModel(model);
     this.setPopupIcon(default_popup_icon); 
     this.setNoMatchingOptionText("");
     this.setSearchBarSearchingText("");
     this.set(PROPERTY_COMBOBOX_MODE, Boolean.TRUE);
   }
-	
+  
+    /**
+     * Creates a new <code>ComboBox</code> with the default model.
+     */
+    public ComboBox()
+    {
+      this( new DefaultComboBoxModel() );
+    }
+    
 	public ComboBoxModel getComboBoxModel() { return (ComboBoxModel) get(PROPERTY_AUTO_LOOKUP_MODEL); }
 
 	public void setComboBoxModel(ComboBoxModel model) 

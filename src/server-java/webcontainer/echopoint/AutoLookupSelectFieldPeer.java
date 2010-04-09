@@ -9,9 +9,8 @@ import nextapp.echo.webcontainer.ServerMessage;
 import nextapp.echo.webcontainer.Service;
 import nextapp.echo.webcontainer.service.JavaScriptService;
 import echopoint.internal.AutoLookupSelectService;
-import echopoint.internal.TextFieldPeer;
 
-public class AutoLookupSelectFieldPeer extends TextFieldPeer {
+public class AutoLookupSelectFieldPeer extends RegexTextFieldPeer {
 	private static final String COMPONENT_NAME = AutoLookupSelectField.class.getName();
 	
 	/** The service for the client side peer for this component. */
@@ -19,6 +18,7 @@ public class AutoLookupSelectFieldPeer extends TextFieldPeer {
 													"resource/js/Sync.AutoLookupSelectField.js" };
 
 	private static final Service COMPONENT_SERVICE = JavaScriptService.forResources(COMPONENT_NAME, SERVICE_FILES);
+	private int combo_listchanged = 0;
 	
 	static{
 		AutoLookupSelectService.install();
@@ -65,6 +65,8 @@ public class AutoLookupSelectFieldPeer extends TextFieldPeer {
     else
     if( propertyName.equals(AutoLookupSelectField.PROPERTY_SELECTED_BG) ) 
       return ( (AutoLookupSelectField) component).getSelectedOptionBackground();
+    if( propertyName.equals(ComboBox.PROPERTY_COMBO_LIST_CHANGED) )
+    	return new Integer(combo_listchanged++);  // always unique value !
     else
       return super.getOutputProperty(context, component, propertyName, propertyIndex);
   }

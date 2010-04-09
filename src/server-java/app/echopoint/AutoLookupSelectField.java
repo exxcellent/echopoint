@@ -3,12 +3,11 @@ package echopoint;
 import nextapp.echo.app.ImageReference;
 import nextapp.echo.app.Color;
 import nextapp.echo.app.Border;
-import echopoint.internal.TextField;
 import echopoint.model.AutoLookupSelectFieldModel;
 import echopoint.model.AutoLookupSelectModel;
 
 
-public class AutoLookupSelectField extends TextField {
+public class AutoLookupSelectField extends RegexTextField {
 
 	private static final long serialVersionUID = 1L;
 	private String key;
@@ -40,14 +39,11 @@ public class AutoLookupSelectField extends TextField {
   /**
    * Creates a new <code>AutoLookupSelectField</code>.
    */
-  public AutoLookupSelectField() { 
-	  super(); 
-	  this.set( PROPERTY_ACTION_CLICK, Boolean.TRUE );
-  }
+  public AutoLookupSelectField() { super(); setActionClick(true); }
  
 
   /**
-   * If ActionClick is true, then after click on the option from list, action event will be started.
+   * If ActionClick is true (default value), then after click on the option from list, action event will be started.
    */
   public void setActionClick(boolean b) { set( PROPERTY_ACTION_CLICK, Boolean.valueOf(b) ); }
   

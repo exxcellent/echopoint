@@ -1,9 +1,10 @@
 package echopoint.model;
 
+import java.util.EventListener;
 
 public interface ComboBoxModel extends AutoLookupSelectModel
 {
-  interface Listener
+	interface Listener extends EventListener
   {
     public void entriesListChanged();
   }

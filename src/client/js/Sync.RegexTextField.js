@@ -14,10 +14,28 @@ echopoint.RegexTextFieldSync = Core.extend( echopoint.internal.TextFieldSync,
     Echo.Render.registerPeer( echopoint.constants.REGEX_TEXT_FIELD, this );
   },
 
+    $virtual: 
+    {
+      clientKeyPressRejected: function( event ) 
+      { 
+        Core.Web.DOM.preventEventDefault(event.domEvent);
+        return false;
+      },
+  
+      clientKeyPressAccepted: function( event ) 
+      { 
+        return echopoint.internal.TextFieldSync.prototype.clientKeyPress.call(this, event);
+      },
+    },
+  
   // Override the TextField method: The filter function implementation.
   clientKeyPress: function( event )
   {
     event = event ? event : window.event;
+
+    if( this.client && this.component.isActive() && !this.component.doKeyPress(event.keyCode, event.charCode) ) 
+          return this.clientKeyPressAccepted(event);
+  
     var charCode = event.domEvent.charCode;
     // Skip copy, cut, paste, select-all, arrow left, arrow right etc.
     if( !event.domEvent.metaKey && !event.domEvent.ctrlKey && !event.domEvent.altKey && charCode > 31 && charCode != 37 && charCode != 39 && this.regexp_filter )
@@ -27,12 +45,9 @@ echopoint.RegexTextFieldSync = Core.extend( echopoint.internal.TextFieldSync,
                   String.fromCharCode( charCode ) +
                   this.input.value.substring( position );
       if( !this.regexp_filter.test( value ) )
-      {
-        Core.Web.DOM.preventEventDefault(event.domEvent);
-        return false;
-      } 
+    	  return this.clientKeyPressRejected( event );
     }
-    return echopoint.internal.TextFieldSync.prototype.clientKeyPress.call(this, event);
+    return this.clientKeyPressAccepted(event);
   },
 
   // Run the processPaste after the input field has had text pasted into it (copy+paste from a keyboard or a mouse)
@@ -40,7 +55,7 @@ echopoint.RegexTextFieldSync = Core.extend( echopoint.internal.TextFieldSync,
   {
     event = event ? event : window.event;
     this._val_bp = this.input.value;
-    Core.Web.Scheduler.run(Core.method(this, this._filterInput), 50, false); // Hak: we have new_value after 50milisec :-)
+    Core.Web.Scheduler.run(Core.method(this, this._filterInput), 1, false); // Hack: we have new_value after 1milisec :-)
   },
   
   _filterInput: function() 
