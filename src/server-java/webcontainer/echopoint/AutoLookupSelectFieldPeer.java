@@ -33,8 +33,9 @@ public class AutoLookupSelectFieldPeer extends RegexTextFieldPeer {
     addOutputProperty(AutoLookupSelectField.PROPERTY_OPTIONS_MENU_BGCOLOR);
     addOutputProperty(AutoLookupSelectField.PROPERTY_OPTIONS_MENU_BORDER);
     addOutputProperty(AutoLookupSelectField.PROPERTY_SELECTED_BG);
-    addOutputProperty(ComboBox.PROPERTY_COMBO_LIST_CHANGED);
     addOutputProperty(AutoLookupSelectField.PROPERTY_ACTION_CLICK);
+    addOutputProperty(ComboBox.PROPERTY_COMBO_LIST_CHANGED);
+    addOutputProperty(ComboBox.PROPERTY_CASE_SENSITIVE);
 	}
 	
 	@Override
@@ -65,8 +66,12 @@ public class AutoLookupSelectFieldPeer extends RegexTextFieldPeer {
     else
     if( propertyName.equals(AutoLookupSelectField.PROPERTY_SELECTED_BG) ) 
       return ( (AutoLookupSelectField) component).getSelectedOptionBackground();
+    else
     if( propertyName.equals(ComboBox.PROPERTY_COMBO_LIST_CHANGED) )
     	return new Integer(combo_listchanged++);  // always unique value !
+    else
+    if( propertyName.equals(ComboBox.PROPERTY_CASE_SENSITIVE) )
+      return (component instanceof ComboBox) ? ( (ComboBox) component).getCaseSensitive() : false;
     else
       return super.getOutputProperty(context, component, propertyName, propertyIndex);
   }

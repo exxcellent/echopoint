@@ -34,6 +34,14 @@ public class RegexTextFieldPeer extends TextFieldPeer
   {
     super();
     addOutputProperty(RegexTextField.PROPERTY_REGEX);
+    addOutputProperty(RegexTextField.PROPERTY_INVALID_MSG_ORIENTATION);
+    addOutputProperty(RegexTextField.PROPERTY_INVALID_MSG);
+    addOutputProperty(RegexTextField.PROPERTY_INVALID_MSG_BACKGROUND);
+    addOutputProperty(RegexTextField.PROPERTY_INVALID_MSG_FOREGROUND);
+    addOutputProperty(RegexTextField.PROPERTY_INVALID_BACKGROUND);
+    addOutputProperty(RegexTextField.PROPERTY_INVALID_FOREGROUND);
+    addOutputProperty(RegexTextField.PROPERTY_INVALID_MSG_WIDTH);
+    addOutputProperty(RegexTextField.PROPERTY_INVALID_MSG_ALIGNMENT);
   }
 
   /**
@@ -73,6 +81,24 @@ public class RegexTextFieldPeer extends TextFieldPeer
   {
     if( propertyName.equals(RegexTextField.PROPERTY_REGEX) ) 
       return ((RegexTextField)component).getRegex();
+    else if( propertyName.equals(RegexTextField.PROPERTY_INVALID_MSG_ORIENTATION) ) 
+      return ((RegexTextField)component).getInvalidMsgOrientation();
+    else if( propertyName.equals(RegexTextField.PROPERTY_INVALID_MSG) ) 
+      return ((RegexTextField)component).getInvalidMsg();
+    else if( propertyName.equals(RegexTextField.PROPERTY_INVALID_MSG_BACKGROUND) ) 
+      return ((RegexTextField)component).getInvalidMsgBackground();
+    else if( propertyName.equals(RegexTextField.PROPERTY_INVALID_MSG_FOREGROUND) ) 
+      return ((RegexTextField)component).getInvalidMsgForeground();
+    else if( propertyName.equals(RegexTextField.PROPERTY_INVALID_BACKGROUND) ) 
+      return ((RegexTextField)component).getInvalidBackground();
+    else if( propertyName.equals(RegexTextField.PROPERTY_INVALID_FOREGROUND) ) 
+      return ((RegexTextField)component).gettInvalidForeground();
+    else if( propertyName.equals(RegexTextField.PROPERTY_INVALID_MSG_WIDTH) ) 
+      return ((RegexTextField)component).getInvalidMsgWidth();
+    else if( propertyName.equals(RegexTextField.PROPERTY_INVALID_MSG_ALIGNMENT) ) 
+      return ((RegexTextField)component).getInvalidMsgAlignment();
+    else if( propertyName.equals(RegexTextField.PROPERTY_INVALID_MSG_FONT) ) 
+      return ((RegexTextField)component).getInvalidMsgFont();
     else 
       return super.getOutputProperty(context, component, propertyName, propertyIndex);
   }

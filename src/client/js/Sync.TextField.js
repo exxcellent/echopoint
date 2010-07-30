@@ -19,6 +19,11 @@ echopoint.internal.TextFieldSync = Core.extend( Echo.Sync.TextField,
     /** The default text for the input.  Will be cleared after first use. */
     defaultText: null,
 
+    renderAddToParentTf: function( parentElement )
+    {
+      this.superRenderAddToParent(parentElement);
+    },
+
     /** The event handler for a mouse click event. */
     processClick: function( event )
     {
@@ -119,6 +124,8 @@ echopoint.internal.TextFieldSync = Core.extend( Echo.Sync.TextField,
 
   renderAdd: function( update, parentElement )
   {
+    this.superRenderAddToParent = this.renderAddToParent;
+    this.renderAddToParent = this.renderAddToParentTf;
     Echo.Sync.TextField.prototype.renderAdd.call(
         this, update, parentElement );
 

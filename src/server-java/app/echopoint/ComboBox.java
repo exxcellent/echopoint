@@ -11,6 +11,7 @@ public class ComboBox extends AutoLookupSelectField
 	private static final long serialVersionUID = 22091226L;
   protected static final String PROPERTY_COMBO_LIST_CHANGED = "comboListChanged";
   private static final String PROPERTY_COMBOBOX_MODE = "comboboxMode";
+  public  static final String PROPERTY_CASE_SENSITIVE = "caseSensitive";
   public static final ResourceImageReference default_popup_icon = new ResourceImageReference( "/resource/images/Decrement.gif" );
 
   private class ComboBoxModelListner implements ComboBoxModel.Listener
@@ -35,16 +36,21 @@ public class ComboBox extends AutoLookupSelectField
     this.setNoMatchingOptionText("");
     this.setSearchBarSearchingText("");
     this.set(PROPERTY_COMBOBOX_MODE, Boolean.TRUE);
+    this.set(PROPERTY_CASE_SENSITIVE, Boolean.TRUE);
   }
   
-    /**
-     * Creates a new <code>ComboBox</code> with the default model.
-     */
-    public ComboBox()
-    {
-      this( new DefaultComboBoxModel() );
-    }
+  /**
+    * Creates a new <code>ComboBox</code> with the default model.
+    */
+  public ComboBox()
+  {
+    this( new DefaultComboBoxModel() );
+  }
     
+  public boolean getCaseSensitive() { return ( (Boolean)get(PROPERTY_CASE_SENSITIVE) ).booleanValue(); }
+
+  public void    setCaseSensitive(boolean b) { set(PROPERTY_CASE_SENSITIVE, Boolean.valueOf(b)); }
+
 	public ComboBoxModel getComboBoxModel() { return (ComboBoxModel) get(PROPERTY_AUTO_LOOKUP_MODEL); }
 
 	public void setComboBoxModel(ComboBoxModel model) 

@@ -19,6 +19,9 @@
 package echopoint;
 
 import echopoint.internal.TextField;
+import nextapp.echo.app.Font;
+import nextapp.echo.app.Alignment;
+import nextapp.echo.app.Color;
 
 /**
  * A text field that enforces a user supplied regular expression on a key
@@ -86,6 +89,15 @@ public class RegexTextField extends TextField
    * This property may also be styled.
    */
   public static final String PROPERTY_REGEX = "regex";
+  public static final String PROPERTY_INVALID_MSG_ORIENTATION = "invalid_msg_orientation";
+  public static final String PROPERTY_INVALID_MSG = "invalid_msg";
+  public static final String PROPERTY_INVALID_MSG_BACKGROUND = "invalid_msg_background";  
+  public static final String PROPERTY_INVALID_MSG_FOREGROUND = "invalid_msg_foreground";  
+  public static final String PROPERTY_INVALID_BACKGROUND = "invalid_background";  
+  public static final String PROPERTY_INVALID_FOREGROUND = "invalid_foreground";  
+  public static final String PROPERTY_INVALID_MSG_ALIGNMENT = "invalid_msg_alignment";  
+  public static final String PROPERTY_INVALID_MSG_WIDTH = "invalid_msg_width";
+  public static final String PROPERTY_INVALID_MSG_FONT = "invalid_msg_font";
 
   /** Default constructor.  Not particularly useful. */
   public RegexTextField() {}
@@ -123,4 +135,96 @@ public class RegexTextField extends TextField
     set( PROPERTY_REGEX, regex );
     firePropertyChange(PROPERTY_REGEX, old_regex, regex);
   }
+
+  public Alignment getInvalidMsgOrientation()
+  {
+    return (Alignment) get( PROPERTY_INVALID_MSG_ORIENTATION );
+  }
+  
+  public String getInvalidMsg()
+  {
+    return (String) get( PROPERTY_INVALID_MSG );
+  }
+
+  public Color getInvalidMsgBackground()
+  {  
+    return (Color) get( PROPERTY_INVALID_MSG_BACKGROUND );
+  }
+ 
+  public Color getInvalidMsgForeground()
+  {
+    return (Color) get( PROPERTY_INVALID_MSG_FOREGROUND );
+  }
+
+  public Color getInvalidBackground()
+  {
+    return (Color) get( PROPERTY_INVALID_BACKGROUND );
+  }
+
+  public Color gettInvalidForeground()
+  {
+    return (Color) get( PROPERTY_INVALID_FOREGROUND );
+  }
+
+  public Alignment getInvalidMsgAlignment()
+  {
+    return (Alignment) get( PROPERTY_INVALID_MSG_ALIGNMENT );
+  }
+
+  public int getInvalidMsgWidth()
+  {
+    Integer value = (Integer) get(PROPERTY_INVALID_MSG_WIDTH);
+    return value == null ? -1 : value.intValue();
+  }
+
+  public Font getInvalidMsgFont()
+  {
+    return (Font) get( PROPERTY_INVALID_MSG_FONT );
+  }
+
+  public void setInvalidMsgOrientation( Alignment orientation )
+  {
+    set( PROPERTY_INVALID_MSG_ORIENTATION, orientation  );
+  }
+  
+  public void setInvalidMsg( String invalid_msg )
+  {
+    set( PROPERTY_INVALID_MSG, invalid_msg);
+  }
+
+  public void setInvalidMsgBackground( Color inv_msg_background )
+  {  
+    set( PROPERTY_INVALID_MSG_BACKGROUND, inv_msg_background );
+  }
+
+  public void setInvalidMsgForeground( Color inv_msg_foreground )
+  {
+    set( PROPERTY_INVALID_MSG_FOREGROUND, inv_msg_foreground );
+  }
+
+  public void setInvalidBackground( Color inv_background )
+  {
+    set( PROPERTY_INVALID_BACKGROUND, inv_background );
+  }
+
+  public void setInvalidForeground( Color inv_foreground )
+  {
+    set( PROPERTY_INVALID_FOREGROUND, inv_foreground );
+  }
+
+  public void setInvalidMsgAlignment( Alignment align )
+  {
+    set( PROPERTY_INVALID_MSG_ALIGNMENT, align );
+  }
+
+  public void setInvalidMsgWidth( int width )
+  {
+    set( PROPERTY_INVALID_MSG_WIDTH, width );
+  }
+
+  public void setInvalidMsgFont( Font font )
+  {
+    set( PROPERTY_INVALID_MSG_FONT, font );
+  }
+
 }
