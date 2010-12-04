@@ -20,6 +20,7 @@ public class CarouselContainer extends ContainerEx {
     public static final String PROPERTY_RIGHT_ICON_OVER = "rightIconOver";
     public static final String PROPERTY_VISIBLE = "visible";
     public static final String PROPERTY_CIRCULAR = "circular";
+    public static final String PROPERTY_SPEED = "speed";
 
 
     public CarouselContainer() {
@@ -132,4 +133,22 @@ public class CarouselContainer extends ContainerEx {
     public void setCircular(boolean isCircular) {
         set(PROPERTY_CIRCULAR, isCircular);
     }
+
+    /**
+     * Returns the scroll speed of the carousel
+     * @return
+     */
+    public boolean getSpeed() {
+        return get(PROPERTY_SPEED, false);
+    }
+
+    /**
+     * Sets the scroll speed of the carousel
+     * @param scrollSpeed
+     */
+    public void setSpeed(int scrollSpeed) {
+        set(PROPERTY_SPEED, scrollSpeed);
+    }
+
+    
 }

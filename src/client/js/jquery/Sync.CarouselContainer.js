@@ -38,7 +38,8 @@ echopoint.CarouselContainerSync = Core.extend(Echo.Render.ComponentSync, {
         LEFTICONOVER: "leftIconOver",
         RIGHTICONOVER: "rightIconOver",
         VISIBLE: "visible",
-        CIRCULAR: "circular"
+        CIRCULAR: "circular",
+        SPEED: "speed"
     },
 
     $load: function()
@@ -301,15 +302,19 @@ echopoint.CarouselContainerSync = Core.extend(Echo.Render.ComponentSync, {
                     jQuery("#" + this.component.renderId.replace('.', '\\.') + "right").show();
             }
 
-            //            jQuery(document).ready(function() {
-            //                alert("CarouselContainer2");
+            var scrollSpeed = this.component.render(echopoint.CarouselContainerSync.SPEED);
+            if (!scrollSpeed) {
+                scrollSpeed = 200;
+            }
+
             jQuery("#" + this.component.renderId.replace('.', '\\.')).jCarouselLite({
                 btnNext: "#" + this.component.renderId.replace('.', '\\.') + "right",   
                 btnPrev: "#" + this.component.renderId.replace('.', '\\.') + "left",
                 visible: visible,
-                circular: circular
+                circular: circular,
+                speed: scrollSpeed,
+                mouseWheel: true
             });
-            //            });
         }
     },
 

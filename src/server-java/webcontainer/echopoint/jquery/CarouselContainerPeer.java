@@ -23,6 +23,7 @@ public class CarouselContainerPeer extends JQueryAbstractPeer {
     /** The JS service files to load. */
     private static final String[] SERVICE_FILES =
             {
+                    "resource/js/jquery/jquery.mousewheel.min.js",
                     "resource/js/jquery/jcarousellite_1.0.1.min.js",
                     "resource/js/jquery/jquery-CallbackContext.js",
                     "resource/js/jquery/Application.CarouselContainer.js",
