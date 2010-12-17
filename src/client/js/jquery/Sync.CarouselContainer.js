@@ -283,9 +283,9 @@ echopoint.CarouselContainerSync = Core.extend(Echo.Render.ComponentSync, {
                 );
 
                 if (this.componentCounter <= visible)
-                    jQuery("#" + this.component.renderId.replace('.', '\\.') + "left").hide();
+                    jQuery("#" + this.component.renderId.replace('.', '\\.') + "left").css('visibility', 'hidden');
                 else
-                    jQuery("#" + this.component.renderId.replace('.', '\\.') + "left").show();
+                    jQuery("#" + this.component.renderId.replace('.', '\\.') + "left").css('visibility', 'visible');
             }
 
             if (this.rightIconOverUrl)
