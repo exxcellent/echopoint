@@ -10,6 +10,11 @@ version                           3.0.0b5
 jdk.version                       1.5
 debug                             true
 
+ivy.home                          ${user.home}/.ivy2
+ivy.jar.dir                       ${ivy.home}/lib
+ivy.jar.file                      ${ivy.jar.dir}/ivy.jar
+ivy.install.version               2.2.0
+
 dir.src                           src
 dir.src.client                    ${dir.src}/client
 dir.src.client.app                ${dir.src.client}/js
@@ -36,7 +41,7 @@ jsp.lib.jar                       ${dir.appserver}/lib/jsp-api.jar
 servlet.lib.jar                   ${dir.appserver}/lib/servlet-api.jar
 yuicompressor.lib.jar             ${dir.lib}/yuicompressor-2.4.2.jar
 
-jarfile                           echopoint.jar
+jarname                           echopoint
 testwarfile                       echopointtest.war
 dir.appserver.deploy              ${dir.appserver}/webapps
 

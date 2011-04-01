@@ -215,9 +215,9 @@ public class AbstractContainer extends Component
   {
     if ( ! hasEventListenerList() ) return;
 
-    EventListener[] listeners =
+    final EventListener[] listeners =
         getEventListenerList().getListeners( ActionListener.class );
-    for ( EventListener listener : listeners )
+    for ( final EventListener listener : listeners )
     {
       ( (ActionListener) listener ).actionPerformed( event );
     }

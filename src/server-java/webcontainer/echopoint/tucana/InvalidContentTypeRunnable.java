@@ -25,7 +25,7 @@ class InvalidContentTypeRunnable extends AbstractRunnable
         "Disallowed content-type: " + contentType + "!";
 
     uploadSelect.notifyCallback( new InvalidContentTypeEvent(
-        uploadSelect, uploadIndex, fileName, contentType ) );
+        uploadSelect, uploadIndex, fileName, contentType, progress.getContentLength() ) );
     progress.setStatus( Status.disallowed );
     progress.setMessage( message );
   }

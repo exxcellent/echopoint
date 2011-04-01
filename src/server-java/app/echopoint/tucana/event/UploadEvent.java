@@ -44,6 +44,9 @@ public abstract class UploadEvent extends EventObject
   /** The name of the file that was uploaded. */
   private final String fileName;
 
+  /** The content length header as specified by the upload request. */
+  private final long contentLength;
+
   /**
    * Creates a new {@link UploadEvent}.
    *
@@ -51,14 +54,16 @@ public abstract class UploadEvent extends EventObject
    * @param index the index of the upload
    * @param fileName the name of the file, may not contain path information
    * @param contentType the content type of the uploaded file
+   * @param contentLength The content length http header value.
    */
   public UploadEvent( final FileUploadSelector source, final String index,
-      final String fileName,  final String contentType )
+      final String fileName, final String contentType, final long contentLength )
   {
     super( source );
     this.index = index;
     this.fileName = fileName;
     this.contentType = contentType;
+    this.contentLength = contentLength;
   }
 
   /**
@@ -89,5 +94,11 @@ public abstract class UploadEvent extends EventObject
   public String getFileName()
   {
     return fileName;
+  }
+
+  /** @return The content length http header value. */
+  public long getContentLength()
+  {
+    return contentLength;
   }
 }

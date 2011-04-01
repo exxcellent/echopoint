@@ -3562,7 +3562,7 @@ Echo.WindowPane = Core.extend(Echo.Component, {
      * Object specifying state of window pane before it was maximized,
      * May contain x, y, width, height integer properties or be null.
      */
-    _preMaximizedState: null,
+    originalState: null,
     
     /**
      * Processes a user request to close the window.
@@ -3576,14 +3576,14 @@ Echo.WindowPane = Core.extend(Echo.Component, {
      */
     userMaximize: function() {
         if (this.render("width") == "100%" && this.render("height") == "100%") {
-            if (this._preMaximizedState) {
-                this.set("width", this._preMaximizedState.width);
-                this.set("height", this._preMaximizedState.height);
-                this.set("positionX", this._preMaximizedState.x);
-                this.set("positionY", this._preMaximizedState.y);
+            if (this.originalState) {
+                this.set("width", this.originalState.width);
+                this.set("height", this.originalState.height);
+                this.set("positionX", this.originalState.x);
+                this.set("positionY", this.originalState.y);
             }
         } else {
-            this._preMaximizedState = { 
+            this.originalState = {
                     x: this.get("positionX"), y: this.get("positionY"),
                     width: this.get("width"), height: this.get("height") };
             this.set("width", "100%");

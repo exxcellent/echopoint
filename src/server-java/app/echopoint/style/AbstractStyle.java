@@ -63,9 +63,9 @@ public abstract class AbstractStyle extends MutableStyle
    * @return Object The appropriate instance of Style.
    */
   @Override
-  public Object get( String name )
+  public Object get( final String name )
   {
-    Object object = super.get( name );
+    final Object object = super.get( name );
 
     if ( object == null )
     {

@@ -233,7 +233,7 @@ import java.util.Set;
  * @author jvolkman (Echo2), Rakesh 2008-11-2
  * @version $Id$
  */
-@SuppressWarnings( { "ClassWithTooManyMethods" } )
+@SuppressWarnings( { "ClassWithTooManyMethods", "UnusedDeclaration" } )
 public class FileUploadSelector extends AbstractContainer
 {
   private static final long serialVersionUID = 1l;

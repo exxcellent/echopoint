@@ -50,7 +50,7 @@ public class Application extends ApplicationInstance
    */
   public static Application getApplication()
   {
-    return (Application) ApplicationInstance.getActive();
+    return (Application) getActive();
   }
 
   /**
@@ -62,7 +62,7 @@ public class Application extends ApplicationInstance
    */
   public static MainContent getContent()
   {
-    return (MainContent) Application.getApplication().getWindow().getContent();
+    return (MainContent) getApplication().getWindow().getContent();
   }
 
   /**

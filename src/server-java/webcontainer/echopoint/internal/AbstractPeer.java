@@ -34,23 +34,23 @@ import nextapp.echo.webcontainer.ServerMessage;
  */
 public abstract class AbstractPeer extends AbstractComponentSynchronizePeer
 {
-    /** Register the core services */
-    static
-    {
-      CommonResources.install();
-    }
+  /** Register the core services */
+  static
+  {
+    CommonResources.install();
+  }
 
-    /**
-     * {@inheritDoc}
-     * @see nextapp.echo.webcontainer.AbstractComponentSynchronizePeer#init
-     */
-    @Override
-    public void init( final Context context, final Component component )
-    {
-        super.init( context, component );
-        ServerMessage serverMessage =
-                (ServerMessage) context.get( ServerMessage.class );
-        serverMessage.addLibrary( CommonService.ECHOPOINT_SERVICE.getId() );
-        serverMessage.addLibrary( CommonService.JQUERY_SERVICE.getId() );
-    }
+  /**
+   * {@inheritDoc}
+   * @see nextapp.echo.webcontainer.AbstractComponentSynchronizePeer#init
+   */
+  @Override
+  public void init( final Context context, final Component component )
+  {
+    super.init( context, component );
+    final ServerMessage serverMessage =
+            (ServerMessage) context.get( ServerMessage.class );
+    serverMessage.addLibrary( CommonService.ECHOPOINT_SERVICE.getId() );
+    serverMessage.addLibrary( CommonService.JQUERY_SERVICE.getId() );
+  }
 }

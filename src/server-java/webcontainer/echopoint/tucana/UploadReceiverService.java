@@ -92,7 +92,7 @@ public class UploadReceiverService extends BaseUploadService
     }
 
     final String contentLengthHeader = request.getHeader( "Content-Length" );
-    long contentLength;
+    final long contentLength;
     if ( contentLengthHeader != null )
     {
       contentLength = Math.max( Long.parseLong( contentLengthHeader ), -1 );
@@ -121,12 +121,12 @@ public class UploadReceiverService extends BaseUploadService
     catch ( IllegalStateException e )
     {
       app.enqueueTask( uploadSelect.getTaskQueue(),
-          new Cancel( uploadSelect, uploadIndex, fileName, e ) );
+          new Cancel( uploadSelect, uploadIndex, fileName, contentLength, e ) );
     }
     catch ( Exception e )
     {
       app.enqueueTask( uploadSelect.getTaskQueue(),
-          new Fail( uploadSelect, uploadIndex, e ) );
+          new Fail( uploadSelect, uploadIndex, contentLength, e ) );
     }
     finally
     {
@@ -142,21 +142,25 @@ public class UploadReceiverService extends BaseUploadService
     private final FileUploadSelector uploadSelect;
     private final String uploadIndex;
     private final String fileName;
+    private final long contentLength;
     private final Exception e;
 
     private Cancel( final FileUploadSelector uploadSelect,
-        final String uploadIndex, final String fileName, final Exception e )
+        final String uploadIndex, final String fileName,
+        final long contentLength,
+        final Exception e )
     {
       this.uploadSelect = uploadSelect;
       this.uploadIndex = uploadIndex;
       this.fileName = fileName;
+      this.contentLength = contentLength;
       this.e = e;
     }
 
     public void run()
     {
       uploadSelect.notifyCallback( new UploadCancelEvent( uploadSelect,
-          uploadIndex, fileName, null, e ) );
+          uploadIndex, fileName, null, contentLength, e ) );
     }
   }
 
@@ -167,20 +171,22 @@ public class UploadReceiverService extends BaseUploadService
   {
     private final FileUploadSelector uploadSelect;
     private final String uploadIndex;
+    private final long contentLength;
     private final Exception e;
 
     private Fail( final FileUploadSelector uploadSelect,
-        final String uploadIndex, final Exception e )
+        final String uploadIndex, final long contentLength, final Exception e )
     {
       this.uploadSelect = uploadSelect;
       this.uploadIndex = uploadIndex;
+      this.contentLength = contentLength;
       this.e = e;
     }
 
     public void run()
     {
       uploadSelect.notifyCallback(
-          new UploadFailEvent( uploadSelect, uploadIndex, null, null, e ) );
+          new UploadFailEvent( uploadSelect, uploadIndex, null, null, contentLength, e ) );
     }
   }
 }

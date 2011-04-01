@@ -42,12 +42,13 @@ public class UploadProgressEvent extends UploadEvent
    *
    * @param source the source of the event
    * @param index the index of the upload
+   * @param contentLength The content length http header value.
    * @param progress The progress of the file upload.
    */
   public UploadProgressEvent( final FileUploadSelector source,
-      final String index, final UploadProgress progress )
+      final String index, final long contentLength, final UploadProgress progress )
   {
-    this( source, index, null, null, progress );
+    this( source, index, null, null, contentLength, progress );
   }
 
   /**
@@ -57,13 +58,15 @@ public class UploadProgressEvent extends UploadEvent
    * @param index the index of the upload
    * @param fileName the name of the file, may not contain path information
    * @param contentType the content type of the uploaded file
+   * @param contentLength The content length http header value.
    * @param progress The progress of the file upload.
    */
   public UploadProgressEvent( final FileUploadSelector source,
       final String index, final String fileName,
-      final String contentType, final UploadProgress progress )
+      final String contentType, final long contentLength,
+      final UploadProgress progress )
   {
-    super( source, index, fileName, contentType );
+    super( source, index, fileName, contentType, contentLength );
     this.progress = progress;
   }
 

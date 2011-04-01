@@ -25,6 +25,6 @@ class CancelRunnable extends AbstractRunnable
   {
     progress.setStatus( Status.cancelled );
     uploadSelect.notifyCallback( new UploadCancelEvent( uploadSelect,
-        uploadIndex, fileName, contentType, e  ) );
+        uploadIndex, fileName, contentType, progress.getContentLength(), e  ) );
   }
 }

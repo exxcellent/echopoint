@@ -54,7 +54,7 @@ public abstract class AbstractFileUploadProvider implements UploadSPI
   }
 
   /** @see nextapp.echo.webcontainer.WebContainerServlet.MultipartRequestWrapper#getWrappedRequest(javax.servlet.http.HttpServletRequest) */
-  public HttpServletRequest getWrappedRequest( HttpServletRequest request )
+  public HttpServletRequest getWrappedRequest( final HttpServletRequest request )
       throws IOException, ServletException
   {
     return request;

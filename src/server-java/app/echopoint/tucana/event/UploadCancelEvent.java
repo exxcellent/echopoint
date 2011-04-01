@@ -43,13 +43,14 @@ public class UploadCancelEvent extends UploadEvent
    * @param index the index of the upload
    * @param fileName the name of the file, may not contain path information
    * @param contentType the content type of the uploaded file
+   * @param contentLength The content length as reported by commons upload handler
    * @param exception The exception that was triggered by the cancel.
    */
   public UploadCancelEvent( final FileUploadSelector source,
       final String index, final String fileName, final String contentType,
-      final Exception exception )
+      final long contentLength, final Exception exception )
   {
-    super( source, index, fileName, contentType );
+    super( source, index, fileName, contentType, contentLength );
     this.exception = exception;
   }
 

@@ -78,7 +78,7 @@ public class UploadProgress implements Serializable
   private String message = "";
 
   /** @param contentLength the total number of bytes, <code>-1</code> if unknown */
-  public UploadProgress( long contentLength )
+  public UploadProgress( final long contentLength )
   {
     this.contentLength = contentLength;
     this.milestones = new LinkedList<Milestone>();
@@ -132,8 +132,8 @@ public class UploadProgress implements Serializable
    */
   public long getTransferRate()
   {
-    Milestone firstMarker;
-    Milestone lastMarker;
+    final Milestone firstMarker;
+    final Milestone lastMarker;
     synchronized ( milestones )
     {
       if ( milestones.size() < MINIMUM_MILESTONE_COUNT )
@@ -144,8 +144,8 @@ public class UploadProgress implements Serializable
       lastMarker = milestones.getLast();
     }
 
-    long byteDiff = lastMarker.bytesRead - firstMarker.bytesRead;
-    long timeDiff = lastMarker.timeStamp - firstMarker.timeStamp;
+    final long byteDiff = lastMarker.bytesRead - firstMarker.bytesRead;
+    final long timeDiff = lastMarker.timeStamp - firstMarker.timeStamp;
 
     return byteDiff * 1000 / timeDiff;
   }
@@ -167,7 +167,7 @@ public class UploadProgress implements Serializable
       return 0;
     }
 
-    long transferRate = getTransferRate();
+    final long transferRate = getTransferRate();
     if ( transferRate == -1 )
     {
       return -1;
@@ -180,7 +180,7 @@ public class UploadProgress implements Serializable
    *
    * @param bytesRead the number of bytes read
    */
-  public void setBytesRead( long bytesRead )
+  public void setBytesRead( final long bytesRead )
   {
     this.bytesRead = bytesRead;
 
@@ -193,7 +193,7 @@ public class UploadProgress implements Serializable
 
     synchronized ( milestones )
     {
-      long now = System.currentTimeMillis();
+      final long now = System.currentTimeMillis();
       if ( milestones.isEmpty() ||
           now >= ( milestones.getLast().timeStamp + MILESTONE_INTERVAL ) )
       {
@@ -255,7 +255,7 @@ public class UploadProgress implements Serializable
 
     private final long timeStamp;
 
-    private Milestone( long bytesRead, long timeStamp )
+    private Milestone( final long bytesRead, final long timeStamp )
     {
       this.bytesRead = bytesRead;
       this.timeStamp = timeStamp;

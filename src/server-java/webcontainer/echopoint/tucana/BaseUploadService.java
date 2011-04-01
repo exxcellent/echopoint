@@ -41,22 +41,22 @@ public abstract class BaseUploadService implements Service
    *
    * @see Service#service(Connection)
    */
-  public void service( Connection conn ) throws IOException
+  public void service( final Connection conn ) throws IOException
   {
-    UserInstance userInstance = conn.getUserInstance();
+    final UserInstance userInstance = conn.getUserInstance();
     if ( userInstance == null )
     {
       serviceBadRequest( conn, "No user instance available." );
       return;
     }
-    HttpServletRequest request = conn.getRequest();
-    String renderId = request.getParameter( "i" );
+    final HttpServletRequest request = conn.getRequest();
+    final String renderId = request.getParameter( "i" );
     if ( renderId == null )
     {
       serviceBadRequest( conn, "FileUploadSelector id not specified." );
       return;
     }
-    FileUploadSelector uploadSelect = (FileUploadSelector)
+    final FileUploadSelector uploadSelect = (FileUploadSelector)
         userInstance.getComponentByClientRenderId( renderId );
     if ( uploadSelect == null )
     {
@@ -64,7 +64,7 @@ public abstract class BaseUploadService implements Service
           "FileUploadSelector id is not valid: " + renderId );
       return;
     }
-    String uploadIndexParam = request.getParameter( "x" );
+    final String uploadIndexParam = request.getParameter( "x" );
     if ( uploadIndexParam == null )
     {
       serviceBadRequest( conn,

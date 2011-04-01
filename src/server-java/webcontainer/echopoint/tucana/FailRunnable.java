@@ -25,6 +25,6 @@ class FailRunnable extends AbstractRunnable
   {
     progress.setStatus( Status.failed );
     uploadSelect.notifyCallback( new UploadFailEvent( uploadSelect,
-        uploadIndex, fileName, contentType, e ) );
+        uploadIndex, fileName, contentType, progress.getContentLength(), e ) );
   }
 }

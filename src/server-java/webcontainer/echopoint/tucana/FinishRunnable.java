@@ -16,8 +16,8 @@ class FinishRunnable extends AbstractRunnable
   private final FileItem item;
 
   FinishRunnable( final FileUploadSelector uploadSelect,
-      final String uploadIndex, final String fileName, final FileItem item,
-      final UploadProgress progress )
+      final String uploadIndex, final String fileName,
+      final FileItem item, final UploadProgress progress )
   {
     super( uploadSelect, uploadIndex, fileName, item.getContentType(), progress );
     this.item = item;
@@ -26,7 +26,8 @@ class FinishRunnable extends AbstractRunnable
   public void run()
   {
     uploadSelect.notifyCallback( new UploadFinishEvent( uploadSelect,
-        uploadIndex, fileName, item.getContentType(), item ) );
+        uploadIndex, fileName, item.getContentType(),
+        progress.getContentLength(), item ) );
     progress.setStatus( Status.completed );
   }
 }

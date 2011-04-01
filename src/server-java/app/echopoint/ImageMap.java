@@ -201,7 +201,7 @@ public class ImageMap extends AbstractImage
 
   /** {@inheritDoc} */
   @Override
-  public void processInput( String name, Object value )
+  public void processInput( final String name, final Object value )
   {
     super.processInput( name, value );
     if ( ACTION_COMMAND_PROPERTY.equals( name ) )

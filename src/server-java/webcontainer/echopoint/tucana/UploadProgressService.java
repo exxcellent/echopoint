@@ -54,7 +54,7 @@ public class UploadProgressService extends BaseUploadService
   /** @see nextapp.echo.webcontainer.Service#getId() */
   public String getId()
   {
-    return "echopoint.tucana.UploadProgressService";
+    return getClass().getName();
   }
 
   /** @see nextapp.echo.webcontainer.Service#getVersion() */
@@ -77,8 +77,8 @@ public class UploadProgressService extends BaseUploadService
     {
       if ( !renderState.isUploadEnded( uploadIndex ) )
       {
-        uploadSelect.notifyCallback(
-            new UploadProgressEvent( uploadSelect, uploadIndex, progress ) );
+        uploadSelect.notifyCallback( new UploadProgressEvent(
+            uploadSelect, uploadIndex, progress.getContentLength(), progress ) );
       }
 
       buff.append( "{" );

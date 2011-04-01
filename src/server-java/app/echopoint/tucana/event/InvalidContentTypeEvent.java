@@ -33,7 +33,7 @@ import echopoint.tucana.FileUploadSelector;
  */
 public class InvalidContentTypeEvent extends UploadEvent
 {
-  private static final long serialVersionUID = 1l;
+  private static final long serialVersionUID = 1L;
 
   /**
    * Creates a new {@link UploadEvent}.
@@ -42,10 +42,12 @@ public class InvalidContentTypeEvent extends UploadEvent
    * @param index the index of the upload
    * @param fileName the name of the file, may not contain path information
    * @param contentType the content type of the uploaded file
+   * @param contentLength The content length as reported by upload
    */
   public InvalidContentTypeEvent( final FileUploadSelector source,
-      final String index, final String fileName, final String contentType )
+      final String index, final String fileName, final String contentType,
+      final long contentLength )
   {
-    super( source, index, fileName, contentType );
+    super( source, index, fileName, contentType, contentLength );
   }
 }

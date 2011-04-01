@@ -20,6 +20,10 @@ package echopoint.tucana;
 import static echopoint.internal.AbstractContainer.ACTION_LISTENERS_CHANGED_PROPERTY;
 import static echopoint.tucana.FileUploadSelector.COMPLETE_ACTION;
 import static echopoint.tucana.FileUploadSelector.START_ACTION;
+import static nextapp.echo.webcontainer.WebContainerServlet.getResourceRegistry;
+import static nextapp.echo.webcontainer.WebContainerServlet.getServiceRegistry;
+import static nextapp.echo.webcontainer.service.JavaScriptService.forResources;
+
 import nextapp.echo.app.Component;
 import nextapp.echo.app.util.Context;
 import nextapp.echo.webcontainer.ContentType;
@@ -54,14 +58,14 @@ public class FileUploadSelectorPeer extends AbstractContainerPeer
 
   /** The service for the client side peer for this component. */
   private static final Service COMPONENT_SERVICE =
-      JavaScriptService.forResources( COMPONENT_NAME, SERVICE_FILES );
+      forResources( COMPONENT_NAME, SERVICE_FILES );
 
   /** Register the services */
   static
   {
     UploadProgressService.install();
-    WebContainerServlet.getServiceRegistry().add( COMPONENT_SERVICE );
-    final ResourceRegistry resources = WebContainerServlet.getResourceRegistry();
+    getServiceRegistry().add( COMPONENT_SERVICE );
+    final ResourceRegistry resources = getResourceRegistry();
     resources.add( "echopoint", "images/upload.png", ContentType.IMAGE_PNG );
     resources.add( "echopoint", "images/cancel.png", ContentType.IMAGE_PNG );
     resources.add( "echopoint", "images/wait.png", ContentType.IMAGE_PNG );

@@ -81,7 +81,7 @@ echopoint.tucana.FileUploadSelectorSync = Core.extend( echopoint.internal.Abstra
     this._table._renderDispose();
 
     var progress = this.component.getComponent( 0 );
-    if ( progress )
+    if ( progress && progress.peer && progress.peer.displayed )
     {
       var progressElement = progress.peer._div ;
       if ( progressElement ) Core.Web.DOM.removeNode( progressElement );
@@ -267,7 +267,7 @@ echopoint.tucana.FileUploadSelectorSync = Core.extend( echopoint.internal.Abstra
     this._div.appendChild( form );
 
     var progress = this.component.getComponent( 0 );
-    if ( progress )
+    if ( progress && progress.peer && progress.peer.displayed )
     {
       var child = progress.peer._div;
       this._div.removeChild( child );
@@ -421,28 +421,30 @@ echopoint.tucana.FileUploadSelectorSync.Frame = Core.extend(
     if ( this.component && this.component.getComponentCount() > 0 )
     {
       var progressBar = this.component.getComponent( 0 );
-
-      var pattern = progressBar.render(
-          echopoint.tucana.FileUploadSelector.PATTERN );
-      if ( pattern )
+      if ( progressBar.peer && progressBar.peer.displayed )
       {
-        pattern = pattern.replace( "#bytes#",
-            parseInt(uploadProgress.bytesRead / 1000 ) );
-        pattern = pattern.replace( "#length#",
-            parseInt( uploadProgress.contentLength / 1000 ) );
-        pattern = pattern.replace( "#rate#",
-            parseInt( uploadProgress.transferRate / 1000 ) );
-        pattern = pattern.replace( "#percent#", uploadProgress.percentComplete );
-        pattern = pattern.replace( "#time#", uploadProgress.estimatedTimeLeft );
-        progressBar.set( echopoint.ProgressBar.TEXT, pattern );
-      }
-      else
-      {
-        progressBar.set( echopoint.ProgressBar.TEXT, text );
-      }
+        var pattern = progressBar.render(
+            echopoint.tucana.FileUploadSelector.PATTERN );
+        if ( pattern )
+        {
+          pattern = pattern.replace( "#bytes#",
+              parseInt(uploadProgress.bytesRead / 1000 ) );
+          pattern = pattern.replace( "#length#",
+              parseInt( uploadProgress.contentLength / 1000 ) );
+          pattern = pattern.replace( "#rate#",
+              parseInt( uploadProgress.transferRate / 1000 ) );
+          pattern = pattern.replace( "#percent#", uploadProgress.percentComplete );
+          pattern = pattern.replace( "#time#", uploadProgress.estimatedTimeLeft );
+          progressBar.set( echopoint.ProgressBar.TEXT, pattern );
+        }
+        else
+        {
+          progressBar.set( echopoint.ProgressBar.TEXT, text );
+        }
 
-      progressBar.set( echopoint.ProgressBar.PERCENTAGE, uploadProgress.percentComplete );
-      progressBar.peer.renderUpdate();
+        progressBar.set( echopoint.ProgressBar.PERCENTAGE, uploadProgress.percentComplete );
+        progressBar.peer.renderUpdate();
+      }
     }
     else
     {
@@ -455,7 +457,7 @@ echopoint.tucana.FileUploadSelectorSync.Frame = Core.extend(
     {
       if ( uploadProgress.message )
       {
-        if ( progressBar )
+        if ( progressBar && progressBar.peer.displayed )
         {
           progressBar.set( echopoint.ProgressBar.TEXT, uploadProgress.message );
         }

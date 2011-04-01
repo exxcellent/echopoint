@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
+import static java.lang.String.format;
 import org.apache.commons.io.IOUtils;
 
 /**
@@ -38,7 +39,7 @@ import org.apache.commons.io.IOUtils;
  */
 public class DefaultUploadCallback extends UploadCallbackAdapter
 {
-  private static final long serialVersionUID = 1l;
+  private static final long serialVersionUID = 1L;
 
   /** The file separator character to use. */
   protected static final String FILE_SEPARATOR =
@@ -86,9 +87,9 @@ public class DefaultUploadCallback extends UploadCallbackAdapter
 
       if ( ! temp.renameTo( file ) )
       {
-        BufferedOutputStream bos =
+        final BufferedOutputStream bos =
             new BufferedOutputStream( new FileOutputStream( file ) );
-        BufferedInputStream bis =
+        final BufferedInputStream bis =
             new BufferedInputStream( new FileInputStream( temp ) );
         IOUtils.copy( bis, bos );
         bis.close();
@@ -154,9 +155,19 @@ public class DefaultUploadCallback extends UploadCallbackAdapter
    */
   public void setDirectory( final File directory ) throws IllegalArgumentException
   {
+    if ( ! directory.exists() )
+    {
+      if ( ! directory.mkdirs() )
+      {
+        throw new IllegalArgumentException(
+            format( "Unable to create directory! {%s}", directory ) );
+      }
+    }
+
     if ( ! directory.isDirectory() )
     {
-      throw new IllegalArgumentException( "File specified must be a directory!" );
+      throw new IllegalArgumentException(
+          format( "File specified must be a directory! {%s}", directory ) );
     }
 
     this.directory = directory;

@@ -19,7 +19,7 @@
 -->
 
 
-<project name='EchoPoint' default='default' basedir='.'>
+<project name='EchoPoint' default='default' basedir='.' xmlns:ivy='antlib:org.apache.ivy.ant'>
 
   <property environment='env' />
   <property file='ant.properties' />
@@ -40,10 +40,11 @@
   <path id='compile.classpath'>
     <fileset  dir='${dir.lib}'>
       <include name='*.jar' />
+      <exclude name='junit*.jar' />
+      <exclude name='*sources*.jar' />
+      <exclude name='*javadoc*.jar' />
       <exclude name='yuicompressor*.jar' />
     </fileset>
-    <pathelement path='${jsp.lib.jar}' />
-    <pathelement path='${servlet.lib.jar}' />
   </path>
 
 
@@ -58,7 +59,7 @@
 
 <!-- ************************************************************************************************** -->
   <!-- Initialization Tasks -->
-  <target name='init'>
+  <target name='init' depends='init-ivy, resolve'>
     <mkdir dir='${dir.build.api}'/>
     <mkdir dir='${dir.dist}'/>
   </target>
@@ -81,13 +82,15 @@
 
     <javac srcdir='${dir.src.server.app}' destdir='${dir.build.api}'
       debug='${debug}' deprecation='yes'
-      source='${jdk.version}' target='${jdk.version}'>
+      source='${jdk.version}' target='${jdk.version}'
+      includeantruntime='yes'>
       <classpath refid='compile.classpath'/>
     </javac>
 
     <javac srcdir='${dir.src.server.webcontainer}' destdir='${dir.build.api}'
       debug='${debug}' deprecation='yes'
-      source='${jdk.version}' target='${jdk.version}'>
+      source='${jdk.version}' target='${jdk.version}'
+      includeantruntime='yes'>
       <classpath refid='compile.classpath'/>
     </javac>
   </target>
@@ -113,8 +116,18 @@
       </fileset>
     </copy>
 
-    <delete file='${dir.dist}/echopoint.jar' />
-    <jar jarfile='${dir.dist}/${jarfile}' basedir='${dir.build.api}'>
+    <delete file='${dir.dist}/${jarname}.jar' />
+    <jar jarfile='${dir.dist}/${jarname}.jar' basedir='${dir.build.api}'>
+      <metainf dir='${dir.src.server.webcontainer}/META-INF'>
+        <patternset refid='fileset.resources' />
+      </metainf>
+    </jar>
+
+    <delete file='${dir.dist}/${jarname}-all.jar' />
+    <jar jarfile='${dir.dist}/${jarname}-all.jar' basedir='${dir.build.api}'>
+      <zipgroupfileset dir="${dir.lib}"
+                       includes="commons*.jar, jdom*.jar, mime*.jar, xstream*.jar xpp3*.jar"
+                       excludes="Echo*.jar, *sources*.jar, *javadoc*.jar" />
       <metainf dir='${dir.src.server.webcontainer}/META-INF'>
         <patternset refid='fileset.resources' />
       </metainf>
@@ -123,13 +136,11 @@
 
 <!-- ************************************************************************************************** -->
   <path id='test.classpath'>
+    <path refid='compile.classpath' />
     <fileset  dir='${dir.lib}'>
-      <include name='*.jar' />
-      <exclude name='yuicompressor*.jar' />
+      <include name='junit*.jar' />
     </fileset>
-    <pathelement path='${jsp.lib.jar}' />
-    <pathelement path='${servlet.lib.jar}' />
-    <pathelement path='${dir.dist}/${jarfile}' />
+    <pathelement path='${dir.dist}/${jarname}-all.jar' />
   </path>
 
   <!-- Compile EchoPoint Test classes -->
@@ -139,7 +150,7 @@
     <mkdir dir='${dir.build.test}' />
 
     <javac srcdir='${dir.src.server.test}' destdir='${dir.build.test}'
-      debug='${debug}' deprecation='yes'>
+      debug='${debug}' deprecation='yes' includeantruntime='yes'>
       <classpath refid='test.classpath'/>
     </javac>
 
@@ -149,9 +160,14 @@
     <delete file='${dir.dist}/${testwarfile}' />
     <war destfile='${dir.dist}/${testwarfile}'
       webxml='${dir.src.server.test}/config/web.xml'>
-      <lib file='${dir.dist}/${jarfile}' />
+      <lib file='${dir.dist}/${jarname}-all.jar' />
       <lib file='${dir.dist}/echopointtest.jar' />
-      <lib dir='${dir.lib}' />
+      <lib dir='${dir.lib}'>
+        <include name="Echo*.jar" />
+        <include name="junit*.jar" />
+        <exclude name="*sources*.jar" />
+        <exclude name="*javadoc*.jar" />
+      </lib>
       <fileset dir='${dir.src.client.test}/' includes='image/' />
       <fileset dir='${dir.src.server.test}/fckeditor.src/' includes='fckeditor/' />
     </war>
@@ -280,7 +296,7 @@
         <file name='jquery-ui-1.7.1.effects.min.js'/>
         <file name='Application.Clock.js'/>
         <file name='Sync.Clock.js'/>
-        <file name='jquery.jclock-1.2.0.js'/>
+        <file name='jquery.jclock.js'/>
         <file name='Application.TooltipContainer.js'/>
         <file name='Sync.TooltipContainer.js'/>
         <file name='jquery.qtip-1.0.0-rc3.js'/> <!-- the .min.js file gives compression errors -->
@@ -370,10 +386,10 @@
   <path id='javadoc.classpath'>
     <fileset  dir='${dir.lib}'>
       <include name='*.jar' />
+      <exclude name='*sources*.jar' />
+      <exclude name='*javadoc*.jar' />
       <exclude name='yuicompressor*.jar' />
     </fileset>
-    <pathelement path='${jsp.lib.jar}' />
-    <pathelement path='${servlet.lib.jar}' />
     <pathelement path='${dir.build}' />
   </path>
 
@@ -532,6 +548,29 @@
       Done Building EchoPoint
       Version : ${version}
     </echo>
+  </target>
+
+  <!-- automatically configure download and install ivy if required. -->
+  <condition property='ivy.home' value='${env.IVY_HOME}'>
+    <isset property='env.IVY_HOME' />
+  </condition>
+
+  <target name='download-ivy' unless='offline'>
+    <mkdir dir='${ivy.jar.dir}'/>
+    <get src='http://repo2.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar'
+         dest='${ivy.jar.file}' usetimestamp='true'/>
+  </target>
+
+  <target name='init-ivy' depends='download-ivy'>
+    <path id='ivy.lib.path'>
+      <fileset dir='${ivy.jar.dir}' includes='*.jar'/>
+    </path>
+    <taskdef resource='org/apache/ivy/ant/antlib.xml'
+                 uri='antlib:org.apache.ivy.ant' classpathref='ivy.lib.path'/>
+  </target>
+
+  <target name="resolve" description="--> retrieve dependencies with ivy">
+    <ivy:retrieve />
   </target>
 
 </project>

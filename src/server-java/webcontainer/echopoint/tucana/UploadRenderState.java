@@ -61,7 +61,7 @@ public class UploadRenderState implements RenderState
    *
    * @param uploadIndex the upload index
    */
-  public void uploadStarted( String uploadIndex )
+  public void uploadStarted( final String uploadIndex )
   {
     this.uploadIndex = uploadIndex;
   }
@@ -72,7 +72,7 @@ public class UploadRenderState implements RenderState
    * @param uploadIndex the upload index
    * @return <code>true</code> if the upload has ended.
    */
-  public boolean isUploadEnded( String uploadIndex )
+  public boolean isUploadEnded( final String uploadIndex )
   {
     return ended.containsKey( uploadIndex );
   }
@@ -82,7 +82,7 @@ public class UploadRenderState implements RenderState
    *
    * @param uploadIndex The upload index for the current upload.
    */
-  public void uploadEnded( String uploadIndex )
+  public void uploadEnded( final String uploadIndex )
   {
     ended.put( uploadIndex, uploadIndex );
   }
@@ -93,7 +93,7 @@ public class UploadRenderState implements RenderState
    * @param uploadIndex the upload index
    * @return the progress if available, <code>null</code> otherwise.
    */
-  public UploadProgress getProgress( String uploadIndex )
+  public UploadProgress getProgress( final String uploadIndex )
   {
     return progress.get( uploadIndex );
   }
@@ -104,7 +104,7 @@ public class UploadRenderState implements RenderState
    * @param uploadIndex the upload index
    * @param progress the progress
    */
-  public void setProgress( String uploadIndex, UploadProgress progress )
+  public void setProgress( final String uploadIndex, final UploadProgress progress )
   {
     if ( this.progress.containsKey( uploadIndex ) )
     {

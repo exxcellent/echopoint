@@ -40,10 +40,11 @@ public class UploadStartEvent extends UploadEvent
    * @param index the index of the upload
    * @param fileName the name of the file, may not contain path information
    * @param contentType the content type of the uploaded file
+   * @param contentLength The content length http header value.
    */
   public UploadStartEvent( final FileUploadSelector source, final String index,
-      final String fileName, final String contentType )
+      final String fileName, final String contentType, final long contentLength )
   {
-    super( source, index, fileName, contentType );
+    super( source, index, fileName, contentType, contentLength );
   }
 }

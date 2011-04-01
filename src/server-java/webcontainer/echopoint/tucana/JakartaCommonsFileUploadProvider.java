@@ -101,10 +101,13 @@ public class JakartaCommonsFileUploadProvider extends AbstractFileUploadProvider
           }
 
           progress.setStatus( Status.inprogress );
-          uploadSelect.notifyCallback( new UploadStartEvent( uploadSelect,
-              uploadIndex, fileName, contentType ) );
           final FileItem item = itemFactory.createItem( fileName,
               contentType, false, stream.getName() );
+          item.getOutputStream(); // initialise DiskFileItem internals
+
+          uploadSelect.notifyCallback( new UploadStartEvent( uploadSelect,
+              uploadIndex, fileName, contentType, item.getSize() ) );
+
           IOUtils.copy( stream.openStream(), item.getOutputStream() );
 
           app.enqueueTask( uploadSelect.getTaskQueue(), new FinishRunnable(

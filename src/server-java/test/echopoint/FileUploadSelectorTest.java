@@ -21,8 +21,11 @@ import echopoint.tucana.event.InvalidContentTypeEvent;
 import echopoint.tucana.event.UploadCancelEvent;
 import echopoint.tucana.event.UploadFailEvent;
 import echopoint.tucana.event.UploadFinishEvent;
+import echopoint.tucana.event.UploadProgressEvent;
+import echopoint.tucana.event.UploadStartEvent;
 
 import org.junit.AfterClass;
+import static org.junit.Assert.assertTrue;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -123,6 +126,7 @@ public class FileUploadSelectorTest extends AbstractTest<FileUploadSelector>
     getComponent().setProgressBar( bar );
     assertEquals( "Ensure that progress bar is set",
         bar, getComponent().getProgressBar() );
+    bar.setVisible( false );
   }
 
   @Test
@@ -171,14 +175,20 @@ public class FileUploadSelectorTest extends AbstractTest<FileUploadSelector>
   @Test
   public void actionListener()
   {
+    final FileUploadSelector component = getComponent();
+
     getComponent().addActionListener( new ActionListener()
     {
-      private static final long serialVersionUID = 1l;
+      private static final long serialVersionUID = 1L;
 
       public void actionPerformed( final ActionEvent event )
       {
         Logger.getAnonymousLogger().info(
             "Action command: " + event.getActionCommand() );
+        if ( component.getUploadCallback().getEvent() instanceof UploadStartEvent )
+        {
+          component.getProgressBar().setVisible( true );
+        }
       }
     });
   }
@@ -201,6 +211,20 @@ public class FileUploadSelectorTest extends AbstractTest<FileUploadSelector>
     {
       super( file );
       this.upload = upload;
+    }
+
+    @Override
+    public void uploadStarted( final UploadStartEvent event )
+    {
+      super.uploadStarted( event );
+      assertTrue( "Ensure contentLength set", event.getContentLength() != -1 );
+    }
+
+    @Override
+    public void uploadProgressed( final UploadProgressEvent event )
+    {
+      super.uploadProgressed( event );
+      assertTrue( "Ensure contentLength set", event.getContentLength() != -1 );
     }
 
     @Override
