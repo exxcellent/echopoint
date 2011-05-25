@@ -18,15 +18,16 @@
 
 package echopoint.tucana;
 
-import static eu.medsea.util.MimeUtil.getMimeType;
+import static eu.medsea.mimeutil.MimeUtil.getMimeTypes;
+import static eu.medsea.mimeutil.MimeUtil.getMostSpecificMimeType;
+import static eu.medsea.mimeutil.MimeUtil.registerMimeDetector;
+import org.apache.commons.io.IOUtils;
 
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-
-import org.apache.commons.io.IOUtils;
 
 /**
  * A download provider for sending files to the client.
@@ -36,7 +37,12 @@ import org.apache.commons.io.IOUtils;
  */
 public class FileDownloadProvider extends AbstractDownloadProvider
 {
-  private static final long serialVersionUID = 1l;
+  private static final long serialVersionUID = 1L;
+
+  static
+  {
+    registerMimeDetector( "eu.medsea.mimeutil.detector.MagicMimeMimeDetector" );
+  }
 
   /** The file that is to be enqueued for download to the client. */
   private final File file;
@@ -55,7 +61,8 @@ public class FileDownloadProvider extends AbstractDownloadProvider
    */
   public String getContentType()
   {
-    return ( contentType != null ) ? contentType : getMimeType( file );
+    return ( contentType != null ) ? contentType :
+        getMostSpecificMimeType( getMimeTypes( file ) ).toString();
   }
 
   /**

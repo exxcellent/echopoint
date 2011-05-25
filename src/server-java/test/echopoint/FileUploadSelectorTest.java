@@ -25,6 +25,7 @@ import echopoint.tucana.event.UploadProgressEvent;
 import echopoint.tucana.event.UploadStartEvent;
 
 import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -33,8 +34,6 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import static org.junit.Assert.assertEquals;
 
 /**
  * Unit test suite for the {@link FileUploadSelector}
@@ -60,7 +59,7 @@ public class FileUploadSelectorTest extends AbstractTest<FileUploadSelector>
         getComponent().getButtonMode() );
   }
 
-  //@Test
+  @Test
   public void buttonDisplay()
   {
     final ButtonDisplay display = ButtonDisplay.none;

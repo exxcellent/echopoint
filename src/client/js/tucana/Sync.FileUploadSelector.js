@@ -179,7 +179,9 @@ echopoint.tucana.FileUploadSelectorSync = Core.extend( echopoint.internal.Abstra
   /** Create the form used to select file and submit for uploading. */
   _createForm: function()
   {
-    if ( Core.Web.Env.BROWSER_INTERNET_EXPLORER )
+    var version = this._getIEVersion();
+
+    if ( Core.Web.Env.BROWSER_INTERNET_EXPLORER && version < 9.0 )
     {
       this._form = document.createElement( "<form enctype='multipart/form-data'/>" );
     }
@@ -282,6 +284,21 @@ echopoint.tucana.FileUploadSelectorSync = Core.extend( echopoint.internal.Abstra
   _getBody: function()
   {
     return document.getElementsByTagName( "body" ).item( 0 );
+  },
+
+  /** Return IE version.  9 and above is more standards compliant. */
+  _getIEVersion : function()
+  {
+    var rv = -1; // Return value assumes failure or other kind of a browser
+
+    if ( navigator.appName == 'Microsoft Internet Explorer' )
+    {
+      var ua = navigator.userAgent;
+      var re  = new RegExp( 'MSIE ([0-9]{1,}[\.0-9]{0,})' );
+      if ( re.exec(ua) != null ) rv = parseFloat( RegExp.$1 );
+    }
+
+    return rv;
   }
 });
 

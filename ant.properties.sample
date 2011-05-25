@@ -4,7 +4,7 @@
 # If you set dir.appserver.deploy then the test war files will be deployed
 # to it.  Use to automatically deploy to Tomcat/JBoss etc.
 #
-dir.appserver                     /usr/local/apache-tomcat-6.0.20
+dir.appserver                     /usr/local/apache-tomcat-7.0.14
 
 version                           3.0.0b5
 jdk.version                       1.5

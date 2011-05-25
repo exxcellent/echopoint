@@ -96,22 +96,31 @@ echopoint.RegexTextFieldSync = Core.extend( echopoint.internal.TextFieldSync,
       if ( this.invalid_msg_alignment != null )
       {
         if ( this.invalid_msg_alignment == "left" )
-          this.invalid_msg_left = cellBounds.left;        
+        {
+          this.invalid_msg_left = cellBounds.left;
+        }
         else if ( this.invalid_msg_alignment == "center" )
+        {
           this.invalid_msg_left = cellBounds.left + ( ( cellBounds.width - this.invalid_msg_width)/2 ) ;
+        }
         else if ( this.invalid_msg_alignment == "right" )
-          this.invalid_msg_left = cellBounds.left + cellBounds.width - this.invalid_msg_width;        
+        {
+          this.invalid_msg_left = cellBounds.left + cellBounds.width - this.invalid_msg_width;
+        }
       }
     } 
     else
+    {
       this._regexp_msg.style.width = (cellBounds.width ) + 'px';
-    
+    }
+
     if ( message_position == "bottom")
     {
       this._regexp_msg.style.left = this.invalid_msg_left + 'px';
       this._regexp_msg.style.top = (cellBounds.bottom) + 'px';
     }
     else
+    {
       if ( message_position == "top")
       {
         //Display the message div for few moment with left position = 0 - this._regexp_msg.style.width 
@@ -127,17 +136,22 @@ echopoint.RegexTextFieldSync = Core.extend( echopoint.internal.TextFieldSync,
         this._regexp_msg.style.display = "none";     
       }
       else
+      {
         if ( message_position == "left")
         { 
           this._regexp_msg.style.left = (cellBounds.left - cellBounds.width - 5) + 'px';
           this._regexp_msg.style.top = (cellBounds.top) + 'px';
         }
         else
+        {
           if ( message_position == "right")
           {
             this._regexp_msg.style.left = (cellBounds.left + cellBounds.width - 5) + 'px';
             this._regexp_msg.style.top = (cellBounds.top) + 'px';
           }
+        }
+      }
+    }
   },
 
   // Override the TextField method: The filter function implementation.
@@ -145,12 +159,17 @@ echopoint.RegexTextFieldSync = Core.extend( echopoint.internal.TextFieldSync,
   {
     event = event ? event : window.event;
 
-    if( this.client && this.component.isActive() && !this.component.doKeyPress(event.keyCode, event.charCode) ) 
-          return this.clientKeyPressAccepted(event);
-  
+    if( this.client && this.component.isActive() &&
+        !this.component.doKeyPress(event.keyCode, event.charCode) )
+    {
+      return this.clientKeyPressAccepted(event);
+    }
+
     var charCode = event.domEvent.charCode;
     // Skip copy, cut, paste, select-all, arrow left, arrow right etc.
-    if( !event.domEvent.metaKey && !event.domEvent.ctrlKey && !event.domEvent.altKey && charCode > 31 && charCode != 37 && charCode != 39 && this.regexp_filter )
+    if( !event.domEvent.metaKey && !event.domEvent.ctrlKey &&
+        !event.domEvent.altKey && charCode > 31 && charCode != 37 &&
+        charCode != 39 && this.regexp_filter )
     {
       var position = this.getCaretPosition();
       var value = this.input.value.substring( 0, position ) +
@@ -172,8 +191,7 @@ echopoint.RegexTextFieldSync = Core.extend( echopoint.internal.TextFieldSync,
   
   _filterInput: function() 
   {
-    if( !this.regexp_filter.test( this.input.value ) )
-      this.input.value = this._val_bp;
+    if( !this.regexp_filter.test( this.input.value ) ) this.input.value = this._val_bp;
   },
 
   // Override the TextField method
@@ -186,8 +204,8 @@ echopoint.RegexTextFieldSync = Core.extend( echopoint.internal.TextFieldSync,
     this.invalid_msg_alignment = this.component.render('invalid_msg_alignment', null);
     echopoint.internal.TextFieldSync.prototype.renderAdd.call(this, update, parentElement);
     var regex = this.component.render( echopoint.RegexTextField.REGEX );
-    if(regex)
-      this.regexp_filter = new RegExp(regex);
+
+    if(regex) this.regexp_filter = new RegExp(regex);
     Core.Web.Event.add(this.input, "paste", Core.method(this, this.processPaste), false);
  },
 
@@ -195,8 +213,7 @@ echopoint.RegexTextFieldSync = Core.extend( echopoint.internal.TextFieldSync,
   renderUpdate: function(update) 
   {
     var regex = update.getUpdatedProperty( echopoint.RegexTextField.REGEX );
-    if(regex) 
-      this.regexp_filter = new RegExp(regex.newValue);
+    if(regex) this.regexp_filter = new RegExp(regex.newValue);
     return echopoint.internal.TextFieldSync.prototype.renderUpdate.call(this, update);      
   },
 
@@ -209,65 +226,74 @@ echopoint.RegexTextFieldSync = Core.extend( echopoint.internal.TextFieldSync,
 /**
  * Remote regex text field component.
  */
-echopoint.RemoteRegexTextField = Core.extend(echopoint.RegexTextField, {
+echopoint.RemoteRegexTextField = Core.extend(echopoint.RegexTextField,
+{
+  /** @see Echo.Component#componentType */
+  componentType: "RxRTF",
 
-    /** @see Echo.Component#componentType */
-    componentType: "RxRTF",
-    
-    $load: function() {
-        Echo.ComponentFactory.registerType("RxRTF", this);
-    }
+  $load: function()
+  {
+    Echo.ComponentFactory.registerType("RxRTF", this);
+  }
 });
 
 /**
  * Remote regex text field component synchronization peer.
  */
-echopoint.RemoteRegexTextField.Sync = Core.extend(echopoint.RegexTextFieldSync, {
-    
-    $load: function() {
-        Echo.Render.registerPeer("RxRTF", this);
-    },
-    
-    $include: [ Echo.Sync.RemoteTextComponent._SyncMixins],
-    
-    /** Constructor. */
-    $construct: function() {
-        this._remoteInit();
-    },
-    
-    /** @see Echo.Sync.TextComponent#getSupportedPartialProperties */
-    getSupportedPartialProperties: function() {
-        return this._remoteGetSupportedPartialProperties(
-                echopoint.RegexTextFieldSync.prototype.getSupportedPartialProperties.call(this));
-    },
-    
-    /** @see Echo.Sync.TextComponent#processBlur */
-    processBlur: function(e) {
-    	echopoint.RegexTextFieldSync.prototype.processBlur.call(this, e);
-        this._remoteBlur();
-    },
-    
-    /** @see Echo.Sync.TextComponent#processFocus */
-    processFocus: function(e) {
-    	echopoint.RegexTextFieldSync.prototype.processFocus.call(this, e);
-        this._remoteFocus();
-    },
-    
-    /** @see Echo.Render.ComponentSync#renderAdd */
-    renderAdd: function(update, parentElement) {
-        echopoint.RegexTextFieldSync.prototype.renderAdd.call(this, update, parentElement);
-        this._remoteAdd();
-    },
-    
-    /** @see Echo.Render.ComponentSync#renderDispose */
-    renderDispose: function(update) {
-        this._remoteDispose();
-        echopoint.RegexTextFieldSync.prototype.renderDispose.call(this, update);
-    },
-    
-    /** @see Echo.Render.ComponentSync#renderUpdate */
-    renderUpdate: function(update) {
-        this._remoteUpdate();
-        echopoint.RegexTextFieldSync.prototype.renderUpdate.call(this, update);
-    }
+echopoint.RemoteRegexTextField.Sync = Core.extend(echopoint.RegexTextFieldSync,
+{
+  $load: function()
+  {
+    Echo.Render.registerPeer("RxRTF", this);
+  },
+
+  $include: [ Echo.Sync.RemoteTextComponent._SyncMixins],
+
+  /** Constructor. */
+  $construct: function()
+  {
+    this._remoteInit();
+  },
+
+  /** @see Echo.Sync.TextComponent#getSupportedPartialProperties */
+  getSupportedPartialProperties: function()
+  {
+    return this._remoteGetSupportedPartialProperties(
+        echopoint.RegexTextFieldSync.prototype.getSupportedPartialProperties.call(this));
+  },
+
+  /** @see Echo.Sync.TextComponent#processBlur */
+  processBlur: function(e)
+  {
+    echopoint.RegexTextFieldSync.prototype.processBlur.call(this, e);
+    this._remoteBlur();
+  },
+
+  /** @see Echo.Sync.TextComponent#processFocus */
+  processFocus: function(e)
+  {
+    echopoint.RegexTextFieldSync.prototype.processFocus.call(this, e);
+    this._remoteFocus();
+  },
+
+  /** @see Echo.Render.ComponentSync#renderAdd */
+  renderAdd: function(update, parentElement)
+  {
+    echopoint.RegexTextFieldSync.prototype.renderAdd.call(this, update, parentElement);
+    this._remoteAdd();
+  },
+
+  /** @see Echo.Render.ComponentSync#renderDispose */
+  renderDispose: function(update)
+  {
+    this._remoteDispose();
+    echopoint.RegexTextFieldSync.prototype.renderDispose.call(this, update);
+  },
+
+  /** @see Echo.Render.ComponentSync#renderUpdate */
+  renderUpdate: function(update)
+  {
+    this._remoteUpdate();
+    echopoint.RegexTextFieldSync.prototype.renderUpdate.call(this, update);
+  }
 });

@@ -17,15 +17,16 @@
  */
 package echopoint.tucana;
 
-import java.io.File;
-import java.io.InputStream;
-
 import nextapp.echo.app.ApplicationInstance;
 import nextapp.echo.app.Button;
 import nextapp.echo.app.event.ActionEvent;
 import nextapp.echo.app.event.ActionListener;
+
 import echopoint.tucana.event.DownloadCallback;
 import echopoint.tucana.event.DownloadCallbackAdapter;
+
+import java.io.File;
+import java.io.InputStream;
 
 /**
  * A convenience component to display a {@link DownloadCommand} as a button
@@ -53,7 +54,7 @@ import echopoint.tucana.event.DownloadCallbackAdapter;
  */
 public class DownloadButton extends Button
 {
-  private static final long serialVersionUID = 1l;
+  private static final long serialVersionUID = 1L;
 
   /** The download command instance that is to be enqueued. */
   private DownloadProvider provider;

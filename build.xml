@@ -23,6 +23,7 @@
 
   <property environment='env' />
   <property file='ant.properties' />
+  <property name='ivy.checksums' value='' />
 
   <patternset id='fileset.resources'>
     <include name='**/*properties' />
@@ -126,7 +127,7 @@
     <delete file='${dir.dist}/${jarname}-all.jar' />
     <jar jarfile='${dir.dist}/${jarname}-all.jar' basedir='${dir.build.api}'>
       <zipgroupfileset dir="${dir.lib}"
-                       includes="commons*.jar, jdom*.jar, mime*.jar, xstream*.jar xpp3*.jar"
+                       includes="commons*.jar, jdom*.jar, log4j*.jar, mime*.jar, slf4j*.jar, xstream*.jar, xpp3*.jar"
                        excludes="Echo*.jar, *sources*.jar, *javadoc*.jar" />
       <metainf dir='${dir.src.server.webcontainer}/META-INF'>
         <patternset refid='fileset.resources' />
