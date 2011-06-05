@@ -35,6 +35,13 @@ import nextapp.echo.webcontainer.UserInstance;
  */
 public abstract class BaseUploadService implements Service
 {
+  public String getUrl( final Connection conn,
+      final AbstractUploadSelect uploadSelect )
+  {
+    return conn.getUserInstance().getServiceUri( this,  new String[]{ "i" },
+        new String[]{ conn.getUserInstance().getClientRenderId( uploadSelect ) } );
+  }
+
   /**
    * Validates if the request contains a valid FileUploadSelector render id
    * and index.
@@ -49,21 +56,26 @@ public abstract class BaseUploadService implements Service
       serviceBadRequest( conn, "No user instance available." );
       return;
     }
+
     final HttpServletRequest request = conn.getRequest();
     final String renderId = request.getParameter( "i" );
+
     if ( renderId == null )
     {
       serviceBadRequest( conn, "FileUploadSelector id not specified." );
       return;
     }
+
     final FileUploadSelector uploadSelect = (FileUploadSelector)
         userInstance.getComponentByClientRenderId( renderId );
+
     if ( uploadSelect == null )
     {
       serviceBadRequest( conn,
           "FileUploadSelector id is not valid: " + renderId );
       return;
     }
+
     final String uploadIndexParam = request.getParameter( "x" );
     if ( uploadIndexParam == null )
     {
@@ -71,6 +83,7 @@ public abstract class BaseUploadService implements Service
           "FileUploadSelector upload index not specified." );
       return;
     }
+
     service( conn, uploadSelect, uploadIndexParam );
   }
 
