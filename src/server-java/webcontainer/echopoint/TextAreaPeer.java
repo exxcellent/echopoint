@@ -33,7 +33,6 @@ public class TextAreaPeer extends TextFieldPeer
   public TextAreaPeer()
   {
     super();
-    // addOutputProperty(RegexTextField.PROPERTY_REGEX);
   }
 
   /**
@@ -66,14 +65,5 @@ public class TextAreaPeer extends TextFieldPeer
   public String getClientComponentType( final boolean shortType )
   {
     return COMPONENT_NAME;
-  }
-
-  @Override
-  public Object getOutputProperty(Context context, Component component, String propertyName, int propertyIndex) 
-  {
-    //if( propertyName.equals(RegexTextField.PROPERTY_REGEX) )
-    //  return ((RegexTextField)component).getRegex();
-    // else
-      return super.getOutputProperty(context, component, propertyName, propertyIndex);
   }
 }
