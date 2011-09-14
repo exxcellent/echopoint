@@ -35,9 +35,38 @@ public class IntegerTextField extends RegexTextField
    *
    * {@value}
    */
-  public static final String EXP = "^[0-9]*$";
+  public static final String EXP = "^(|-)[0-9]*$";
+	public static final String POSITIVE_EXP = "^[0-9]*$";
+	public static final String FILTER_REGEX = "(|-)(|[0-9])";
+	public static final String POSITIVE_FILTER_REGEX = "[0-9]";
+  public IntegerTextField() 
+	{
+		setNegative(false);
+	}
 
-  public IntegerTextField() { super.setRegex(EXP); }
+  public IntegerTextField(boolean negative) 
+	{
+		setNegative(negative);
+	}
+
+  /**
+    *  Sets or removes negative values constraint.
+    *
+    * @param negative Decides if the field should use negative values.
+    */
+	public void setNegative( boolean negative )
+	{
+		if(negative)
+		{
+			super.setRegex(EXP);
+			super.setFilter(FILTER_REGEX);			
+		}
+		else
+		{
+			super.setRegex(POSITIVE_EXP);
+			super.setFilter(POSITIVE_FILTER_REGEX);
+		}
+	}
 
   /**
     * Over-ridden to do nothing.  This component does not allow custom

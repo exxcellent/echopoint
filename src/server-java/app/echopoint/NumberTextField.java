@@ -42,6 +42,7 @@ public class NumberTextField extends RegexTextField
   private static final long serialVersionUID = 1L;
 
   public static final String PROPERTY_PRECISION = "precision";
+	public static final String PROPERTY_NEGATIVE = "negative";
 
   /** Default constructor.  No actions required. */
   public NumberTextField() {}
@@ -76,6 +77,17 @@ public class NumberTextField extends RegexTextField
   }
 
   /**
+   * Return the value of the {@link #PROPERTY_PRECISION} property.  This
+   * indicates the number of fractional digits allowed in the number.
+   *
+   * @return The precision or {@code -1} if not set.
+   */
+  public Boolean getNegative()
+  {
+    return (Boolean) get( PROPERTY_NEGATIVE );
+  }
+
+  /**
    * Set the value of the {@link #PROPERTY_PRECISION} property.
    *
    * @param precision The maximum number of fractional digits.
@@ -98,4 +110,11 @@ public class NumberTextField extends RegexTextField
   {
     // No-op
   }
+
+	public void setNegative( Boolean negative )
+	{
+    final Boolean old_negative = getNegative();
+		set( PROPERTY_NEGATIVE, negative );
+    firePropertyChange(PROPERTY_NEGATIVE, old_negative, negative);
+	}
 }

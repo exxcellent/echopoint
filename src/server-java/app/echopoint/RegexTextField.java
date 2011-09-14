@@ -18,10 +18,18 @@
 
 package echopoint;
 
+import java.util.EventListener;
+
+import echopoint.event.ValidationEvent;
+import echopoint.event.ValidationListener;
 import echopoint.internal.TextField;
 import nextapp.echo.app.Font;
 import nextapp.echo.app.Alignment;
 import nextapp.echo.app.Color;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+
+
 
 /**
  * A text field that enforces a user supplied regular expression on a key
@@ -81,6 +89,11 @@ import nextapp.echo.app.Color;
 public class RegexTextField extends TextField
 {
   private static final long serialVersionUID = 1l;
+	private String regexPattern = "";    
+  private Pattern pattern;
+
+	public static final String INVALID_VALUE_EVENT = "expInvalid";
+	public static final String VALID_VALUE_EVENT = "expValid";
 
   /**
    * The regular expression to specify.  Note that the string value is used
@@ -98,9 +111,13 @@ public class RegexTextField extends TextField
   public static final String PROPERTY_INVALID_MSG_ALIGNMENT = "invalid_msg_alignment";  
   public static final String PROPERTY_INVALID_MSG_WIDTH = "invalid_msg_width";
   public static final String PROPERTY_INVALID_MSG_FONT = "invalid_msg_font";
+  public static final String PROPERTY_FILTER = "filter";
+  public static final String PROPERTY_ISVALID = "isValid";
+  public static final String PROPERTY_FILTER_MSG = "invalid_filter_msg";
 
+  public static final String VALIDATION_LISTENERS_CHANGED_PROPERTY = "validationListeners";
   /** Default constructor.  Not particularly useful. */
-  public RegexTextField() {}
+  public RegexTextField() {	}
 
   /**
    * Create a new text field with the specified regex pattern.
@@ -111,6 +128,89 @@ public class RegexTextField extends TextField
   {
     setRegex( regex );
   }
+
+  /**
+   * Create a new text field with the specified regex pattern.
+   *
+   * @param regex The regular expression to use.
+	 * @param filter_regex The regular expression for the filter.
+   */
+  public RegexTextField( final String regex, final String filter_regex )
+  {
+    setRegex( regex );
+		setFilter( filter_regex );
+  }
+
+
+	public void addValidationListener(ValidationListener l){
+			getEventListenerList().addListener(ValidationListener.class, l);
+			// Notification of empty listener changes is provided due to 
+			// existence of hasEmptyListeners() method. 
+			firePropertyChange(VALIDATION_LISTENERS_CHANGED_PROPERTY, null, l);
+	}
+
+	/**
+		* Fires a expValid event to all listeners.
+		*/
+	private void fireInvalidValueEvent() {
+			if (!hasEventListenerList()) {
+					return;
+			}
+			EventListener[] listeners = getEventListenerList().getListeners(ValidationListener.class);
+			for (int i = 0; i < listeners.length; ++i) {
+					((ValidationListener) listeners[i]).expInvalid(new ValidationEvent(this));
+			}
+	}
+
+	/**
+		* Fires a expInvalid event to all listeners.
+		*/
+	private void fireValidValueEvent() {
+			if (!hasEventListenerList()) {
+					return;
+			}
+			EventListener[] listeners = getEventListenerList().getListeners(ValidationListener.class);
+			for (int i = 0; i < listeners.length; ++i) {
+					((ValidationListener) listeners[i]).expValid(new ValidationEvent(this));
+			}
+	}
+
+	/**
+		* Removes an <code>ValidationListener</code> from the <code>RegexTextField</code>.
+		* 
+		* @param l the <code>ValidationListener</code> to remove
+		*/
+	public void removeValidationListener(ValidationListener l) {
+			if (!hasEventListenerList()) {
+					return;
+			}
+			getEventListenerList().removeListener(ValidationListener.class, l);
+			// Notification of validation listener changes is provided due to 
+			// existence of hasValidationsListeners() method. 
+			firePropertyChange(VALIDATION_LISTENERS_CHANGED_PROPERTY, l, null);
+	}    
+
+	/**
+		* Determines if any <code>ValidationListener</code>s are registered.
+		* 
+		* @return true if any validation listeners are registered
+		*/
+	public boolean hasValidationListeners() {
+			return hasEventListenerList() && getEventListenerList().getListenerCount(ValidationListener.class) != 0;
+	}
+    
+
+	/**
+		* @see nextapp.echo.app.Component#processInput(java.lang.String, java.lang.Object)
+		*/
+	public void processInput(String inputName, Object inputValue) {			
+			super.processInput(inputName, inputValue);
+			if (VALID_VALUE_EVENT.equals(inputName)) {
+					fireValidValueEvent();
+			} else if (INVALID_VALUE_EVENT.equals(inputName)) {
+					fireInvalidValueEvent();
+			}
+	}
 
   /**
    * Return the regular expression in use for the field ({@link
@@ -132,8 +232,48 @@ public class RegexTextField extends TextField
   public void setRegex( final String regex )
   {
     final String old_regex = getRegex();
+		regexPattern = regex;
+    pattern = Pattern.compile(regex);
     set( PROPERTY_REGEX, regex );
     firePropertyChange(PROPERTY_REGEX, old_regex, regex);
+  }
+
+  /**
+   * Return the regular expression in use for the filter ({@link
+   * #PROPERTY_FILTER}).
+   *
+   * @return The filter in use.
+   */
+  public String getFilter()
+  {
+    return (String) get( PROPERTY_FILTER );
+  }
+
+  /**
+   * Set the regular expression filter pattern ({@link #PROPERTY_FILTER}) to use to
+   * restrict input into this * field.  This value may also be styled.
+   *
+   * @param regex The regular expression filter to use.
+   */
+  public void setFilter( final String filter )
+  {
+    set( PROPERTY_FILTER, filter );
+  }
+
+	public boolean isValid() 
+	{    
+		String text = getText();
+		
+		// No RegEx pattern to test against, defined as valid
+		if( regexPattern.isEmpty() )
+				return true;
+		
+		// Must use 'find' and not 'matches' so that the Java validation
+		//   behavior is as close to the JavaScript valication behavior
+		//   as possible. Otherwise, we'd have to go to the client.
+		
+		Matcher matcher = pattern.matcher(text);
+		return matcher.find();
   }
 
   public Alignment getInvalidMsgOrientation()
@@ -144,6 +284,11 @@ public class RegexTextField extends TextField
   public String getInvalidMsg()
   {
     return (String) get( PROPERTY_INVALID_MSG );
+  }
+
+  public String getFilterMsg()
+  {
+    return (String) get( PROPERTY_FILTER_MSG);
   }
 
   public Color getInvalidMsgBackground()
@@ -191,6 +336,11 @@ public class RegexTextField extends TextField
   {
     set( PROPERTY_INVALID_MSG, invalid_msg);
   }
+
+	public void setFilterMsg( String filter_msg )
+	{
+    set( PROPERTY_FILTER_MSG, filter_msg);
+	}
 
   public void setInvalidMsgBackground( Color inv_msg_background )
   {  
