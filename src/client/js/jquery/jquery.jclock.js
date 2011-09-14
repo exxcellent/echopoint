@@ -175,7 +175,8 @@
           var hours = (dateObject.getHours() % 12 || 12);
           return ((hours < 10) ? "0" : "") + hours;
       case "m": // month number
-          return ((dateObject.getMonth() < 10) ? "0" : "") + (dateObject.getMonth() + 1);
+          var month = dateObject.getMonth() + 1;          
+          return (month < 10 ? "0" : "") + month;
       case "M": // minute as a decimal number
           return ((dateObject.getMinutes() < 10) ? "0" : "") + dateObject.getMinutes();
       case "p": // either `am' or `pm' according to the given time value,
