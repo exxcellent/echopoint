@@ -77,11 +77,11 @@ public class AutoLookupSelectService implements Service {
 		AutoLookupSelectField textFieldEx = (AutoLookupSelectField) interestedParties.get(elementId);
 		if (textFieldEx == null) {
 			System.out.println(interestedParties);
-			throw new IllegalStateException("El AutolookupSelectField " + elementId + " no pudo ser encontrado.");
+			throw new IllegalStateException("Can not found AutolookupSelectField:" + elementId + ".");
 		}
 		AutoLookupSelectModel autoLookupModel = textFieldEx.getAutoLookupModel();
 		if (autoLookupModel == null)
-			return; // nothing to do
+      throw new IllegalStateException("Can not found AutolookupSelectModel for AutolookupSelectField:" + elementId + ".");
 
     Document doc = DomUtil.createDocument("xml", null, null, null);
  		Element dataElement = doc.getDocumentElement();
@@ -109,11 +109,11 @@ public class AutoLookupSelectService implements Service {
 		dataElement.appendChild(autoLookupModelE);
 
 		conn.setContentType(ContentType.TEXT_XML);
-        try {
-	        DomUtil.save(doc, conn.getWriter(), OUTPUT_PROPERTIES);
-        } catch (SAXException ex) {
-            throw new SynchronizationException("Failed to write HTML document.", ex);
-        }
+    try {
+      DomUtil.save(doc, conn.getWriter(), OUTPUT_PROPERTIES);
+    } catch (SAXException ex) {
+        throw new SynchronizationException("Failed to write HTML document.", ex);
+    }
 	}
 	
 	public synchronized void register(AutoLookupSelectField selectFieldEx) {
