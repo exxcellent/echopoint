@@ -28,7 +28,7 @@ import static nextapp.echo.webcontainer.WebContainerServlet.getResourceRegistry;
  */
 public class CommonResources
 {
-  private static boolean installed;
+  private static boolean installed = false;
 
   /** Method that must be invoked by all component peers. */
   public static void install()
