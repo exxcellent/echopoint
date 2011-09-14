@@ -35,12 +35,12 @@ import nextapp.echo.webcontainer.UserInstance;
  */
 public abstract class BaseUploadService implements Service
 {
-  public String getUrl( final Connection conn,
-      final AbstractUploadSelect uploadSelect )
-  {
-    return conn.getUserInstance().getServiceUri( this,  new String[]{ "i" },
-        new String[]{ conn.getUserInstance().getClientRenderId( uploadSelect ) } );
-  }
+//  public String getUrl( final Connection conn,
+//      final AbstractUploadSelect uploadSelect )
+//  {
+//    return conn.getUserInstance().getServiceUri( this,  new String[]{ "i" },
+//        new String[]{ conn.getUserInstance().getClientRenderId( uploadSelect ) } );
+//  }
 
   /**
    * Validates if the request contains a valid FileUploadSelector render id
