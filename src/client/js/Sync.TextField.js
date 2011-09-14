@@ -14,10 +14,26 @@ echopoint.internal.TextFieldSync = Core.extend( Echo.Sync.TextField,
     Echo.Render.registerPeer( echopoint.constants.TEXT_FIELD, this );
   },
 
+  $construct: function()
+  {
+    Echo.Sync.TextField.call( this );
+    this.superProcessClick = this._processClick;
+    this._processClick     = this.processClick;
+    this.superRenderAddToParent = this.renderAddToParent;
+    this.renderAddToParent      = this.renderAddToParentTf;
+    this._superProcessRestrictionsClear = this._processRestrictionsClear; // hack: override _processRestrictionsClear
+    this._processRestrictionsClear      = this.processInputRestrictionsClear;
+  },
+
   $virtual:
   {
     /** The default text for the input.  Will be cleared after first use. */
     defaultText: null,
+
+    processInputRestrictionsClear: function()
+    {
+      this._superProcessRestrictionsClear();
+    },
 
     renderAddToParentTf: function( parentElement )
     {
@@ -36,7 +52,7 @@ echopoint.internal.TextFieldSync = Core.extend( Echo.Sync.TextField,
       }
       
       this.defaultText = null;
-      this._textFieldProcessClick( event );
+      this.superProcessClick( event );
     },
 
     /** The event listener for a focus change event. */
@@ -58,7 +74,7 @@ echopoint.internal.TextFieldSync = Core.extend( Echo.Sync.TextField,
     {
       var text = this.component.render(
           echopoint.internal.TextField.DEFAULT_TEXT );
-      if ( text && ( this.input.value == "" ) )
+      if ( text && this.input.value == "" )
       {
         Echo.Sync.Color.render(
             Echo.Sync.getEffectProperty( this.component, "foreground",
@@ -100,7 +116,7 @@ echopoint.internal.TextFieldSync = Core.extend( Echo.Sync.TextField,
           echopoint.internal.TextField.DEFAULT_TEXT );
       var value = this.component.render( "text" );
 
-      if ( this.defaultText && ( ( ! value ) || ( value == '' ) ) )
+      if ( this.defaultText && ( ! value || value == '' ) )
       {
         Echo.Sync.Color.render(
             Echo.Sync.getEffectProperty( this.component, "foreground",
@@ -114,21 +130,9 @@ echopoint.internal.TextFieldSync = Core.extend( Echo.Sync.TextField,
     }
   },
 
-  $construct: function()
-  {
-    Echo.Sync.TextField.call( this );
-
-    this._textFieldProcessClick = this._processClick;
-    this._processClick = this.processClick;
-  },
-
   renderAdd: function( update, parentElement )
   {
-    this.superRenderAddToParent = this.renderAddToParent;
-    this.renderAddToParent = this.renderAddToParentTf;
-    Echo.Sync.TextField.prototype.renderAdd.call(
-        this, update, parentElement );
-
+    Echo.Sync.TextField.prototype.renderAdd.call(this, update, parentElement );
     this.setDefaultText();
   }
 });

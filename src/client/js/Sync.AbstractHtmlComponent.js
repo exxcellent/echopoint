@@ -21,6 +21,7 @@ echopoint.internal.AbstractHtmlComponentSync = Core.extend( echopoint.internal.A
 
   /** The container element for this component */
   _container: null,
+  _new_html: null,
 
   renderAdd: function( update, parentElement )
   {
@@ -28,9 +29,8 @@ echopoint.internal.AbstractHtmlComponentSync = Core.extend( echopoint.internal.A
     this._container.id = this.component.renderId;
     this.renderStyle( this._container );
     this._renderStyle();
-
-    this._container.innerHTML = this.component.render(
-        echopoint.internal.AbstractHtmlComponent.TEXT, "" );
+		
+    this._container.innerHTML = this.component.render( echopoint.internal.AbstractHtmlComponent.TEXT, "" );
     this._processLinks();
 
     parentElement.appendChild( this._container );
@@ -39,15 +39,17 @@ echopoint.internal.AbstractHtmlComponentSync = Core.extend( echopoint.internal.A
   renderDispose: function()
   {
     this._container = null;
-    this.containerType = null;
   },
 
   renderUpdate: function( update )
   {
     this.renderStyle( this._container, update );
 
-    var property = update.getUpdatedProperty(
-        echopoint.internal.AbstractHtmlComponent.TEXT );
+    var process_forms_property = update.getUpdatedProperty("process_forms");
+    if(process_forms_property)
+      this._processForms();
+
+    var property = update.getUpdatedProperty( echopoint.internal.AbstractHtmlComponent.TEXT );
     if ( property )
     {
       this._container.innerHTML = property.newValue;
@@ -93,5 +95,39 @@ echopoint.internal.AbstractHtmlComponentSync = Core.extend( echopoint.internal.A
         Core.Debug.consoleWrite( message );
       }
     }
+  },
+
+  _processForms: function()
+  {
+    var open_tag = '<p>';
+    var close_tag = '</p>';
+    var scope = document.getElementById(this.component.renderId);
+    scope = jQuery(scope);
+    jQuery(':input', scope).each(
+      function()
+      {
+        var elem = jQuery(this);
+        var value = elem.val();
+        elem.replaceWith(open_tag + value + close_tag);
+      }
+    );
+
+    this._new_html = scope.html();
+
+    if (!this.client.verifyInput(this.component))
+      this.client.registerRestrictionListener(this.component, Core.method(this, this._processRestrictionsClear));
+    else
+    {
+      this.component.set(echopoint.internal.AbstractHtmlComponent.TEXT, this._new_html, true);
+      this.component.fireEvent({type: "content_changed", source: this.component});
+    }
+  },
+
+  _processRestrictionsClear: function()
+  {
+    if (!this.client)
+      return; // Component has been disposed, do nothing.
+    this.component.set(echopoint.internal.AbstractHtmlComponent.TEXT, this._new_html, true);
+    this.component.fireEvent({type: "content_changed", source: this.component});
   }
 });

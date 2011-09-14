@@ -59,6 +59,18 @@ echopoint.RegexTextField = Core.extend( echopoint.internal.TextField,
     REGEX: "regex" // property used to specify the regex to use.
   },
 
+	$virtual:
+	{
+		fireExpValid: function()
+		{		
+			this.fireEvent({type: "expValid", source: this});
+		},
+	
+		fireExpInvalid: function()
+		{		
+			this.fireEvent({type: "expInvalid", source: this});
+		}
+	},
   componentType: echopoint.constants.REGEX_TEXT_FIELD
 });
 

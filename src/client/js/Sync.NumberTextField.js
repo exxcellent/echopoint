@@ -29,6 +29,11 @@ echopoint.NumberTextFieldSync = Core.extend( echopoint.RegexTextFieldSync,
       this.regexp_filter = new RegExp( echopoint.NumberTextField.NUMBER_REGEX );
       this.component.set( echopoint.RegexTextField.REGEX, echopoint.NumberTextField.NUMBER_REGEX );
     }
+		var negative = this.component.render("negative", false);
+		if(negative)
+		{			
+			this.regexp_filter = /^(-){0,1}([\d]+[.]{0,1}[\d]*){0,1}$/;
+		}
   },
 
   // Override the RegexTextField method

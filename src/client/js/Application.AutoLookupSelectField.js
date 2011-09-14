@@ -19,7 +19,7 @@
 /** The name of the AutoLookupSelectField component. */
 echopoint.constants.AUTO_LOOKUP_SELECT_FIELD = "echopoint.AutoLookupSelectField";
 
-echopoint.AutoLookupSelectField = Core.extend( echopoint.internal.TextField, {
+echopoint.AutoLookupSelectField = Core.extend( echopoint.RegexTextField, {
 	
 	$load: function() {
 		Echo.ComponentFactory.registerType(echopoint.constants.AUTO_LOOKUP_SELECT_FIELD, this);
