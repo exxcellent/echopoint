@@ -35,7 +35,7 @@ public class CommonService
       forResource( "echopoint.Boot", "resource/js/Echopoint.js" );
 
   public static final Service JQUERY_SERVICE = forResource( "jq",
-      "resource/js/jquery/jquery-1.3.2.js" );
+      "resource/js/jquery/jquery.js" );
 
   /** Add the {@link #ECHOPOINT_SERVICE} to the service registry. */
   static
