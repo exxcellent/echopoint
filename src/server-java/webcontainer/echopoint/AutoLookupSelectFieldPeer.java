@@ -29,13 +29,15 @@ public class AutoLookupSelectFieldPeer extends RegexTextFieldPeer {
 		super();
 		addOutputProperty(AutoLookupSelectField.PROPERTY_KEY);
 		addOutputProperty(AutoLookupSelectField.PROPERTY_SEARCH_VAL);
-    addOutputProperty(AutoLookupSelectField.PROPERTY_OPTIONS_VISIBLE);
     addOutputProperty(AutoLookupSelectField.PROPERTY_OPTIONS_MENU_BGCOLOR);
     addOutputProperty(AutoLookupSelectField.PROPERTY_OPTIONS_MENU_BORDER);
     addOutputProperty(AutoLookupSelectField.PROPERTY_SELECTED_BG);
+    addOutputProperty(AutoLookupSelectField.PROPERTY_SELECTED_FG);
     addOutputProperty(AutoLookupSelectField.PROPERTY_ACTION_CLICK);
     addOutputProperty(ComboBox.PROPERTY_COMBO_LIST_CHANGED);
     addOutputProperty(ComboBox.PROPERTY_CASE_SENSITIVE);
+    addOutputProperty(ComboBox.PROPERTY_ADDABLE_MODE);
+    addOutputProperty(ComboBox.PROPERTY_LAZY_MODE);
 	}
 	
 	@Override
@@ -55,10 +57,7 @@ public class AutoLookupSelectFieldPeer extends RegexTextFieldPeer {
     if (propertyName.equals(AutoLookupSelectField.PROPERTY_SEARCH_VAL)) 
       return ( (AutoLookupSelectField) component).getSearchVal();
     else 
-    if( propertyName.equals(AutoLookupSelectField.PROPERTY_OPTIONS_VISIBLE) ) 
-      return ( (AutoLookupSelectField) component).isOptionsVisible();
-    else
-    if( propertyName.equals(AutoLookupSelectField.PROPERTY_OPTIONS_MENU_BGCOLOR) ) 
+    if( propertyName.equals(AutoLookupSelectField.PROPERTY_OPTIONS_MENU_BGCOLOR) )
       return ( (AutoLookupSelectField) component).getOptionsMenuBackground();
     else
     if( propertyName.equals(AutoLookupSelectField.PROPERTY_OPTIONS_MENU_BORDER) ) 
@@ -67,11 +66,20 @@ public class AutoLookupSelectFieldPeer extends RegexTextFieldPeer {
     if( propertyName.equals(AutoLookupSelectField.PROPERTY_SELECTED_BG) ) 
       return ( (AutoLookupSelectField) component).getSelectedOptionBackground();
     else
+    if( propertyName.equals(AutoLookupSelectField.PROPERTY_SELECTED_FG) )
+      return ( (AutoLookupSelectField) component).getSelectedOptionForeground();
+    else
     if( propertyName.equals(ComboBox.PROPERTY_COMBO_LIST_CHANGED) )
     	return new Integer(combo_listchanged++);  // always unique value !
     else
     if( propertyName.equals(ComboBox.PROPERTY_CASE_SENSITIVE) )
       return (component instanceof ComboBox) ? ( (ComboBox) component).getCaseSensitive() : false;
+    else
+    if( propertyName.equals(ComboBox.PROPERTY_ADDABLE_MODE) )
+      return (component instanceof ComboBox) ? ( (ComboBox) component).getAddableMode() : false;
+    else
+    if( propertyName.equals(ComboBox.PROPERTY_LAZY_MODE) )
+      return (component instanceof ComboBox) ? ( (ComboBox) component).getLazyMode() : null;
     else
       return super.getOutputProperty(context, component, propertyName, propertyIndex);
   }
@@ -82,17 +90,13 @@ public class AutoLookupSelectFieldPeer extends RegexTextFieldPeer {
 		if(propertyName.equals(AutoLookupSelectField.PROPERTY_KEY) || propertyName.equals(AutoLookupSelectField.PROPERTY_SEARCH_VAL))
 			return String.class;
     else 
-    if( propertyName.equals(AutoLookupSelectField.PROPERTY_OPTIONS_VISIBLE) ) 
-      return Boolean.class;      
-    else
-			return super.getInputPropertyClass(propertyName);	
+			return super.getInputPropertyClass(propertyName);
 	}
 
 	@Override
 	public void storeInputProperty(Context context, Component component, 
             String propertyName, int propertyIndex, Object newValue) {
-		if( propertyName.equals(AutoLookupSelectField.PROPERTY_KEY) || propertyName.equals(AutoLookupSelectField.PROPERTY_SEARCH_VAL) || 
-        propertyName.equals(AutoLookupSelectField.PROPERTY_OPTIONS_VISIBLE ) ) 
+		if( propertyName.equals(AutoLookupSelectField.PROPERTY_KEY) || propertyName.equals(AutoLookupSelectField.PROPERTY_SEARCH_VAL) )
     {
       ClientUpdateManager clientUpdateManager =  (ClientUpdateManager) context.get(ClientUpdateManager.class);
       clientUpdateManager.setComponentProperty(component, propertyName, newValue);
@@ -101,12 +105,8 @@ public class AutoLookupSelectFieldPeer extends RegexTextFieldPeer {
 	}
 
 	@Override
-	public Class getComponentClass() {
-		return AutoLookupSelectField.class;
-	}
+	public Class getComponentClass() { return AutoLookupSelectField.class; }
 	
 	@Override
-	public String getClientComponentType(final boolean shortType) {
-		return COMPONENT_NAME;
-	}
+	public String getClientComponentType(final boolean shortType) { return COMPONENT_NAME; }
 }

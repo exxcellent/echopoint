@@ -42,6 +42,19 @@ public class RegexTextFieldPeer extends TextFieldPeer
     addOutputProperty(RegexTextField.PROPERTY_INVALID_FOREGROUND);
     addOutputProperty(RegexTextField.PROPERTY_INVALID_MSG_WIDTH);
     addOutputProperty(RegexTextField.PROPERTY_INVALID_MSG_ALIGNMENT);
+    addOutputProperty(RegexTextField.PROPERTY_ISVALID);
+    addOutputProperty(RegexTextField.PROPERTY_FILTER);
+
+		addEvent(new EventPeer(RegexTextField.VALID_VALUE_EVENT, RegexTextField.VALIDATION_LISTENERS_CHANGED_PROPERTY) {
+				public boolean hasListeners(Context context, Component c) {
+						return ((RegexTextField) c).hasValidationListeners();
+				}
+		});
+		addEvent(new EventPeer(RegexTextField.INVALID_VALUE_EVENT, RegexTextField.VALIDATION_LISTENERS_CHANGED_PROPERTY) {
+				public boolean hasListeners(Context context, Component c) {
+						return ((RegexTextField) c).hasValidationListeners();
+				}
+		});
   }
 
   /**
@@ -99,7 +112,10 @@ public class RegexTextFieldPeer extends TextFieldPeer
       return ((RegexTextField)component).getInvalidMsgAlignment();
     else if( propertyName.equals(RegexTextField.PROPERTY_INVALID_MSG_FONT) ) 
       return ((RegexTextField)component).getInvalidMsgFont();
-    else 
-      return super.getOutputProperty(context, component, propertyName, propertyIndex);
+    else if( propertyName.equals(RegexTextField.PROPERTY_ISVALID) ) 
+      return ((RegexTextField)component).isValid();
+    else if( propertyName.equals(RegexTextField.PROPERTY_FILTER) ) 
+      return ((RegexTextField)component).getFilter();
+    return super.getOutputProperty(context, component, propertyName, propertyIndex);
   }
 }
