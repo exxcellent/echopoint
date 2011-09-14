@@ -18,6 +18,9 @@
 
 package echopoint.internal;
 
+import echopoint.event.ContentChangedEvent;
+import echopoint.event.ContentChangedListener;
+import java.util.EventListener;
 import nextapp.echo.app.Component;
 
 /**
@@ -36,8 +39,17 @@ public abstract class AbstractHtmlComponent extends AbstractContainer
   /** The property for specifying the target for anchor tags in the content. */
   public static final String PROPERTY_TARGET = "target";
 
+  /** something */
+  public static final String CONTENT_CHANGED_EVENT              = "content_changed";
+  public static final String PROCESS_FORMS_PROPERTY             = "process_forms";
+  public static final String CONTENT_CHANGED_LISTENERS_PROPERTY = "content_changed_listeners";
+
   /** Default constructor.  Create a new instance with empty text. */
-  public AbstractHtmlComponent() { this( "" ); }
+  public AbstractHtmlComponent()
+  { 
+    this( "" );
+    set( PROCESS_FORMS_PROPERTY, false);
+  }
 
   /**
    * Create a new instance enclosing the specified HTML text.
@@ -47,6 +59,7 @@ public abstract class AbstractHtmlComponent extends AbstractContainer
   public AbstractHtmlComponent( final String text )
   {
     setText( text );
+    set( PROCESS_FORMS_PROPERTY, false );
   }
 
   /**
@@ -121,4 +134,62 @@ public abstract class AbstractHtmlComponent extends AbstractContainer
   {
     set( PROPERTY_TARGET, target );
   }
+
+  /**
+   * something
+   */
+  public void processForms()
+  {
+    set( PROCESS_FORMS_PROPERTY, true );
+  }
+  
+  @Override
+  public void processInput(String inputName, Object inputValue)
+  {
+    //System.out.println("processInput: " + inputName + " : " + inputValue);
+    
+    super.processInput(inputName, inputValue);
+    
+    if (CONTENT_CHANGED_EVENT.equals(inputName))
+      fireContentChangedEvent();
+    else if(PROPERTY_TEXT.equals(inputName))
+      setText((String) inputValue);
+	}
+
+  public void addContentChangedListener(ContentChangedListener l)
+  {
+			getEventListenerList().addListener(ContentChangedListener.class, l);
+			// Notification of empty listener changes is provided due to
+			// existence of hasEmptyListeners() method.
+			firePropertyChange(CONTENT_CHANGED_LISTENERS_PROPERTY, null, l);
+  }
+
+  public void removeContentChangedListener(ContentChangedListener l) {
+			if (!hasEventListenerList()) {
+					return;
+			}
+			getEventListenerList().removeListener(ContentChangedListener.class, l);
+			// Notification of validation listener changes is provided due to
+			// existence of hasValidationsListeners() method.
+			firePropertyChange(CONTENT_CHANGED_LISTENERS_PROPERTY, l, null);
+	}
+
+  private void fireContentChangedEvent()
+  {
+    if (!hasEventListenerList())
+      return;
+
+    EventListener[] listeners = getEventListenerList().getListeners(ContentChangedListener.class);
+    for (int i = 0; i < listeners.length; ++i)
+        ((ContentChangedListener) listeners[i]).contentChanged((new ContentChangedEvent(this)));
+	}
+
+  /**
+		* Determines if any <code>ValidationListener</code>s are registered.
+		*
+		* @return true if any validation listeners are registered
+		*/
+	public boolean hasContentChangedListeners() {
+			return hasEventListenerList() && getEventListenerList().getListenerCount(ContentChangedListener.class) != 0;
+	}
 }

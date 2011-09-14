@@ -30,7 +30,7 @@ public abstract class TextField extends nextapp.echo.app.TextField
   public static final String PROPERTY_DEFAULT_TEXT = "defaultText";
 
   /**
-   * Set the default text to display in the component.
+   * Returns the default text to display in the component.
    *
    *  @return The {@link #PROPERTY_DEFAULT_TEXT} value.
    */
