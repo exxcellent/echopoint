@@ -19,6 +19,7 @@
 package echopoint.internal;
 
 import nextapp.echo.app.Component;
+import nextapp.echo.app.update.ClientUpdateManager;
 import nextapp.echo.app.util.Context;
 import nextapp.echo.webcontainer.ServerMessage;
 import nextapp.echo.webcontainer.Service;
@@ -53,6 +54,19 @@ public class AbstractHtmlComponentPeer extends AbstractContainerPeer
     WebContainerServlet.getServiceRegistry().add( COMPONENT_SERVICE );
   }
 
+  public AbstractHtmlComponentPeer()
+  {
+    super();
+    addOutputProperty(AbstractHtmlComponent.PROCESS_FORMS_PROPERTY);
+    addOutputProperty(AbstractHtmlComponent.PROPERTY_TEXT);
+    addEvent(new EventPeer(AbstractHtmlComponent.CONTENT_CHANGED_EVENT, AbstractHtmlComponent.CONTENT_CHANGED_LISTENERS_PROPERTY) {
+      @Override
+      public boolean hasListeners(Context context, Component c) {
+          return ((AbstractHtmlComponent) c).hasContentChangedListeners();
+      }
+		});
+  }
+
   /**
    * {@inheritDoc}
    * @see nextapp.echo.webcontainer.AbstractComponentSynchronizePeer#init
@@ -80,8 +94,42 @@ public class AbstractHtmlComponentPeer extends AbstractContainerPeer
    * {@inheritDoc}
    * @see nextapp.echo.webcontainer.AbstractComponentSynchronizePeer#getClientComponentType
    */
+  @Override
   public String getClientComponentType( final boolean shortType )
   {
     return COMPONENT_NAME;
   }
+
+  /**
+   * @see nextapp.echo.webcontainer.AbstractComponentSynchronizePeer#getInputPropertyClass(java.lang.String)
+   */
+
+  @Override
+  public Class getInputPropertyClass(String propertyName)
+  {
+    if(AbstractHtmlComponent.PROPERTY_TEXT.equals(propertyName))
+      return String.class;    
+    return super.getInputPropertyClass(propertyName);
+  }
+
+  @Override
+  public Object getOutputProperty(Context context, Component component, String propertyName, int propertyIndex)
+  {
+    if(propertyName.equals(AbstractHtmlComponent.PROPERTY_TEXT))
+    {      
+      return ((AbstractHtmlComponent)component).getText();
+    }
+
+    return super.getOutputProperty(context, component, propertyName, propertyIndex);
+  }
+
+  @Override
+	public void storeInputProperty(Context context, Component component, String propertyName, int propertyIndex, Object newValue) {
+		if( propertyName.equals(AbstractHtmlComponent.PROPERTY_TEXT)  )
+    {
+      ClientUpdateManager clientUpdateManager =  (ClientUpdateManager) context.get(ClientUpdateManager.class);
+      clientUpdateManager.setComponentProperty(component, propertyName, newValue);
+    }
+		super.storeInputProperty(context, component, propertyName, propertyIndex, newValue);
+	}
 }
