@@ -20,7 +20,7 @@ import echopoint.model.AutoLookupSelectFieldModel;
 
 /***
  * Unit test for the {@link AutoLookupSelectField} component
- * @author Aníbal Rivero 2009-11-22
+ * @author AnÃ­bal Rivero 2009-11-22
  *
  */
 public class AutoLookupSelectFieldTest extends AbstractTest<AutoLookupSelectField> {

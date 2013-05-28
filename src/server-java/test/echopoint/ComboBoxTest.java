@@ -21,7 +21,7 @@ import echopoint.model.ComboBoxModel;
 
 /***
  * Unit test for the {@link ComboBox} component
- * @author Aníbal Rivero 2009-11-22
+ * @author AnÃ­bal Rivero 2009-11-22
  *
  */
 public class ComboBoxTest extends AbstractTest<ComboBox> {
