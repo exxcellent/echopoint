@@ -803,7 +803,9 @@ Extras.Sync.TabPane = Core.extend(Echo.Render.ComponentSync, {
         if (this._displayedTabId != this._activeTabId) {
             if (this._displayedTabId != null) {
                 tab = this._getTabById(this._displayedTabId);
-                tab._renderState(false);
+                if( tab != null) { // if there is no such tab left continue
+                  tab._renderState(false);
+                } 
             }
             if (this._activeTabId != null) {
                 tab = this._getTabById(this._activeTabId);
@@ -1032,7 +1034,9 @@ Extras.Sync.TabPane = Core.extend(Echo.Render.ComponentSync, {
         } else {
             if (this._rolloverTabId == tabId) {
                 this._rolloverTabId = null;
-                rolloverTab.setRollover(false, false);
+                if (rolloverTab) {
+                    rolloverTab.setRollover(false, false);
+                }
             } else {
                 // Tab state is already non-rollover, do nothing.
             }

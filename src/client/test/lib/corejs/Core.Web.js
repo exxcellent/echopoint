@@ -130,6 +130,10 @@ Core.Web.DOM = {
                         "application/xml");
             } else {
                 dom = document.implementation.createDocument(namespaceUri, qualifiedName, null);
+                try {
+                    // Advises the IE9 to sent posts back in UTF-8 as expected. See http://echo.nextapp.com/site/node/6658
+                    dom.charset = "utf-8";
+                } catch(e) {} // ignore potential errors. It works without all other browsers.
             }
             if (!dom.documentElement) {
                 dom.appendChild(dom.createElement(qualifiedName));
@@ -774,6 +778,13 @@ Core.Web.Env = {
     QUIRK_UNLOADED_IMAGE_HAS_SIZE: null,
 
     /**
+     * Flag indicating if xml-documents should be serialized before
+     * sending them through a xmlHttp request.
+     * @type Boolean
+     */
+    QUIRK_SERIALIZE_XML_BEFORE_XML_HTTP_REQ: null,
+
+    /**
      * User-agent string, in lowercase.
      */
     _ua: null,
@@ -882,11 +893,13 @@ Core.Web.Env = {
             this.QUIRK_DELAYED_FOCUS_REQUIRED = true;
             this.QUIRK_UNLOADED_IMAGE_HAS_SIZE = true;
             this.MEASURE_OFFSET_EXCLUDES_BORDER = true;
-            this.QUIRK_IE_BLANK_SCREEN = true;
             this.QUIRK_IE_HAS_LAYOUT = true;
             this.NOT_SUPPORTED_CSS_OPACITY = true;
             this.PROPRIETARY_IE_OPACITY_FILTER_REQUIRED = true;
             
+            if (this.BROWSER_VERSION_MAJOR < 9) {
+                this.QUIRK_IE_BLANK_SCREEN = true;
+            }
             if (this.BROWSER_VERSION_MAJOR < 8) {
                 // Internet Explorer 6 and 7 Flags.
                 this.QUIRK_TABLE_CELL_WIDTH_EXCLUDES_PADDING = true;
@@ -904,6 +917,11 @@ Core.Web.Env = {
                     // Enable 'garbage collection' on large associative arrays to avoid memory leak.
                     Core.Arrays.LargeMap.garbageCollectEnabled = true;
                 }
+            }
+            if(this.BROWSER_VERSION_MAJOR == 9) {
+                // Internet Explorer 9 Flags
+                // if false ie9 will re-format your xml by adding and removing linebreaks
+                this.QUIRK_SERIALIZE_XML_BEFORE_XML_HTTP_REQ = true;
             }
         } else if (this.ENGINE_GECKO) {
             this.QUIRK_KEY_PRESS_FIRED_FOR_SPECIAL_KEYS = true;
@@ -1461,7 +1479,12 @@ Core.Web.HttpConnection = Core.extend({
         }
 
         // Execute request.
-        this._xmlHttpRequest.send(this._messageObject ? this._messageObject : null);
+        if (Core.Web.Env.QUIRK_SERIALIZE_XML_BEFORE_XML_HTTP_REQ) {
+            // serialize before sending
+            this._xmlHttpRequest.send(this._messageObject ? new XMLSerializer().serializeToString(this._messageObject) : null);
+        } else {
+            this._xmlHttpRequest.send(this._messageObject ? this._messageObject : null);
+        }
     },
     
     /**

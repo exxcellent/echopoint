@@ -582,6 +582,8 @@ Extras.Sync.Menu.RenderedMenu = Core.extend({
             foreground = this.component.render("foreground", Extras.Sync.Menu.DEFAULTS.foreground);
         }
         Echo.Sync.Color.render(foreground, menuContentDiv, "color");
+        Echo.Sync.Extent.render(this.component.render("menuWidth"),
+                menuContentDiv, "width", true, false);
 
         // Apply menu font if it is set, or apply default font 
         // if it is set and the menu font is NOT set.
@@ -627,6 +629,7 @@ Extras.Sync.Menu.RenderedMenu = Core.extend({
 
         var menuTable = document.createElement("table");
         menuTable.style.borderCollapse = "collapse";
+        menuTable.style.width = "100%";
         menuContentDiv.appendChild(menuTable);
 
         var menuTbody = document.createElement("tbody");
@@ -665,6 +668,7 @@ Extras.Sync.Menu.RenderedMenu = Core.extend({
                 if (hasIcons) {
                     menuItemIconTd = document.createElement("td");
                     Echo.Sync.Insets.render(iconPadding, menuItemIconTd, "padding");
+                    Echo.Sync.Extent.render("0px", menuItemIconTd, "width", true, false);
                     if (item instanceof Extras.ToggleOptionModel) {
                         var iconIdentifier;
                         var selected = this.stateModel && this.stateModel.isSelected(item.modelId);
@@ -1002,7 +1006,7 @@ Extras.Sync.ContextMenu = Core.extend(Extras.Sync.Menu, {
     
     /** @see Echo.Render.ComponentSync#renderUpdate */
     renderUpdate: function(update) {
-        if (update.isUpdatedPropertySetIn({ stateModel: true, model: true })) {
+        if (update.isUpdatedPropertySetIn({ modal: true, stateModel: true, model: true })) {
             // partial update
             var removedChildren = update.getRemovedChildren();
             if (removedChildren) {
@@ -1180,6 +1184,7 @@ Extras.Sync.DropDownMenu = Core.extend(Extras.Sync.Menu, {
             this._contentDiv.style.whiteSpace = "nowrap";
         }
         Echo.Sync.Insets.render(this.component.render("insets", "2px 5px"), this._contentDiv, "padding");
+        Echo.Sync.Font.render(this.component.render("font"), this._contentDiv);
         dropDownDiv.appendChild(this._contentDiv);
         
         var clearDiv = document.createElement("div");

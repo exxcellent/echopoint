@@ -2,6 +2,22 @@
   <info organisation='EchoPoint' module='echopoint'/>
 
   <dependencies>
+    <dependency org='com.nextapp' name='echo3-app' rev='3.0.0' force="true">
+      <artifact name='echo3-app' type='jar' />
+    </dependency>
+
+    <dependency org='com.nextapp' name='echo3-webcontainer' rev='3.0.0' force="true">
+      <artifact name='echo3-webcontainer' type='jar' />
+    </dependency>
+
+    <dependency org='com.nextapp' name='echo3-extras' rev='3.0.0' force="true">
+      <artifact name='echo3-extras' type='jar' />
+    </dependency>
+
+    <dependency org='com.nextapp' name='echo3-extras-webcontainer' rev='3.0.0' force="true">
+      <artifact name='echo3-extras-webcontainer' type='jar' />
+    </dependency>
+
     <dependency org='javax.servlet' name='jsp-api' rev='2.0' >
       <artifact name='jsp-api' type='jar' />
     </dependency>
@@ -34,7 +50,7 @@
       <artifact name='xstream' type='jar' />
     </dependency>
 
-    <dependency org='com.yahoo.platform.yui' name='yuicompressor' rev='2.4.6' >
+    <dependency org='com.yahoo.platform.yui' name='yuicompressor' rev='2.4.7' >
       <artifact name='yuicompressor' type='jar' />
     </dependency>
 
