@@ -23,6 +23,7 @@
 
   <property environment='env' />
   <property file='ant.properties' />
+  <property file='custom-ant.properties' />
   <property name='ivy.checksums' value='' />
 
   <patternset id='fileset.resources'>
@@ -60,7 +61,7 @@
 
 <!-- ************************************************************************************************** -->
   <!-- Initialization Tasks -->
-  <target name='init' depends='init-ivy, resolve'>
+  <target name='init' depends='init-ivy, resolve, update'>
     <mkdir dir='${dir.build.api}'/>
     <mkdir dir='${dir.dist}'/>
   </target>
@@ -73,6 +74,8 @@
     <delete dir='${dir.build}'/>
     <delete dir='${dir.dist}'/>
     <delete dir='${dir.docs.api}'/>
+    <delete dir='${dir.lib}'/>
+    <delete dir='${dir.tmp}'/>
   </target>
 
 
@@ -128,7 +131,7 @@
     <jar jarfile='${dir.dist}/${jarname}-all.jar' basedir='${dir.build.api}'>
       <zipgroupfileset dir="${dir.lib}"
                        includes="commons*.jar, jdom*.jar, log4j*.jar, mime*.jar, slf4j*.jar, xstream*.jar, xpp3*.jar"
-                       excludes="Echo*.jar, *sources*.jar, *javadoc*.jar" />
+                       excludes="echo*.jar, *sources*.jar, *javadoc*.jar" />
       <metainf dir='${dir.src.server.webcontainer}/META-INF'>
         <patternset refid='fileset.resources' />
       </metainf>
@@ -164,7 +167,7 @@
       <lib file='${dir.dist}/${jarname}-all.jar' />
       <lib file='${dir.dist}/echopointtest.jar' />
       <lib dir='${dir.lib}'>
-        <include name="Echo*.jar" />
+        <include name="echo*.jar" />
         <include name="junit*.jar" />
         <exclude name="*sources*.jar" />
         <exclude name="*javadoc*.jar" />
@@ -291,7 +294,7 @@
         <file name='Sync.QRCode.js'/>
       </filelist>
       <filelist dir='${dir.src.client.app}/jquery'>
-        <file name='jquery-1.3.2.js'/>
+        <file name='jquery.js'/>
         <file name='jquery-CallbackContext.js'/>
         <file name='jquery-ui-1.7.1.core.min.js'/>
         <file name='jquery-ui-1.7.1.effects.min.js'/>
@@ -485,60 +488,67 @@
 
 <!-- ************************************************************************************************** -->
   <target name='update'
-    description='Updates client application JS library from Echo3'
-    if='dir.echo'>
-    <copy todir='${dir.src.client.test}/lib/corejs'
-      overwrite='true' preservelastmodified='true'>
-      <filelist dir='${dir.echo}/src/client/corejs/'>
-        <file name='Core.js'/>
-        <file name='Core.Web.js'/>
-      </filelist>
-    </copy>
+    description='Updates client application JS library from Echo3'>
+    <unzip src='${echo3-webcontainer.lib.jar}' dest='${dir.src.client.test}/lib/corejs'>
+        <patternset>
+            <include name='**/Core.js' />
+            <include name='**/Core.Web.js' />
+        </patternset>
+        <mapper>
+            <globmapper from="nextapp/echo/webcontainer/resource/*" to="*"/>
+        </mapper>
+    </unzip>
 
-    <copy todir='${dir.src.client.test}/lib/echo'
-      overwrite='true' preservelastmodified='true'>
-      <filelist dir='${dir.echo}/src/client/echo/'>
-        <file name='Application.js'/>
-        <file name='Render.js'/>
-        <file name='Sync.js'/>
-        <file name='Serial.js'/>
-        <file name='Client.js'/>
-        <file name='FreeClient.js'/>
-        <file name='Arc.js'/>
-        <file name='Sync.ArrayContainer.js'/>
-        <file name='Sync.Button.js'/>
-        <file name='Sync.ContentPane.js'/>
-        <file name='Sync.Grid.js'/>
-        <file name='Sync.Label.js'/>
-        <file name='Sync.List.js'/>
-        <file name='Sync.SplitPane.js'/>
-        <file name='Sync.TextComponent.js'/>
-        <file name='Sync.WindowPane.js'/>
-      </filelist>
-    </copy>
+      <unzip src='${echo3-webcontainer.lib.jar}' dest='${dir.src.client.test}/lib/echo'>
+          <patternset>
+              <include name='**/Application.js'/>
+              <include name='**/Render.js'/>
+              <include name='**/Sync.js'/>
+              <include name='**/Serial.js'/>
+              <include name='**/Client.js'/>
+              <include name='**/FreeClient.js'/>
+              <include name='**/Arc.js'/>
+              <include name='**/Sync.ArrayContainer.js'/>
+              <include name='**/Sync.Button.js'/>
+              <include name='**/Sync.Composite.js'/>
+              <include name='**/Sync.ContentPane.js'/>
+              <include name='**/Sync.Grid.js'/>
+              <include name='**/Sync.Label.js'/>
+              <include name='**/Sync.List.js'/>
+              <include name='**/Sync.SplitPane.js'/>
+              <include name='**/Sync.TextComponent.js'/>
+              <include name='**/Sync.ToggleButton.js'/>
+              <include name='**/Sync.WindowPane.js'/>
+          </patternset>
+          <mapper>
+              <globmapper from="nextapp/echo/webcontainer/resource/*" to="*"/>
+          </mapper>
+      </unzip>
 
-    <copy todir='${dir.src.client.test}/lib/extras'
-      overwrite='true' preservelastmodified='true'>
-      <filelist dir='${dir.echo.extras}/src/client/extras/'>
-        <file name='Extras.js'/>
-        <file name='Application.AccordionPane.js'/>
-        <file name='Sync.AccordionPane.js'/>
-        <file name='Application.Menu.js'/>
-        <file name='Sync.Menu.js'/>
-        <file name='Application.TransitionPane.js'/>
-        <file name='Sync.TransitionPane.js'/>
-        <file name='Application.TabPane.js'/>
-        <file name='Sync.TabPane.js'/>
-        <file name='Application.ColorSelect.js'/>
-        <file name='Sync.ColorSelect.js'/>
-        <file name='Application.RichTextInput.js'/>
-        <file name='Sync.RichTextInput.js'/>
-        <file name='Application.RichTextArea.js'/>
-        <file name='Sync.RichTextArea.js'/>
-        <file name='Application.ToolTipContainer.js'/>
-        <file name='Sync.ToolTipContainer.js'/>
-      </filelist>
-    </copy>
+      <unzip src='${echo3-extras-webcontainer.lib.jar}' dest='${dir.src.client.test}/lib/extras'>
+          <patternset>
+              <include name='**/Extras.js'/>
+              <include name='**/Application.AccordionPane.js'/>
+              <include name='**/Sync.AccordionPane.js'/>
+              <include name='**/Application.Menu.js'/>
+              <include name='**/Sync.Menu.js'/>
+              <include name='**/Application.TransitionPane.js'/>
+              <include name='**/Sync.TransitionPane.js'/>
+              <include name='**/Application.TabPane.js'/>
+              <include name='**/Sync.TabPane.js'/>
+              <include name='**/Application.ColorSelect.js'/>
+              <include name='**/Sync.ColorSelect.js'/>
+              <include name='**/Application.RichTextInput.js'/>
+              <include name='**/Sync.RichTextInput.js'/>
+              <include name='**/Application.RichTextArea.js'/>
+              <include name='**/Sync.RichTextArea.js'/>
+              <include name='**/Application.ToolTipContainer.js'/>
+              <include name='**/Sync.ToolTipContainer.js'/>
+          </patternset>
+          <mapper>
+              <globmapper from="nextapp/echo/extras/webcontainer/resource/*" to="*"/>
+          </mapper>
+      </unzip>
   </target>
 
 <!-- ************************************************************************************************** -->
