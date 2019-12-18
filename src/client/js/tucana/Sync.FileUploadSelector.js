@@ -380,12 +380,13 @@ echopoint.tucana.FileUploadSelectorSync.Frame = Core.extend(
   {
     this._loadStage = echopoint.tucana.FileUploadSelectorSync._STAGE_UPLOADING;
     this.peer._form.target = this._frameElement.id;
-    this.peer._form.submit();
 
     if ( this.peer._table._submit )
     {
       this.peer._table._submit._renderButton( true, this.peer._table );
     }
+
+    this.peer._form.submit();
 
     if ( !Core.Web.Env.BROWSER_SAFARI && !Core.Web.Env.BROWSER_CHROME )
     {
